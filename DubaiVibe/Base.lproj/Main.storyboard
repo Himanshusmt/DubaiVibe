@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tbc-root">
     <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -26,14 +27,12 @@
             </objects>
             <point key="canvasLocation" x="-24" y="18"/>
         </scene>
-
-        <!--Dashboard Navigation-->
+        <!--Dashboard-->
         <scene sceneID="exp-nav-scene">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="exp-nav" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Dashboard" image="house" catalog="system" selectedImage="house.fill" id="exp-tab"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="exp-navbar">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -42,14 +41,14 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="exp-nav-fr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="400" y="18"/>
+            <point key="canvasLocation" x="1045" y="17"/>
         </scene>
         <!--Profile-->
         <scene sceneID="prf-scene">
             <objects>
                 <viewController id="prf-vc" customClass="PlaceholderViewController" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" misplaced="YES" id="prf-view">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="779"/>
+                    <view key="view" contentMode="scaleToFill" id="prf-view">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-icon">
@@ -85,7 +84,7 @@
             </objects>
             <point key="canvasLocation" x="780" y="-740"/>
         </scene>
-        <!--Dashboard-->
+        <!--Explore View Controller-->
         <scene sceneID="exp-scene">
             <objects>
                 <viewController id="exp-vc" customClass="ExploreViewController" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
@@ -94,23 +93,24 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="exp-brandbar">
-                                <rect key="frame" x="0.0" y="96" width="414" height="56"/>
+                                <rect key="frame" x="0.0" y="96" width="414" height="68"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="exp-brand">
-                                        <rect key="frame" x="16" y="0.0" width="56" height="56"/>
+                                        <rect key="frame" x="16" y="1" width="70" height="66"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="56" id="brd-h"/>
-                                            <constraint firstAttribute="width" constant="56" id="brd-w"/>
+                                            <constraint firstAttribute="height" constant="66" id="brd-h"/>
+                                            <constraint firstAttribute="width" constant="70" id="brd-w"/>
                                         </constraints>
+                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="DUBAI • EAT • DRINK • EXPLORE" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="exp-tagline">
-                                        <rect key="frame" x="86" y="22.5" width="148" height="11"/>
+                                        <rect key="frame" x="100" y="28.5" width="148" height="11"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="9"/>
                                         <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="exp-bell">
-                                        <rect key="frame" x="366" y="12" width="32" height="32"/>
+                                        <rect key="frame" x="366" y="18" width="32" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="32" id="bel-h"/>
                                             <constraint firstAttribute="width" constant="32" id="bel-w"/>
@@ -120,7 +120,7 @@
                                         <state key="normal" image="bell.fill" catalog="system"/>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="exp-belldot">
-                                        <rect key="frame" x="389.5" y="11.5" width="9" height="9"/>
+                                        <rect key="frame" x="389.5" y="17.5" width="9" height="9"/>
                                         <color key="backgroundColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="9" id="dot-h"/>
@@ -133,7 +133,7 @@
                                     <constraint firstItem="exp-bell" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="exp-tagline" secondAttribute="trailing" constant="8" id="bel-l"/>
                                     <constraint firstItem="exp-bell" firstAttribute="trailing" secondItem="exp-brandbar" secondAttribute="trailing" constant="-16" id="bel-t"/>
                                     <constraint firstItem="exp-bell" firstAttribute="centerY" secondItem="exp-brandbar" secondAttribute="centerY" id="bel-y"/>
-                                    <constraint firstAttribute="height" constant="56" id="brb-h"/>
+                                    <constraint firstAttribute="height" constant="68" id="brb-h"/>
                                     <constraint firstItem="exp-brand" firstAttribute="leading" secondItem="exp-brandbar" secondAttribute="leading" constant="16" id="brd-l"/>
                                     <constraint firstItem="exp-brand" firstAttribute="centerY" secondItem="exp-brandbar" secondAttribute="centerY" id="brd-y"/>
                                     <constraint firstItem="exp-belldot" firstAttribute="centerX" secondItem="exp-bell" secondAttribute="trailing" constant="-4" id="dot-x"/>
@@ -143,10 +143,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="exp-locpill">
-                                <rect key="frame" x="16" y="160" width="106" height="36"/>
+                                <rect key="frame" x="16" y="172" width="106" height="30"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="mappin.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="exp-pin">
-                                        <rect key="frame" x="12" y="10.5" width="16" height="15"/>
+                                        <rect key="frame" x="12" y="7.5" width="16" height="15"/>
                                         <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="16" id="pin-h"/>
@@ -154,13 +154,13 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Dubai" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="exp-city">
-                                        <rect key="frame" x="34" y="9" width="42" height="18"/>
+                                        <rect key="frame" x="34" y="6" width="42" height="18"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="exp-chevron">
-                                        <rect key="frame" x="84" y="18" width="10" height="0.5"/>
+                                        <rect key="frame" x="84" y="15" width="10" height="0.5"/>
                                         <color key="tintColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="10" id="chv-h"/>
@@ -168,7 +168,7 @@
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="exp-loc">
-                                        <rect key="frame" x="0.0" y="0.0" width="106" height="36"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="106" height="30"/>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -182,16 +182,16 @@
                                     <constraint firstItem="exp-loc" firstAttribute="leading" secondItem="exp-locpill" secondAttribute="leading" id="lb-l"/>
                                     <constraint firstAttribute="trailing" secondItem="exp-loc" secondAttribute="trailing" id="lb-r"/>
                                     <constraint firstItem="exp-loc" firstAttribute="top" secondItem="exp-locpill" secondAttribute="top" id="lb-t"/>
-                                    <constraint firstAttribute="height" constant="36" id="lp-h"/>
+                                    <constraint firstAttribute="height" constant="30" id="lp-h"/>
                                     <constraint firstItem="exp-pin" firstAttribute="leading" secondItem="exp-locpill" secondAttribute="leading" constant="12" id="pin-l"/>
                                     <constraint firstItem="exp-pin" firstAttribute="centerY" secondItem="exp-locpill" secondAttribute="centerY" id="pin-y"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="exp-search">
-                                <rect key="frame" x="16" y="208" width="382" height="44"/>
+                                <rect key="frame" x="16" y="214" width="382" height="38"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search restaurants, bars, nightlife, beaches..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="exp-field">
-                                        <rect key="frame" x="12" y="0.0" width="358" height="44"/>
+                                        <rect key="frame" x="12" y="0.0" width="358" height="38"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
@@ -202,24 +202,24 @@
                                     <constraint firstItem="exp-field" firstAttribute="leading" secondItem="exp-search" secondAttribute="leading" constant="12" id="fld-l"/>
                                     <constraint firstItem="exp-field" firstAttribute="trailing" secondItem="exp-search" secondAttribute="trailing" constant="-12" id="fld-t"/>
                                     <constraint firstItem="exp-field" firstAttribute="top" secondItem="exp-search" secondAttribute="top" id="fld-tp"/>
-                                    <constraint firstAttribute="height" constant="44" id="srch-h"/>
+                                    <constraint firstAttribute="height" constant="38" id="srch-h"/>
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="exp-cats">
-                                <rect key="frame" x="0.0" y="266" width="414" height="38"/>
+                                <rect key="frame" x="0.0" y="266" width="414" height="32"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="38" id="cats-h"/>
+                                    <constraint firstAttribute="height" constant="32" id="cats-h"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="8" minimumInteritemSpacing="8" id="cat-flow">
-                                    <size key="itemSize" width="110" height="38"/>
+                                    <size key="itemSize" width="110" height="32"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="16" minY="0.0" maxX="16" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryChipCell" id="cat-cell" customClass="CategoryChipCell" customModule="DubaiVibe" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="0.0" width="110" height="38"/>
+                                        <rect key="frame" x="16" y="-3" width="110" height="38"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="cat-cv">
                                             <rect key="frame" x="0.0" y="0.0" width="110" height="38"/>
@@ -269,7 +269,7 @@
                                 </cells>
                             </collectionView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="400" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="exp-table">
-                                <rect key="frame" x="0.0" y="314" width="414" height="465"/>
+                                <rect key="frame" x="0.0" y="302" width="414" height="477"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="VenueCardCell" rowHeight="404" id="ven-cell" customClass="VenueCardCell" customModule="DubaiVibe" customModuleProvider="target">
@@ -280,17 +280,17 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ven-card">
-                                                    <rect key="frame" x="16" y="8" width="382" height="388"/>
+                                                    <rect key="frame" x="12" y="6" width="390" height="392"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="ven-hero">
-                                                            <rect key="frame" x="0.0" y="0.0" width="382" height="196"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="390" height="145"/>
                                                             <color key="backgroundColor" red="0.10000000000000001" green="0.070000000000000007" blue="0.050000000000000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="196" id="hero-h"/>
+                                                                <constraint firstAttribute="height" constant="145" id="hero-h"/>
                                                             </constraints>
                                                         </imageView>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-fav">
-                                                            <rect key="frame" x="334" y="12" width="36" height="36"/>
+                                                            <rect key="frame" x="342" y="12" width="36" height="36"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="36" id="fav-h"/>
                                                                 <constraint firstAttribute="width" constant="36" id="fav-w"/>
@@ -300,27 +300,27 @@
                                                             <state key="normal" image="heart" catalog="system"/>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="zuma" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-mark">
-                                                            <rect key="frame" x="24" y="77.5" width="334" height="41"/>
+                                                            <rect key="frame" x="24" y="52" width="342" height="41"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Zuma Dubai" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-name">
-                                                            <rect key="frame" x="14" y="210" width="103" height="22"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Zuma Dubai" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-name">
+                                                            <rect key="frame" x="12" y="154" width="103" height="22"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                             <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" image="checkmark.seal.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ven-check">
-                                                            <rect key="frame" x="121" y="213" width="16" height="16"/>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="checkmark.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ven-check">
+                                                            <rect key="frame" x="119" y="157.5" width="16" height="15"/>
                                                             <color key="tintColor" red="0.18431372549019609" green="0.54509803921568623" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="16" id="ver-h"/>
                                                                 <constraint firstAttribute="width" constant="16" id="ver-w"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-book">
-                                                            <rect key="frame" x="340" y="207" width="28" height="28"/>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-book">
+                                                            <rect key="frame" x="350" y="151" width="28" height="28"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="28" id="bk-h"/>
                                                                 <constraint firstAttribute="width" constant="28" id="bk-w"/>
@@ -330,70 +330,70 @@
                                                             <state key="normal" image="bookmark" catalog="system"/>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" text="Japanese  •  DIFC" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-sub">
-                                                            <rect key="frame" x="14" y="236" width="354" height="16"/>
+                                                            <rect key="frame" x="12" y="236" width="364" height="16"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" text="4.8  (2.4K)" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-rate">
-                                                            <rect key="frame" x="14" y="258" width="354" height="16"/>
+                                                            <rect key="frame" x="12" y="258" width="364" height="16"/>
                                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                             <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ven-deal">
-                                                            <rect key="frame" x="14" y="278" width="354" height="96"/>
+                                                            <rect key="frame" x="10" y="296" width="370" height="86"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ven-crown-bg">
-                                                                    <rect key="frame" x="12" y="26" width="44" height="44"/>
+                                                                    <rect key="frame" x="12" y="15" width="56" height="56"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="crown.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ven-crown">
-                                                                            <rect key="frame" x="11" y="11" width="22" height="20.5"/>
+                                                                            <rect key="frame" x="14" y="14" width="28" height="26.5"/>
                                                                             <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="height" constant="22" id="crn-ih"/>
-                                                                                <constraint firstAttribute="width" constant="22" id="crn-iw"/>
+                                                                                <constraint firstAttribute="height" constant="28" id="crn-ih"/>
+                                                                                <constraint firstAttribute="width" constant="28" id="crn-iw"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                     </subviews>
                                                                     <color key="backgroundColor" red="0.11764705882352941" green="0.10196078431372549" blue="0.066666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="height" constant="44" id="crn-h"/>
-                                                                        <constraint firstAttribute="width" constant="44" id="crn-w"/>
+                                                                        <constraint firstAttribute="height" constant="56" id="crn-h"/>
+                                                                        <constraint firstAttribute="width" constant="56" id="crn-w"/>
                                                                         <constraint firstItem="ven-crown" firstAttribute="centerX" secondItem="ven-crown-bg" secondAttribute="centerX" id="crn-x"/>
                                                                         <constraint firstItem="ven-crown" firstAttribute="centerY" secondItem="ven-crown-bg" secondAttribute="centerY" id="crn-y"/>
                                                                     </constraints>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="DUBAI VIBE EXCLUSIVE" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-excl">
-                                                                    <rect key="frame" x="68" y="14" width="110.5" height="11"/>
+                                                                    <rect key="frame" x="83" y="12" width="110.5" height="11"/>
                                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
                                                                     <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="30% OFF" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-off">
-                                                                    <rect key="frame" x="68" y="28" width="87.5" height="24"/>
+                                                                    <rect key="frame" x="83" y="23" width="87.5" height="24"/>
                                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                                     <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Your total bill" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-detail">
-                                                                    <rect key="frame" x="68" y="54" width="74.5" height="15"/>
+                                                                    <rect key="frame" x="83" y="49" width="74.5" height="15"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                     <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Sunday – Thursday" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-valid">
-                                                                    <rect key="frame" x="68" y="71" width="100.5" height="14"/>
+                                                                    <rect key="frame" x="83" y="66" width="100.5" height="14"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                     <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-dealbtn">
-                                                                    <rect key="frame" x="230" y="28" width="112" height="40"/>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-dealbtn" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
+                                                                    <rect key="frame" x="260" y="27" width="100" height="32"/>
                                                                     <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="height" constant="40" id="dlb-h"/>
-                                                                        <constraint firstAttribute="width" constant="112" id="dlb-w"/>
+                                                                        <constraint firstAttribute="height" constant="32" id="dlb-h"/>
+                                                                        <constraint firstAttribute="width" constant="100" id="dlb-w"/>
                                                                     </constraints>
                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -412,28 +412,28 @@
                                                                 <constraint firstItem="ven-dealbtn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ven-off" secondAttribute="trailing" constant="8" id="dlb-l2"/>
                                                                 <constraint firstItem="ven-dealbtn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ven-detail" secondAttribute="trailing" constant="8" id="dlb-l3"/>
                                                                 <constraint firstItem="ven-dealbtn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ven-valid" secondAttribute="trailing" constant="8" id="dlb-l4"/>
-                                                                <constraint firstItem="ven-dealbtn" firstAttribute="trailing" secondItem="ven-deal" secondAttribute="trailing" constant="-12" id="dlb-t"/>
+                                                                <constraint firstItem="ven-dealbtn" firstAttribute="trailing" secondItem="ven-deal" secondAttribute="trailing" constant="-10" id="dlb-t"/>
                                                                 <constraint firstItem="ven-dealbtn" firstAttribute="centerY" secondItem="ven-deal" secondAttribute="centerY" id="dlb-y"/>
-                                                                <constraint firstItem="ven-excl" firstAttribute="leading" secondItem="ven-crown-bg" secondAttribute="trailing" constant="12" id="ex-l"/>
-                                                                <constraint firstItem="ven-excl" firstAttribute="top" secondItem="ven-deal" secondAttribute="top" constant="14" id="ex-t"/>
+                                                                <constraint firstItem="ven-excl" firstAttribute="leading" secondItem="ven-crown-bg" secondAttribute="trailing" constant="15" id="ex-l"/>
+                                                                <constraint firstItem="ven-excl" firstAttribute="top" secondItem="ven-deal" secondAttribute="top" constant="12" id="ex-t"/>
                                                                 <constraint firstItem="ven-off" firstAttribute="leading" secondItem="ven-excl" secondAttribute="leading" id="off-l"/>
-                                                                <constraint firstItem="ven-off" firstAttribute="top" secondItem="ven-excl" secondAttribute="bottom" constant="3" id="off-t"/>
+                                                                <constraint firstItem="ven-off" firstAttribute="top" secondItem="ven-excl" secondAttribute="bottom" id="off-t"/>
                                                                 <constraint firstItem="ven-valid" firstAttribute="leading" secondItem="ven-excl" secondAttribute="leading" id="val-l"/>
                                                                 <constraint firstItem="ven-valid" firstAttribute="top" secondItem="ven-detail" secondAttribute="bottom" constant="2" id="val-t"/>
-                                                                <constraint firstAttribute="height" constant="96" id="ven-deal-h"/>
+                                                                <constraint firstAttribute="height" constant="86" id="ven-deal-h"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstItem="ven-book" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ven-check" secondAttribute="trailing" constant="8" id="bk-l"/>
-                                                        <constraint firstItem="ven-book" firstAttribute="trailing" secondItem="ven-card" secondAttribute="trailing" constant="-14" id="bk-r"/>
+                                                        <constraint firstItem="ven-book" firstAttribute="trailing" secondItem="ven-card" secondAttribute="trailing" constant="-12" id="bk-r"/>
                                                         <constraint firstItem="ven-book" firstAttribute="centerY" secondItem="ven-name" secondAttribute="centerY" id="bk-y"/>
                                                         <constraint firstItem="ven-check" firstAttribute="leading" secondItem="ven-name" secondAttribute="trailing" constant="4" id="ck-l"/>
                                                         <constraint firstItem="ven-check" firstAttribute="centerY" secondItem="ven-name" secondAttribute="centerY" id="ck-y"/>
-                                                        <constraint firstAttribute="bottom" secondItem="ven-deal" secondAttribute="bottom" constant="14" id="dl-b"/>
-                                                        <constraint firstItem="ven-deal" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" constant="14" id="dl-l"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ven-deal" secondAttribute="trailing" constant="14" id="dl-r"/>
+                                                        <constraint firstAttribute="bottom" secondItem="ven-deal" secondAttribute="bottom" constant="10" id="dl-b"/>
+                                                        <constraint firstItem="ven-deal" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" constant="10" id="dl-l"/>
+                                                        <constraint firstAttribute="trailing" secondItem="ven-deal" secondAttribute="trailing" constant="10" id="dl-r"/>
                                                         <constraint firstItem="ven-hero" firstAttribute="trailing" secondItem="ven-fav" secondAttribute="trailing" constant="12" id="fv-r"/>
                                                         <constraint firstItem="ven-fav" firstAttribute="top" secondItem="ven-hero" secondAttribute="top" constant="12" id="fv-t"/>
                                                         <constraint firstItem="ven-hero" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" id="hr-l"/>
@@ -443,24 +443,24 @@
                                                         <constraint firstItem="ven-hero" firstAttribute="trailing" secondItem="ven-mark" secondAttribute="trailing" constant="24" id="mk-r"/>
                                                         <constraint firstItem="ven-mark" firstAttribute="centerX" secondItem="ven-hero" secondAttribute="centerX" id="mk-x"/>
                                                         <constraint firstItem="ven-mark" firstAttribute="centerY" secondItem="ven-hero" secondAttribute="centerY" id="mk-y"/>
-                                                        <constraint firstItem="ven-name" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" constant="14" id="nm-l"/>
-                                                        <constraint firstItem="ven-name" firstAttribute="top" secondItem="ven-hero" secondAttribute="bottom" constant="14" id="nm-t"/>
-                                                        <constraint firstItem="ven-rate" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" constant="14" id="rt-l"/>
+                                                        <constraint firstItem="ven-name" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" constant="12" id="nm-l"/>
+                                                        <constraint firstItem="ven-name" firstAttribute="top" secondItem="ven-hero" secondAttribute="bottom" constant="9" id="nm-t"/>
+                                                        <constraint firstItem="ven-rate" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" constant="12" id="rt-l"/>
                                                         <constraint firstAttribute="trailing" secondItem="ven-rate" secondAttribute="trailing" constant="14" id="rt-r"/>
-                                                        <constraint firstItem="ven-rate" firstAttribute="top" secondItem="ven-sub" secondAttribute="bottom" constant="6" id="rt-t"/>
-                                                        <constraint firstItem="ven-sub" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" constant="14" id="sb-l"/>
+                                                        <constraint firstItem="ven-rate" firstAttribute="top" secondItem="ven-sub" secondAttribute="bottom" constant="4" id="rt-t"/>
+                                                        <constraint firstItem="ven-sub" firstAttribute="leading" secondItem="ven-card" secondAttribute="leading" constant="12" id="sb-l"/>
                                                         <constraint firstAttribute="trailing" secondItem="ven-sub" secondAttribute="trailing" constant="14" id="sb-r"/>
-                                                        <constraint firstItem="ven-sub" firstAttribute="top" secondItem="ven-name" secondAttribute="bottom" constant="4" id="sb-t"/>
-                                                        <constraint firstItem="ven-deal" firstAttribute="top" secondItem="ven-rate" secondAttribute="bottom" constant="12" id="ven-deal-top"/>
+                                                        <constraint firstItem="ven-sub" firstAttribute="top" secondItem="ven-name" secondAttribute="bottom" constant="2" id="sb-t"/>
+                                                        <constraint firstItem="ven-deal" firstAttribute="top" secondItem="ven-rate" secondAttribute="bottom" constant="10" id="ven-deal-top"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="ven-card" secondAttribute="bottom" constant="8" id="cd-b"/>
-                                                <constraint firstItem="ven-card" firstAttribute="leading" secondItem="ven-cview" secondAttribute="leading" constant="16" id="cd-l"/>
-                                                <constraint firstAttribute="trailing" secondItem="ven-card" secondAttribute="trailing" constant="16" id="cd-r"/>
-                                                <constraint firstItem="ven-card" firstAttribute="top" secondItem="ven-cview" secondAttribute="top" constant="8" id="cd-t"/>
+                                                <constraint firstAttribute="bottom" secondItem="ven-card" secondAttribute="bottom" constant="6" id="cd-b"/>
+                                                <constraint firstItem="ven-card" firstAttribute="leading" secondItem="ven-cview" secondAttribute="leading" constant="12" id="cd-l"/>
+                                                <constraint firstAttribute="trailing" secondItem="ven-card" secondAttribute="trailing" constant="12" id="cd-r"/>
+                                                <constraint firstItem="ven-card" firstAttribute="top" secondItem="ven-cview" secondAttribute="top" constant="6" id="cd-t"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -506,7 +506,7 @@
                             <constraint firstItem="exp-table" firstAttribute="bottom" secondItem="exp-safe" secondAttribute="bottom" id="ex-tb"/>
                             <constraint firstItem="exp-table" firstAttribute="leading" secondItem="exp-view" secondAttribute="leading" id="ex-tl"/>
                             <constraint firstItem="exp-table" firstAttribute="trailing" secondItem="exp-view" secondAttribute="trailing" id="ex-tr"/>
-                            <constraint firstItem="exp-table" firstAttribute="top" secondItem="exp-cats" secondAttribute="bottom" constant="10" id="ex-tt"/>
+                            <constraint firstItem="exp-table" firstAttribute="top" secondItem="exp-cats" secondAttribute="bottom" constant="4" id="ex-tt"/>
                         </constraints>
                     </view>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -515,7 +515,9 @@
                         <outlet property="brandImageView" destination="exp-brand" id="eo-brd"/>
                         <outlet property="categoryCollectionView" destination="exp-cats" id="eo-cat"/>
                         <outlet property="locationButton" destination="exp-loc" id="eo-loc"/>
+                        <outlet property="locationChevronImageView" destination="exp-chevron" id="eo-chv"/>
                         <outlet property="locationPillView" destination="exp-locpill" id="eo-lpl"/>
+                        <outlet property="locationPinImageView" destination="exp-pin" id="eo-pin"/>
                         <outlet property="notificationButton" destination="exp-bell" id="eo-bel"/>
                         <outlet property="searchContainerView" destination="exp-search" id="eo-src"/>
                         <outlet property="searchTextField" destination="exp-field" id="eo-fld"/>
@@ -525,19 +527,19 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="exp-fr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="780" y="18"/>
+            <point key="canvasLocation" x="2113" y="17"/>
         </scene>
     </scenes>
     <resources>
         <image name="LaunchLogo" width="1024" height="1024"/>
         <image name="bell.fill" catalog="system" width="123" height="128"/>
         <image name="bookmark" catalog="system" width="110" height="128"/>
-        <image name="house" catalog="system" width="32" height="27"/>
-        <image name="house.fill" catalog="system" width="32" height="27"/>
-        <image name="checkmark.seal.fill" catalog="system" width="128" height="124"/>
+        <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="crown.fill" catalog="system" width="128" height="92"/>
         <image name="heart" catalog="system" width="128" height="107"/>
+        <image name="house" catalog="system" width="128" height="104"/>
+        <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="mappin.circle.fill" catalog="system" width="128" height="123"/>
         <image name="person" catalog="system" width="128" height="121"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>

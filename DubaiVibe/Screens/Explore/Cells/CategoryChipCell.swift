@@ -38,8 +38,8 @@ final class CategoryChipCell: UICollectionViewCell {
     func configure(with category: VenueCategory, selected: Bool) {
         titleLabel.text = category.title
 
-        if let symbolName = category.symbolName {
-            iconImageView.image = UIImage(systemName: symbolName)
+        if let icon = category.icon {
+            iconImageView.image = icon
             iconImageView.isHidden = false
             iconWidthConstraint.constant = Self.iconWidth
             titleLeadingConstraint.constant = Self.iconSpacing
@@ -66,7 +66,7 @@ final class CategoryChipCell: UICollectionViewCell {
     static func size(for category: VenueCategory) -> CGSize {
         let textWidth = (category.title as NSString).size(withAttributes: [.font: font]).width
         var width = ceil(textWidth) + horizontalPadding * 2
-        if category.symbolName != nil {
+        if category.icon != nil {
             width += iconWidth + iconSpacing
         }
         return CGSize(width: width, height: AppMetrics.chipHeight)

@@ -15,15 +15,17 @@ enum AppPalette {
     static let secondaryText = UIColor(hex: 0x9A9AA2)
     static let separator = UIColor(hex: 0x2A2A2E)
 
+    static let tagline = UIColor(hex: 0xC4C4CB)
+
     static let cardBorder = UIColor(hex: 0x26262A)
     static let chipFill = UIColor(hex: 0x141416)
     static let chipBorder = UIColor(hex: 0x2E2E34)
     static let searchFill = UIColor(hex: 0x121214)
     static let searchBorder = UIColor(hex: 0x2A2A2E)
 
-    static let dealFill = UIColor(hex: 0x17140D)
+    static let dealFill = UIColor(hex: 0x120F09)
     static let dealBorder = UIColor(hex: 0xE8B964, alpha: 0.40)
-    static let crownFill = UIColor(hex: 0x1E1A11)
+    static let crownFill = UIColor(hex: 0x0A0805)
 
     static let tabIdle = UIColor(hex: 0x8E8E96)
     static let badgeRed = UIColor(hex: 0xFF3B30)
@@ -40,13 +42,16 @@ enum AppPalette {
 }
 
 enum AppMetrics {
+    /// Header controls sit on a wider gutter than the feed cards.
     static let screenGutter: CGFloat = 16
-    static let cardRadius: CGFloat = 18
-    static let chipHeight: CGFloat = 38
-    static let searchHeight: CGFloat = 44
-    static let heroHeight: CGFloat = 196
-    static let dealHeight: CGFloat = 96
-    static let brandTileSize: CGFloat = 56
+    static let cardGutter: CGFloat = 12
+    static let cardRadius: CGFloat = 16
+    static let chipHeight: CGFloat = 32
+    static let searchHeight: CGFloat = 38
+    static let heroHeight: CGFloat = 145
+    static let dealHeight: CGFloat = 86
+    static let brandTileWidth: CGFloat = 74
+    static let brandTileHeight: CGFloat = 48
 }
 
 /// Screen geometry without touching the deprecated `UIScreen.main`.

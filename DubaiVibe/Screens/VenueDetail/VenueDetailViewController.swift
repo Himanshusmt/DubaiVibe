@@ -2,58 +2,43 @@ import UIKit
 
 final class VenueDetailViewController: UIViewController {
     private enum Metric {
-        /// Cards and the hero share the same outer gutter.
         static let gutter: CGFloat = 12
-        /// Text columns sit slightly inside the card edges, as in the design.
-        static let textGutter: CGFloat = 18
         static let heroHeight: CGFloat = 210
         static let heroRadius: CGFloat = 20
         static let cardRadius: CGFloat = 16
     }
+
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var heroImageView: HeroImageView!
+    @IBOutlet private weak var wordmarkLabel: UILabel!
+    @IBOutlet private weak var backButton: UIButton!
+    @IBOutlet private weak var shareTopButton: UIButton!
+    @IBOutlet private weak var favoriteButton: UIButton!
+    @IBOutlet private weak var photosButton: UIButton!
+    @IBOutlet private weak var vibeButton: UIButton!
+    @IBOutlet private weak var vibeDiscView: UIView!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var verifiedImageView: UIImageView!
+    @IBOutlet private weak var subtitleLabel: UILabel!
+    @IBOutlet private weak var ratingLabel: UILabel!
+    @IBOutlet private weak var brandTileLabel: UILabel!
+    @IBOutlet private weak var segmentCollection: UICollectionView!
+    @IBOutlet private weak var tabContentContainer: UIView!
+    @IBOutlet private weak var metaCardView: UIView!
+    @IBOutlet private weak var addressLabel: UILabel!
+    @IBOutlet private weak var hoursLabel: UILabel!
+    @IBOutlet private weak var directionsButton: UIButton!
+    @IBOutlet private weak var callButton: UIButton!
+    @IBOutlet private weak var websiteButton: UIButton!
+    @IBOutlet private weak var instagramButton: UIButton!
+    @IBOutlet private weak var shareActionButton: UIButton!
+    @IBOutlet private weak var oneVibeButton: UIButton!
 
     private let repository: VenueDetailRepositorying
     private var detail: VenueDetail!
     private var selectedTab: VenueDetailTab = .deals
     private var isFavorite = false
     private var renderedHeroWidth: CGFloat = 0
-
-    private let scrollView = UIScrollView()
-    private let contentStack = UIStackView()
-
-    private let heroImageView = HeroImageView(frame: .zero)
-    private let wordmarkLabel = UILabel()
-    private let backButton = UIButton(type: .system)
-    private let shareTopButton = UIButton(type: .system)
-    private let favoriteButton = UIButton(type: .system)
-    private let photosButton = UIButton(type: .system)
-    private let vibeButton = UIButton(type: .system)
-
-    private let nameLabel = UILabel()
-    private let verifiedImageView = UIImageView()
-    private let subtitleLabel = UILabel()
-    private let ratingLabel = UILabel()
-    private let brandTileLabel = UILabel()
-
-    private let addressLabel = UILabel()
-    private let hoursLabel = UILabel()
-
-    private lazy var segmentCollection: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        layout.sectionInset = .zero
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.backgroundColor = .clear
-        view.isScrollEnabled = false
-        view.showsHorizontalScrollIndicator = false
-        view.register(VenueDetailSegmentCell.self, forCellWithReuseIdentifier: VenueDetailSegmentCell.reuseIdentifier)
-        view.dataSource = self
-        view.delegate = self
-        return view
-    }()
-
-    private let tabContentContainer = UIView()
 
     init?(coder: NSCoder, repository: VenueDetailRepositorying) {
         self.repository = repository
@@ -78,7 +63,7 @@ final class VenueDetailViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = AppPalette.background
         navigationController?.setNavigationBarHidden(true, animated: false)
-        buildLayout()
+        configureChrome()
         if detail != nil {
             bind()
         }
@@ -95,436 +80,52 @@ final class VenueDetailViewController: UIViewController {
     }
 }
 
-// MARK: - Layout
+// MARK: - Chrome
 
 private extension VenueDetailViewController {
-    func buildLayout() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+    func configureChrome() {
         scrollView.alwaysBounceVertical = true
         scrollView.showsVerticalScrollIndicator = false
         scrollView.contentInsetAdjustmentBehavior = .never
-        view.addSubview(scrollView)
-
-        contentStack.axis = .vertical
-        contentStack.spacing = 0
-        contentStack.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentStack)
-
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-
-            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
-        ])
-
-        let hero = makeHero()
-        contentStack.addArrangedSubview(hero)
-        contentStack.setCustomSpacing(14, after: hero)
-
-        let info = makeInfoSection()
-        contentStack.addArrangedSubview(info)
-        contentStack.setCustomSpacing(12, after: info)
-
-        contentStack.addArrangedSubview(segmentCollection)
-        segmentCollection.heightAnchor.constraint(equalToConstant: 42).isActive = true
-        contentStack.setCustomSpacing(10, after: segmentCollection)
-
-        contentStack.addArrangedSubview(tabContentContainer)
-        contentStack.setCustomSpacing(14, after: tabContentContainer)
-
-        let meta = makeMetaCard()
-        contentStack.addArrangedSubview(meta)
-        contentStack.setCustomSpacing(20, after: meta)
-
-        contentStack.addArrangedSubview(makeActionsSection())
-
-        let tail = UIView()
-        contentStack.addArrangedSubview(tail)
-        tail.heightAnchor.constraint(equalToConstant: 24).isActive = true
-    }
-
-    // MARK: Hero
-
-    func makeHero() -> UIView {
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
 
         heroImageView.layer.cornerRadius = Metric.heroRadius
         heroImageView.layer.cornerCurve = .continuous
         heroImageView.backgroundColor = AppPalette.surface
-        heroImageView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(heroImageView)
-
-        wordmarkLabel.textColor = .white
-        wordmarkLabel.font = UIFont.systemFont(ofSize: 44, weight: .bold)
-        wordmarkLabel.textAlignment = .right
-        wordmarkLabel.adjustsFontSizeToFitWidth = true
-        wordmarkLabel.minimumScaleFactor = 0.4
-        wordmarkLabel.translatesAutoresizingMaskIntoConstraints = false
-        heroImageView.addSubview(wordmarkLabel)
+        heroImageView.clipsToBounds = true
 
         styleCircleButton(backButton, symbol: "chevron.left")
         styleCircleButton(shareTopButton, symbol: "square.and.arrow.up")
         styleCircleButton(favoriteButton, symbol: "heart")
-        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
-        shareTopButton.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
-        favoriteButton.addTarget(self, action: #selector(handleFavorite), for: .touchUpInside)
 
-        heroImageView.addSubview(backButton)
-        heroImageView.addSubview(shareTopButton)
-        heroImageView.addSubview(favoriteButton)
-
-        stylePillButton(photosButton, symbol: "photo.on.rectangle", title: "120 Photos")
+        stylePillButton(photosButton, symbol: "photo.on.rectangle", title: photosButton.currentTitle ?? "Photos")
+        photosButton.accessibilityLabel = "Photos"
         configureVibeButton()
-        photosButton.addTarget(self, action: #selector(handleSoon(_:)), for: .touchUpInside)
-        vibeButton.addTarget(self, action: #selector(handleSoon(_:)), for: .touchUpInside)
-        heroImageView.addSubview(photosButton)
-        heroImageView.addSubview(vibeButton)
+        vibeButton.accessibilityLabel = "Watch Vibe"
+        vibeDiscView.layer.cornerRadius = 13
 
-        NSLayoutConstraint.activate([
-            heroImageView.topAnchor.constraint(equalTo: container.topAnchor, constant: 6),
-            heroImageView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: Metric.gutter),
-            heroImageView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -Metric.gutter),
-            heroImageView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            heroImageView.heightAnchor.constraint(equalToConstant: Metric.heroHeight),
-
-            backButton.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor, constant: 12),
-            backButton.topAnchor.constraint(equalTo: heroImageView.topAnchor, constant: 12),
-            backButton.widthAnchor.constraint(equalToConstant: 36),
-            backButton.heightAnchor.constraint(equalToConstant: 36),
-
-            favoriteButton.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor, constant: -12),
-            favoriteButton.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
-            favoriteButton.widthAnchor.constraint(equalToConstant: 36),
-            favoriteButton.heightAnchor.constraint(equalToConstant: 36),
-
-            shareTopButton.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -10),
-            shareTopButton.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
-            shareTopButton.widthAnchor.constraint(equalToConstant: 36),
-            shareTopButton.heightAnchor.constraint(equalToConstant: 36),
-
-            wordmarkLabel.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor, constant: -18),
-            wordmarkLabel.centerYAnchor.constraint(equalTo: heroImageView.centerYAnchor, constant: -8),
-            wordmarkLabel.leadingAnchor.constraint(greaterThanOrEqualTo: heroImageView.centerXAnchor, constant: -20),
-
-            photosButton.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor, constant: 12),
-            photosButton.bottomAnchor.constraint(equalTo: heroImageView.bottomAnchor, constant: -14),
-            photosButton.heightAnchor.constraint(equalToConstant: 36),
-
-            vibeButton.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor, constant: -12),
-            vibeButton.centerYAnchor.constraint(equalTo: photosButton.centerYAnchor),
-            vibeButton.heightAnchor.constraint(equalToConstant: 36)
-        ])
-        return container
-    }
-
-    // MARK: Title block
-
-    func makeInfoSection() -> UIView {
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-
-        nameLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
-        nameLabel.textColor = AppPalette.primaryText
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        verifiedImageView.image = UIImage(systemName: "checkmark.seal.fill")
-        verifiedImageView.tintColor = AppPalette.verified
-        verifiedImageView.contentMode = .scaleAspectFit
-        verifiedImageView.translatesAutoresizingMaskIntoConstraints = false
-
-        subtitleLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        subtitleLabel.textColor = AppPalette.detailSubtitle
-        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        ratingLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        brandTileLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        brandTileLabel.textColor = AppPalette.gold
-        brandTileLabel.textAlignment = .center
-        brandTileLabel.adjustsFontSizeToFitWidth = true
-        brandTileLabel.minimumScaleFactor = 0.5
         brandTileLabel.backgroundColor = AppPalette.detailCardFill
         brandTileLabel.layer.cornerRadius = 14
         brandTileLabel.layer.cornerCurve = .continuous
         brandTileLabel.layer.borderWidth = 1
         brandTileLabel.layer.borderColor = AppPalette.gold.withAlphaComponent(0.7).cgColor
         brandTileLabel.clipsToBounds = true
-        brandTileLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        container.addSubview(nameLabel)
-        container.addSubview(verifiedImageView)
-        container.addSubview(subtitleLabel)
-        container.addSubview(ratingLabel)
-        container.addSubview(brandTileLabel)
+        metaCardView.backgroundColor = AppPalette.detailCardFill
+        metaCardView.layer.cornerRadius = Metric.cardRadius
+        metaCardView.layer.cornerCurve = .continuous
+        metaCardView.layer.borderWidth = 1
+        metaCardView.layer.borderColor = AppPalette.detailCardBorder.cgColor
 
-        NSLayoutConstraint.activate([
-            brandTileLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -Metric.textGutter),
-            brandTileLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 2),
-            brandTileLabel.widthAnchor.constraint(equalToConstant: 80),
-            brandTileLabel.heightAnchor.constraint(equalToConstant: 72),
+        styleDirectionsButton()
+        [callButton, websiteButton, instagramButton, shareActionButton, oneVibeButton].forEach(styleActionButton)
 
-            nameLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: Metric.textGutter),
-            nameLabel.topAnchor.constraint(equalTo: container.topAnchor),
-
-            verifiedImageView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 7),
-            verifiedImageView.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor, constant: 1),
-            verifiedImageView.widthAnchor.constraint(equalToConstant: 19),
-            verifiedImageView.heightAnchor.constraint(equalToConstant: 19),
-            verifiedImageView.trailingAnchor.constraint(lessThanOrEqualTo: brandTileLabel.leadingAnchor, constant: -10),
-
-            subtitleLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            subtitleLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-            subtitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: brandTileLabel.leadingAnchor, constant: -10),
-
-            ratingLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            ratingLabel.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 6),
-            ratingLabel.trailingAnchor.constraint(lessThanOrEqualTo: brandTileLabel.leadingAnchor, constant: -10),
-
-            container.bottomAnchor.constraint(greaterThanOrEqualTo: ratingLabel.bottomAnchor),
-            container.bottomAnchor.constraint(greaterThanOrEqualTo: brandTileLabel.bottomAnchor)
-        ])
-        return container
-    }
-
-    // MARK: Address + hours card
-
-    func makeMetaCard() -> UIView {
-        let card = UIView()
-        card.backgroundColor = AppPalette.detailCardFill
-        card.layer.cornerRadius = Metric.cardRadius
-        card.layer.cornerCurve = .continuous
-        card.layer.borderWidth = 1
-        card.layer.borderColor = AppPalette.detailCardBorder.cgColor
-        card.translatesAutoresizingMaskIntoConstraints = false
-
-        let locationRow = makeLocationRow()
-        let hoursRow = makeHoursRow()
-
-        let divider = UIView()
-        divider.backgroundColor = AppPalette.detailCardBorder
-        divider.translatesAutoresizingMaskIntoConstraints = false
-
-        card.addSubview(locationRow)
-        card.addSubview(divider)
-        card.addSubview(hoursRow)
-
-        NSLayoutConstraint.activate([
-            locationRow.topAnchor.constraint(equalTo: card.topAnchor),
-            locationRow.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-            locationRow.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            locationRow.heightAnchor.constraint(equalToConstant: 46),
-
-            divider.topAnchor.constraint(equalTo: locationRow.bottomAnchor),
-            divider.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-            divider.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            divider.heightAnchor.constraint(equalToConstant: 1),
-
-            hoursRow.topAnchor.constraint(equalTo: divider.bottomAnchor),
-            hoursRow.leadingAnchor.constraint(equalTo: card.leadingAnchor),
-            hoursRow.trailingAnchor.constraint(equalTo: card.trailingAnchor),
-            hoursRow.heightAnchor.constraint(equalToConstant: 46),
-            hoursRow.bottomAnchor.constraint(equalTo: card.bottomAnchor)
-        ])
-
-        return wrap(card, inset: Metric.gutter)
-    }
-
-    func makeLocationRow() -> UIView {
-        let row = UIView()
-        row.translatesAutoresizingMaskIntoConstraints = false
-
-        let icon = UIImageView(image: UIImage(systemName: "mappin.circle.fill"))
-        icon.tintColor = AppPalette.gold
-        icon.contentMode = .scaleAspectFit
-        icon.translatesAutoresizingMaskIntoConstraints = false
-
-        addressLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        addressLabel.textColor = AppPalette.primaryText
-        addressLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        let directions = UIButton(type: .system)
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage(systemName: "paperplane.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 11, weight: .semibold))
-        config.title = "Directions"
-        config.imagePadding = 6
-        config.baseForegroundColor = AppPalette.primaryText
-        config.background.strokeColor = AppPalette.gold.withAlphaComponent(0.55)
-        config.background.strokeWidth = 1
-        config.background.cornerRadius = 16
-        config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 12, bottom: 7, trailing: 12)
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 12.5, weight: .medium)
-            return outgoing
-        }
-        directions.configuration = config
-        directions.addTarget(self, action: #selector(handleDirections), for: .touchUpInside)
-        directions.translatesAutoresizingMaskIntoConstraints = false
-
-        row.addSubview(icon)
-        row.addSubview(addressLabel)
-        row.addSubview(directions)
-
-        NSLayoutConstraint.activate([
-            icon.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 14),
-            icon.centerYAnchor.constraint(equalTo: row.centerYAnchor),
-            icon.widthAnchor.constraint(equalToConstant: 20),
-            icon.heightAnchor.constraint(equalToConstant: 20),
-
-            directions.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -10),
-            directions.centerYAnchor.constraint(equalTo: row.centerYAnchor),
-
-            addressLabel.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: 10),
-            addressLabel.trailingAnchor.constraint(lessThanOrEqualTo: directions.leadingAnchor, constant: -8),
-            addressLabel.centerYAnchor.constraint(equalTo: row.centerYAnchor)
-        ])
-        return row
-    }
-
-    func makeHoursRow() -> UIView {
-        let row = UIView()
-        row.translatesAutoresizingMaskIntoConstraints = false
-
-        let icon = UIImageView(image: UIImage(systemName: "clock"))
-        icon.tintColor = AppPalette.gold
-        icon.contentMode = .scaleAspectFit
-        icon.translatesAutoresizingMaskIntoConstraints = false
-
-        hoursLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        hoursLabel.textColor = AppPalette.primaryText
-        hoursLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        let chevron = UIImageView(image: UIImage(systemName: "chevron.down"))
-        chevron.tintColor = AppPalette.gold
-        chevron.contentMode = .scaleAspectFit
-        chevron.translatesAutoresizingMaskIntoConstraints = false
-
-        let hit = UIButton(type: .system)
-        hit.translatesAutoresizingMaskIntoConstraints = false
-        hit.addTarget(self, action: #selector(handleHours), for: .touchUpInside)
-
-        row.addSubview(icon)
-        row.addSubview(hoursLabel)
-        row.addSubview(chevron)
-        row.addSubview(hit)
-
-        NSLayoutConstraint.activate([
-            icon.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 14),
-            icon.centerYAnchor.constraint(equalTo: row.centerYAnchor),
-            icon.widthAnchor.constraint(equalToConstant: 20),
-            icon.heightAnchor.constraint(equalToConstant: 20),
-
-            chevron.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -16),
-            chevron.centerYAnchor.constraint(equalTo: row.centerYAnchor),
-            chevron.widthAnchor.constraint(equalToConstant: 14),
-            chevron.heightAnchor.constraint(equalToConstant: 14),
-
-            hoursLabel.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: 10),
-            hoursLabel.trailingAnchor.constraint(lessThanOrEqualTo: chevron.leadingAnchor, constant: -8),
-            hoursLabel.centerYAnchor.constraint(equalTo: row.centerYAnchor),
-
-            hit.topAnchor.constraint(equalTo: row.topAnchor),
-            hit.leadingAnchor.constraint(equalTo: row.leadingAnchor),
-            hit.trailingAnchor.constraint(equalTo: row.trailingAnchor),
-            hit.bottomAnchor.constraint(equalTo: row.bottomAnchor)
-        ])
-        return row
-    }
-
-    // MARK: Quick actions
-
-    func makeActionsSection() -> UIView {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .fillEqually
-        stack.alignment = .top
-        stack.spacing = 0
-        stack.translatesAutoresizingMaskIntoConstraints = false
-
-        let items: [(UIImage?, String, Selector)] = [
-            (UIImage(systemName: "phone.fill"), "Call", #selector(handleCall)),
-            (UIImage(systemName: "globe"), "Website", #selector(handleWebsite)),
-            (BrandGlyphs.instagram, "Instagram", #selector(handleInstagram)),
-            (nil, "OneVibe", #selector(handleSoon(_:))),
-            (BrandGlyphs.shareNodes, "Share", #selector(handleShare))
-        ]
-        for (image, title, action) in items {
-            stack.addArrangedSubview(makeActionItem(image: image, title: title, action: action))
-        }
-
-        return wrap(stack, inset: 14)
-    }
-
-    func makeActionItem(image: UIImage?, title: String, action: Selector) -> UIView {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.spacing = 8
-
-        let button = UIButton(type: .system)
-        button.tintColor = AppPalette.gold
-        button.backgroundColor = AppPalette.detailCardFill
-        button.layer.cornerRadius = 27
-        button.layer.borderWidth = 1
-        button.layer.borderColor = AppPalette.gold.withAlphaComponent(0.35).cgColor
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.widthAnchor.constraint(equalToConstant: 54).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 54).isActive = true
-        button.addTarget(self, action: action, for: .touchUpInside)
-        button.accessibilityLabel = title
-
-        if let image {
-            button.setImage(image.withConfiguration(UIImage.SymbolConfiguration(pointSize: 21, weight: .regular)), for: .normal)
-        } else {
-            // OneVibe uses the brand mark rather than a symbol.
-            let logo = UIImageView(image: UIImage(named: "LaunchLogo"))
-            logo.contentMode = .scaleAspectFit
-            logo.clipsToBounds = true
-            logo.layer.cornerRadius = 20
-            logo.translatesAutoresizingMaskIntoConstraints = false
-            button.addSubview(logo)
-            NSLayoutConstraint.activate([
-                logo.centerXAnchor.constraint(equalTo: button.centerXAnchor),
-                logo.centerYAnchor.constraint(equalTo: button.centerYAnchor),
-                logo.widthAnchor.constraint(equalToConstant: 40),
-                logo.heightAnchor.constraint(equalToConstant: 40)
-            ])
-        }
-
-        let label = UILabel()
-        label.text = title
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textColor = AppPalette.primaryText
-        label.textAlignment = .center
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.8
-
-        stack.addArrangedSubview(button)
-        stack.addArrangedSubview(label)
-        return stack
-    }
-
-    // MARK: Shared styling
-
-    func wrap(_ child: UIView, inset: CGFloat) -> UIView {
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        child.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(child)
-        NSLayoutConstraint.activate([
-            child.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: inset),
-            child.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -inset),
-            child.topAnchor.constraint(equalTo: container.topAnchor),
-            child.bottomAnchor.constraint(equalTo: container.bottomAnchor)
-        ])
-        return container
+        let symbol = UIImage.SymbolConfiguration(pointSize: 21, weight: .regular)
+        instagramButton.setImage(BrandGlyphs.instagram.withConfiguration(symbol), for: .normal)
+        shareActionButton.setImage(BrandGlyphs.shareNodes.withConfiguration(symbol), for: .normal)
+        oneVibeButton.accessibilityLabel = "OneVibe"
+        oneVibeButton.imageView?.contentMode = .scaleAspectFit
+        oneVibeButton.imageEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
+        oneVibeButton.clipsToBounds = true
     }
 
     func styleCircleButton(_ button: UIButton, symbol: String) {
@@ -536,7 +137,6 @@ private extension VenueDetailViewController {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.white.withAlphaComponent(0.14).cgColor
         button.clipsToBounds = true
-        button.translatesAutoresizingMaskIntoConstraints = false
     }
 
     func stylePillButton(_ button: UIButton, symbol: String, title: String) {
@@ -554,10 +154,8 @@ private extension VenueDetailViewController {
             return outgoing
         }
         button.configuration = config
-        button.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    /// "Watch Vibe" keeps the play glyph inside a solid white disc.
     func configureVibeButton() {
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = UIColor.black.withAlphaComponent(0.62)
@@ -571,33 +169,32 @@ private extension VenueDetailViewController {
             return outgoing
         }
         vibeButton.configuration = config
-        vibeButton.translatesAutoresizingMaskIntoConstraints = false
+    }
 
-        let disc = UIView()
-        disc.backgroundColor = .white
-        disc.layer.cornerRadius = 13
-        disc.isUserInteractionEnabled = false
-        disc.translatesAutoresizingMaskIntoConstraints = false
+    func styleDirectionsButton() {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "paperplane.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 11, weight: .semibold))
+        config.title = "Directions"
+        config.imagePadding = 6
+        config.baseForegroundColor = AppPalette.primaryText
+        config.background.strokeColor = AppPalette.gold.withAlphaComponent(0.55)
+        config.background.strokeWidth = 1
+        config.background.cornerRadius = 16
+        config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 12, bottom: 7, trailing: 12)
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 12.5, weight: .medium)
+            return outgoing
+        }
+        directionsButton.configuration = config
+    }
 
-        let play = UIImageView(image: UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .black)))
-        play.tintColor = .black
-        play.contentMode = .scaleAspectFit
-        play.translatesAutoresizingMaskIntoConstraints = false
-
-        vibeButton.addSubview(disc)
-        disc.addSubview(play)
-
-        NSLayoutConstraint.activate([
-            disc.trailingAnchor.constraint(equalTo: vibeButton.trailingAnchor, constant: -6),
-            disc.centerYAnchor.constraint(equalTo: vibeButton.centerYAnchor),
-            disc.widthAnchor.constraint(equalToConstant: 26),
-            disc.heightAnchor.constraint(equalToConstant: 26),
-
-            play.centerXAnchor.constraint(equalTo: disc.centerXAnchor, constant: 1),
-            play.centerYAnchor.constraint(equalTo: disc.centerYAnchor),
-            play.widthAnchor.constraint(equalToConstant: 12),
-            play.heightAnchor.constraint(equalToConstant: 12)
-        ])
+    func styleActionButton(_ button: UIButton) {
+        button.tintColor = AppPalette.gold
+        button.backgroundColor = AppPalette.detailCardFill
+        button.layer.cornerRadius = 27
+        button.layer.borderWidth = 1
+        button.layer.borderColor = AppPalette.gold.withAlphaComponent(0.35).cgColor
     }
 }
 
@@ -882,11 +479,11 @@ private extension VenueDetailViewController {
 // MARK: - Actions
 
 private extension VenueDetailViewController {
-    @objc func handleBack() {
+    @IBAction func handleBack() {
         navigationController?.popViewController(animated: true)
     }
 
-    @objc func handleFavorite() {
+    @IBAction func handleFavorite() {
         isFavorite.toggle()
         updateFavoriteIcon()
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -899,37 +496,37 @@ private extension VenueDetailViewController {
         favoriteButton.tintColor = isFavorite ? .systemRed : .white
     }
 
-    @objc func handleShare() {
+    @IBAction func handleShare() {
         guard let detail else { return }
         let items: [Any] = ["\(detail.name) — \(detail.subtitle)", detail.website]
         present(UIActivityViewController(activityItems: items, applicationActivities: nil), animated: true)
     }
 
-    @objc func handleUnlockDeal() {
+    @IBAction func handleUnlockDeal() {
         presentAlert(title: "Deal unlocked", message: "Show this offer at the venue. Full redemption flow coming soon.")
     }
 
-    @objc func handleDirections() {
+    @IBAction func handleDirections() {
         presentAlert(title: "Directions", message: detail?.address ?? "")
     }
 
-    @objc func handleHours() {
+    @IBAction func handleHours() {
         presentAlert(title: "Opening hours", message: detail?.hoursText ?? "")
     }
 
-    @objc func handleCall() {
+    @IBAction func handleCall() {
         presentAlert(title: "Call", message: detail?.phone ?? "")
     }
 
-    @objc func handleWebsite() {
+    @IBAction func handleWebsite() {
         presentAlert(title: "Website", message: detail?.website ?? "")
     }
 
-    @objc func handleInstagram() {
+    @IBAction func handleInstagram() {
         presentAlert(title: "Instagram", message: "@\(detail?.instagram ?? "")")
     }
 
-    @objc func handleSoon(_ sender: UIButton) {
+    @IBAction func handleSoon(_ sender: UIButton) {
         let title = sender.accessibilityLabel ?? sender.configuration?.title ?? "Coming soon"
         presentAlert(title: title, message: "Coming soon")
     }

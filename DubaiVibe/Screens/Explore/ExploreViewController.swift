@@ -7,6 +7,8 @@ final class ExploreViewController: UIViewController {
     @IBOutlet private weak var notificationButton: UIButton!
     @IBOutlet private weak var bellDotView: UIView!
     @IBOutlet private weak var locationPillView: UIView!
+    @IBOutlet private weak var locationPinImageView: UIImageView!
+    @IBOutlet private weak var locationChevronImageView: UIImageView!
     @IBOutlet private weak var locationButton: UIButton!
     @IBOutlet private weak var searchContainerView: UIView!
     @IBOutlet private weak var searchTextField: UITextField!
@@ -63,20 +65,24 @@ private extension ExploreViewController {
         brandImageView.layer.cornerRadius = 14
         brandImageView.layer.cornerCurve = .continuous
         brandImageView.clipsToBounds = true
-        brandImageView.layer.borderWidth = 1
-        brandImageView.layer.borderColor = AppPalette.gold.withAlphaComponent(0.55).cgColor
+        brandImageView.layer.borderWidth = 1.5
+//        brandImageView.layer.borderColor = AppPalette.gold.withAlphaComponent(0.75).cgColor
         brandImageView.accessibilityLabel = "Dubai Vibe"
 
         taglineLabel.attributedText = NSAttributedString(
             string: "DUBAI • EAT • DRINK • EXPLORE",
             attributes: [
                 .font: UIFont.systemFont(ofSize: 9, weight: .semibold),
-                .foregroundColor: AppPalette.secondaryText,
-                .kern: 1.6
+                .foregroundColor: AppPalette.tagline,
+                .kern: 1.9
             ]
         )
 
-        notificationButton.setImage(UIImage(systemName: "bell.fill"), for: .normal)
+        let bell = UIImage(
+            systemName: "bell",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 21, weight: .regular)
+        )
+        notificationButton.setImage(bell, for: .normal)
         notificationButton.tintColor = AppPalette.gold
         notificationButton.accessibilityLabel = "Notifications"
         notificationButton.addTarget(self, action: #selector(handleNotifications), for: .touchUpInside)
@@ -87,8 +93,17 @@ private extension ExploreViewController {
         bellDotView.layer.borderColor = AppPalette.background.cgColor
         bellDotView.isUserInteractionEnabled = false
 
+        locationPinImageView.image = BrandGlyphs.mapPin
+        locationPinImageView.tintColor = AppPalette.gold
+
+        locationChevronImageView.image = UIImage(
+            systemName: "chevron.down",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 11, weight: .semibold)
+        )
+        locationChevronImageView.tintColor = AppPalette.primaryText
+
         locationPillView.backgroundColor = AppPalette.surface
-        locationPillView.layer.cornerRadius = 18
+        locationPillView.layer.cornerRadius = 15
         locationPillView.layer.cornerCurve = .continuous
         locationPillView.layer.borderWidth = 1
         locationPillView.layer.borderColor = AppPalette.chipBorder.cgColor
@@ -110,12 +125,16 @@ private extension ExploreViewController {
         searchContainerView.layer.borderWidth = 1
         searchContainerView.layer.borderColor = AppPalette.searchBorder.cgColor
 
-        let icon = UIImageView(image: UIImage(systemName: "magnifyingglass"))
-        icon.tintColor = AppPalette.secondaryText
+        let glass = UIImage(
+            systemName: "magnifyingglass",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
+        )
+        let icon = UIImageView(image: glass)
+        icon.tintColor = AppPalette.primaryText
         icon.contentMode = .scaleAspectFit
         icon.frame = CGRect(x: 0, y: 0, width: 22, height: 22)
 
-        let left = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 22))
+        let left = UIView(frame: CGRect(x: 0, y: 0, width: 32, height: 22))
         icon.center = left.center
         left.addSubview(icon)
 
@@ -212,7 +231,7 @@ private extension ExploreViewController {
     }
 
     func prefetchArtwork() {
-        let size = CGSize(width: view.bounds.width - 32, height: AppMetrics.heroHeight)
+        let size = CGSize(width: view.bounds.width - AppMetrics.cardGutter * 2, height: AppMetrics.heroHeight)
         ArtworkCache.prefetch(venues, size: size)
     }
 }
@@ -365,7 +384,7 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSourcePrefe
     }
 
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        let size = CGSize(width: view.bounds.width - 32, height: AppMetrics.heroHeight)
+        let size = CGSize(width: view.bounds.width - AppMetrics.cardGutter * 2, height: AppMetrics.heroHeight)
         let ids = indexPaths.compactMap { dataSource.itemIdentifier(for: $0) }
         let upcoming = ids.compactMap(venue(with:))
         ArtworkCache.prefetch(upcoming, size: size)

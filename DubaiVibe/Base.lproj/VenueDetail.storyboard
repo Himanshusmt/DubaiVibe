@@ -1,27 +1,800 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vd-root">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vd-root">
     <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23504"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Venue Detail View Controller-->
         <scene sceneID="vd-scene">
             <objects>
-                <viewController storyboardIdentifier="VenueDetailViewController" id="vd-root" customClass="VenueDetailViewController" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VenueDetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vd-root" customClass="VenueDetailViewController" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vd-view">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1100"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vd-scroll">
+                                <rect key="frame" x="0.0" y="48" width="414" height="1018"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vd-content">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="950"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-hero-wrap">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="216"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-hero" customClass="HeroImageView" customModule="DubaiVibe" customModuleProvider="target">
+                                                        <rect key="frame" x="12" y="6" width="390" height="210"/>
+                                                        <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="210" id="vd-hero-h"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <real key="value" value="20"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="COYA" textAlignment="right" lineBreakMode="tailTruncation" minimumScaleFactor="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="vd-wordmark">
+                                                        <rect key="frame" x="264.5" y="76.5" width="119.5" height="53"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="44"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-back">
+                                                        <rect key="frame" x="24" y="18" width="36" height="36"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.41999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="36" id="vd-back-h"/>
+                                                            <constraint firstAttribute="width" constant="36" id="vd-back-w"/>
+                                                        </constraints>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" image="chevron.left" catalog="system"/>
+                                                        <connections>
+                                                            <action selector="handleBack" destination="vd-root" eventType="touchUpInside" id="vd-a-back"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-share-top">
+                                                        <rect key="frame" x="308" y="18" width="36" height="36"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.41999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="36" id="vd-sht-h"/>
+                                                            <constraint firstAttribute="width" constant="36" id="vd-sht-w"/>
+                                                        </constraints>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" image="square.and.arrow.up" catalog="system"/>
+                                                        <connections>
+                                                            <action selector="handleShare" destination="vd-root" eventType="touchUpInside" id="vd-a-sht"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-fav">
+                                                        <rect key="frame" x="354" y="18" width="36" height="36"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.41999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="36" id="vd-fav-h"/>
+                                                            <constraint firstAttribute="width" constant="36" id="vd-fav-w"/>
+                                                        </constraints>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" image="heart" catalog="system"/>
+                                                        <connections>
+                                                            <action selector="handleFavorite" destination="vd-root" eventType="touchUpInside" id="vd-a-fav"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-photos">
+                                                        <rect key="frame" x="24" y="166" width="99" height="36"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.62" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="36" id="vd-pho-h"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="7" maxY="0.0"/>
+                                                        <state key="normal" title="120 Photos" image="photo.on.rectangle" catalog="system">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <real key="value" value="18"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="handleSoon:" destination="vd-root" eventType="touchUpInside" id="vd-a-pho"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-vibe">
+                                                        <rect key="frame" x="314" y="166" width="76" height="36"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.62" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="36" id="vd-vib-h"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                        <state key="normal" title="Watch Vibe">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <real key="value" value="18"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="handleSoon:" destination="vd-root" eventType="touchUpInside" id="vd-a-vib"/>
+                                                        </connections>
+                                                    </button>
+                                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-vibe-disc">
+                                                        <rect key="frame" x="358" y="171" width="26" height="26"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="play.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vd-vibe-play">
+                                                                <rect key="frame" x="8" y="9" width="12" height="8"/>
+                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="12" id="vd-play-h"/>
+                                                                    <constraint firstAttribute="width" constant="12" id="vd-play-w"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="26" id="vd-disc-h"/>
+                                                            <constraint firstAttribute="width" constant="26" id="vd-disc-w"/>
+                                                            <constraint firstItem="vd-vibe-play" firstAttribute="centerX" secondItem="vd-vibe-disc" secondAttribute="centerX" constant="1" id="vd-play-x"/>
+                                                            <constraint firstItem="vd-vibe-play" firstAttribute="centerY" secondItem="vd-vibe-disc" secondAttribute="centerY" id="vd-play-y"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <real key="value" value="13"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="vd-back" firstAttribute="leading" secondItem="vd-hero" secondAttribute="leading" constant="12" id="vd-back-l"/>
+                                                    <constraint firstItem="vd-back" firstAttribute="top" secondItem="vd-hero" secondAttribute="top" constant="12" id="vd-back-t"/>
+                                                    <constraint firstItem="vd-vibe-disc" firstAttribute="trailing" secondItem="vd-vibe" secondAttribute="trailing" constant="-6" id="vd-disc-r"/>
+                                                    <constraint firstItem="vd-vibe-disc" firstAttribute="centerY" secondItem="vd-vibe" secondAttribute="centerY" id="vd-disc-y"/>
+                                                    <constraint firstItem="vd-hero" firstAttribute="trailing" secondItem="vd-fav" secondAttribute="trailing" constant="12" id="vd-fav-r"/>
+                                                    <constraint firstItem="vd-fav" firstAttribute="centerY" secondItem="vd-back" secondAttribute="centerY" id="vd-fav-y"/>
+                                                    <constraint firstAttribute="bottom" secondItem="vd-hero" secondAttribute="bottom" id="vd-hero-b"/>
+                                                    <constraint firstItem="vd-hero" firstAttribute="leading" secondItem="vd-hero-wrap" secondAttribute="leading" constant="12" id="vd-hero-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="vd-hero" secondAttribute="trailing" constant="12" id="vd-hero-r"/>
+                                                    <constraint firstItem="vd-hero" firstAttribute="top" secondItem="vd-hero-wrap" secondAttribute="top" constant="6" id="vd-hero-t"/>
+                                                    <constraint firstItem="vd-hero" firstAttribute="bottom" secondItem="vd-photos" secondAttribute="bottom" constant="14" id="vd-pho-b"/>
+                                                    <constraint firstItem="vd-photos" firstAttribute="leading" secondItem="vd-hero" secondAttribute="leading" constant="12" id="vd-pho-l"/>
+                                                    <constraint firstItem="vd-fav" firstAttribute="leading" secondItem="vd-share-top" secondAttribute="trailing" constant="10" id="vd-sht-r"/>
+                                                    <constraint firstItem="vd-share-top" firstAttribute="centerY" secondItem="vd-back" secondAttribute="centerY" id="vd-sht-y"/>
+                                                    <constraint firstItem="vd-hero" firstAttribute="trailing" secondItem="vd-vibe" secondAttribute="trailing" constant="12" id="vd-vib-r"/>
+                                                    <constraint firstItem="vd-vibe" firstAttribute="centerY" secondItem="vd-photos" secondAttribute="centerY" id="vd-vib-y"/>
+                                                    <constraint firstItem="vd-wordmark" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vd-hero" secondAttribute="centerX" constant="-20" id="vd-wm-l"/>
+                                                    <constraint firstItem="vd-hero" firstAttribute="trailing" secondItem="vd-wordmark" secondAttribute="trailing" constant="18" id="vd-wm-r"/>
+                                                    <constraint firstItem="vd-wordmark" firstAttribute="centerY" secondItem="vd-hero" secondAttribute="centerY" constant="-8" id="vd-wm-y"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vd-info">
+                                                <rect key="frame" x="0.0" y="230" width="414" height="76"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Coya Dubai" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-name">
+                                                        <rect key="frame" x="18" y="0.0" width="133" height="30"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                                        <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="checkmark.seal.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vd-verified">
+                                                        <rect key="frame" x="158" y="5.5" width="19" height="20.5"/>
+                                                        <color key="tintColor" red="0.18431372549019609" green="0.54509803921568623" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="19" id="vd-ver-h"/>
+                                                            <constraint firstAttribute="width" constant="19" id="vd-ver-w"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Peruvian  •  DIFC" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-subtitle">
+                                                        <rect key="frame" x="18" y="34" width="115.5" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                        <color key="textColor" red="0.52549019607843139" green="0.63529411764705879" blue="0.77647058823529413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="★  4.6  (2.1K)" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-rating">
+                                                        <rect key="frame" x="18" y="58" width="106.5" height="20.5"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                        <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="COYA" textAlignment="center" lineBreakMode="tailTruncation" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="vd-brand">
+                                                        <rect key="frame" x="316" y="2" width="80" height="72"/>
+                                                        <color key="backgroundColor" red="0.054901960784313725" green="0.054901960784313725" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="72" id="vd-brd-h"/>
+                                                            <constraint firstAttribute="width" constant="80" id="vd-brd-w"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                                        <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <real key="value" value="14"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="vd-brand" firstAttribute="trailing" secondItem="vd-info" secondAttribute="trailing" constant="-18" id="vd-brd-r"/>
+                                                    <constraint firstItem="vd-brand" firstAttribute="top" secondItem="vd-info" secondAttribute="top" constant="2" id="vd-brd-t"/>
+                                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="vd-rating" secondAttribute="bottom" id="vd-info-b1"/>
+                                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="vd-brand" secondAttribute="bottom" id="vd-info-b2"/>
+                                                    <constraint firstItem="vd-name" firstAttribute="leading" secondItem="vd-info" secondAttribute="leading" constant="18" id="vd-name-l"/>
+                                                    <constraint firstItem="vd-name" firstAttribute="top" secondItem="vd-info" secondAttribute="top" id="vd-name-t"/>
+                                                    <constraint firstItem="vd-rating" firstAttribute="leading" secondItem="vd-name" secondAttribute="leading" id="vd-rat-l"/>
+                                                    <constraint firstItem="vd-rating" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="vd-brand" secondAttribute="leading" constant="-10" id="vd-rat-r"/>
+                                                    <constraint firstItem="vd-rating" firstAttribute="top" secondItem="vd-subtitle" secondAttribute="bottom" constant="6" id="vd-rat-t"/>
+                                                    <constraint firstItem="vd-subtitle" firstAttribute="leading" secondItem="vd-name" secondAttribute="leading" id="vd-sub-l"/>
+                                                    <constraint firstItem="vd-subtitle" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="vd-brand" secondAttribute="leading" constant="-10" id="vd-sub-r"/>
+                                                    <constraint firstItem="vd-subtitle" firstAttribute="top" secondItem="vd-name" secondAttribute="bottom" constant="4" id="vd-sub-t"/>
+                                                    <constraint firstItem="vd-verified" firstAttribute="leading" secondItem="vd-name" secondAttribute="trailing" constant="7" id="vd-ver-l"/>
+                                                    <constraint firstItem="vd-verified" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="vd-brand" secondAttribute="leading" constant="-10" id="vd-ver-r"/>
+                                                    <constraint firstItem="vd-verified" firstAttribute="centerY" secondItem="vd-name" secondAttribute="centerY" constant="1" id="vd-ver-y"/>
+                                                </constraints>
+                                            </view>
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="vd-tabs">
+                                                <rect key="frame" x="0.0" y="318" width="414" height="42"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="42" id="vd-tabs-h"/>
+                                                </constraints>
+                                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="vd-tabs-flow">
+                                                    <size key="itemSize" width="82" height="42"/>
+                                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                </collectionViewFlowLayout>
+                                                <cells>
+                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VenueDetailSegmentCell" id="vd-tab-cell" customClass="VenueDetailSegmentCell" customModule="DubaiVibe" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="82" height="42"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="vd-tab-cv">
+                                                            <rect key="frame" x="0.0" y="0.0" width="82" height="42"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Deals" textAlignment="center" lineBreakMode="tailTruncation" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="vd-tab-title">
+                                                                    <rect key="frame" x="2" y="4" width="78" height="18"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                    <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-tab-line">
+                                                                    <rect key="frame" x="16" y="31" width="50" height="2.5"/>
+                                                                    <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="2.5" id="vd-line-h"/>
+                                                                        <constraint firstAttribute="width" constant="50" id="vd-line-w"/>
+                                                                    </constraints>
+                                                                </view>
+                                                            </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="vd-tab-line" firstAttribute="top" secondItem="vd-tab-title" secondAttribute="bottom" constant="9" id="vd-line-t"/>
+                                                                <constraint firstItem="vd-tab-line" firstAttribute="centerX" secondItem="vd-tab-title" secondAttribute="centerX" id="vd-line-x"/>
+                                                                <constraint firstItem="vd-tab-title" firstAttribute="leading" secondItem="vd-tab-cv" secondAttribute="leading" constant="2" id="vd-tab-l"/>
+                                                                <constraint firstAttribute="trailing" secondItem="vd-tab-title" secondAttribute="trailing" constant="2" id="vd-tab-r"/>
+                                                                <constraint firstItem="vd-tab-title" firstAttribute="top" secondItem="vd-tab-cv" secondAttribute="top" constant="4" id="vd-tab-t"/>
+                                                            </constraints>
+                                                        </collectionViewCellContentView>
+                                                        <size key="customSize" width="82" height="42"/>
+                                                        <connections>
+                                                            <outlet property="titleLabel" destination="vd-tab-title" id="vd-tab-o1"/>
+                                                            <outlet property="underline" destination="vd-tab-line" id="vd-tab-o2"/>
+                                                            <outlet property="underlineWidth" destination="vd-line-w" id="vd-tab-o3"/>
+                                                        </connections>
+                                                    </collectionViewCell>
+                                                </cells>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="vd-root" id="vd-tabs-ds"/>
+                                                    <outlet property="delegate" destination="vd-root" id="vd-tabs-dg"/>
+                                                </connections>
+                                            </collectionView>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vd-tab-box">
+                                                <rect key="frame" x="0.0" y="370" width="414" height="330"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-deal">
+                                                        <rect key="frame" x="12" y="0.0" width="390" height="300"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-crown-box">
+                                                                <rect key="frame" x="14" y="14" width="72" height="72"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="crown.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vd-crown">
+                                                                        <rect key="frame" x="18" y="21" width="36" height="28.5"/>
+                                                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="30" id="vd-crn-h"/>
+                                                                            <constraint firstAttribute="width" constant="36" id="vd-crn-w"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.039215686274509803" green="0.031372549019607843" blue="0.019607843137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="72" id="vd-cb-h"/>
+                                                                    <constraint firstAttribute="width" constant="72" id="vd-cb-w"/>
+                                                                    <constraint firstItem="vd-crown" firstAttribute="centerX" secondItem="vd-crown-box" secondAttribute="centerX" id="vd-crn-x"/>
+                                                                    <constraint firstItem="vd-crown" firstAttribute="centerY" secondItem="vd-crown-box" secondAttribute="centerY" id="vd-crn-y"/>
+                                                                </constraints>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <real key="value" value="14"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </view>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="EXCLUSIVE DEAL" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-deal-badge">
+                                                                <rect key="frame" x="102" y="18" width="99" height="14"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11.5"/>
+                                                                <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="20% OFF" textAlignment="natural" lineBreakMode="tailTruncation" minimumScaleFactor="0.59999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="vd-deal-off">
+                                                                <rect key="frame" x="102" y="33" width="133" height="37"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="31"/>
+                                                                <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Total bill" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-deal-detail">
+                                                                <rect key="frame" x="102" y="70" width="47.5" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="vd-terms">
+                                                                <rect key="frame" x="18" y="110" width="354" height="104"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Dine-in only" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="vd-term1">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="354" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Valid Sun–Thu" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="vd-term2">
+                                                                        <rect key="frame" x="0.0" y="29" width="354" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="One offer per table" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="vd-term3">
+                                                                        <rect key="frame" x="0.0" y="58" width="354" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Show at the venue to redeem" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="vd-term4">
+                                                                        <rect key="frame" x="0.0" y="87" width="354" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                            </stackView>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-unlock" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="16" y="236" width="358" height="48"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="48" id="vd-unl-h"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                                                <state key="normal" title="Unlock Deal">
+                                                                    <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                </state>
+                                                                <connections>
+                                                                    <action selector="handleUnlockDeal" destination="vd-root" eventType="touchUpInside" id="vd-a-unl"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <color key="backgroundColor" red="0.078431372549019607" green="0.066666666666666666" blue="0.047058823529411764" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstItem="vd-crown-box" firstAttribute="leading" secondItem="vd-deal" secondAttribute="leading" constant="14" id="vd-cb-l"/>
+                                                            <constraint firstItem="vd-crown-box" firstAttribute="top" secondItem="vd-deal" secondAttribute="top" constant="14" id="vd-cb-t"/>
+                                                            <constraint firstItem="vd-deal-badge" firstAttribute="leading" secondItem="vd-crown-box" secondAttribute="trailing" constant="16" id="vd-db-l"/>
+                                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vd-deal-badge" secondAttribute="trailing" constant="14" id="vd-db-r"/>
+                                                            <constraint firstItem="vd-deal-badge" firstAttribute="top" secondItem="vd-crown-box" secondAttribute="top" constant="4" id="vd-db-t"/>
+                                                            <constraint firstItem="vd-deal-detail" firstAttribute="leading" secondItem="vd-deal-badge" secondAttribute="leading" id="vd-dd-l"/>
+                                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vd-deal-detail" secondAttribute="trailing" constant="14" id="vd-dd-r"/>
+                                                            <constraint firstItem="vd-deal-detail" firstAttribute="top" secondItem="vd-deal-off" secondAttribute="bottom" id="vd-dd-t"/>
+                                                            <constraint firstItem="vd-deal-off" firstAttribute="leading" secondItem="vd-deal-badge" secondAttribute="leading" id="vd-do-l"/>
+                                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vd-deal-off" secondAttribute="trailing" constant="14" id="vd-do-r"/>
+                                                            <constraint firstItem="vd-deal-off" firstAttribute="top" secondItem="vd-deal-badge" secondAttribute="bottom" constant="1" id="vd-do-t"/>
+                                                            <constraint firstItem="vd-terms" firstAttribute="leading" secondItem="vd-deal" secondAttribute="leading" constant="18" id="vd-tm-l"/>
+                                                            <constraint firstAttribute="trailing" secondItem="vd-terms" secondAttribute="trailing" constant="18" id="vd-tm-r"/>
+                                                            <constraint firstItem="vd-terms" firstAttribute="top" secondItem="vd-crown-box" secondAttribute="bottom" constant="24" id="vd-tm-t"/>
+                                                            <constraint firstAttribute="bottom" secondItem="vd-unlock" secondAttribute="bottom" constant="16" id="vd-unl-b"/>
+                                                            <constraint firstItem="vd-unlock" firstAttribute="leading" secondItem="vd-deal" secondAttribute="leading" constant="16" id="vd-unl-l"/>
+                                                            <constraint firstAttribute="trailing" secondItem="vd-unlock" secondAttribute="trailing" constant="16" id="vd-unl-r"/>
+                                                            <constraint firstItem="vd-unlock" firstAttribute="top" secondItem="vd-terms" secondAttribute="bottom" constant="22" id="vd-unl-t"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <real key="value" value="18"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="vd-deal" secondAttribute="bottom" id="vd-deal-b"/>
+                                                    <constraint firstItem="vd-deal" firstAttribute="leading" secondItem="vd-tab-box" secondAttribute="leading" constant="12" id="vd-deal-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="vd-deal" secondAttribute="trailing" constant="12" id="vd-deal-r"/>
+                                                    <constraint firstItem="vd-deal" firstAttribute="top" secondItem="vd-tab-box" secondAttribute="top" id="vd-deal-t"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vd-meta-wrap">
+                                                <rect key="frame" x="0.0" y="714" width="414" height="93"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-meta">
+                                                        <rect key="frame" x="12" y="0.0" width="390" height="93"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-loc-row">
+                                                                <rect key="frame" x="0.0" y="0.0" width="390" height="46"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="mappin.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vd-pin">
+                                                                        <rect key="frame" x="14" y="13.5" width="20" height="19"/>
+                                                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="20" id="vd-pin-h"/>
+                                                                            <constraint firstAttribute="width" constant="20" id="vd-pin-w"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Gate Village, DIFC" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-address">
+                                                                        <rect key="frame" x="44" y="14.5" width="117" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-directions">
+                                                                        <rect key="frame" x="297" y="13.5" width="83" height="19.5"/>
+                                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12.5"/>
+                                                                        <color key="tintColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="6" maxY="0.0"/>
+                                                                        <state key="normal" title="Directions" image="paperplane.fill" catalog="system">
+                                                                            <color key="titleColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                <real key="value" value="16"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                        <connections>
+                                                                            <action selector="handleDirections" destination="vd-root" eventType="touchUpInside" id="vd-a-dir"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="vd-address" firstAttribute="leading" secondItem="vd-pin" secondAttribute="trailing" constant="10" id="vd-addr-l"/>
+                                                                    <constraint firstItem="vd-address" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="vd-directions" secondAttribute="leading" constant="-8" id="vd-addr-r"/>
+                                                                    <constraint firstItem="vd-address" firstAttribute="centerY" secondItem="vd-loc-row" secondAttribute="centerY" id="vd-addr-y"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="vd-directions" secondAttribute="trailing" constant="10" id="vd-dir-r"/>
+                                                                    <constraint firstItem="vd-directions" firstAttribute="centerY" secondItem="vd-loc-row" secondAttribute="centerY" id="vd-dir-y"/>
+                                                                    <constraint firstAttribute="height" constant="46" id="vd-loc-h"/>
+                                                                    <constraint firstItem="vd-pin" firstAttribute="leading" secondItem="vd-loc-row" secondAttribute="leading" constant="14" id="vd-pin-l"/>
+                                                                    <constraint firstItem="vd-pin" firstAttribute="centerY" secondItem="vd-loc-row" secondAttribute="centerY" id="vd-pin-y"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-divider">
+                                                                <rect key="frame" x="0.0" y="46" width="390" height="1"/>
+                                                                <color key="backgroundColor" red="0.1803921568627451" green="0.1803921568627451" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="1" id="vd-div-h"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-hours-row">
+                                                                <rect key="frame" x="0.0" y="47" width="390" height="46"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="clock" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vd-clock">
+                                                                        <rect key="frame" x="14" y="13.5" width="20" height="19"/>
+                                                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="20" id="vd-clk-h"/>
+                                                                            <constraint firstAttribute="width" constant="20" id="vd-clk-w"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Open · Closes 1:00 AM" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-hours">
+                                                                        <rect key="frame" x="44" y="14.5" width="147" height="17"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vd-hours-chevron">
+                                                                        <rect key="frame" x="360" y="21" width="14" height="4.5"/>
+                                                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="14" id="vd-hch-h"/>
+                                                                            <constraint firstAttribute="width" constant="14" id="vd-hch-w"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-hours-hit">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="390" height="46"/>
+                                                                        <connections>
+                                                                            <action selector="handleHours" destination="vd-root" eventType="touchUpInside" id="vd-a-hrs"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="vd-clock" firstAttribute="leading" secondItem="vd-hours-row" secondAttribute="leading" constant="14" id="vd-clk-l"/>
+                                                                    <constraint firstItem="vd-clock" firstAttribute="centerY" secondItem="vd-hours-row" secondAttribute="centerY" id="vd-clk-y"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="vd-hours-chevron" secondAttribute="trailing" constant="16" id="vd-hch-r"/>
+                                                                    <constraint firstItem="vd-hours-chevron" firstAttribute="centerY" secondItem="vd-hours-row" secondAttribute="centerY" id="vd-hch-y"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="vd-hours-hit" secondAttribute="bottom" id="vd-hit-b"/>
+                                                                    <constraint firstItem="vd-hours-hit" firstAttribute="leading" secondItem="vd-hours-row" secondAttribute="leading" id="vd-hit-l"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="vd-hours-hit" secondAttribute="trailing" id="vd-hit-r"/>
+                                                                    <constraint firstItem="vd-hours-hit" firstAttribute="top" secondItem="vd-hours-row" secondAttribute="top" id="vd-hit-t"/>
+                                                                    <constraint firstAttribute="height" constant="46" id="vd-hrs-h"/>
+                                                                    <constraint firstItem="vd-hours" firstAttribute="leading" secondItem="vd-clock" secondAttribute="trailing" constant="10" id="vd-hrs-l"/>
+                                                                    <constraint firstItem="vd-hours" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="vd-hours-chevron" secondAttribute="leading" constant="-8" id="vd-hrs-r"/>
+                                                                    <constraint firstItem="vd-hours" firstAttribute="centerY" secondItem="vd-hours-row" secondAttribute="centerY" id="vd-hrs-y"/>
+                                                                </constraints>
+                                                            </view>
+                                                        </subviews>
+                                                        <color key="backgroundColor" red="0.054901960784313725" green="0.054901960784313725" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstItem="vd-divider" firstAttribute="leading" secondItem="vd-meta" secondAttribute="leading" id="vd-div-l"/>
+                                                            <constraint firstAttribute="trailing" secondItem="vd-divider" secondAttribute="trailing" id="vd-div-r"/>
+                                                            <constraint firstItem="vd-divider" firstAttribute="top" secondItem="vd-loc-row" secondAttribute="bottom" id="vd-div-t"/>
+                                                            <constraint firstItem="vd-hours-row" firstAttribute="top" secondItem="vd-divider" secondAttribute="bottom" id="vd-hrs-t"/>
+                                                            <constraint firstAttribute="bottom" secondItem="vd-hours-row" secondAttribute="bottom" id="vd-hrsrow-b"/>
+                                                            <constraint firstItem="vd-hours-row" firstAttribute="leading" secondItem="vd-meta" secondAttribute="leading" id="vd-hrsrow-l"/>
+                                                            <constraint firstAttribute="trailing" secondItem="vd-hours-row" secondAttribute="trailing" id="vd-hrsrow-r"/>
+                                                            <constraint firstItem="vd-loc-row" firstAttribute="leading" secondItem="vd-meta" secondAttribute="leading" id="vd-loc-l"/>
+                                                            <constraint firstAttribute="trailing" secondItem="vd-loc-row" secondAttribute="trailing" id="vd-loc-r"/>
+                                                            <constraint firstItem="vd-loc-row" firstAttribute="top" secondItem="vd-meta" secondAttribute="top" id="vd-loc-t"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <real key="value" value="16"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="vd-meta" secondAttribute="bottom" id="vd-mw-b"/>
+                                                    <constraint firstItem="vd-meta" firstAttribute="leading" secondItem="vd-meta-wrap" secondAttribute="leading" constant="12" id="vd-mw-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="vd-meta" secondAttribute="trailing" constant="12" id="vd-mw-r"/>
+                                                    <constraint firstItem="vd-meta" firstAttribute="top" secondItem="vd-meta-wrap" secondAttribute="top" id="vd-mw-t"/>
+                                                </constraints>
+                                            </view>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="vd-actions">
+                                                <rect key="frame" x="14" y="827" width="386" height="76.5"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vd-act-call">
+                                                        <rect key="frame" x="0.0" y="0.0" width="77" height="76.5"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-call">
+                                                                <rect key="frame" x="11.5" y="0.0" width="54" height="54"/>
+                                                                <color key="backgroundColor" red="0.054901960784313725" green="0.054901960784313725" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="54" id="vd-call-h"/>
+                                                                    <constraint firstAttribute="width" constant="54" id="vd-call-w"/>
+                                                                </constraints>
+                                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <state key="normal" image="phone.fill" catalog="system"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <real key="value" value="27"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="handleCall" destination="vd-root" eventType="touchUpInside" id="vd-a-call"/>
+                                                                </connections>
+                                                            </button>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Call" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-call-l">
+                                                                <rect key="frame" x="28" y="62" width="21.5" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vd-act-web">
+                                                        <rect key="frame" x="77" y="0.0" width="77.5" height="76.5"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-web">
+                                                                <rect key="frame" x="12" y="0.0" width="54" height="54"/>
+                                                                <color key="backgroundColor" red="0.054901960784313725" green="0.054901960784313725" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="54" id="vd-web-h"/>
+                                                                    <constraint firstAttribute="width" constant="54" id="vd-web-w"/>
+                                                                </constraints>
+                                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <state key="normal" image="globe" catalog="system"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <real key="value" value="27"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="handleWebsite" destination="vd-root" eventType="touchUpInside" id="vd-a-web"/>
+                                                                </connections>
+                                                            </button>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Website" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-web-l">
+                                                                <rect key="frame" x="16" y="62" width="46" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vd-act-ig">
+                                                        <rect key="frame" x="154.5" y="0.0" width="77" height="76.5"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-ig">
+                                                                <rect key="frame" x="11.5" y="0.0" width="54" height="54"/>
+                                                                <color key="backgroundColor" red="0.054901960784313725" green="0.054901960784313725" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="54" id="vd-ig-h"/>
+                                                                    <constraint firstAttribute="width" constant="54" id="vd-ig-w"/>
+                                                                </constraints>
+                                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <state key="normal" image="camera" catalog="system"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <real key="value" value="27"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="handleInstagram" destination="vd-root" eventType="touchUpInside" id="vd-a-ig"/>
+                                                                </connections>
+                                                            </button>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Instagram" textAlignment="center" lineBreakMode="tailTruncation" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="vd-ig-l">
+                                                                <rect key="frame" x="10.5" y="62" width="56.5" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vd-act-ov">
+                                                        <rect key="frame" x="231.5" y="0.0" width="77.5" height="76.5"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-onevibe">
+                                                                <rect key="frame" x="11.5" y="0.0" width="54" height="54"/>
+                                                                <color key="backgroundColor" red="0.054901960784313725" green="0.054901960784313725" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="54" id="vd-ov-h"/>
+                                                                    <constraint firstAttribute="width" constant="54" id="vd-ov-w"/>
+                                                                </constraints>
+                                                                <state key="normal" image="LaunchLogo"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <real key="value" value="27"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="handleSoon:" destination="vd-root" eventType="touchUpInside" id="vd-a-ov"/>
+                                                                </connections>
+                                                            </button>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="OneVibe" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-ov-l">
+                                                                <rect key="frame" x="14.5" y="62" width="48" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="vd-act-share">
+                                                        <rect key="frame" x="309" y="0.0" width="77" height="76.5"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-share-act">
+                                                                <rect key="frame" x="11.5" y="0.0" width="54" height="54"/>
+                                                                <color key="backgroundColor" red="0.054901960784313725" green="0.054901960784313725" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="54" id="vd-sha-h"/>
+                                                                    <constraint firstAttribute="width" constant="54" id="vd-sha-w"/>
+                                                                </constraints>
+                                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <state key="normal" image="square.and.arrow.up" catalog="system"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <real key="value" value="27"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="handleShare" destination="vd-root" eventType="touchUpInside" id="vd-a-sha"/>
+                                                                </connections>
+                                                            </button>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Share" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-sha-l">
+                                                                <rect key="frame" x="22" y="62" width="33" height="14.5"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="vd-actions" secondAttribute="bottom" constant="24" id="vd-act-b"/>
+                                            <constraint firstItem="vd-actions" firstAttribute="leading" secondItem="vd-content" secondAttribute="leading" constant="14" id="vd-act-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="vd-actions" secondAttribute="trailing" constant="14" id="vd-act-r"/>
+                                            <constraint firstItem="vd-actions" firstAttribute="top" secondItem="vd-meta-wrap" secondAttribute="bottom" constant="20" id="vd-act-t"/>
+                                            <constraint firstItem="vd-hero-wrap" firstAttribute="leading" secondItem="vd-content" secondAttribute="leading" id="vd-hw-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="vd-hero-wrap" secondAttribute="trailing" id="vd-hw-r"/>
+                                            <constraint firstItem="vd-hero-wrap" firstAttribute="top" secondItem="vd-content" secondAttribute="top" id="vd-hw-t"/>
+                                            <constraint firstItem="vd-info" firstAttribute="leading" secondItem="vd-content" secondAttribute="leading" id="vd-info-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="vd-info" secondAttribute="trailing" id="vd-info-r"/>
+                                            <constraint firstItem="vd-info" firstAttribute="top" secondItem="vd-hero-wrap" secondAttribute="bottom" constant="14" id="vd-info-t"/>
+                                            <constraint firstItem="vd-meta-wrap" firstAttribute="leading" secondItem="vd-content" secondAttribute="leading" id="vd-mw-ld"/>
+                                            <constraint firstItem="vd-meta-wrap" firstAttribute="top" secondItem="vd-tab-box" secondAttribute="bottom" constant="14" id="vd-mw-top"/>
+                                            <constraint firstAttribute="trailing" secondItem="vd-meta-wrap" secondAttribute="trailing" id="vd-mw-tr"/>
+                                            <constraint firstItem="vd-tabs" firstAttribute="leading" secondItem="vd-content" secondAttribute="leading" id="vd-tabs-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="vd-tabs" secondAttribute="trailing" id="vd-tabs-r"/>
+                                            <constraint firstItem="vd-tabs" firstAttribute="top" secondItem="vd-info" secondAttribute="bottom" constant="12" id="vd-tabs-t"/>
+                                            <constraint firstItem="vd-tab-box" firstAttribute="leading" secondItem="vd-content" secondAttribute="leading" id="vd-tb-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="vd-tab-box" secondAttribute="trailing" id="vd-tb-r"/>
+                                            <constraint firstItem="vd-tab-box" firstAttribute="top" secondItem="vd-tabs" secondAttribute="bottom" constant="10" id="vd-tb-t"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="vd-content" secondAttribute="bottom" id="vd-c-b"/>
+                                    <constraint firstItem="vd-content" firstAttribute="leading" secondItem="vd-scroll" secondAttribute="leading" id="vd-c-l"/>
+                                    <constraint firstAttribute="trailing" secondItem="vd-content" secondAttribute="trailing" id="vd-c-r"/>
+                                    <constraint firstItem="vd-content" firstAttribute="top" secondItem="vd-scroll" secondAttribute="top" id="vd-c-t"/>
+                                    <constraint firstItem="vd-content" firstAttribute="width" secondItem="vd-scroll" secondAttribute="width" id="vd-c-w"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vd-safe"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="vd-safe" firstAttribute="bottom" secondItem="vd-scroll" secondAttribute="bottom" id="vd-sc-b"/>
+                            <constraint firstItem="vd-scroll" firstAttribute="leading" secondItem="vd-view" secondAttribute="leading" id="vd-sc-l"/>
+                            <constraint firstAttribute="trailing" secondItem="vd-scroll" secondAttribute="trailing" id="vd-sc-r"/>
+                            <constraint firstItem="vd-scroll" firstAttribute="top" secondItem="vd-safe" secondAttribute="top" id="vd-sc-t"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="vd-navitem"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="414" height="1100"/>
+                    <connections>
+                        <outlet property="addressLabel" destination="vd-address" id="vd-o-addr"/>
+                        <outlet property="backButton" destination="vd-back" id="vd-o-back"/>
+                        <outlet property="brandTileLabel" destination="vd-brand" id="vd-o-brd"/>
+                        <outlet property="callButton" destination="vd-call" id="vd-o-call"/>
+                        <outlet property="directionsButton" destination="vd-directions" id="vd-o-dir"/>
+                        <outlet property="favoriteButton" destination="vd-fav" id="vd-o-fav"/>
+                        <outlet property="heroImageView" destination="vd-hero" id="vd-o-hero"/>
+                        <outlet property="hoursLabel" destination="vd-hours" id="vd-o-hrs"/>
+                        <outlet property="instagramButton" destination="vd-ig" id="vd-o-ig"/>
+                        <outlet property="metaCardView" destination="vd-meta" id="vd-o-meta"/>
+                        <outlet property="nameLabel" destination="vd-name" id="vd-o-name"/>
+                        <outlet property="oneVibeButton" destination="vd-onevibe" id="vd-o-ov"/>
+                        <outlet property="photosButton" destination="vd-photos" id="vd-o-pho"/>
+                        <outlet property="ratingLabel" destination="vd-rating" id="vd-o-rat"/>
+                        <outlet property="scrollView" destination="vd-scroll" id="vd-o-sc"/>
+                        <outlet property="segmentCollection" destination="vd-tabs" id="vd-o-tabs"/>
+                        <outlet property="shareActionButton" destination="vd-share-act" id="vd-o-sha"/>
+                        <outlet property="shareTopButton" destination="vd-share-top" id="vd-o-sht"/>
+                        <outlet property="subtitleLabel" destination="vd-subtitle" id="vd-o-sub"/>
+                        <outlet property="tabContentContainer" destination="vd-tab-box" id="vd-o-tab"/>
+                        <outlet property="verifiedImageView" destination="vd-verified" id="vd-o-ver"/>
+                        <outlet property="vibeButton" destination="vd-vibe" id="vd-o-vib"/>
+                        <outlet property="vibeDiscView" destination="vd-vibe-disc" id="vd-o-disc"/>
+                        <outlet property="websiteButton" destination="vd-web" id="vd-o-web"/>
+                        <outlet property="wordmarkLabel" destination="vd-wordmark" id="vd-o-wm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vd-fr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="20" y="20"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="LaunchLogo" width="1024" height="1024"/>
+        <image name="camera" catalog="system" width="128" height="93"/>
+        <image name="checkmark.seal.fill" catalog="system" width="128" height="124"/>
+        <image name="chevron.down" catalog="system" width="128" height="70"/>
+        <image name="chevron.left" catalog="system" width="97" height="128"/>
+        <image name="clock" catalog="system" width="128" height="123"/>
+        <image name="crown.fill" catalog="system" width="128" height="92"/>
+        <image name="globe" catalog="system" width="128" height="123"/>
+        <image name="heart" catalog="system" width="128" height="107"/>
+        <image name="mappin.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="paperplane.fill" catalog="system" width="128" height="119"/>
+        <image name="phone.fill" catalog="system" width="128" height="114"/>
+        <image name="photo.on.rectangle" catalog="system" width="128" height="98"/>
+        <image name="play.fill" catalog="system" width="120" height="128"/>
+        <image name="square.and.arrow.up" catalog="system" width="110" height="128"/>
+    </resources>
 </document>

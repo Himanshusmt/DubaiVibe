@@ -110,9 +110,9 @@
 		80080175304FE3DE005FC893 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A9D9936B1DA4B4721D764E4E /* Pods-DubaiVibe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DubaiVibe.debug.xcconfig"; path = "Target Support Files/Pods-DubaiVibe/Pods-DubaiVibe.debug.xcconfig"; sourceTree = "<group>"; };
 		DF7DD79E305028EE002BFA4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DF7DD79F305028EE002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ../Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		DF7DD7A1305028EE002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ../Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		DF7DD7A3305028EE002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ../Base.lproj/VenueDetail.storyboard; sourceTree = "<group>"; };
+		DF7DD79F305028EE002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		DF7DD7A1305028EE002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DF7DD7A3305028EE002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/VenueDetail.storyboard; sourceTree = "<group>"; };
 		DF7DD7A6305028EE002BFA4F /* ExploreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreRepository.swift; sourceTree = "<group>"; };
 		DF7DD7A7305028EE002BFA4F /* VenueDetailRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailRepository.swift; sourceTree = "<group>"; };
 		DF7DD7A9305028EE002BFA4F /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
@@ -171,10 +171,7 @@
 		8008012A304FE3DE005FC893 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
-				DF7DD7A0305028EE002BFA4F /* LaunchScreen.storyboard */,
-				DF7DD7A4305028EE002BFA4F /* VenueDetail.storyboard */,
 				80080124304FE3DE005FC893 /* Authentication.storyboard */,
-				DF7DD7A2305028EE002BFA4F /* Main.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -262,13 +259,16 @@
 		80080176304FE3DE005FC893 /* DubaiVibe */ = {
 			isa = PBXGroup;
 			children = (
-				8008012A304FE3DE005FC893 /* Storyboard */,
-				8008016C304FE3DE005FC893 /* SupportingFile */,
 				8008016D304FE3DE005FC893 /* AppDelegate.swift */,
-				8008016F304FE3DE005FC893 /* Info.plist */,
 				80080174304FE3DE005FC893 /* SceneDelegate.swift */,
 				80080175304FE3DE005FC893 /* ViewController.swift */,
+				DF7DD7A2305028EE002BFA4F /* Main.storyboard */,
+				DF7DD7A0305028EE002BFA4F /* LaunchScreen.storyboard */,
+				DF7DD7A4305028EE002BFA4F /* VenueDetail.storyboard */,
 				DF7DD79E305028EE002BFA4F /* Assets.xcassets */,
+				8008016F304FE3DE005FC893 /* Info.plist */,
+				8008012A304FE3DE005FC893 /* Storyboard */,
+				8008016C304FE3DE005FC893 /* SupportingFile */,
 				DF7DD7A8305028EE002BFA4F /* Data */,
 				DF7DD7AB305028EE002BFA4F /* Models */,
 				DF7DD7AD305028EE002BFA4F /* Rendering */,
