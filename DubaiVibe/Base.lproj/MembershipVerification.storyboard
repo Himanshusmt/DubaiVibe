@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mv-root">
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Membership Verification View Controller-->
+        <scene sceneID="mv-scene">
+            <objects>
+                <viewController storyboardIdentifier="MembershipVerificationViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mv-root" customClass="MembershipVerificationViewController" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mv-view">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1100"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-glow-t" customClass="GoldAmbientGlowView" customModule="DubaiVibe" customModuleProvider="target">
+                                <rect key="frame" x="-80" y="-20" width="300" height="280"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="280" id="mv-gt-h"/>
+                                    <constraint firstAttribute="width" constant="300" id="mv-gt-w"/>
+                                </constraints>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-glow-m" customClass="GoldAmbientGlowView" customModule="DubaiVibe" customModuleProvider="target">
+                                <rect key="frame" x="57" y="234" width="300" height="260"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="260" id="mv-gm-h"/>
+                                    <constraint firstAttribute="width" constant="300" id="mv-gm-w"/>
+                                </constraints>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-glow-b" customClass="GoldAmbientGlowView" customModule="DubaiVibe" customModuleProvider="target">
+                                <rect key="frame" x="194" y="780" width="300" height="360"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="360" id="mv-gb-h"/>
+                                    <constraint firstAttribute="width" constant="300" id="mv-gb-w"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-nav">
+                                <rect key="frame" x="0.0" y="96" width="414" height="68"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-back">
+                                        <rect key="frame" x="10" y="18" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="mv-bk-h"/>
+                                            <constraint firstAttribute="width" constant="32" id="mv-bk-w"/>
+                                        </constraints>
+                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="chevron.left" catalog="system"/>
+                                        <connections>
+                                            <action selector="handleBack" destination="mv-root" eventType="touchUpInside" id="mv-a-back"/>
+                                        </connections>
+                                    </button>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-logo-tile">
+                                        <rect key="frame" x="174" y="1" width="66" height="66"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="mv-logo">
+                                                <rect key="frame" x="0.0" y="0.0" width="66" height="66"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="mv-logo" secondAttribute="bottom" id="mv-lg-b"/>
+                                            <constraint firstAttribute="height" constant="66" id="mv-lg-h"/>
+                                            <constraint firstItem="mv-logo" firstAttribute="leading" secondItem="mv-logo-tile" secondAttribute="leading" id="mv-lg-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="mv-logo" secondAttribute="trailing" id="mv-lg-r"/>
+                                            <constraint firstItem="mv-logo" firstAttribute="top" secondItem="mv-logo-tile" secondAttribute="top" id="mv-lg-t"/>
+                                            <constraint firstAttribute="width" constant="66" id="mv-lg-w"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-help">
+                                        <rect key="frame" x="360" y="18" width="34" height="32"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <state key="normal" title="Help">
+                                            <color key="titleColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="handleHelp" destination="mv-root" eventType="touchUpInside" id="mv-a-help"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="mv-back" firstAttribute="leading" secondItem="mv-nav" secondAttribute="leading" constant="10" id="mv-bk-l"/>
+                                    <constraint firstItem="mv-back" firstAttribute="centerY" secondItem="mv-nav" secondAttribute="centerY" id="mv-bk-y"/>
+                                    <constraint firstAttribute="trailing" secondItem="mv-help" secondAttribute="trailing" constant="20" id="mv-hp-r"/>
+                                    <constraint firstItem="mv-help" firstAttribute="centerY" secondItem="mv-nav" secondAttribute="centerY" id="mv-hp-y"/>
+                                    <constraint firstItem="mv-logo-tile" firstAttribute="centerX" secondItem="mv-nav" secondAttribute="centerX" id="mv-lg-x"/>
+                                    <constraint firstItem="mv-logo-tile" firstAttribute="centerY" secondItem="mv-nav" secondAttribute="centerY" id="mv-lg-y"/>
+                                    <constraint firstAttribute="height" constant="68" id="mv-nav-h"/>
+                                </constraints>
+                            </view>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mv-scroll">
+                                <rect key="frame" x="0.0" y="164" width="414" height="868"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-content">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="955"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Almost there!" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-title">
+                                                <rect key="frame" x="24" y="8" width="366" height="33.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Verify your membership to unlock this exclusive offer." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="mv-sub">
+                                                <rect key="frame" x="36" y="49.5" width="342" height="36"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" red="0.83137254901960789" green="0.83137254901960789" blue="0.84705882352941175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-avatar-wrap">
+                                                <rect key="frame" x="151" y="107.5" width="112" height="112"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="person.crop.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-avatar" customClass="CircularImageView" customModule="DubaiVibe" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="4.5" width="96" height="95"/>
+                                                        <color key="backgroundColor" red="0.23137254901960785" green="0.16470588235294117" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="tintColor" red="0.83137254901960789" green="0.69019607843137254" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="96" id="mv-av-h"/>
+                                                            <constraint firstAttribute="width" constant="96" id="mv-av-w"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                <real key="value" value="3"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                <color key="value" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </imageView>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-crown-badge" customClass="CircleView" customModule="DubaiVibe" customModuleProvider="target">
+                                                        <rect key="frame" x="80" y="76" width="28" height="28"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="crown.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-crown">
+                                                                <rect key="frame" x="7" y="8" width="14" height="10.5"/>
+                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="12" id="mv-cr-h"/>
+                                                                    <constraint firstAttribute="width" constant="14" id="mv-cr-w"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                        </subviews>
+                                                        <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="28" id="mv-cb-h"/>
+                                                            <constraint firstAttribute="width" constant="28" id="mv-cb-w"/>
+                                                            <constraint firstItem="mv-crown" firstAttribute="centerX" secondItem="mv-crown-badge" secondAttribute="centerX" id="mv-cr-x"/>
+                                                            <constraint firstItem="mv-crown" firstAttribute="centerY" secondItem="mv-crown-badge" secondAttribute="centerY" id="mv-cr-y"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="mv-avatar" firstAttribute="top" secondItem="mv-avatar-wrap" secondAttribute="top" constant="4" id="mv-av-t"/>
+                                                    <constraint firstItem="mv-avatar" firstAttribute="centerX" secondItem="mv-avatar-wrap" secondAttribute="centerX" id="mv-av-x"/>
+                                                    <constraint firstAttribute="height" constant="112" id="mv-aw-h"/>
+                                                    <constraint firstAttribute="width" constant="112" id="mv-aw-w"/>
+                                                    <constraint firstItem="mv-crown-badge" firstAttribute="bottom" secondItem="mv-avatar" secondAttribute="bottom" constant="4" id="mv-cb-b"/>
+                                                    <constraint firstItem="mv-crown-badge" firstAttribute="trailing" secondItem="mv-avatar" secondAttribute="trailing" constant="4" id="mv-cb-r"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-verified">
+                                                <rect key="frame" x="141" y="227.5" width="132.5" height="28"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Verified Member" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-verified-l">
+                                                        <rect key="frame" x="14" y="6" width="104.5" height="16"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                                                        <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="mv-vb-h"/>
+                                                    <constraint firstItem="mv-verified-l" firstAttribute="leading" secondItem="mv-verified" secondAttribute="leading" constant="14" id="mv-vl-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="mv-verified-l" secondAttribute="trailing" constant="14" id="mv-vl-r"/>
+                                                    <constraint firstItem="mv-verified-l" firstAttribute="centerY" secondItem="mv-verified" secondAttribute="centerY" id="mv-vl-y"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="14"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="mv-name-row">
+                                                <rect key="frame" x="163.5" y="267.5" width="87" height="24"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Alex R." textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-name">
+                                                        <rect key="frame" x="0.0" y="0.0" width="65" height="24"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="crown.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-name-crown">
+                                                        <rect key="frame" x="71" y="5" width="16" height="12.5"/>
+                                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="14" id="mv-nc-h"/>
+                                                            <constraint firstAttribute="width" constant="16" id="mv-nc-w"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                            </stackView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="OneVibe Member since 2024" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-since">
+                                                <rect key="frame" x="24" y="295.5" width="366" height="16"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="mv-benefits">
+                                                <rect key="frame" x="119.5" y="333.5" width="175" height="96"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b1">
+                                                        <rect key="frame" x="0.0" y="0.0" width="175" height="24"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b1-icon" customClass="GoldGradientCircleView" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b1-check">
+                                                                        <rect key="frame" x="6" y="9" width="12" height="6.5"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="10" id="mv-c1-h"/>
+                                                                            <constraint firstAttribute="width" constant="12" id="mv-c1-w"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstItem="mv-b1-check" firstAttribute="centerX" secondItem="mv-b1-icon" secondAttribute="centerX" id="mv-c1-x"/>
+                                                                    <constraint firstItem="mv-b1-check" firstAttribute="centerY" secondItem="mv-b1-icon" secondAttribute="centerY" id="mv-c1-y"/>
+                                                                    <constraint firstAttribute="height" constant="24" id="mv-i1-h"/>
+                                                                    <constraint firstAttribute="width" constant="24" id="mv-i1-w"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Real People" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b1-label">
+                                                                <rect key="frame" x="34" y="2.5" width="141" height="19.5"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b2">
+                                                        <rect key="frame" x="0.0" y="36" width="175" height="24"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b2-icon" customClass="GoldGradientCircleView" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b2-check">
+                                                                        <rect key="frame" x="6" y="9" width="12" height="6.5"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="10" id="mv-c2-h"/>
+                                                                            <constraint firstAttribute="width" constant="12" id="mv-c2-w"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstItem="mv-b2-check" firstAttribute="centerX" secondItem="mv-b2-icon" secondAttribute="centerX" id="mv-c2-x"/>
+                                                                    <constraint firstItem="mv-b2-check" firstAttribute="centerY" secondItem="mv-b2-icon" secondAttribute="centerY" id="mv-c2-y"/>
+                                                                    <constraint firstAttribute="height" constant="24" id="mv-i2-h"/>
+                                                                    <constraint firstAttribute="width" constant="24" id="mv-i2-w"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Exclusive Deals" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b2-label">
+                                                                <rect key="frame" x="34" y="2.5" width="141" height="19.5"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b3">
+                                                        <rect key="frame" x="0.0" y="72" width="175" height="24"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b3-icon" customClass="GoldGradientCircleView" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b3-check">
+                                                                        <rect key="frame" x="6" y="9" width="12" height="6.5"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="10" id="mv-c3-h"/>
+                                                                            <constraint firstAttribute="width" constant="12" id="mv-c3-w"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstItem="mv-b3-check" firstAttribute="centerX" secondItem="mv-b3-icon" secondAttribute="centerX" id="mv-c3-x"/>
+                                                                    <constraint firstItem="mv-b3-check" firstAttribute="centerY" secondItem="mv-b3-icon" secondAttribute="centerY" id="mv-c3-y"/>
+                                                                    <constraint firstAttribute="height" constant="24" id="mv-i3-h"/>
+                                                                    <constraint firstAttribute="width" constant="24" id="mv-i3-w"/>
+                                                                </constraints>
+                                                            </view>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Better Experiences" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-b3-label">
+                                                                <rect key="frame" x="34" y="2.5" width="141" height="19.5"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-card">
+                                                <rect key="frame" x="20" y="453.5" width="374" height="445"/>
+                                                <subviews>
+                                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-halo" customClass="GoldHaloView" customModule="DubaiVibe" customModuleProvider="target">
+                                                        <rect key="frame" x="97" y="4" width="180" height="90"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="90" id="mv-halo-h"/>
+                                                            <constraint firstAttribute="width" constant="180" id="mv-halo-w"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mv-emblem">
+                                                        <rect key="frame" x="141" y="22" width="92" height="44"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mv-emblem-row">
+                                                                <rect key="frame" x="0.0" y="0.0" width="92" height="44"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="mv-spark-l">
+                                                                        <rect key="frame" x="0.0" y="15" width="16" height="14"/>
+                                                                        <subviews>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-sl1">
+                                                                                <rect key="frame" x="6" y="0.0" width="10" height="2"/>
+                                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="2" id="mv-sl1-h"/>
+                                                                                    <constraint firstAttribute="width" constant="10" id="mv-sl1-w"/>
+                                                                                </constraints>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                        <real key="value" value="1"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </view>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-sl2">
+                                                                                <rect key="frame" x="0.0" y="6" width="16" height="2"/>
+                                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="2" id="mv-sl2-h"/>
+                                                                                    <constraint firstAttribute="width" constant="16" id="mv-sl2-w"/>
+                                                                                </constraints>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                        <real key="value" value="1"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </view>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-sl3">
+                                                                                <rect key="frame" x="6" y="12" width="10" height="2"/>
+                                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="2" id="mv-sl3-h"/>
+                                                                                    <constraint firstAttribute="width" constant="10" id="mv-sl3-w"/>
+                                                                                </constraints>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                        <real key="value" value="1"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </view>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-shield-wrap">
+                                                                        <rect key="frame" x="24" y="0.0" width="44" height="44"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="shield.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-shield">
+                                                                                <rect key="frame" x="0.0" y="0.5" width="44" height="43"/>
+                                                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            </imageView>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-shield-check">
+                                                                                <rect key="frame" x="13" y="17" width="18" height="12.5"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="16" id="mv-sc-h"/>
+                                                                                    <constraint firstAttribute="width" constant="18" id="mv-sc-w"/>
+                                                                                </constraints>
+                                                                            </imageView>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstItem="mv-shield-check" firstAttribute="centerX" secondItem="mv-shield-wrap" secondAttribute="centerX" id="mv-sc-x"/>
+                                                                            <constraint firstItem="mv-shield-check" firstAttribute="centerY" secondItem="mv-shield-wrap" secondAttribute="centerY" constant="1" id="mv-sc-y"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="mv-shield" secondAttribute="bottom" id="mv-sh-b"/>
+                                                                            <constraint firstItem="mv-shield" firstAttribute="leading" secondItem="mv-shield-wrap" secondAttribute="leading" id="mv-sh-l"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="mv-shield" secondAttribute="trailing" id="mv-sh-r"/>
+                                                                            <constraint firstItem="mv-shield" firstAttribute="top" secondItem="mv-shield-wrap" secondAttribute="top" id="mv-sh-t"/>
+                                                                            <constraint firstAttribute="height" constant="44" id="mv-sw-h"/>
+                                                                            <constraint firstAttribute="width" constant="44" id="mv-sw-w"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="mv-spark-r">
+                                                                        <rect key="frame" x="76" y="15" width="16" height="14"/>
+                                                                        <subviews>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-sr1">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="10" height="2"/>
+                                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="2" id="mv-sr1-h"/>
+                                                                                    <constraint firstAttribute="width" constant="10" id="mv-sr1-w"/>
+                                                                                </constraints>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                        <real key="value" value="1"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </view>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-sr2">
+                                                                                <rect key="frame" x="0.0" y="6" width="16" height="2"/>
+                                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="2" id="mv-sr2-h"/>
+                                                                                    <constraint firstAttribute="width" constant="16" id="mv-sr2-w"/>
+                                                                                </constraints>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                        <real key="value" value="1"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </view>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-sr3">
+                                                                                <rect key="frame" x="0.0" y="12" width="10" height="2"/>
+                                                                                <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="2" id="mv-sr3-h"/>
+                                                                                    <constraint firstAttribute="width" constant="10" id="mv-sr3-w"/>
+                                                                                </constraints>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                        <real key="value" value="1"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
+                                                                            </view>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                            </stackView>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="YOUR VERIFIED CODE" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-caption">
+                                                        <rect key="frame" x="20" y="78" width="334" height="13.5"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
+                                                        <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-code-bar">
+                                                        <rect key="frame" x="16" y="103.5" width="342" height="52"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="OV-7K92X4" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-code">
+                                                                <rect key="frame" x="44" y="11.5" width="254" height="29"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-copy">
+                                                                <rect key="frame" x="296" y="8" width="36" height="36"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="36" id="mv-cp-h"/>
+                                                                    <constraint firstAttribute="width" constant="36" id="mv-cp-w"/>
+                                                                </constraints>
+                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <state key="normal" image="square.on.square" catalog="system"/>
+                                                                <connections>
+                                                                    <action selector="handleCopyCode" destination="mv-root" eventType="touchUpInside" id="mv-a-copy"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <color key="backgroundColor" red="0.086274509803921567" green="0.078431372549019607" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="52" id="mv-bar-h"/>
+                                                            <constraint firstItem="mv-code" firstAttribute="leading" secondItem="mv-code-bar" secondAttribute="leading" constant="44" id="mv-cd-l"/>
+                                                            <constraint firstAttribute="trailing" secondItem="mv-code" secondAttribute="trailing" constant="44" id="mv-cd-r"/>
+                                                            <constraint firstItem="mv-code" firstAttribute="centerY" secondItem="mv-code-bar" secondAttribute="centerY" id="mv-cd-y"/>
+                                                            <constraint firstAttribute="trailing" secondItem="mv-copy" secondAttribute="trailing" constant="10" id="mv-cp-r"/>
+                                                            <constraint firstItem="mv-copy" firstAttribute="centerY" secondItem="mv-code-bar" secondAttribute="centerY" id="mv-cp-y"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="12"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Show this code to the staff to get your exclusive discount." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="mv-instruct">
+                                                        <rect key="frame" x="24" y="167.5" width="326" height="31.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                        <color key="textColor" red="0.90196078431372551" green="0.90196078431372551" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-details">
+                                                        <rect key="frame" x="16" y="215" width="342" height="212"/>
+                                                        <subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="mv-rows">
+                                                                <rect key="frame" x="14" y="4" width="314" height="204"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r1">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r1-icon">
+                                                                                <rect key="frame" x="0.0" y="12" width="18" height="15.5"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="18" id="mv-r1i-h"/>
+                                                                                    <constraint firstAttribute="width" constant="18" id="mv-r1i-w"/>
+                                                                                </constraints>
+                                                                            </imageView>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r1-title">
+                                                                                <rect key="frame" x="28" y="11.5" width="30.5" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="14 Mar 2025" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r1-value">
+                                                                                <rect key="frame" x="68.5" y="11.5" width="245.5" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="40" id="mv-r1-h"/>
+                                                                        </constraints>
+                                                                    </stackView>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-div1">
+                                                                        <rect key="frame" x="0.0" y="40" width="314" height="1"/>
+                                                                        <color key="backgroundColor" red="0.2196078431372549" green="0.2196078431372549" blue="0.23921568627450981" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="1" id="mv-div1-h"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r2">
+                                                                        <rect key="frame" x="0.0" y="41" width="314" height="40"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" image="clock" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r2-icon">
+                                                                                <rect key="frame" x="0.0" y="11.5" width="18" height="17"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="18" id="mv-r2i-h"/>
+                                                                                    <constraint firstAttribute="width" constant="18" id="mv-r2i-w"/>
+                                                                                </constraints>
+                                                                            </imageView>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r2-title">
+                                                                                <rect key="frame" x="28" y="11.5" width="32" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="20:14 (8:14 PM)" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r2-value">
+                                                                                <rect key="frame" x="70" y="11.5" width="244" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="40" id="mv-r2-h"/>
+                                                                        </constraints>
+                                                                    </stackView>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-div2">
+                                                                        <rect key="frame" x="0.0" y="81" width="314" height="1"/>
+                                                                        <color key="backgroundColor" red="0.2196078431372549" green="0.2196078431372549" blue="0.23921568627450981" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="1" id="mv-div2-h"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r3">
+                                                                        <rect key="frame" x="0.0" y="82" width="314" height="40"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" image="clock.arrow.circlepath" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r3-icon">
+                                                                                <rect key="frame" x="-0.5" y="11.5" width="18.5" height="17"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="18" id="mv-r3i-h"/>
+                                                                                    <constraint firstAttribute="width" constant="18" id="mv-r3i-w"/>
+                                                                                </constraints>
+                                                                            </imageView>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" text="Valid Until" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r3-title">
+                                                                                <rect key="frame" x="28" y="11.5" width="65" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="14 Mar 2025, 20:29" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r3-value">
+                                                                                <rect key="frame" x="103" y="11.5" width="211" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="40" id="mv-r3-h"/>
+                                                                        </constraints>
+                                                                    </stackView>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-div3">
+                                                                        <rect key="frame" x="0.0" y="122" width="314" height="1"/>
+                                                                        <color key="backgroundColor" red="0.2196078431372549" green="0.2196078431372549" blue="0.23921568627450981" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="1" id="mv-div3-h"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r4">
+                                                                        <rect key="frame" x="0.0" y="123" width="314" height="40"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" image="hourglass" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r4-icon">
+                                                                                <rect key="frame" x="0.0" y="12" width="18" height="15.5"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="18" id="mv-r4i-h"/>
+                                                                                    <constraint firstAttribute="width" constant="18" id="mv-r4i-w"/>
+                                                                                </constraints>
+                                                                            </imageView>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" text="Valid For" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r4-title">
+                                                                                <rect key="frame" x="28" y="11.5" width="56.5" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="15 minutes" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r4-value">
+                                                                                <rect key="frame" x="94.5" y="11" width="219.5" height="18"/>
+                                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="40" id="mv-r4-h"/>
+                                                                        </constraints>
+                                                                    </stackView>
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-div4">
+                                                                        <rect key="frame" x="0.0" y="163" width="314" height="1"/>
+                                                                        <color key="backgroundColor" red="0.2196078431372549" green="0.2196078431372549" blue="0.23921568627450981" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="1" id="mv-div4-h"/>
+                                                                        </constraints>
+                                                                    </view>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r5">
+                                                                        <rect key="frame" x="0.0" y="164" width="314" height="40"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" image="arrow.triangle.2.circlepath" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r5-icon">
+                                                                                <rect key="frame" x="-0.5" y="11.5" width="19" height="17"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="18" id="mv-r5i-h"/>
+                                                                                    <constraint firstAttribute="width" constant="18" id="mv-r5i-w"/>
+                                                                                </constraints>
+                                                                            </imageView>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" text="Usage" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r5-title">
+                                                                                <rect key="frame" x="28" y="11.5" width="41.5" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="One-time use only" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-r5-value">
+                                                                                <rect key="frame" x="79.5" y="11.5" width="234.5" height="17"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="40" id="mv-r5-h"/>
+                                                                        </constraints>
+                                                                    </stackView>
+                                                                </subviews>
+                                                            </stackView>
+                                                        </subviews>
+                                                        <color key="backgroundColor" red="0.086274509803921567" green="0.078431372549019607" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="bottom" secondItem="mv-rows" secondAttribute="bottom" constant="4" id="mv-rw-b"/>
+                                                            <constraint firstItem="mv-rows" firstAttribute="leading" secondItem="mv-details" secondAttribute="leading" constant="14" id="mv-rw-l"/>
+                                                            <constraint firstAttribute="trailing" secondItem="mv-rows" secondAttribute="trailing" constant="14" id="mv-rw-r"/>
+                                                            <constraint firstItem="mv-rows" firstAttribute="top" secondItem="mv-details" secondAttribute="top" constant="4" id="mv-rw-t"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="16"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                <real key="value" value="0.5"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                <color key="value" red="1" green="1" blue="1" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" red="0.047058823529411764" green="0.043137254901960784" blue="0.035294117647058823" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstItem="mv-code-bar" firstAttribute="leading" secondItem="mv-card" secondAttribute="leading" constant="16" id="mv-bar-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="mv-code-bar" secondAttribute="trailing" constant="16" id="mv-bar-r"/>
+                                                    <constraint firstItem="mv-code-bar" firstAttribute="top" secondItem="mv-caption" secondAttribute="bottom" constant="12" id="mv-bar-t"/>
+                                                    <constraint firstItem="mv-caption" firstAttribute="leading" secondItem="mv-card" secondAttribute="leading" constant="20" id="mv-cap-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="mv-caption" secondAttribute="trailing" constant="20" id="mv-cap-r"/>
+                                                    <constraint firstItem="mv-caption" firstAttribute="top" secondItem="mv-emblem" secondAttribute="bottom" constant="12" id="mv-cap-t"/>
+                                                    <constraint firstAttribute="bottom" secondItem="mv-details" secondAttribute="bottom" constant="18" id="mv-dt-b"/>
+                                                    <constraint firstItem="mv-details" firstAttribute="leading" secondItem="mv-card" secondAttribute="leading" constant="16" id="mv-dt-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="mv-details" secondAttribute="trailing" constant="16" id="mv-dt-r"/>
+                                                    <constraint firstItem="mv-details" firstAttribute="top" secondItem="mv-instruct" secondAttribute="bottom" constant="16" id="mv-dt-t"/>
+                                                    <constraint firstItem="mv-emblem" firstAttribute="top" secondItem="mv-card" secondAttribute="top" constant="22" id="mv-em-t"/>
+                                                    <constraint firstItem="mv-emblem" firstAttribute="centerX" secondItem="mv-card" secondAttribute="centerX" id="mv-em-x"/>
+                                                    <constraint firstItem="mv-halo" firstAttribute="top" secondItem="mv-card" secondAttribute="top" constant="4" id="mv-halo-t"/>
+                                                    <constraint firstItem="mv-halo" firstAttribute="centerX" secondItem="mv-card" secondAttribute="centerX" id="mv-halo-x"/>
+                                                    <constraint firstItem="mv-instruct" firstAttribute="leading" secondItem="mv-card" secondAttribute="leading" constant="24" id="mv-in-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="mv-instruct" secondAttribute="trailing" constant="24" id="mv-in-r"/>
+                                                    <constraint firstItem="mv-instruct" firstAttribute="top" secondItem="mv-code-bar" secondAttribute="bottom" constant="12" id="mv-in-t"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="22"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="This code can only be used once." textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-once">
+                                                <rect key="frame" x="24" y="912.5" width="366" height="14.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="mv-avatar-wrap" firstAttribute="top" secondItem="mv-sub" secondAttribute="bottom" constant="22" id="mv-aw-t"/>
+                                            <constraint firstItem="mv-avatar-wrap" firstAttribute="centerX" secondItem="mv-content" secondAttribute="centerX" id="mv-aw-x"/>
+                                            <constraint firstItem="mv-benefits" firstAttribute="top" secondItem="mv-since" secondAttribute="bottom" constant="22" id="mv-bf-t"/>
+                                            <constraint firstItem="mv-benefits" firstAttribute="centerX" secondItem="mv-content" secondAttribute="centerX" id="mv-bf-x"/>
+                                            <constraint firstItem="mv-card" firstAttribute="leading" secondItem="mv-content" secondAttribute="leading" constant="20" id="mv-cdv-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="mv-card" secondAttribute="trailing" constant="20" id="mv-cdv-r"/>
+                                            <constraint firstItem="mv-card" firstAttribute="top" secondItem="mv-benefits" secondAttribute="bottom" constant="24" id="mv-cdv-t"/>
+                                            <constraint firstItem="mv-name-row" firstAttribute="top" secondItem="mv-verified" secondAttribute="bottom" constant="12" id="mv-nm-t"/>
+                                            <constraint firstItem="mv-name-row" firstAttribute="centerX" secondItem="mv-content" secondAttribute="centerX" id="mv-nm-x"/>
+                                            <constraint firstAttribute="bottom" secondItem="mv-once" secondAttribute="bottom" constant="28" id="mv-on-b"/>
+                                            <constraint firstItem="mv-once" firstAttribute="leading" secondItem="mv-content" secondAttribute="leading" constant="24" id="mv-on-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="mv-once" secondAttribute="trailing" constant="24" id="mv-on-r"/>
+                                            <constraint firstItem="mv-once" firstAttribute="top" secondItem="mv-card" secondAttribute="bottom" constant="14" id="mv-on-t"/>
+                                            <constraint firstItem="mv-since" firstAttribute="leading" secondItem="mv-content" secondAttribute="leading" constant="24" id="mv-sn-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="mv-since" secondAttribute="trailing" constant="24" id="mv-sn-r"/>
+                                            <constraint firstItem="mv-since" firstAttribute="top" secondItem="mv-name-row" secondAttribute="bottom" constant="4" id="mv-sn-t"/>
+                                            <constraint firstItem="mv-sub" firstAttribute="leading" secondItem="mv-content" secondAttribute="leading" constant="36" id="mv-su-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="mv-sub" secondAttribute="trailing" constant="36" id="mv-su-r"/>
+                                            <constraint firstItem="mv-sub" firstAttribute="top" secondItem="mv-title" secondAttribute="bottom" constant="8" id="mv-su-t"/>
+                                            <constraint firstItem="mv-title" firstAttribute="leading" secondItem="mv-content" secondAttribute="leading" constant="24" id="mv-ti-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="mv-title" secondAttribute="trailing" constant="24" id="mv-ti-r"/>
+                                            <constraint firstItem="mv-title" firstAttribute="top" secondItem="mv-content" secondAttribute="top" constant="8" id="mv-ti-t"/>
+                                            <constraint firstItem="mv-verified" firstAttribute="top" secondItem="mv-avatar-wrap" secondAttribute="bottom" constant="8" id="mv-vb-t"/>
+                                            <constraint firstItem="mv-verified" firstAttribute="centerX" secondItem="mv-content" secondAttribute="centerX" id="mv-vb-x"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="mv-content" secondAttribute="bottom" id="mv-ct-b"/>
+                                    <constraint firstItem="mv-content" firstAttribute="leading" secondItem="mv-scroll" secondAttribute="leading" id="mv-ct-l"/>
+                                    <constraint firstAttribute="trailing" secondItem="mv-content" secondAttribute="trailing" id="mv-ct-r"/>
+                                    <constraint firstItem="mv-content" firstAttribute="top" secondItem="mv-scroll" secondAttribute="top" id="mv-ct-t"/>
+                                    <constraint firstItem="mv-content" firstAttribute="width" secondItem="mv-scroll" secondAttribute="width" id="mv-ct-w"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="mv-safe"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="mv-glow-b" secondAttribute="bottom" constant="-40" id="mv-gb-b"/>
+                            <constraint firstAttribute="trailing" secondItem="mv-glow-b" secondAttribute="trailing" constant="-80" id="mv-gb-r"/>
+                            <constraint firstItem="mv-glow-m" firstAttribute="top" secondItem="mv-nav" secondAttribute="bottom" constant="70" id="mv-gm-t"/>
+                            <constraint firstItem="mv-glow-m" firstAttribute="centerX" secondItem="mv-view" secondAttribute="centerX" id="mv-gm-x"/>
+                            <constraint firstItem="mv-glow-t" firstAttribute="leading" secondItem="mv-view" secondAttribute="leading" constant="-80" id="mv-gt-l"/>
+                            <constraint firstItem="mv-glow-t" firstAttribute="top" secondItem="mv-view" secondAttribute="top" constant="-20" id="mv-gt-t"/>
+                            <constraint firstItem="mv-nav" firstAttribute="leading" secondItem="mv-view" secondAttribute="leading" id="mv-nv-l"/>
+                            <constraint firstAttribute="trailing" secondItem="mv-nav" secondAttribute="trailing" id="mv-nv-r"/>
+                            <constraint firstItem="mv-nav" firstAttribute="top" secondItem="mv-safe" secondAttribute="top" id="mv-nv-t"/>
+                            <constraint firstItem="mv-safe" firstAttribute="bottom" secondItem="mv-scroll" secondAttribute="bottom" id="mv-sc-b"/>
+                            <constraint firstItem="mv-scroll" firstAttribute="leading" secondItem="mv-view" secondAttribute="leading" id="mv-sc-l"/>
+                            <constraint firstAttribute="trailing" secondItem="mv-scroll" secondAttribute="trailing" id="mv-sc-r"/>
+                            <constraint firstItem="mv-scroll" firstAttribute="top" secondItem="mv-nav" secondAttribute="bottom" id="mv-sc-t"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="mv-navitem"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="414" height="1100"/>
+                    <connections>
+                        <outlet property="backButton" destination="mv-back" id="mv-o-back"/>
+                        <outlet property="captionLabel" destination="mv-caption" id="mv-o-cap"/>
+                        <outlet property="codeBarView" destination="mv-code-bar" id="mv-o-bar"/>
+                        <outlet property="codeCardView" destination="mv-card" id="mv-o-card"/>
+                        <outlet property="codeLabel" destination="mv-code" id="mv-o-code"/>
+                        <outlet property="copyButton" destination="mv-copy" id="mv-o-copy"/>
+                        <outlet property="crownBadgeView" destination="mv-crown-badge" id="mv-o-crn"/>
+                        <outlet property="dateValueLabel" destination="mv-r1-value" id="mv-o-date"/>
+                        <outlet property="detailsPanelView" destination="mv-details" id="mv-o-det"/>
+                        <outlet property="helpButton" destination="mv-help" id="mv-o-help"/>
+                        <outlet property="logoImageView" destination="mv-logo" id="mv-o-logo"/>
+                        <outlet property="logoTileView" destination="mv-logo-tile" id="mv-o-tile"/>
+                        <outlet property="memberSinceLabel" destination="mv-since" id="mv-o-since"/>
+                        <outlet property="nameLabel" destination="mv-name" id="mv-o-name"/>
+                        <outlet property="profileImageView" destination="mv-avatar" id="mv-o-av"/>
+                        <outlet property="scrollView" destination="mv-scroll" id="mv-o-sc"/>
+                        <outlet property="sparkleLeftStack" destination="mv-spark-l" id="mv-o-spl"/>
+                        <outlet property="sparkleRightStack" destination="mv-spark-r" id="mv-o-spr"/>
+                        <outlet property="timeValueLabel" destination="mv-r2-value" id="mv-o-time"/>
+                        <outlet property="usageValueLabel" destination="mv-r5-value" id="mv-o-use"/>
+                        <outlet property="validForValueLabel" destination="mv-r4-value" id="mv-o-for"/>
+                        <outlet property="validUntilValueLabel" destination="mv-r3-value" id="mv-o-until"/>
+                        <outlet property="verifiedBadgeView" destination="mv-verified" id="mv-o-ver"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mv-fr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="20" y="20"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="LaunchLogo" width="1024" height="1024"/>
+        <image name="arrow.triangle.2.circlepath" catalog="system" width="128" height="117"/>
+        <image name="calendar" catalog="system" width="128" height="107"/>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
+        <image name="chevron.left" catalog="system" width="97" height="128"/>
+        <image name="clock" catalog="system" width="128" height="123"/>
+        <image name="clock.arrow.circlepath" catalog="system" width="128" height="119"/>
+        <image name="crown.fill" catalog="system" width="128" height="92"/>
+        <image name="hourglass" catalog="system" width="103" height="128"/>
+        <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="shield.fill" catalog="system" width="121" height="128"/>
+        <image name="square.on.square" catalog="system" width="128" height="116"/>
+    </resources>
+</document>

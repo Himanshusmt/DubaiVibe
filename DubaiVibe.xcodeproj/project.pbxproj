@@ -64,6 +64,9 @@
 		DF7DD7CF305028EE002BFA4F /* VenueDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7DD7A4305028EE002BFA4F /* VenueDetail.storyboard */; };
 		DF7DD7D0305028EE002BFA4F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7DD7A0305028EE002BFA4F /* LaunchScreen.storyboard */; };
 		DF7DD7D1305028EE002BFA4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7DD7A2305028EE002BFA4F /* Main.storyboard */; };
+		DF8EE8A6305030AA002BFA4F /* MembershipVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8EE8A1305030AA002BFA4F /* MembershipVerificationViewController.swift */; };
+		DF8EE8A7305030AA002BFA4F /* MembershipVerificationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8EE8A2305030AA002BFA4F /* MembershipVerificationViews.swift */; };
+		DF8EE8A8305030AA002BFA4F /* MembershipVerification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF8EE8A4305030AA002BFA4F /* MembershipVerification.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,6 +131,9 @@
 		DF7DD7B9305028EE002BFA4F /* VenueDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailViewController.swift; sourceTree = "<group>"; };
 		DF7DD7BA305028EE002BFA4F /* VenueDetailViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailViews.swift; sourceTree = "<group>"; };
 		DF7DD7BD305028EE002BFA4F /* AppPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPalette.swift; sourceTree = "<group>"; };
+		DF8EE8A1305030AA002BFA4F /* MembershipVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipVerificationViewController.swift; sourceTree = "<group>"; };
+		DF8EE8A2305030AA002BFA4F /* MembershipVerificationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipVerificationViews.swift; sourceTree = "<group>"; };
+		DF8EE8A3305030AA002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MembershipVerification.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -265,6 +271,7 @@
 				DF7DD7A2305028EE002BFA4F /* Main.storyboard */,
 				DF7DD7A0305028EE002BFA4F /* LaunchScreen.storyboard */,
 				DF7DD7A4305028EE002BFA4F /* VenueDetail.storyboard */,
+				DF8EE8A4305030AA002BFA4F /* MembershipVerification.storyboard */,
 				DF7DD79E305028EE002BFA4F /* Assets.xcassets */,
 				8008016F304FE3DE005FC893 /* Info.plist */,
 				8008012A304FE3DE005FC893 /* Storyboard */,
@@ -363,6 +370,7 @@
 			children = (
 				DF7DD7B2305028EE002BFA4F /* Explore */,
 				DF7DD7B4305028EE002BFA4F /* Launch */,
+				DF8EE8A5305030AA002BFA4F /* MembershipVerification */,
 				DF7DD7B7305028EE002BFA4F /* Tabs */,
 				DF7DD7BB305028EE002BFA4F /* VenueDetail */,
 			);
@@ -375,6 +383,15 @@
 				DF7DD7BD305028EE002BFA4F /* AppPalette.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		DF8EE8A5305030AA002BFA4F /* MembershipVerification */ = {
+			isa = PBXGroup;
+			children = (
+				DF8EE8A1305030AA002BFA4F /* MembershipVerificationViewController.swift */,
+				DF8EE8A2305030AA002BFA4F /* MembershipVerificationViews.swift */,
+			);
+			path = MembershipVerification;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -441,6 +458,7 @@
 				80080177304FE3DE005FC893 /* Authentication.storyboard in Resources */,
 				DF7DD7CE305028EE002BFA4F /* Assets.xcassets in Resources */,
 				DF7DD7CF305028EE002BFA4F /* VenueDetail.storyboard in Resources */,
+				DF8EE8A8305030AA002BFA4F /* MembershipVerification.storyboard in Resources */,
 				DF7DD7D0305028EE002BFA4F /* LaunchScreen.storyboard in Resources */,
 				DF7DD7D1305028EE002BFA4F /* Main.storyboard in Resources */,
 				8008017E304FE3DE005FC893 /* assets.bundle in Resources */,
@@ -482,13 +500,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DubaiVibe/Pods-DubaiVibe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DubaiVibe/Pods-DubaiVibe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -510,6 +524,8 @@
 				8008018A304FE3DE005FC893 /* TextFieldExtension.swift in Sources */,
 				8008018B304FE3DE005FC893 /* UIColorExtension.swift in Sources */,
 				DF7DD7BF305028EE002BFA4F /* VenueDetailViewController.swift in Sources */,
+				DF8EE8A6305030AA002BFA4F /* MembershipVerificationViewController.swift in Sources */,
+				DF8EE8A7305030AA002BFA4F /* MembershipVerificationViews.swift in Sources */,
 				DF7DD7C0305028EE002BFA4F /* VenueDetailRepository.swift in Sources */,
 				DF7DD7C1305028EE002BFA4F /* ExploreViewController.swift in Sources */,
 				DF7DD7C2305028EE002BFA4F /* VenueDetailViews.swift in Sources */,
@@ -578,6 +594,14 @@
 				DF7DD7A3305028EE002BFA4F /* Base */,
 			);
 			name = VenueDetail.storyboard;
+			sourceTree = "<group>";
+		};
+		DF8EE8A4305030AA002BFA4F /* MembershipVerification.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF8EE8A3305030AA002BFA4F /* Base */,
+			);
+			name = MembershipVerification.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -503,7 +503,12 @@ private extension VenueDetailViewController {
     }
 
     @IBAction func handleUnlockDeal() {
-        presentAlert(title: "Deal unlocked", message: "Show this offer at the venue. Full redemption flow coming soon.")
+        let storyboard = UIStoryboard(name: "MembershipVerification", bundle: nil)
+        guard let controller = storyboard.instantiateInitialViewController() as? MembershipVerificationViewController else {
+            return
+        }
+        controller.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     @IBAction func handleDirections() {

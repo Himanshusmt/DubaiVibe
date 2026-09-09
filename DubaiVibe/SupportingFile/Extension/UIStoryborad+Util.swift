@@ -10,6 +10,7 @@ import UIKit
 
 extension UIStoryboard {
     static let main = UIStoryboard(name: "Main", bundle: nil)
+    static let membershipVerification = UIStoryboard(name: "MembershipVerification", bundle: nil)
     static let authentication = UIStoryboard(name: "Authentication", bundle: nil)
     static let setting = UIStoryboard(name: "Setting", bundle: nil)
     static let plans = UIStoryboard(name: "Plans", bundle: nil)
