@@ -17,7 +17,7 @@ final class WelcomeSuccessVC: UIViewController {
 
     @IBAction private func startExploring(_ sender: Any) {
         navigationController?.pushViewController(
-            UIStoryboard.authNotifications.instantiateViewController(withIdentifier: "NotificationsPermissionVC"),
+            UIStoryboard.authentication.instantiateViewController(withIdentifier: "NotificationsPermissionVC"),
             animated: true
         )
     }

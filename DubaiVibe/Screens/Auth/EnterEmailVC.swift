@@ -48,7 +48,7 @@ final class EnterEmailVC: UIViewController {
             return
         }
         navigationController?.pushViewController(
-            UIStoryboard.authSuccess.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
+            UIStoryboard.authentication.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
             animated: true
         )
     }

@@ -56,7 +56,7 @@ final class SignUpViewController: UIViewController {
             showAlert(message: "Please enter your phone number.")
             return
         }
-        let otp = UIStoryboard.authOTP
+        let otp = UIStoryboard.authentication
             .instantiateViewController(withIdentifier: "EnterOTPVC") as! EnterOTPVC
         otp.phoneNumberDisplay = "\(dialCode) \(phone)"
         navigationController?.pushViewController(otp, animated: true)

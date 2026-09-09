@@ -113,7 +113,7 @@ final class EnterOTPVC: UIViewController {
         guard !didAdvance else { return }
         didAdvance = true
         navigationController?.pushViewController(
-            UIStoryboard.authName.instantiateViewController(withIdentifier: "EnterEmailVC"),
+            UIStoryboard.authentication.instantiateViewController(withIdentifier: "EnterEmailVC"),
             animated: true
         )
     }

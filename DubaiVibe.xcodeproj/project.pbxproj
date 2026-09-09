@@ -52,11 +52,6 @@
 		A1B2C3D43060100100000006 /* WelcomeSuccessVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000016 /* WelcomeSuccessVC.swift */; };
 		A1B2C3D43060100100000007 /* NotificationsPermissionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000017 /* NotificationsPermissionVC.swift */; };
 		A1B2C3D43060100100000008 /* AuthUIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000018 /* AuthUIComponents.swift */; };
-		A1B2C3D43060100100000009 /* AuthPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000019 /* AuthPhone.storyboard */; };
-		A1B2C3D4306010010000000A /* AuthOTP.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4306010010000001A /* AuthOTP.storyboard */; };
-		A1B2C3D4306010010000000B /* AuthName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4306010010000001B /* AuthName.storyboard */; };
-		A1B2C3D4306010010000000C /* AuthSuccess.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4306010010000001C /* AuthSuccess.storyboard */; };
-		A1B2C3D4306010010000000D /* AuthNotifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4306010010000001D /* AuthNotifications.storyboard */; };
 		CA4434C2938D2EBF3E5C2162 /* Pods_DubaiVibe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42EB8265AEA2256E883FE8BC /* Pods_DubaiVibe.framework */; };
 		DF7DD7BF305028EE002BFA4F /* VenueDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7B9305028EE002BFA4F /* VenueDetailViewController.swift */; };
 		DF7DD7C0305028EE002BFA4F /* VenueDetailRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7A7305028EE002BFA4F /* VenueDetailRepository.swift */; };
@@ -132,11 +127,6 @@
 		A1B2C3D43060100100000016 /* WelcomeSuccessVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeSuccessVC.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000017 /* NotificationsPermissionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPermissionVC.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000018 /* AuthUIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthUIComponents.swift; sourceTree = "<group>"; };
-		A1B2C3D43060100100000019 /* AuthPhone.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthPhone.storyboard; sourceTree = "<group>"; };
-		A1B2C3D4306010010000001A /* AuthOTP.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthOTP.storyboard; sourceTree = "<group>"; };
-		A1B2C3D4306010010000001B /* AuthName.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthName.storyboard; sourceTree = "<group>"; };
-		A1B2C3D4306010010000001C /* AuthSuccess.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthSuccess.storyboard; sourceTree = "<group>"; };
-		A1B2C3D4306010010000001D /* AuthNotifications.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthNotifications.storyboard; sourceTree = "<group>"; };
 		A9D9936B1DA4B4721D764E4E /* Pods-DubaiVibe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DubaiVibe.debug.xcconfig"; path = "Target Support Files/Pods-DubaiVibe/Pods-DubaiVibe.debug.xcconfig"; sourceTree = "<group>"; };
 		DF7DD79E305028EE002BFA4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF7DD79F305028EE002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -204,11 +194,6 @@
 			isa = PBXGroup;
 			children = (
 				80080124304FE3DE005FC893 /* Authentication.storyboard */,
-				A1B2C3D43060100100000019 /* AuthPhone.storyboard */,
-				A1B2C3D4306010010000001A /* AuthOTP.storyboard */,
-				A1B2C3D4306010010000001B /* AuthName.storyboard */,
-				A1B2C3D4306010010000001C /* AuthSuccess.storyboard */,
-				A1B2C3D4306010010000001D /* AuthNotifications.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -503,11 +488,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				80080177304FE3DE005FC893 /* Authentication.storyboard in Resources */,
-				A1B2C3D43060100100000009 /* AuthPhone.storyboard in Resources */,
-				A1B2C3D4306010010000000A /* AuthOTP.storyboard in Resources */,
-				A1B2C3D4306010010000000B /* AuthName.storyboard in Resources */,
-				A1B2C3D4306010010000000C /* AuthSuccess.storyboard in Resources */,
-				A1B2C3D4306010010000000D /* AuthNotifications.storyboard in Resources */,
 				DF7DD7CE305028EE002BFA4F /* Assets.xcassets in Resources */,
 				DF7DD7CF305028EE002BFA4F /* VenueDetail.storyboard in Resources */,
 				DF8EE8A8305030AA002BFA4F /* MembershipVerification.storyboard in Resources */,
