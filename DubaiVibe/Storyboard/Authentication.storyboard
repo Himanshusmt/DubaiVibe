@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hhO-cu-YyN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hhO-cu-YyN">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -1166,6 +1166,9 @@
                             <constraint firstItem="PXA-fP-RhP" firstAttribute="leading" secondItem="TJ1-Cb-x0f" secondAttribute="leading" constant="16" id="jmP-J8-JGt"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="nameTextField" destination="XQ7-0I-H9R" id="name-tf-out"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zUL-eC-fxc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1179,41 +1182,197 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Welcome_logo" translatesAutoresizingMaskIntoConstraints="NO" id="zcP-x0-UtX">
-                                <rect key="frame" x="132" y="346.66666666666669" width="129" height="129"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="zcP-x0-UtX" secondAttribute="height" multiplier="1:1" id="dbz-4X-xYH"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="14"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AuthSkyline" translatesAutoresizingMaskIntoConstraints="NO" id="wel-hero" customClass="HeroImageView" customModule="DubaiVibe" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="602"/>
                             </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="wel-logo">
+                                <rect key="frame" x="121.66666666666669" y="146" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="wel-logo-h"/>
+                                    <constraint firstAttribute="width" constant="150" id="wel-logo-w"/>
+                                </constraints>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="wel-tag-stack">
+                                <rect key="frame" x="24" y="310" width="345" height="35.333333333333314"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REAL PEOPLE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wel-tag-people">
+                                        <rect key="frame" x="130.33333333333334" y="0.0" width="84.666666666666657" height="15.666666666666666"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REAL EXPERIENCES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wel-tag-exp">
+                                        <rect key="frame" x="111.33333333333334" y="19.666666666666686" width="122.33333333333334" height="15.666666666666664"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="wel-cta-stack">
+                                <rect key="frame" x="24" y="493.33333333333326" width="345" height="278.66666666666674"/>
+                                <subviews>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wel-phone" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="345" height="54"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="54" id="wel-phone-h"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                        <color key="tintColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="Continue with Phone Number" image="chevron.right" catalog="system">
+                                            <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="14"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="continueWithPhone:" destination="8VM-pN-6pS" eventType="touchUpInside" id="wel-phone-act"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c8G-EW-ag3">
+                                        <rect key="frame" x="0.0" y="68.000000000000057" width="345" height="16"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wel-or-left">
+                                                <rect key="frame" x="35" y="7.6666666666666288" width="114" height="1"/>
+                                                <color key="backgroundColor" red="0.2612304688" green="0.2612304688" blue="0.2690429688" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="wel-or-left-h"/>
+                                                </constraints>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="or" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wel-or-lbl">
+                                                <rect key="frame" x="166" y="0.33333333333325665" width="13" height="15.666666666666664"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                                                <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wel-or-right">
+                                                <rect key="frame" x="196" y="7.6666666666666288" width="114" height="1"/>
+                                                <color key="backgroundColor" red="0.2612304688" green="0.2612304688" blue="0.2690429688" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="wel-or-right-h"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="wel-or-right" firstAttribute="leading" secondItem="wel-or-lbl" secondAttribute="leading" constant="30" id="50z-FF-JAM"/>
+                                            <constraint firstAttribute="height" constant="16" id="7sk-BD-Hew"/>
+                                            <constraint firstItem="wel-or-right" firstAttribute="centerY" secondItem="wel-or-lbl" secondAttribute="centerY" id="8ZR-ZC-w3J"/>
+                                            <constraint firstItem="wel-or-left" firstAttribute="trailing" secondItem="wel-or-lbl" secondAttribute="trailing" constant="-30" id="D4Y-sa-ELq"/>
+                                            <constraint firstItem="wel-or-lbl" firstAttribute="centerX" secondItem="c8G-EW-ag3" secondAttribute="centerX" id="Kxq-z7-RGE"/>
+                                            <constraint firstItem="wel-or-lbl" firstAttribute="centerY" secondItem="c8G-EW-ag3" secondAttribute="centerY" id="O2I-OV-c0Y"/>
+                                            <constraint firstAttribute="trailing" secondItem="wel-or-right" secondAttribute="trailing" constant="35" id="VxM-ai-PMz"/>
+                                            <constraint firstItem="wel-or-left" firstAttribute="centerY" secondItem="wel-or-lbl" secondAttribute="centerY" id="fnD-Gg-LLJ"/>
+                                            <constraint firstItem="wel-or-left" firstAttribute="leading" secondItem="c8G-EW-ag3" secondAttribute="leading" constant="35" id="pwi-d2-xlc"/>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wel-apple">
+                                        <rect key="frame" x="0.0" y="98.000000000000057" width="345" height="54"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="54" id="wel-apple-h"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="titleEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <state key="normal" title="Continue with Apple" image="apple.logo" catalog="system">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="14"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" red="0.2612304688" green="0.2612304688" blue="0.2690429688" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="continueWithApple:" destination="8VM-pN-6pS" eventType="touchUpInside" id="wel-apple-act"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wel-google">
+                                        <rect key="frame" x="0.0" y="166.00000000000006" width="345" height="54"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="54" id="wel-google-h"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                        <inset key="titleEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
+                                        <state key="normal" title="Continue with Google" image="GoogleG">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="14"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" red="0.2612304688" green="0.2612304688" blue="0.2690429688" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="continueWithGoogle:" destination="8VM-pN-6pS" eventType="touchUpInside" id="wel-google-act"/>
+                                        </connections>
+                                    </button>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="By continuing, you agree to our                                           Terms of Service and Privacy Policy." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="wel-terms">
+                                        <rect key="frame" x="0.0" y="234.00000000000003" width="345" height="44.666666666666657"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Sdy-Dc-bIq"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="zcP-x0-UtX" firstAttribute="centerX" secondItem="Sdy-Dc-bIq" secondAttribute="centerX" id="ifc-Lb-cIi"/>
-                            <constraint firstItem="zcP-x0-UtX" firstAttribute="centerY" secondItem="Sdy-Dc-bIq" secondAttribute="centerY" constant="-40" id="q6N-CU-7gf"/>
+                            <constraint firstItem="Sdy-Dc-bIq" firstAttribute="bottom" secondItem="wel-cta-stack" secondAttribute="bottom" constant="12" id="wel-cta-b"/>
+                            <constraint firstItem="wel-cta-stack" firstAttribute="top" relation="greaterThanOrEqual" secondItem="wel-tag-stack" secondAttribute="bottom" constant="24" id="wel-cta-gap"/>
+                            <constraint firstItem="wel-cta-stack" firstAttribute="leading" secondItem="Sdy-Dc-bIq" secondAttribute="leading" constant="24" id="wel-cta-l"/>
+                            <constraint firstItem="Sdy-Dc-bIq" firstAttribute="trailing" secondItem="wel-cta-stack" secondAttribute="trailing" constant="24" id="wel-cta-r"/>
+                            <constraint firstAttribute="bottom" secondItem="wel-hero" secondAttribute="bottom" constant="250" id="wel-hero-b"/>
+                            <constraint firstItem="wel-hero" firstAttribute="leading" secondItem="4ff-3B-S0d" secondAttribute="leading" id="wel-hero-l"/>
+                            <constraint firstAttribute="trailing" secondItem="wel-hero" secondAttribute="trailing" id="wel-hero-r"/>
+                            <constraint firstItem="wel-hero" firstAttribute="top" secondItem="4ff-3B-S0d" secondAttribute="top" id="wel-hero-t"/>
+                            <constraint firstItem="wel-logo" firstAttribute="centerX" secondItem="Sdy-Dc-bIq" secondAttribute="centerX" id="wel-logo-cx"/>
+                            <constraint firstItem="wel-logo" firstAttribute="top" secondItem="Sdy-Dc-bIq" secondAttribute="top" constant="28" id="wel-logo-t"/>
+                            <constraint firstItem="wel-tag-stack" firstAttribute="leading" secondItem="Sdy-Dc-bIq" secondAttribute="leading" constant="24" id="wel-tag-l"/>
+                            <constraint firstItem="Sdy-Dc-bIq" firstAttribute="trailing" secondItem="wel-tag-stack" secondAttribute="trailing" constant="24" id="wel-tag-r"/>
+                            <constraint firstItem="wel-tag-stack" firstAttribute="top" secondItem="wel-logo" secondAttribute="bottom" constant="14" id="wel-tag-t"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="gkx-xK-leF"/>
+                    <connections>
+                        <outlet property="termsTextView" destination="wel-terms" id="wel-out-terms"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T3S-yx-p5E" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-216" y="158"/>
+            <point key="canvasLocation" x="-216.03053435114504" y="157.74647887323945"/>
         </scene>
     </scenes>
     <resources>
         <image name="AL.png" width="256" height="183"/>
+        <image name="AuthSkyline" width="720" height="1280"/>
         <image name="Container-7" width="7" height="5"/>
         <image name="GURDIAN LINK BLUE PNG 1" width="240" height="79"/>
-        <image name="Welcome_logo" width="129" height="129"/>
+        <image name="GoogleG" width="16" height="16"/>
+        <image name="LaunchLogo" width="1024" height="1024"/>
         <image name="apple" width="20" height="20"/>
+        <image name="apple.logo" catalog="system" width="105" height="128"/>
         <image name="arrow.right" catalog="system" width="128" height="95"/>
         <image name="backArrow" width="16" height="16"/>
         <image name="call" width="15" height="15"/>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="email 1" width="20" height="16"/>
         <image name="google 1" width="20" height="20"/>
         <image name="ic_find" width="15" height="15"/>
@@ -1248,8 +1407,5 @@
         <namedColor name="mgWhite">
             <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

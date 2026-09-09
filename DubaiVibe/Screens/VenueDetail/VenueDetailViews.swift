@@ -30,6 +30,9 @@ final class GoldGradientButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         gradient.frame = bounds
+        // Keep IB title/image above the gradient layer.
+        if let titleLabel { bringSubviewToFront(titleLabel) }
+        if let imageView { bringSubviewToFront(imageView) }
     }
 }
 
