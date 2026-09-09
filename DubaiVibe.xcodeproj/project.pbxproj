@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		80080177304FE3DE005FC893 /* Authentication.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80080124304FE3DE005FC893 /* Authentication.storyboard */; };
 		A1B2C3D43060100100000009 /* AuthPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000019 /* AuthPhone.storyboard */; };
+		A1B2C3D4306010010000000A /* AuthOTP.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4306010010000001A /* AuthOTP.storyboard */; };
+		A1B2C3D4306010010000000B /* AuthName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4306010010000001B /* AuthName.storyboard */; };
 		8008017E304FE3DE005FC893 /* assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 80080153304FE3DE005FC893 /* assets.bundle */; };
 		8008017F304FE3DE005FC893 /* CallingCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = 80080154304FE3DE005FC893 /* CallingCodes.plist */; };
 		80080180304FE3DE005FC893 /* celebrate.json in Resources */ = {isa = PBXBuildFile; fileRef = 8008015F304FE3DE005FC893 /* celebrate.json */; };
@@ -84,6 +86,8 @@
 		80080082304FE092005FC893 /* DubaiVibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DubaiVibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80080124304FE3DE005FC893 /* Authentication.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Authentication.storyboard; sourceTree = "<group>"; };
 		A1B2C3D43060100100000019 /* AuthPhone.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthPhone.storyboard; sourceTree = "<group>"; };
+		A1B2C3D4306010010000001A /* AuthOTP.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthOTP.storyboard; sourceTree = "<group>"; };
+		A1B2C3D4306010010000001B /* AuthName.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AuthName.storyboard; sourceTree = "<group>"; };
 		8008012B304FE3DE005FC893 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		8008012C304FE3DE005FC893 /* DashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashView.swift; sourceTree = "<group>"; };
 		8008012D304FE3DE005FC893 /* PageConstent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageConstent.swift; sourceTree = "<group>"; };
@@ -197,6 +201,8 @@
 			children = (
 				80080124304FE3DE005FC893 /* Authentication.storyboard */,
 				A1B2C3D43060100100000019 /* AuthPhone.storyboard */,
+				A1B2C3D4306010010000001A /* AuthOTP.storyboard */,
+				A1B2C3D4306010010000001B /* AuthName.storyboard */,
 				DF7DD7A2305028EE002BFA4F /* Main.storyboard */,
 			);
 			path = Storyboard;
@@ -493,6 +499,8 @@
 			files = (
 				80080177304FE3DE005FC893 /* Authentication.storyboard in Resources */,
 				A1B2C3D43060100100000009 /* AuthPhone.storyboard in Resources */,
+				A1B2C3D4306010010000000A /* AuthOTP.storyboard in Resources */,
+				A1B2C3D4306010010000000B /* AuthName.storyboard in Resources */,
 				DF7DD7CE305028EE002BFA4F /* Assets.xcassets in Resources */,
 				DF7DD7CF305028EE002BFA4F /* VenueDetail.storyboard in Resources */,
 				DF8EE8A8305030AA002BFA4F /* MembershipVerification.storyboard in Resources */,

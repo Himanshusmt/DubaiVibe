@@ -16,6 +16,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="bg-img">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="back-btn">
                                 <rect key="frame" x="16" y="122" width="44" height="44"/>
                                 <constraints>
@@ -170,6 +173,10 @@
                         <viewLayoutGuide key="safeArea" id="phone-safe"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="bg-img" firstAttribute="top" secondItem="phone-root" secondAttribute="top" id="bg-t"/>
+                            <constraint firstItem="bg-img" firstAttribute="leading" secondItem="phone-root" secondAttribute="leading" id="bg-l"/>
+                            <constraint firstAttribute="trailing" secondItem="bg-img" secondAttribute="trailing" id="bg-r"/>
+                            <constraint firstAttribute="bottom" secondItem="bg-img" secondAttribute="bottom" id="bg-b"/>
                             <constraint firstItem="back-btn" firstAttribute="leading" secondItem="phone-safe" secondAttribute="leading" constant="16" id="c1"/>
                             <constraint firstItem="sub-lbl" firstAttribute="top" secondItem="title-lbl" secondAttribute="bottom" constant="12" id="c10"/>
                             <constraint firstItem="sub-lbl" firstAttribute="leading" secondItem="phone-safe" secondAttribute="leading" constant="32" id="c11"/>
@@ -209,6 +216,7 @@
     </scenes>
     <resources>
         <image name="LaunchLogo" width="1024" height="1024"/>
+        <image name="backgroundImage" width="393" height="852"/>
         <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="flag" catalog="system" width="128" height="121"/>
         <image name="lock.fill" catalog="system" width="111" height="128"/>

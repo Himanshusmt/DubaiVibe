@@ -112,7 +112,6 @@ final class AuthTopBar: UIView {
 
 final class AuthDarkField: UIView, UITextFieldDelegate {
     let textField = UITextField()
-    private let borderLayer = CALayer()
 
     var placeholder: String? {
         get { textField.placeholder }
@@ -131,6 +130,15 @@ final class AuthDarkField: UIView, UITextFieldDelegate {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = AppPalette.surface
         layer.cornerRadius = AuthMetrics.corner
@@ -155,8 +163,6 @@ final class AuthDarkField: UIView, UITextFieldDelegate {
             textField.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         layer.borderColor = AppPalette.gold.cgColor
@@ -304,7 +310,7 @@ protocol AuthOTPViewDelegate: AnyObject {
 final class AuthOTPView: UIView, UITextFieldDelegate {
     weak var delegate: AuthOTPViewDelegate?
     private let count = 6
-    private let boxes: [UILabel]
+    private var boxes: [UILabel] = []
     private let hiddenField = UITextField()
 
     var code: String {
@@ -312,7 +318,18 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
     }
 
     override init(frame: CGRect) {
-        boxes = (0..<6).map { _ in
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        translatesAutoresizingMaskIntoConstraints = false
+        boxes = (0..<count).map { _ in
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.textAlignment = .center
@@ -326,8 +343,6 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
             label.clipsToBounds = true
             return label
         }
-        super.init(frame: frame)
-        translatesAutoresizingMaskIntoConstraints = false
 
         let stack = UIStackView(arrangedSubviews: boxes)
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -362,8 +377,6 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
         addGestureRecognizer(tap)
         updateBorders()
     }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     @objc func focus() {
         hiddenField.becomeFirstResponder()

@@ -85,12 +85,16 @@ final class WelcomeVC: UIViewController {
 
     @IBAction private func continueWithApple(_ sender: Any) {
         // TODO: Sign in with Apple — UI navigation stub only.
-        navigationController?.pushViewController(EnterEmailVC(), animated: true)
+        let name = UIStoryboard.authName
+            .instantiateViewController(withIdentifier: "EnterEmailVC")
+        navigationController?.pushViewController(name, animated: true)
     }
 
     @IBAction private func continueWithGoogle(_ sender: Any) {
         // TODO: Google Sign-In — UI navigation stub only.
-        navigationController?.pushViewController(EnterEmailVC(), animated: true)
+        let name = UIStoryboard.authName
+            .instantiateViewController(withIdentifier: "EnterEmailVC")
+        navigationController?.pushViewController(name, animated: true)
     }
 }
 
