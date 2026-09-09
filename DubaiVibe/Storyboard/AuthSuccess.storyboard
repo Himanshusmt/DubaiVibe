@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="success-vc">
+    <device id="retina6_12" orientation="portrait" appearance="dark"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Welcome SuccessVC-->
+        <scene sceneID="success-scene">
+            <objects>
+                <viewController storyboardIdentifier="WelcomeSuccessVC" id="success-vc" customClass="WelcomeSuccessVC" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="success-root">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="success-bg">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="success-logo">
+                                <rect key="frame" x="121.66666666666669" y="146" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="success-logo-h"/>
+                                    <constraint firstAttribute="width" constant="150" id="success-logo-w"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Group 1" translatesAutoresizingMaskIntoConstraints="NO" id="success-check">
+                                <rect key="frame" x="116.66666666666669" y="332" width="160" height="160"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="success-check-h"/>
+                                    <constraint firstAttribute="width" constant="160" id="success-check-w"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to OneVibe!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-title">
+                                <rect key="frame" x="24" y="528" width="345" height="33.666666666666629"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your account is ready." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-subtitle">
+                                <rect key="frame" x="24" y="569.66666666666663" width="345" height="19.333333333333371"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="success-features">
+                                <rect key="frame" x="24" y="617" width="345" height="64.666666666666629"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-1">
+                                        <rect key="frame" x="0.0" y="0.0" width="109.66666666666667" height="64.666666666666671"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SVG - Two People Icon" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-1-icon">
+                                                <rect key="frame" x="41" y="0.0" width="28" height="28"/>
+                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="success-feat-1-icon-h"/>
+                                                    <constraint firstAttribute="width" constant="28" id="success-feat-1-icon-w"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect with people" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-1-label">
+                                                <rect key="frame" x="22" y="36" width="65.666666666666671" height="28.666666666666671"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-2">
+                                        <rect key="frame" x="117.66666666666666" y="0.0" width="109.66666666666666" height="64.666666666666671"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SVG - Globe Outline Icon" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-2-icon">
+                                                <rect key="frame" x="41" y="0.0" width="28" height="28"/>
+                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="success-feat-2-icon-h"/>
+                                                    <constraint firstAttribute="width" constant="28" id="success-feat-2-icon-w"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Discover amazing places" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-2-label">
+                                                <rect key="frame" x="11" y="36" width="87.666666666666671" height="28.666666666666671"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-3">
+                                        <rect key="frame" x="235.33333333333329" y="0.0" width="109.66666666666666" height="64.666666666666671"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Container" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-3-icon">
+                                                <rect key="frame" x="41" y="0.0" width="28" height="28"/>
+                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="success-feat-3-icon-h"/>
+                                                    <constraint firstAttribute="width" constant="28" id="success-feat-3-icon-w"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Get exclusive                                deal" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-3-label">
+                                                <rect key="frame" x="0.0" y="36" width="109.66666666666669" height="28.666666666666671"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="success-cta" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
+                                <rect key="frame" x="24" y="706" width="345" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="success-cta-h"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Start Exploring">
+                                    <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="27"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="startExploring:" destination="success-vc" eventType="touchUpInside" id="success-cta-act"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="success-safe"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="success-bg" secondAttribute="bottom" id="success-bg-b"/>
+                            <constraint firstItem="success-bg" firstAttribute="leading" secondItem="success-root" secondAttribute="leading" id="success-bg-l"/>
+                            <constraint firstAttribute="trailing" secondItem="success-bg" secondAttribute="trailing" id="success-bg-r"/>
+                            <constraint firstItem="success-bg" firstAttribute="top" secondItem="success-root" secondAttribute="top" id="success-bg-t"/>
+                            <constraint firstItem="success-title" firstAttribute="leading" secondItem="success-safe" secondAttribute="leading" constant="24" id="success-c10"/>
+                            <constraint firstItem="success-safe" firstAttribute="trailing" secondItem="success-title" secondAttribute="trailing" constant="24" id="success-c11"/>
+                            <constraint firstItem="success-subtitle" firstAttribute="top" secondItem="success-title" secondAttribute="bottom" constant="8" id="success-c12"/>
+                            <constraint firstItem="success-subtitle" firstAttribute="leading" secondItem="success-title" secondAttribute="leading" id="success-c13"/>
+                            <constraint firstItem="success-subtitle" firstAttribute="trailing" secondItem="success-title" secondAttribute="trailing" id="success-c14"/>
+                            <constraint firstItem="success-features" firstAttribute="top" secondItem="success-subtitle" secondAttribute="bottom" constant="28" id="success-c15"/>
+                            <constraint firstItem="success-features" firstAttribute="leading" secondItem="success-title" secondAttribute="leading" id="success-c16"/>
+                            <constraint firstItem="success-features" firstAttribute="trailing" secondItem="success-title" secondAttribute="trailing" id="success-c17"/>
+                            <constraint firstItem="success-cta" firstAttribute="leading" secondItem="success-safe" secondAttribute="leading" constant="24" id="success-c18"/>
+                            <constraint firstItem="success-safe" firstAttribute="trailing" secondItem="success-cta" secondAttribute="trailing" constant="24" id="success-c19"/>
+                            <constraint firstItem="success-safe" firstAttribute="bottom" secondItem="success-cta" secondAttribute="bottom" constant="24" id="success-c20"/>
+                            <constraint firstItem="success-logo" firstAttribute="centerX" secondItem="success-root" secondAttribute="centerX" id="success-c3"/>
+                            <constraint firstItem="success-logo" firstAttribute="top" secondItem="success-safe" secondAttribute="top" constant="28" id="success-c4"/>
+                            <constraint firstItem="success-check" firstAttribute="top" secondItem="success-logo" secondAttribute="bottom" constant="36" id="success-c5"/>
+                            <constraint firstItem="success-check" firstAttribute="centerX" secondItem="success-root" secondAttribute="centerX" id="success-c6"/>
+                            <constraint firstItem="success-title" firstAttribute="top" secondItem="success-check" secondAttribute="bottom" constant="36" id="success-c9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="continueButton" destination="success-cta" id="success-out-cta"/>
+                        <outlet property="subtitleLabel" destination="success-subtitle" id="success-out-sub"/>
+                        <outlet property="titleLabel" destination="success-title" id="success-out-title"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="success-fr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="20" y="20"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Container" width="46" height="46"/>
+        <image name="Group 1" width="199" height="199"/>
+        <image name="LaunchLogo" width="1024" height="1024"/>
+        <image name="SVG - Globe Outline Icon" width="32" height="32"/>
+        <image name="SVG - Two People Icon" width="32" height="32"/>
+        <image name="backgroundImage" width="851" height="1848"/>
+    </resources>
+</document>

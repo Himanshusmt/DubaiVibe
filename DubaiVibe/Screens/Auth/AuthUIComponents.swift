@@ -301,6 +301,44 @@ final class AuthPhoneInputView: UIView {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
 
+// MARK: - Success rays
+
+final class AuthRaysView: UIView {
+    override class var layerClass: AnyClass { CAShapeLayer.self }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard let shape = layer as? CAShapeLayer else { return }
+        let path = UIBezierPath()
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        let inner: CGFloat = 70
+        let outer: CGFloat = 100
+        let count = 16
+        for i in 0..<count {
+            let angle = (CGFloat(i) / CGFloat(count)) * (.pi * 2)
+            path.move(to: CGPoint(x: center.x + cos(angle) * inner, y: center.y + sin(angle) * inner))
+            path.addLine(to: CGPoint(x: center.x + cos(angle) * outer, y: center.y + sin(angle) * outer))
+        }
+        shape.path = path.cgPath
+        shape.strokeColor = AppPalette.gold.cgColor
+        shape.lineWidth = 3
+        shape.lineCap = .round
+        shape.fillColor = UIColor.clear.cgColor
+    }
+}
+
 // MARK: - OTP
 
 protocol AuthOTPViewDelegate: AnyObject {

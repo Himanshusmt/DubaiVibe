@@ -47,6 +47,9 @@ final class EnterEmailVC: UIViewController {
             showAlert(message: "Please enter your first and last name.")
             return
         }
-        navigationController?.pushViewController(WelcomeSuccessVC(), animated: true)
+        navigationController?.pushViewController(
+            UIStoryboard.authSuccess.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
+            animated: true
+        )
     }
 }
