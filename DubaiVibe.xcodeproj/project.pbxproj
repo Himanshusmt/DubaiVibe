@@ -75,6 +75,11 @@
 		DF8EE8A6305030AA002BFA4F /* MembershipVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8EE8A1305030AA002BFA4F /* MembershipVerificationViewController.swift */; };
 		DF8EE8A7305030AA002BFA4F /* MembershipVerificationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8EE8A2305030AA002BFA4F /* MembershipVerificationViews.swift */; };
 		DF8EE8A8305030AA002BFA4F /* MembershipVerification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF8EE8A4305030AA002BFA4F /* MembershipVerification.storyboard */; };
+		F01A2B3C3060110100000011 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000001 /* Inter-Regular.ttf */; };
+		F01A2B3C3060110100000012 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000002 /* Inter-Medium.ttf */; };
+		F01A2B3C3060110100000013 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */; };
+		F01A2B3C3060110100000014 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000004 /* Inter-Bold.ttf */; };
+		F01A2B3C3060110100000031 /* UIFont+Inter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000030 /* UIFont+Inter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +122,11 @@
 		8008016B304FE3DE005FC893 /* TDImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDImagePicker.swift; sourceTree = "<group>"; };
 		8008016D304FE3DE005FC893 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8008016F304FE3DE005FC893 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F01A2B3C3060110100000001 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000002 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000004 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000030 /* UIFont+Inter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Inter.swift"; sourceTree = "<group>"; };
 		80080174304FE3DE005FC893 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		80080175304FE3DE005FC893 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000011 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
@@ -215,11 +225,31 @@
 				80080130304FE3DE005FC893 /* StringExtension.swift */,
 				80080131304FE3DE005FC893 /* TextFieldExtension.swift */,
 				80080132304FE3DE005FC893 /* UIColorExtension.swift */,
+				F01A2B3C3060110100000030 /* UIFont+Inter.swift */,
 				80080133304FE3DE005FC893 /* UIStoryborad+Util.swift */,
 				80080134304FE3DE005FC893 /* UIViewControllerExtension.swift */,
 				80080135304FE3DE005FC893 /* ViewExtension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		F01A2B3C3060110100000020 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F01A2B3C3060110100000001 /* Inter-Regular.ttf */,
+				F01A2B3C3060110100000002 /* Inter-Medium.ttf */,
+				F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */,
+				F01A2B3C3060110100000004 /* Inter-Bold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		F01A2B3C3060110100000021 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F01A2B3C3060110100000020 /* Fonts */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		80080152304FE3DE005FC893 /* NetworkManager */ = {
@@ -289,6 +319,7 @@
 				DF7DD7A4305028EE002BFA4F /* VenueDetail.storyboard */,
 				DF8EE8A4305030AA002BFA4F /* MembershipVerification.storyboard */,
 				DF7DD79E305028EE002BFA4F /* Assets.xcassets */,
+				F01A2B3C3060110100000021 /* Resources */,
 				8008016F304FE3DE005FC893 /* Info.plist */,
 				8008012A304FE3DE005FC893 /* Storyboard */,
 				8008016C304FE3DE005FC893 /* SupportingFile */,
@@ -496,6 +527,10 @@
 				8008017E304FE3DE005FC893 /* assets.bundle in Resources */,
 				8008017F304FE3DE005FC893 /* CallingCodes.plist in Resources */,
 				80080180304FE3DE005FC893 /* celebrate.json in Resources */,
+				F01A2B3C3060110100000011 /* Inter-Regular.ttf in Resources */,
+				F01A2B3C3060110100000012 /* Inter-Medium.ttf in Resources */,
+				F01A2B3C3060110100000013 /* Inter-SemiBold.ttf in Resources */,
+				F01A2B3C3060110100000014 /* Inter-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,6 +594,7 @@
 				80080189304FE3DE005FC893 /* StringExtension.swift in Sources */,
 				8008018A304FE3DE005FC893 /* TextFieldExtension.swift in Sources */,
 				8008018B304FE3DE005FC893 /* UIColorExtension.swift in Sources */,
+				F01A2B3C3060110100000031 /* UIFont+Inter.swift in Sources */,
 				DF7DD7BF305028EE002BFA4F /* VenueDetailViewController.swift in Sources */,
 				DF8EE8A6305030AA002BFA4F /* MembershipVerificationViewController.swift in Sources */,
 				DF8EE8A7305030AA002BFA4F /* MembershipVerificationViews.swift in Sources */,
