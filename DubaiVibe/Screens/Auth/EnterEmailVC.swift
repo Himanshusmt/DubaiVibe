@@ -7,6 +7,10 @@ final class EnterEmailVC: UIViewController {
     @IBOutlet private weak var lastNameField: AuthDarkField!
     @IBOutlet private weak var createButton: GoldGradientButton!
 
+    /// Prefill from Apple / Google social login (first authorization only usually).
+    var prefillFirstName: String?
+    var prefillLastName: String?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -21,6 +25,13 @@ final class EnterEmailVC: UIViewController {
         lastNameField?.textField.autocapitalizationType = .words
         lastNameField?.textField.returnKeyType = .done
         lastNameField?.textField.addTarget(self, action: #selector(lastReturn), for: .editingDidEndOnExit)
+
+        if let prefillFirstName, !prefillFirstName.isEmpty {
+            firstNameField?.text = prefillFirstName
+        }
+        if let prefillLastName, !prefillLastName.isEmpty {
+            lastNameField?.text = prefillLastName
+        }
 
         createButton?.setTitleColor(AppPalette.onGold, for: .normal)
         createButton?.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)

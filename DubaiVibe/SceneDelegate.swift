@@ -1,11 +1,5 @@
-//
-//  SceneDelegate.swift
-//  DubaiVibe
-//
-//  Created by Himanshu Pal on 08/09/26.
-//
-
 import UIKit
+import GoogleSignIn
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,6 +14,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = self.window ?? UIWindow(windowScene: windowScene)
         self.window = window
         AppRouter.configureRoot(for: window)
+
+        if let urlContext = connectionOptions.urlContexts.first {
+            GIDSignIn.sharedInstance.handle(urlContext.url)
+        }
+    }
+
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        GIDSignIn.sharedInstance.handle(url)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}

@@ -59,7 +59,6 @@
 		DF7DD7C2305028EE002BFA4F /* VenueDetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7BA305028EE002BFA4F /* VenueDetailViews.swift */; };
 		DF7DD7C3305028EE002BFA4F /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7B5305028EE002BFA4F /* MainTabBarController.swift */; };
 		DF7DD7C4305028EE002BFA4F /* PlaceholderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7B6305028EE002BFA4F /* PlaceholderViewController.swift */; };
-		F02A11FC3060110200000002 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02A11FC3060110200000001 /* ProfileViewController.swift */; };
 		DF7DD7C5305028EE002BFA4F /* AppPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7BD305028EE002BFA4F /* AppPalette.swift */; };
 		DF7DD7C6305028EE002BFA4F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7A9305028EE002BFA4F /* Venue.swift */; };
 		DF7DD7C7305028EE002BFA4F /* LaunchOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7B3305028EE002BFA4F /* LaunchOverlay.swift */; };
@@ -76,11 +75,17 @@
 		DF8EE8A6305030AA002BFA4F /* MembershipVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8EE8A1305030AA002BFA4F /* MembershipVerificationViewController.swift */; };
 		DF8EE8A7305030AA002BFA4F /* MembershipVerificationViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8EE8A2305030AA002BFA4F /* MembershipVerificationViews.swift */; };
 		DF8EE8A8305030AA002BFA4F /* MembershipVerification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF8EE8A4305030AA002BFA4F /* MembershipVerification.storyboard */; };
+		E37E2DDE3052C935009AACEF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E37E2DDD3052C935009AACEF /* GoogleService-Info.plist */; };
 		F01A2B3C3060110100000011 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000001 /* Inter-Regular.ttf */; };
 		F01A2B3C3060110100000012 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000002 /* Inter-Medium.ttf */; };
 		F01A2B3C3060110100000013 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */; };
 		F01A2B3C3060110100000014 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000004 /* Inter-Bold.ttf */; };
 		F01A2B3C3060110100000031 /* UIFont+Inter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000030 /* UIFont+Inter.swift */; };
+		F02A11FC3060110200000002 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02A11FC3060110200000001 /* ProfileViewController.swift */; };
+		F03A11E13060110300000003 /* AppleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E13060110300000001 /* AppleSignInService.swift */; };
+		F03A11E13060110300000004 /* AppleAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E13060110300000002 /* AppleAuthAPI.swift */; };
+		F03A11E23060110400000003 /* GoogleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E23060110400000001 /* GoogleSignInService.swift */; };
+		F03A11E23060110400000004 /* GoogleAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E23060110400000002 /* GoogleAuthAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,11 +128,6 @@
 		8008016B304FE3DE005FC893 /* TDImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDImagePicker.swift; sourceTree = "<group>"; };
 		8008016D304FE3DE005FC893 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8008016F304FE3DE005FC893 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F01A2B3C3060110100000001 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
-		F01A2B3C3060110100000002 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
-		F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
-		F01A2B3C3060110100000004 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
-		F01A2B3C3060110100000030 /* UIFont+Inter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Inter.swift"; sourceTree = "<group>"; };
 		80080174304FE3DE005FC893 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		80080175304FE3DE005FC893 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000011 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
@@ -154,7 +154,6 @@
 		DF7DD7B3305028EE002BFA4F /* LaunchOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchOverlay.swift; sourceTree = "<group>"; };
 		DF7DD7B5305028EE002BFA4F /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		DF7DD7B6305028EE002BFA4F /* PlaceholderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViewController.swift; sourceTree = "<group>"; };
-		F02A11FC3060110200000001 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DF7DD7B8305028EE002BFA4F /* VenueDetailSegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailSegmentCell.swift; sourceTree = "<group>"; };
 		DF7DD7B9305028EE002BFA4F /* VenueDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailViewController.swift; sourceTree = "<group>"; };
 		DF7DD7BA305028EE002BFA4F /* VenueDetailViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailViews.swift; sourceTree = "<group>"; };
@@ -162,6 +161,18 @@
 		DF8EE8A1305030AA002BFA4F /* MembershipVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipVerificationViewController.swift; sourceTree = "<group>"; };
 		DF8EE8A2305030AA002BFA4F /* MembershipVerificationViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipVerificationViews.swift; sourceTree = "<group>"; };
 		DF8EE8A3305030AA002BFA4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MembershipVerification.storyboard; sourceTree = "<group>"; };
+		E37E2DDD3052C935009AACEF /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000001 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000002 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000004 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		F01A2B3C3060110100000030 /* UIFont+Inter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Inter.swift"; sourceTree = "<group>"; };
+		F02A11FC3060110200000001 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		F03A11E13060110300000001 /* AppleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInService.swift; sourceTree = "<group>"; };
+		F03A11E13060110300000002 /* AppleAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthAPI.swift; sourceTree = "<group>"; };
+		F03A11E13060110300000005 /* DubaiVibe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DubaiVibe.entitlements; sourceTree = "<group>"; };
+		F03A11E23060110400000001 /* GoogleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInService.swift; sourceTree = "<group>"; };
+		F03A11E23060110400000002 /* GoogleAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,25 +246,6 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		F01A2B3C3060110100000020 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				F01A2B3C3060110100000001 /* Inter-Regular.ttf */,
-				F01A2B3C3060110100000002 /* Inter-Medium.ttf */,
-				F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */,
-				F01A2B3C3060110100000004 /* Inter-Bold.ttf */,
-			);
-			path = Fonts;
-			sourceTree = "<group>";
-		};
-		F01A2B3C3060110100000021 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				F01A2B3C3060110100000020 /* Fonts */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		80080152304FE3DE005FC893 /* NetworkManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -323,6 +315,7 @@
 				DF7DD79E305028EE002BFA4F /* Assets.xcassets */,
 				F01A2B3C3060110100000021 /* Resources */,
 				8008016F304FE3DE005FC893 /* Info.plist */,
+				E37E2DDD3052C935009AACEF /* GoogleService-Info.plist */,
 				8008012A304FE3DE005FC893 /* Storyboard */,
 				8008016C304FE3DE005FC893 /* SupportingFile */,
 				DF7DD7A8305028EE002BFA4F /* Data */,
@@ -330,6 +323,7 @@
 				DF7DD7AD305028EE002BFA4F /* Rendering */,
 				DF7DD7BC305028EE002BFA4F /* Screens */,
 				DF7DD7BE305028EE002BFA4F /* Theme */,
+				F03A11E13060110300000005 /* DubaiVibe.entitlements */,
 			);
 			path = DubaiVibe;
 			sourceTree = "<group>";
@@ -339,6 +333,10 @@
 			children = (
 				A1B2C3D43060100100000011 /* AppRouter.swift */,
 				A1B2C3D43060100100000018 /* AuthUIComponents.swift */,
+				F03A11E13060110300000001 /* AppleSignInService.swift */,
+				F03A11E13060110300000002 /* AppleAuthAPI.swift */,
+				F03A11E23060110400000001 /* GoogleSignInService.swift */,
+				F03A11E23060110400000002 /* GoogleAuthAPI.swift */,
 				A1B2C3D43060100100000012 /* WelcomeVC.swift */,
 				A1B2C3D43060100100000013 /* SignUpViewController.swift */,
 				A1B2C3D43060100100000014 /* EnterOTPVC.swift */,
@@ -460,6 +458,25 @@
 			path = MembershipVerification;
 			sourceTree = "<group>";
 		};
+		F01A2B3C3060110100000020 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F01A2B3C3060110100000001 /* Inter-Regular.ttf */,
+				F01A2B3C3060110100000002 /* Inter-Medium.ttf */,
+				F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */,
+				F01A2B3C3060110100000004 /* Inter-Bold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		F01A2B3C3060110100000021 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F01A2B3C3060110100000020 /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -534,6 +551,7 @@
 				F01A2B3C3060110100000012 /* Inter-Medium.ttf in Resources */,
 				F01A2B3C3060110100000013 /* Inter-SemiBold.ttf in Resources */,
 				F01A2B3C3060110100000014 /* Inter-Bold.ttf in Resources */,
+				E37E2DDE3052C935009AACEF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -650,6 +668,10 @@
 				A1B2C3D43060100100000006 /* WelcomeSuccessVC.swift in Sources */,
 				A1B2C3D43060100100000007 /* NotificationsPermissionVC.swift in Sources */,
 				A1B2C3D43060100100000008 /* AuthUIComponents.swift in Sources */,
+				F03A11E13060110300000003 /* AppleSignInService.swift in Sources */,
+				F03A11E13060110300000004 /* AppleAuthAPI.swift in Sources */,
+				F03A11E23060110400000003 /* GoogleSignInService.swift in Sources */,
+				F03A11E23060110400000004 /* GoogleAuthAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,15 +719,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DubaiVibe/DubaiVibe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = STXTC9BS7F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DubaiVibe/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Dubai Vibe needs camera access so you can take a profile photo.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Dubai Vibe needs photo library access so you can choose a profile photo.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -733,15 +759,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DubaiVibe/DubaiVibe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = STXTC9BS7F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DubaiVibe/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Dubai Vibe needs camera access so you can take a profile photo.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Dubai Vibe needs photo library access so you can choose a profile photo.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
