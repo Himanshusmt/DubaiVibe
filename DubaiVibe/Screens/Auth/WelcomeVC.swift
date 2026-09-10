@@ -24,7 +24,7 @@ final class WelcomeVC: UIViewController {
         paragraph.alignment = .center
 
         let text = NSMutableAttributedString(
-            string: "By continuing, you agree to our ",
+            string: "By continuing, you agree to our\n",
             attributes: [
                 .foregroundColor: AppPalette.secondaryText,
                 .font: font,
