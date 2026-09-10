@@ -42,8 +42,8 @@ enum AppPalette {
     static let tabIdle = UIColor(hex: 0x8E8E96)
     /// Figma QuickActionsFooter labels: #D4D4D4
     static let tabLabel = UIColor(hex: 0xD4D4D4)
-    /// Figma pill fill: #181717 @ 59%
-    static let tabBarFill = UIColor(hex: 0x181717, alpha: 0.59)
+    /// Chip fill: dark but a little see-through over the Explore feed.
+    static let tabBarFill = UIColor(hex: 0x181717, alpha: 0.45)
     /// Figma pill stroke: #494949
     static let tabBarBorder = UIColor(hex: 0x494949)
     static let badgeRed = UIColor(hex: 0xFF453A)
@@ -79,11 +79,11 @@ enum AppMetrics {
     static let brandTileWidth: CGFloat = 74
     static let brandTileHeight: CGFloat = 48
 
-    /// Compact centered Home / Profile chip (170×80 capsule).
-    static let floatingTabPillSize = CGSize(width: 170, height: 80)
+    /// Compact centered Home / Profile chip (230×80 capsule).
+    static let floatingTabPillSize = CGSize(width: 230, height: 80)
     /// Gap between the chip and the home-indicator safe area.
     static let floatingTabSafeGap: CGFloat = 2
-    static let floatingTabItemWidth: CGFloat = 70
+    static let floatingTabItemWidth: CGFloat = 100
     static let floatingTabItemSpacing: CGFloat = 8
     static let floatingTabCornerRadius: CGFloat = 40
     /// Icon inset from the top of the chip; title inset from the bottom.
@@ -101,7 +101,7 @@ enum AppMetrics {
         homeIndicatorInset(for: view) + floatingTabSafeGap
     }
 
-    /// Centered 170×80 chip sitting just above the home-indicator safe area.
+    /// Centered 230×80 chip sitting just above the home-indicator safe area.
     static func floatingTabChipFrame(in host: UIView) -> CGRect {
         let pill = floatingTabPillSize
         let safeBottom = host.window?.safeAreaInsets.bottom ?? homeIndicatorInset(for: host)

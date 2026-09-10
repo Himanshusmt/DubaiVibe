@@ -44,14 +44,17 @@ final class CategoryChipCell: UICollectionViewCell {
             selectedFill.trailingAnchor.constraint(equalTo: chipBackgroundView.trailingAnchor),
             selectedFill.bottomAnchor.constraint(equalTo: chipBackgroundView.bottomAnchor)
         ])
+        applyCapsuleRadius()
     }
 
     override func layoutSubviews() {
+        applyCapsuleRadius()
         super.layoutSubviews()
-        let radius = chipBackgroundView.bounds.height / 2
-        chipBackgroundView.layer.cornerRadius = radius
-        selectedFill.layer.cornerRadius = radius
-        selectedFill.layer.cornerCurve = .continuous
+    }
+
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        applyCapsuleRadius()
     }
 
     override func prepareForReuse() {
@@ -97,6 +100,18 @@ final class CategoryChipCell: UICollectionViewCell {
             chipBackgroundView.layer.borderColor = AppPalette.chipBorder.cgColor
             titleLabel.textColor = AppPalette.chipText
         }
+
+        applyCapsuleRadius()
+    }
+
+    private func applyCapsuleRadius() {
+        let radius = AppMetrics.chipHeight / 2
+        chipBackgroundView.layer.cornerRadius = radius
+        chipBackgroundView.layer.cornerCurve = .continuous
+        chipBackgroundView.layer.masksToBounds = true
+        selectedFill.layer.cornerRadius = radius
+        selectedFill.layer.cornerCurve = .continuous
+        selectedFill.layer.masksToBounds = true
     }
 
     static func size(for category: VenueCategory) -> CGSize {

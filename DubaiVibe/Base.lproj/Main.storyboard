@@ -60,7 +60,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="prf-bg">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="prf-scroll">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="764"/>
@@ -68,7 +68,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-content">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="480"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="prf-avatar" customClass="CircularImageView" customModule="DubaiVibe" customModuleProvider="target">
+                                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="prf-avatar" customClass="CircularImageView" customModule="DubaiVibe" customModuleProvider="target">
                                                 <rect key="frame" x="151" y="40" width="112" height="112"/>
                                                 <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
@@ -91,16 +91,24 @@
                                                 <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="32" id="prf-cam-h"/>
-                                                    <constraint firstAttribute="width" constant="32" id="prf-cam-w"/>
                                                     <constraint firstItem="prf-cam-icon" firstAttribute="centerX" secondItem="prf-cam" secondAttribute="centerX" id="prf-cam-ix"/>
                                                     <constraint firstItem="prf-cam-icon" firstAttribute="centerY" secondItem="prf-cam" secondAttribute="centerY" id="prf-cam-iy"/>
+                                                    <constraint firstAttribute="width" constant="32" id="prf-cam-w"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-first" customClass="AuthDarkField" customModule="DubaiVibe" customModuleProvider="target">
-                                                <rect key="frame" x="24" y="184" width="366" height="54"/>
+                                                <rect key="frame" x="24" y="184" width="366" height="56"/>
+                                                <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="56" id="prf-f-h"/>
+                                                </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-last" customClass="AuthDarkField" customModule="DubaiVibe" customModuleProvider="target">
-                                                <rect key="frame" x="24" y="252" width="366" height="54"/>
+                                                <rect key="frame" x="24" y="256" width="366" height="56"/>
+                                                <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="56" id="prf-l-h"/>
+                                                </constraints>
                                             </view>
                                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-save" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
                                                 <rect key="frame" x="24" y="336" width="366" height="54"/>
@@ -123,20 +131,20 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="prf-avatar" firstAttribute="centerX" secondItem="prf-content" secondAttribute="centerX" id="prf-av-x"/>
                                             <constraint firstItem="prf-avatar" firstAttribute="top" secondItem="prf-content" secondAttribute="top" constant="40" id="prf-av-t"/>
-                                            <constraint firstItem="prf-cam" firstAttribute="trailing" secondItem="prf-avatar" secondAttribute="trailing" id="prf-cam-r"/>
+                                            <constraint firstItem="prf-avatar" firstAttribute="centerX" secondItem="prf-content" secondAttribute="centerX" id="prf-av-x"/>
                                             <constraint firstItem="prf-cam" firstAttribute="bottom" secondItem="prf-avatar" secondAttribute="bottom" id="prf-cam-b"/>
-                                            <constraint firstItem="prf-first" firstAttribute="top" secondItem="prf-avatar" secondAttribute="bottom" constant="32" id="prf-f-t"/>
+                                            <constraint firstItem="prf-cam" firstAttribute="trailing" secondItem="prf-avatar" secondAttribute="trailing" id="prf-cam-r"/>
                                             <constraint firstItem="prf-first" firstAttribute="leading" secondItem="prf-content" secondAttribute="leading" constant="24" id="prf-f-l"/>
                                             <constraint firstAttribute="trailing" secondItem="prf-first" secondAttribute="trailing" constant="24" id="prf-f-r"/>
-                                            <constraint firstItem="prf-last" firstAttribute="top" secondItem="prf-first" secondAttribute="bottom" constant="14" id="prf-l-t"/>
+                                            <constraint firstItem="prf-first" firstAttribute="top" secondItem="prf-avatar" secondAttribute="bottom" constant="32" id="prf-f-t"/>
                                             <constraint firstItem="prf-last" firstAttribute="leading" secondItem="prf-first" secondAttribute="leading" id="prf-l-l"/>
                                             <constraint firstItem="prf-last" firstAttribute="trailing" secondItem="prf-first" secondAttribute="trailing" id="prf-l-r"/>
-                                            <constraint firstItem="prf-save" firstAttribute="top" secondItem="prf-last" secondAttribute="bottom" constant="30" id="prf-s-t"/>
+                                            <constraint firstItem="prf-last" firstAttribute="top" secondItem="prf-first" secondAttribute="bottom" constant="14" id="prf-l-t"/>
+                                            <constraint firstAttribute="bottom" secondItem="prf-save" secondAttribute="bottom" constant="40" id="prf-s-b"/>
                                             <constraint firstItem="prf-save" firstAttribute="leading" secondItem="prf-first" secondAttribute="leading" id="prf-s-l"/>
                                             <constraint firstItem="prf-save" firstAttribute="trailing" secondItem="prf-first" secondAttribute="trailing" id="prf-s-r"/>
-                                            <constraint firstAttribute="bottom" secondItem="prf-save" secondAttribute="bottom" constant="40" id="prf-s-b"/>
+                                            <constraint firstItem="prf-save" firstAttribute="top" secondItem="prf-last" secondAttribute="bottom" constant="30" id="prf-s-t"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -148,30 +156,18 @@
                                     <constraint firstItem="prf-content" firstAttribute="width" secondItem="prf-scroll" secondAttribute="width" id="prf-ct-w"/>
                                 </constraints>
                             </scrollView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-icon">
-                                <rect key="frame" x="181" y="402" width="52" height="52"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="52" id="prf-ih"/>
-                                    <constraint firstAttribute="width" constant="52" id="prf-iw"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Profile" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-title">
-                                <rect key="frame" x="24" y="470" width="366" height="24"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="prf-safe"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="prf-bg" firstAttribute="top" secondItem="prf-view" secondAttribute="top" id="prf-bg-t"/>
+                            <constraint firstAttribute="bottom" secondItem="prf-bg" secondAttribute="bottom" id="prf-bg-b"/>
                             <constraint firstItem="prf-bg" firstAttribute="leading" secondItem="prf-view" secondAttribute="leading" id="prf-bg-l"/>
                             <constraint firstAttribute="trailing" secondItem="prf-bg" secondAttribute="trailing" id="prf-bg-r"/>
-                            <constraint firstAttribute="bottom" secondItem="prf-bg" secondAttribute="bottom" id="prf-bg-b"/>
-                            <constraint firstItem="prf-scroll" firstAttribute="top" secondItem="prf-safe" secondAttribute="top" id="prf-sc-t"/>
+                            <constraint firstItem="prf-bg" firstAttribute="top" secondItem="prf-view" secondAttribute="top" id="prf-bg-t"/>
+                            <constraint firstItem="prf-safe" firstAttribute="bottom" secondItem="prf-scroll" secondAttribute="bottom" id="prf-sc-b"/>
                             <constraint firstItem="prf-scroll" firstAttribute="leading" secondItem="prf-safe" secondAttribute="leading" id="prf-sc-l"/>
                             <constraint firstItem="prf-safe" firstAttribute="trailing" secondItem="prf-scroll" secondAttribute="trailing" id="prf-sc-r"/>
-                            <constraint firstItem="prf-safe" firstAttribute="bottom" secondItem="prf-scroll" secondAttribute="bottom" id="prf-sc-b"/>
+                            <constraint firstItem="prf-scroll" firstAttribute="top" secondItem="prf-safe" secondAttribute="top" id="prf-sc-t"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="person" catalog="system" selectedImage="person.fill" id="prf-tab"/>
@@ -201,8 +197,8 @@
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="exp-brand">
                                         <rect key="frame" x="16" y="1" width="70" height="66"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="66" id="brd-h"/>
-                                            <constraint firstAttribute="width" constant="70" id="brd-w"/>
+                                            <constraint firstAttribute="height" constant="66" id="brd-h" userLabel="height = 60"/>
+                                            <constraint firstAttribute="width" constant="70" id="brd-w" userLabel="width = 60"/>
                                         </constraints>
                                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                     </imageView>
@@ -236,7 +232,7 @@
                                     <constraint firstItem="exp-bell" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="exp-tagline" secondAttribute="trailing" constant="8" id="bel-l"/>
                                     <constraint firstItem="exp-bell" firstAttribute="trailing" secondItem="exp-brandbar" secondAttribute="trailing" constant="-16" id="bel-t"/>
                                     <constraint firstItem="exp-bell" firstAttribute="centerY" secondItem="exp-brandbar" secondAttribute="centerY" id="bel-y"/>
-                                    <constraint firstAttribute="height" constant="68" id="brb-h"/>
+                                    <constraint firstAttribute="height" constant="68" id="brb-h" userLabel="height = 65"/>
                                     <constraint firstItem="exp-brand" firstAttribute="leading" secondItem="exp-brandbar" secondAttribute="leading" constant="16" id="brd-l"/>
                                     <constraint firstItem="exp-brand" firstAttribute="centerY" secondItem="exp-brandbar" secondAttribute="centerY" id="brd-y"/>
                                     <constraint firstItem="exp-belldot" firstAttribute="centerX" secondItem="exp-bell" secondAttribute="trailing" constant="-4" id="dot-x"/>
@@ -322,18 +318,18 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryChipCell" id="cat-cell" customClass="CategoryChipCell" customModule="DubaiVibe" customModuleProvider="target">
-                                        <rect key="frame" x="16" y="-3" width="110" height="38"/>
+                                        <rect key="frame" x="16" y="0.0" width="110" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="cat-cv">
-                                            <rect key="frame" x="0.0" y="0.0" width="110" height="38"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="110" height="32"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cat-bg">
-                                                    <rect key="frame" x="0.0" y="0.0" width="110" height="38"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="110" height="32"/>
                                                     <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </view>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="cat-icon">
-                                                    <rect key="frame" x="15" y="11" width="16" height="16"/>
+                                                    <rect key="frame" x="15" y="8" width="16" height="16"/>
                                                     <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="16" id="cic-h"/>
@@ -341,7 +337,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Restaurants" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cat-title">
-                                                    <rect key="frame" x="37" y="11" width="58" height="16"/>
+                                                    <rect key="frame" x="37" y="8" width="58" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                     <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -359,7 +355,7 @@
                                                 <constraint firstItem="cat-title" firstAttribute="centerY" secondItem="cat-cv" secondAttribute="centerY" id="ctt-y"/>
                                             </constraints>
                                         </collectionViewCellContentView>
-                                        <size key="customSize" width="110" height="38"/>
+                                        <size key="customSize" width="110" height="32"/>
                                         <connections>
                                             <outlet property="chipBackgroundView" destination="cat-bg" id="cat-o1"/>
                                             <outlet property="iconImageView" destination="cat-icon" id="cat-o3"/>
@@ -433,13 +429,13 @@
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="bookmark" catalog="system"/>
                                                         </button>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" text="Japanese  •  DIFC" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-sub">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Japanese  •  DIFC" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-sub">
                                                             <rect key="frame" x="14" y="236" width="354" height="16"/>
                                                             <fontDescription key="fontDescription" name="Inter-Medium" family="Inter" pointSize="11.5"/>
                                                             <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" ambiguous="YES" text="4.8  (2.4K)" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-rate">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4.8  (2.4K)" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-rate">
                                                             <rect key="frame" x="14" y="258" width="354" height="16"/>
                                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                             <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -637,9 +633,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchLogo" width="1024" height="1024"/>
-        <image name="backgroundImage" width="851" height="1848"/>
         <image name="LaunchLogo" width="1746" height="1704"/>
+        <image name="backgroundImage" width="851" height="1848"/>
         <image name="bell.fill" catalog="system" width="123" height="128"/>
         <image name="bookmark" catalog="system" width="110" height="128"/>
         <image name="checkmark.seal.fill" catalog="system" width="128" height="124"/>

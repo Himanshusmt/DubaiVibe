@@ -74,7 +74,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="54" id="wel-phone-h"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                                         <color key="tintColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <inset key="imageEdgeInsets" minX="40" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <state key="normal" title="Continue with Phone Number" image="chevron.right" catalog="system">
@@ -236,6 +236,7 @@ Terms of Service and Privacy Policy.</string>
                     </view>
                     <navigationItem key="navigationItem" id="gkx-xK-leF"/>
                     <connections>
+                        <outlet property="phoneButton" destination="wel-phone" id="wel-out-phone"/>
                         <outlet property="termsTextView" destination="wel-terms" id="wel-out-terms"/>
                     </connections>
                 </viewController>

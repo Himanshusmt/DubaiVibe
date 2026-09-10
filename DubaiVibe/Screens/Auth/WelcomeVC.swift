@@ -2,6 +2,7 @@ import UIKit
 
 /// Welcome / auth entry screen. Layout and button chrome live in Authentication.storyboard.
 final class WelcomeVC: UIViewController {
+    @IBOutlet private weak var phoneButton: GoldGradientButton!
     @IBOutlet private weak var termsTextView: UITextView!
 
     private let appleSignIn = AppleSignInService()
@@ -15,6 +16,7 @@ final class WelcomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)
+        phoneButton?.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         configureTermsLinks()
     }
 

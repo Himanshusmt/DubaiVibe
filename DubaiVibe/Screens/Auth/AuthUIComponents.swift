@@ -138,6 +138,10 @@ final class AuthDarkField: UIView, UITextFieldDelegate {
         commonInit()
     }
 
+    override var intrinsicContentSize: CGSize {
+        CGSize(width: UIView.noIntrinsicMetric, height: AuthMetrics.fieldHeight)
+    }
+
     private func commonInit() {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = AppPalette.surface
@@ -156,12 +160,18 @@ final class AuthDarkField: UIView, UITextFieldDelegate {
         textField.autocorrectionType = .no
 
         addSubview(textField)
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: AuthMetrics.fieldHeight),
+        var constraints: [NSLayoutConstraint] = [
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             textField.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
+        ]
+        let hasHeight = self.constraints.contains {
+            $0.firstAttribute == .height && $0.secondItem == nil
+        }
+        if !hasHeight {
+            constraints.append(heightAnchor.constraint(equalToConstant: AuthMetrics.fieldHeight))
+        }
+        NSLayoutConstraint.activate(constraints)
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {

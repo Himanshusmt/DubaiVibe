@@ -27,6 +27,7 @@ final class GoldGradientView: UIView {
     private func setup() {
         isUserInteractionEnabled = false
         backgroundColor = .clear
+        clipsToBounds = true
         layer.insertSublayer(gradient, at: 0)
         applyKind()
     }
@@ -69,6 +70,8 @@ final class GoldGradientView: UIView {
         super.layoutSubviews()
         gradient.frame = bounds
         gradient.cornerRadius = layer.cornerRadius
+        gradient.cornerCurve = layer.cornerCurve
+        gradient.masksToBounds = true
     }
 }
 

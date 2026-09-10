@@ -79,6 +79,10 @@ final class ExploreViewController: UIViewController {
                 headerCollapseDistance = distance
             }
         }
+        guard !isAdjustingHeader else { return }
+        if !canCollapseHeader(in: venueTableView), headerShift != 0 {
+            applyHeaderShift(0, adjustsContentOffset: false)
+        }
     }
 }
 
@@ -215,6 +219,7 @@ private extension ExploreViewController {
             layout.scrollDirection = .horizontal
             layout.minimumInteritemSpacing = AppMetrics.chipGap
             layout.minimumLineSpacing = AppMetrics.chipGap
+            layout.estimatedItemSize = .zero
             layout.sectionInset = UIEdgeInsets(top: 0, left: AppMetrics.screenGutter, bottom: 0, right: AppMetrics.screenGutter)
         }
         chipSizeCache.removeAll()
@@ -414,26 +419,77 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSourcePrefe
         guard scrollView === venueTableView, !isAdjustingHeader else { return }
 
         let offset = scrollView.contentOffset.y
-        let delta = offset - lastContentOffset
-        lastContentOffset = offset
+        let minOffset = -scrollView.adjustedContentInset.top
+        let maxOffset = max(minOffset, maxContentOffset(in: scrollView))
 
-        if offset <= 0 {
-            applyHeaderShift(0)
+        guard canCollapseHeader(in: scrollView) else {
+            lastContentOffset = minOffset
+            applyHeaderShift(0, adjustsContentOffset: false)
             return
         }
 
-        guard headerCollapseDistance > 0 else { return }
+        if offset < minOffset || offset > maxOffset {
+            lastContentOffset = min(max(offset, minOffset), maxOffset)
+            if offset < minOffset {
+                applyHeaderShift(0, adjustsContentOffset: false)
+            }
+            return
+        }
+
+        let delta = offset - lastContentOffset
+        lastContentOffset = offset
+
+        if offset <= minOffset {
+            applyHeaderShift(0, adjustsContentOffset: false)
+            return
+        }
+
+        guard headerCollapseDistance > 0, abs(delta) > 0.5 else { return }
         applyHeaderShift(min(max(headerShift + delta, 0), headerCollapseDistance))
     }
 
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         guard scrollView === venueTableView else { return }
-        applyHeaderShift(0)
+        applyHeaderShift(0, adjustsContentOffset: false)
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard scrollView === venueTableView, !decelerate else { return }
+        settleHeaderIfNeeded(in: scrollView)
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard scrollView === venueTableView else { return }
+        settleHeaderIfNeeded(in: scrollView)
     }
 }
 
 private extension ExploreViewController {
-    func applyHeaderShift(_ newShift: CGFloat) {
+    func maxContentOffset(in scrollView: UIScrollView) -> CGFloat {
+        scrollView.contentSize.height - scrollView.bounds.height + scrollView.adjustedContentInset.bottom
+    }
+
+    func canCollapseHeader(in scrollView: UIScrollView) -> Bool {
+        guard headerCollapseDistance > 0, scrollView.bounds.height > 0 else { return false }
+        let expandedTableHeight = scrollView.bounds.height - headerShift
+        let contentHeight = scrollView.contentSize.height
+            + scrollView.adjustedContentInset.top
+            + scrollView.adjustedContentInset.bottom
+        return contentHeight > expandedTableHeight + headerCollapseDistance + 1
+    }
+
+    func settleHeaderIfNeeded(in scrollView: UIScrollView) {
+        guard !isAdjustingHeader else { return }
+        if !canCollapseHeader(in: scrollView) {
+            applyHeaderShift(0, adjustsContentOffset: false)
+            return
+        }
+        if scrollView.contentOffset.y <= -scrollView.adjustedContentInset.top {
+            applyHeaderShift(0, adjustsContentOffset: false)
+        }
+    }
+
+    func applyHeaderShift(_ newShift: CGFloat, adjustsContentOffset: Bool = true) {
         let diff = newShift - headerShift
         guard abs(diff) > 0.01 else { return }
 
@@ -441,7 +497,9 @@ private extension ExploreViewController {
         isAdjustingHeader = true
         headerTopConstraint.constant = -headerShift
         view.layoutIfNeeded()
-        venueTableView.contentOffset.y -= diff
+        if adjustsContentOffset {
+            venueTableView.contentOffset.y -= diff
+        }
         lastContentOffset = venueTableView.contentOffset.y
         isAdjustingHeader = false
 

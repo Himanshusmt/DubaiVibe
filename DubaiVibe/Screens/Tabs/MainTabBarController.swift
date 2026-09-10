@@ -110,21 +110,24 @@ private extension MainTabBarController {
         if tabBar.frame != target {
             tabBar.frame = target
         }
-        // Keep the floating chip above the active screen so glass can sample it.
+        // Keep the floating chip above the active screen.
         view.bringSubviewToFront(tabBar)
         (tabBar as? FloatingTabBar)?.refreshItemLayout()
     }
 }
 
-/// Floating 170×80 Home / Profile chip with Liquid Glass, 1pt #494949 border.
+/// Floating 230×80 Home / Profile chip, 1pt #494949 border.
 final class FloatingTabBar: UITabBar {
     private let chromeView = UIView()
-    private let glassView = UIVisualEffectView()
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
     private let tintOverlay = UIView()
     private let borderLayer = CAShapeLayer()
     private let innerShadowLayer = CAShapeLayer()
     /// Static icon + label drawn by us; the system's own views animate on tap, so they stay hidden.
     private var itemOverlays: [TabItemOverlay] = []
+    private static var isInterfaceBuilder: Bool {
+        ProcessInfo.processInfo.environment["IB_PRODUCT_BUILD_VERSION"] != nil
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -133,14 +136,22 @@ final class FloatingTabBar: UITabBar {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        // Interface Builder instantiates this tab bar from Main.storyboard.
+        // Skip chrome/frame mutation so the canvas and inspectors stay usable.
+        guard !Self.isInterfaceBuilder else { return }
         setupChrome()
     }
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        AppMetrics.floatingTabPillSize
+        guard !Self.isInterfaceBuilder else { return super.sizeThatFits(size) }
+        return AppMetrics.floatingTabPillSize
     }
 
     override func layoutSubviews() {
+        if Self.isInterfaceBuilder {
+            super.layoutSubviews()
+            return
+        }
         if let host = superview, frame.minY < host.bounds.height - 1 {
             let target = AppMetrics.floatingTabChipFrame(in: host)
             if frame != target {
@@ -171,9 +182,10 @@ final class FloatingTabBar: UITabBar {
 
     private func setupChrome() {
         isTranslucent = true
+        isOpaque = false
         backgroundImage = UIImage()
         shadowImage = UIImage()
-        backgroundColor = .black
+        backgroundColor = .clear
         clipsToBounds = false
         layer.masksToBounds = false
 
@@ -182,24 +194,13 @@ final class FloatingTabBar: UITabBar {
         chromeView.backgroundColor = .clear
         insertSubview(chromeView, at: 0)
 
-        glassView.clipsToBounds = true
-        chromeView.addSubview(glassView)
+        blurView.isUserInteractionEnabled = false
+        blurView.clipsToBounds = true
+        chromeView.addSubview(blurView)
 
         tintOverlay.isUserInteractionEnabled = false
+        tintOverlay.backgroundColor = AppPalette.tabBarFill
         chromeView.addSubview(tintOverlay)
-
-        if #available(iOS 26.0, *) {
-            let glass = UIGlassEffect(style: .regular)
-            glass.isInteractive = true
-            // Light tint — heavy fill makes Liquid Glass look like a solid pill.
-            glass.tintColor = UIColor(hex: 0x181717, alpha: 0.28)
-            glassView.effect = glass
-            tintOverlay.isHidden = true
-        } else {
-            glassView.effect = UIBlurEffect(style: .systemChromeMaterialDark)
-            tintOverlay.backgroundColor = UIColor(hex: 0x181717, alpha: 0.35)
-            tintOverlay.isHidden = false
-        }
 
         borderLayer.fillColor = UIColor.clear.cgColor
         borderLayer.strokeColor = AppPalette.tabBarBorder.cgColor
@@ -218,14 +219,14 @@ final class FloatingTabBar: UITabBar {
     private func layoutChrome() {
         sendSubviewToBack(chromeView)
         chromeView.frame = bounds
-        glassView.frame = chromeView.bounds
+        blurView.frame = chromeView.bounds
         tintOverlay.frame = chromeView.bounds
 
         let radius = min(AppMetrics.floatingTabCornerRadius, bounds.height / 2)
         chromeView.layer.cornerRadius = radius
         chromeView.layer.cornerCurve = .continuous
-        glassView.layer.cornerRadius = radius
-        glassView.layer.cornerCurve = .continuous
+        blurView.layer.cornerRadius = radius
+        blurView.layer.cornerCurve = .continuous
         layer.cornerRadius = radius
         layer.cornerCurve = .continuous
 
