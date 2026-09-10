@@ -84,7 +84,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-photos">
-                                                        <rect key="frame" x="24" y="166" width="99" height="36"/>
+                                                        <rect key="frame" x="24" y="166" width="93" height="36"/>
                                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.62" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="36" id="vd-pho-h"/>
@@ -92,7 +92,7 @@
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="7" maxY="0.0"/>
-                                                        <state key="normal" title="120 Photos" image="photo.on.rectangle" catalog="system">
+                                                        <state key="normal" title="30 Photos" image="photo.on.rectangle" catalog="system">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
@@ -428,8 +428,8 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vd-loc-row">
                                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="46"/>
                                                                 <subviews>
-                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="mappin.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="vd-pin">
-                                                                        <rect key="frame" x="14" y="13.5" width="20" height="19"/>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ExplorePin" translatesAutoresizingMaskIntoConstraints="NO" id="vd-pin">
+                                                                        <rect key="frame" x="14" y="13" width="20" height="20"/>
                                                                         <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="20" id="vd-pin-h"/>
@@ -443,11 +443,11 @@
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vd-directions">
-                                                                        <rect key="frame" x="297" y="13.5" width="83" height="19.5"/>
+                                                                        <rect key="frame" x="304" y="15.5" width="76" height="15"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12.5"/>
                                                                         <color key="tintColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="6" maxY="0.0"/>
-                                                                        <state key="normal" title="Directions" image="paperplane.fill" catalog="system">
+                                                                        <inset key="imageEdgeInsets" minX="-2" minY="0.0" maxX="6" maxY="0.0"/>
+                                                                        <state key="normal" title="Directions" image="directionIcon">
                                                                             <color key="titleColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         </state>
                                                                         <userDefinedRuntimeAttributes>
@@ -764,10 +764,12 @@
                         <outlet property="ratingLabel" destination="vd-rating" id="vd-o-rat"/>
                         <outlet property="scrollView" destination="vd-scroll" id="vd-o-sc"/>
                         <outlet property="segmentCollection" destination="vd-tabs" id="vd-o-tabs"/>
+                        <outlet property="segmentCollectionHeight" destination="vd-tabs-h" id="vd-o-tabs-h"/>
                         <outlet property="shareActionButton" destination="vd-share-act" id="vd-o-sha"/>
                         <outlet property="shareTopButton" destination="vd-share-top" id="vd-o-sht"/>
                         <outlet property="subtitleLabel" destination="vd-subtitle" id="vd-o-sub"/>
                         <outlet property="tabContentContainer" destination="vd-tab-box" id="vd-o-tab"/>
+                        <outlet property="tabContentTopSpacing" destination="vd-tb-t" id="vd-o-tbt"/>
                         <outlet property="verifiedImageView" destination="vd-verified" id="vd-o-ver"/>
                         <outlet property="vibeButton" destination="vd-vibe" id="vd-o-vib"/>
                         <outlet property="vibeDiscView" destination="vd-vibe-disc" id="vd-o-disc"/>
@@ -781,17 +783,17 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchLogo" width="1024" height="1024"/>
+        <image name="ExplorePin" width="16" height="16"/>
+        <image name="LaunchLogo" width="1746" height="1704"/>
         <image name="camera" catalog="system" width="128" height="93"/>
         <image name="checkmark.seal.fill" catalog="system" width="128" height="124"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="clock" catalog="system" width="128" height="123"/>
         <image name="crown.fill" catalog="system" width="128" height="92"/>
+        <image name="directionIcon" width="14" height="14"/>
         <image name="globe" catalog="system" width="128" height="123"/>
         <image name="heart" catalog="system" width="128" height="107"/>
-        <image name="mappin.circle.fill" catalog="system" width="128" height="123"/>
-        <image name="paperplane.fill" catalog="system" width="128" height="119"/>
         <image name="phone.fill" catalog="system" width="128" height="114"/>
         <image name="photo.on.rectangle" catalog="system" width="128" height="98"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>

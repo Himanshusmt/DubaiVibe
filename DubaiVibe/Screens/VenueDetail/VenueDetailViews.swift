@@ -1,7 +1,17 @@
 import UIKit
 
-/// Gold gradient CTA used by the deal card.
-final class GoldGradientButton: UIButton {
+/// Diagonal gold fill used by chips, deal CTAs, and offer panels.
+final class GoldGradientView: UIView {
+    enum Kind {
+        case cta
+        case dealPanel
+        case heroFade
+    }
+
+    var kind: Kind = .cta {
+        didSet { applyKind() }
+    }
+
     private let gradient = CAGradientLayer()
 
     override init(frame: CGRect) {
@@ -15,22 +25,160 @@ final class GoldGradientButton: UIButton {
     }
 
     private func setup() {
-        gradient.colors = [
-            AppPalette.goldGradientTop.cgColor,
-            AppPalette.goldGradientBottom.cgColor
-        ]
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 0, y: 1)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
         layer.insertSublayer(gradient, at: 0)
-        layer.cornerRadius = 14
-        layer.cornerCurve = .continuous
-        clipsToBounds = true
+        applyKind()
+    }
+
+    private func applyKind() {
+        switch kind {
+        case .cta:
+            // Figma View Deal: linear-gradient(135.44deg, #F3CE85 0%, #D8A04D 100%)
+            gradient.colors = [
+                AppPalette.goldGradientTop.cgColor,
+                AppPalette.goldGradientBottom.cgColor
+            ]
+            gradient.locations = [0, 1]
+            gradient.startPoint = CGPoint(x: 0, y: 0)
+            gradient.endPoint = CGPoint(x: 1, y: 1)
+        case .dealPanel:
+            // Yellow wash only top 17%; black covers remaining 83%.
+            // #FFA903 @17% opacity → #0B0B0C
+            gradient.colors = [
+                AppPalette.dealGradientWash.cgColor.copy(alpha: 0.1) ?? 0.1,
+                AppPalette.dealFill.cgColor.copy(alpha: 0.15) ?? 0.15
+            ]
+            gradient.locations = [0, 0.37]
+            gradient.startPoint = CGPoint(x: 0.5, y: 0)
+            gradient.endPoint = CGPoint(x: 0.5, y: 1)
+        case .heroFade:
+            gradient.colors = [
+                UIColor.black.withAlphaComponent(0.30).cgColor,
+                UIColor.black.withAlphaComponent(0.20).cgColor,
+                UIColor.black.withAlphaComponent(0.80).cgColor
+            ]
+            gradient.locations = [0, 0.5, 1]
+            gradient.startPoint = CGPoint(x: 0.5, y: 0)
+            gradient.endPoint = CGPoint(x: 0.5, y: 1)
+        }
+        setNeedsLayout()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         gradient.frame = bounds
-        // Keep IB title/image above the gradient layer.
+        gradient.cornerRadius = layer.cornerRadius
+    }
+}
+
+/// 1pt inner gradient stroke used by the exclusive deal panel.
+final class GradientBorderView: UIView {
+    var lineWidth: CGFloat = 1 {
+        didSet { setNeedsLayout() }
+    }
+
+    private let gradient = CAGradientLayer()
+    private let maskLayer = CAShapeLayer()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    private func setup() {
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+        // Figma Borders → primary color: #FCE19B → #E2A645 → #B87B22
+        gradient.colors = [
+            AppPalette.dealBorderGradientTop.cgColor,
+            AppPalette.dealBorderGradientMid.cgColor,
+            AppPalette.dealBorderGradientBottom.cgColor
+        ]
+        gradient.locations = [0, 0.5, 1]
+        gradient.startPoint = CGPoint(x: 0.5, y: 0)
+        gradient.endPoint = CGPoint(x: 0.5, y: 1)
+        maskLayer.fillRule = .evenOdd
+        gradient.mask = maskLayer
+        layer.addSublayer(gradient)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradient.frame = bounds
+        let radius = layer.cornerRadius
+        let outer = UIBezierPath(roundedRect: bounds, cornerRadius: radius)
+        let insetBounds = bounds.insetBy(dx: lineWidth, dy: lineWidth)
+        let innerRadius = max(0, radius - lineWidth)
+        let inner = UIBezierPath(roundedRect: insetBounds, cornerRadius: innerRadius)
+        outer.append(inner)
+        maskLayer.path = outer.cgPath
+    }
+}
+
+/// Gold gradient CTA used by the deal card.
+final class GoldGradientButton: UIButton {
+    /// Unlock Deal: linear-gradient(97.73deg, #FAD77A 0%, #E3A338 50%, #B87B14 100%).
+    private let gradientLayer = CAGradientLayer()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    private func setup() {
+        configuration = nil
+        backgroundColor = .clear
+        tintColor = AppPalette.onGold
+        setTitleColor(AppPalette.onGold, for: .normal)
+        titleLabel?.font = AppTypography.font(.bold, size: 12)
+        layer.cornerRadius = 12
+        layer.cornerCurve = .continuous
+        clipsToBounds = true
+
+        gradientLayer.colors = [
+            AppPalette.unlockDealGradientStart.cgColor,
+            AppPalette.unlockDealGradientMid.cgColor,
+            AppPalette.unlockDealGradientEnd.cgColor
+        ]
+        gradientLayer.locations = [0, 0.5, 1]
+        // CSS 97.73deg: 0° is up, clockwise. Maps to a near-horizontal left → right sweep.
+        let radians = (97.73 - 90) * CGFloat.pi / 180
+        let dx = cos(radians)
+        let dy = sin(radians)
+        gradientLayer.startPoint = CGPoint(x: 0.5 - dx / 2, y: 0.5 - dy / 2)
+        gradientLayer.endPoint = CGPoint(x: 0.5 + dx / 2, y: 0.5 + dy / 2)
+        gradientLayer.cornerRadius = 12
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if configuration != nil {
+            let current = title(for: .normal)
+            let color = titleColor(for: .normal)
+            configuration = nil
+            if let current { setTitle(current, for: .normal) }
+            if let color { setTitleColor(color, for: .normal) }
+        }
+        backgroundColor = .clear
+        for subview in subviews where subview !== titleLabel && subview !== imageView {
+            subview.backgroundColor = .clear
+            subview.isOpaque = false
+        }
+        gradientLayer.frame = bounds
+        gradientLayer.cornerRadius = layer.cornerRadius
+        layer.insertSublayer(gradientLayer, at: 0)
         if let titleLabel { bringSubviewToFront(titleLabel) }
         if let imageView { bringSubviewToFront(imageView) }
     }
