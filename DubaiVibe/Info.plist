@@ -9,6 +9,10 @@
 		<string>Inter-SemiBold.ttf</string>
 		<string>Inter-Bold.ttf</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Dubai Vibe needs camera access so you can take a profile photo.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Dubai Vibe needs photo library access so you can choose a profile photo.</string>
 	<key>UIDesignRequiresCompatibility</key>
 	<true/>
 	<key>UIUserInterfaceStyle</key>

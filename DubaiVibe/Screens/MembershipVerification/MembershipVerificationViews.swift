@@ -130,8 +130,12 @@ final class GoldGradientCircleView: CircleView {
 final class CircularImageView: UIImageView {
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.cornerRadius = min(bounds.width, bounds.height) / 2
+        let side = min(bounds.width, bounds.height)
+        layer.cornerRadius = side / 2
+        layer.cornerCurve = .circular
         clipsToBounds = true
+        // Border is centered on the edge; without this, half the stroke can look clipped.
+        layer.masksToBounds = true
     }
 }
 

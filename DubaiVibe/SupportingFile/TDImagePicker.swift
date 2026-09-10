@@ -66,7 +66,36 @@ open class TDImagePicker: NSObject {
             alertController.popoverPresentationController?.permittedArrowDirections = [.down, .up]
         }
 
-        self.presentationController?.present(alertController, animated: true)
+        self.presentationController?.present(alertController, animated: true) {
+            Self.clearDimmingBackdrop(for: alertController)
+        }
+        // Also clear mid-animation so the dim never flashes in.
+        DispatchQueue.main.async {
+            Self.clearDimmingBackdrop(for: alertController)
+        }
+    }
+
+    private static func clearDimmingBackdrop(for alertController: UIAlertController) {
+        guard let container = alertController.presentationController?.containerView else { return }
+        let presented = alertController.presentationController?.presentedView
+
+        for subview in container.subviews {
+            // Keep the action sheet itself; only clear the full-screen dimming layer.
+            if subview === presented || subview === alertController.view || subview.isDescendant(of: alertController.view) {
+                continue
+            }
+            subview.backgroundColor = .clear
+            subview.isOpaque = false
+            if let effectView = subview as? UIVisualEffectView {
+                effectView.effect = nil
+            }
+            for nested in subview.subviews {
+                nested.backgroundColor = .clear
+                if let effectView = nested as? UIVisualEffectView {
+                    effectView.effect = nil
+                }
+            }
+        }
     }
     
     private func pickerController(_ controller: UIImagePickerController, didSelect image: UIImage?) {

@@ -59,6 +59,7 @@
 		DF7DD7C2305028EE002BFA4F /* VenueDetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7BA305028EE002BFA4F /* VenueDetailViews.swift */; };
 		DF7DD7C3305028EE002BFA4F /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7B5305028EE002BFA4F /* MainTabBarController.swift */; };
 		DF7DD7C4305028EE002BFA4F /* PlaceholderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7B6305028EE002BFA4F /* PlaceholderViewController.swift */; };
+		F02A11FC3060110200000002 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02A11FC3060110200000001 /* ProfileViewController.swift */; };
 		DF7DD7C5305028EE002BFA4F /* AppPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7BD305028EE002BFA4F /* AppPalette.swift */; };
 		DF7DD7C6305028EE002BFA4F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7A9305028EE002BFA4F /* Venue.swift */; };
 		DF7DD7C7305028EE002BFA4F /* LaunchOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF7DD7B3305028EE002BFA4F /* LaunchOverlay.swift */; };
@@ -153,6 +154,7 @@
 		DF7DD7B3305028EE002BFA4F /* LaunchOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchOverlay.swift; sourceTree = "<group>"; };
 		DF7DD7B5305028EE002BFA4F /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		DF7DD7B6305028EE002BFA4F /* PlaceholderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViewController.swift; sourceTree = "<group>"; };
+		F02A11FC3060110200000001 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DF7DD7B8305028EE002BFA4F /* VenueDetailSegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailSegmentCell.swift; sourceTree = "<group>"; };
 		DF7DD7B9305028EE002BFA4F /* VenueDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailViewController.swift; sourceTree = "<group>"; };
 		DF7DD7BA305028EE002BFA4F /* VenueDetailViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailViews.swift; sourceTree = "<group>"; };
@@ -413,6 +415,7 @@
 			children = (
 				DF7DD7B5305028EE002BFA4F /* MainTabBarController.swift */,
 				DF7DD7B6305028EE002BFA4F /* PlaceholderViewController.swift */,
+				F02A11FC3060110200000001 /* ProfileViewController.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -603,6 +606,7 @@
 				DF7DD7C2305028EE002BFA4F /* VenueDetailViews.swift in Sources */,
 				DF7DD7C3305028EE002BFA4F /* MainTabBarController.swift in Sources */,
 				DF7DD7C4305028EE002BFA4F /* PlaceholderViewController.swift in Sources */,
+				F02A11FC3060110200000002 /* ProfileViewController.swift in Sources */,
 				DF7DD7C5305028EE002BFA4F /* AppPalette.swift in Sources */,
 				DF7DD7C6305028EE002BFA4F /* Venue.swift in Sources */,
 				DF7DD7C7305028EE002BFA4F /* LaunchOverlay.swift in Sources */,

@@ -17,6 +17,9 @@ final class MainTabBarController: UITabBarController {
 private extension MainTabBarController {
     /// Design order: Online | Profile | Dashboard | Social | Deals, with Dashboard in the middle.
     func installTabs() {
+        // Keep ProfileViewController linked so storyboard can resolve the custom class.
+        _ = ProfileViewController.self
+
         guard
             let controllers = viewControllers,
             controllers.count == 2,
