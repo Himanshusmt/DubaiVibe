@@ -10,10 +10,12 @@ final class ExploreViewController: UIViewController {
     @IBOutlet private weak var locationPinImageView: UIImageView!
     @IBOutlet private weak var locationChevronImageView: UIImageView!
     @IBOutlet private weak var locationButton: UIButton!
+    @IBOutlet private weak var locationTitleLabel: UILabel!
     @IBOutlet private weak var searchContainerView: UIView!
     @IBOutlet private weak var searchTextField: UITextField!
     @IBOutlet private weak var categoryCollectionView: UICollectionView!
     @IBOutlet private weak var venueTableView: UITableView!
+    @IBOutlet private weak var headerTopConstraint: NSLayoutConstraint!
 
     private let repository: ExploreRepositorying
     private let categories = VenueCategory.allCases
@@ -25,6 +27,11 @@ final class ExploreViewController: UIViewController {
     private var chipSizeCache: [VenueCategory: CGSize] = [:]
 
     private var dataSource: UITableViewDiffableDataSource<Int, UUID>!
+
+    private var lastContentOffset: CGFloat = 0
+    private var headerShift: CGFloat = 0
+    private var headerCollapseDistance: CGFloat = 0
+    private var isAdjustingHeader = false
 
     init?(coder: NSCoder, repository: ExploreRepositorying) {
         self.repository = repository
@@ -56,34 +63,47 @@ final class ExploreViewController: UIViewController {
         super.viewDidAppear(animated)
         prefetchArtwork()
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let bottom = AppMetrics.floatingTabPillSize.height
+            + AppMetrics.floatingTabBottomInset(for: view)
+            + 8
+        if venueTableView.contentInset.bottom != bottom {
+            venueTableView.contentInset.bottom = bottom
+            venueTableView.verticalScrollIndicatorInsets.bottom = bottom
+        }
+        if headerShift == 0 {
+            let distance = searchContainerView.frame.minY - view.safeAreaInsets.top
+            if distance > 0 {
+                headerCollapseDistance = distance
+            }
+        }
+    }
 }
 
 // MARK: - Setup
 
 private extension ExploreViewController {
     func configureHeader() {
+        brandImageView.image = UIImage(named: "ExploreBrandLogo") ?? UIImage(named: "dubai vibe logo") ?? UIImage(named: "LaunchLogo")
+        brandImageView.contentMode = .scaleAspectFit
         brandImageView.layer.cornerRadius = 14
         brandImageView.layer.cornerCurve = .continuous
         brandImageView.clipsToBounds = true
-        brandImageView.layer.borderWidth = 1.5
-//        brandImageView.layer.borderColor = AppPalette.gold.withAlphaComponent(0.75).cgColor
         brandImageView.accessibilityLabel = "Dubai Vibe"
 
         taglineLabel.attributedText = NSAttributedString(
             string: "DUBAI • EAT • DRINK • EXPLORE",
             attributes: [
-                .font: UIFont.systemFont(ofSize: 9, weight: .semibold),
+                .font: AppTypography.font(.medium, size: 9.5),
                 .foregroundColor: AppPalette.tagline,
                 .kern: 1.9
             ]
         )
 
-        let bell = UIImage(
-            systemName: "bell",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 21, weight: .regular)
-        )
-        notificationButton.setImage(bell, for: .normal)
-        notificationButton.tintColor = AppPalette.gold
+        notificationButton.setImage(UIImage(named: "ExploreBell"), for: .normal)
+        notificationButton.tintColor = nil
         notificationButton.accessibilityLabel = "Notifications"
         notificationButton.addTarget(self, action: #selector(handleNotifications), for: .touchUpInside)
 
@@ -93,8 +113,9 @@ private extension ExploreViewController {
         bellDotView.layer.borderColor = AppPalette.background.cgColor
         bellDotView.isUserInteractionEnabled = false
 
-        locationPinImageView.image = BrandGlyphs.mapPin
-        locationPinImageView.tintColor = AppPalette.gold
+        locationPinImageView.image = UIImage(named: "ExplorePin")
+        locationPinImageView.tintColor = nil
+        locationPinImageView.contentMode = .scaleAspectFit
 
         locationChevronImageView.image = UIImage(
             systemName: "chevron.down",
@@ -102,11 +123,20 @@ private extension ExploreViewController {
         )
         locationChevronImageView.tintColor = AppPalette.primaryText
 
-        locationPillView.backgroundColor = AppPalette.surface
+        locationTitleLabel.attributedText = NSAttributedString(
+            string: "Dubai",
+            attributes: [
+                .font: AppTypography.font(.semibold, size: 14),
+                .foregroundColor: AppPalette.primaryText,
+                .kern: 0.35
+            ]
+        )
+
+        locationPillView.backgroundColor = AppPalette.locationFill
         locationPillView.layer.cornerRadius = 15
         locationPillView.layer.cornerCurve = .continuous
         locationPillView.layer.borderWidth = 1
-        locationPillView.layer.borderColor = AppPalette.chipBorder.cgColor
+        locationPillView.layer.borderColor = AppPalette.locationBorder.cgColor
 
         locationButton.accessibilityLabel = "City: Dubai"
         locationButton.menu = UIMenu(children: [
@@ -130,7 +160,7 @@ private extension ExploreViewController {
             withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
         )
         let icon = UIImageView(image: glass)
-        icon.tintColor = AppPalette.primaryText
+        icon.tintColor = AppPalette.searchPlaceholder
         icon.contentMode = .scaleAspectFit
         icon.frame = CGRect(x: 0, y: 0, width: 22, height: 22)
 
@@ -142,12 +172,15 @@ private extension ExploreViewController {
         searchTextField.leftViewMode = .always
         searchTextField.borderStyle = .none
         searchTextField.backgroundColor = .clear
-        searchTextField.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        searchTextField.font = AppTypography.font(.regular, size: 12)
         searchTextField.textColor = AppPalette.primaryText
         searchTextField.tintColor = AppPalette.gold
         searchTextField.attributedPlaceholder = NSAttributedString(
             string: "Search restaurants, bars, nightlife, beaches...",
-            attributes: [.foregroundColor: AppPalette.secondaryText]
+            attributes: [
+                .font: AppTypography.font(.regular, size: 12),
+                .foregroundColor: AppPalette.searchPlaceholder
+            ]
         )
         searchTextField.returnKeyType = .search
         searchTextField.clearButtonMode = .whileEditing
@@ -170,7 +203,7 @@ private extension ExploreViewController {
 
         let clear = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearSearch))
         let done = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboard))
-        done.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 16, weight: .semibold)], for: .normal)
+        done.setTitleTextAttributes([.font: AppTypography.font(.semibold, size: 16)], for: .normal)
 
         toolbar.items = [clear, UIBarButtonItem(systemItem: .flexibleSpace), done]
         toolbar.sizeToFit()
@@ -180,10 +213,11 @@ private extension ExploreViewController {
     func configureCategories() {
         if let layout = categoryCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
-            layout.minimumInteritemSpacing = 8
-            layout.minimumLineSpacing = 8
-            layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            layout.minimumInteritemSpacing = AppMetrics.chipGap
+            layout.minimumLineSpacing = AppMetrics.chipGap
+            layout.sectionInset = UIEdgeInsets(top: 0, left: AppMetrics.screenGutter, bottom: 0, right: AppMetrics.screenGutter)
         }
+        chipSizeCache.removeAll()
         categoryCollectionView.backgroundColor = AppPalette.background
         categoryCollectionView.showsHorizontalScrollIndicator = false
         categoryCollectionView.contentInsetAdjustmentBehavior = .never
@@ -202,7 +236,10 @@ private extension ExploreViewController {
         venueTableView.estimatedRowHeight = 400
         venueTableView.rowHeight = UITableView.automaticDimension
         venueTableView.prefetchDataSource = self
-        venueTableView.contentInset.bottom = 12
+        venueTableView.contentInset.bottom = AppMetrics.floatingTabPillSize.height
+            + AppMetrics.floatingTabBottomInset(for: view)
+            + 8
+        venueTableView.verticalScrollIndicatorInsets.bottom = venueTableView.contentInset.bottom
 
         dataSource = UITableViewDiffableDataSource<Int, UUID>(tableView: venueTableView) { [weak self] tableView, indexPath, id in
             guard
@@ -215,7 +252,7 @@ private extension ExploreViewController {
             cell.configure(with: venue)
             cell.onFavorite = { [weak self] in self?.toggleFavorite(id: id) }
             cell.onBookmark = { [weak self] in self?.toggleBookmark(id: id) }
-            cell.onViewDeal = { [weak self] in self?.presentDeal(id: id) }
+            cell.onViewDeal = { [weak self] in self?.openVenueDetail(id: id) }
             return cell
         }
         dataSource.defaultRowAnimation = .fade
@@ -295,17 +332,6 @@ private extension ExploreViewController {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 
-    func presentDeal(id: UUID) {
-        guard let venue = venue(with: id), let deal = venue.deal else { return }
-        let alert = UIAlertController(
-            title: venue.name,
-            message: "\(deal.discount)\n\(deal.detail)\n\(deal.validity)",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-
     @objc func handleSearchChanged() {
         searchQuery = searchTextField.text ?? ""
         applySnapshot(animated: true)
@@ -377,21 +403,56 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
 }
 
 extension ExploreViewController: UITableViewDelegate, UITableViewDataSourcePrefetching {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        guard let id = dataSource.itemIdentifier(for: indexPath) else { return }
-        openVenueDetail(id: id)
-    }
-
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let size = CGSize(width: view.bounds.width - AppMetrics.cardGutter * 2, height: AppMetrics.heroHeight)
         let ids = indexPaths.compactMap { dataSource.itemIdentifier(for: $0) }
         let upcoming = ids.compactMap(venue(with:))
         ArtworkCache.prefetch(upcoming, size: size)
     }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView === venueTableView, !isAdjustingHeader else { return }
+
+        let offset = scrollView.contentOffset.y
+        let delta = offset - lastContentOffset
+        lastContentOffset = offset
+
+        if offset <= 0 {
+            applyHeaderShift(0)
+            return
+        }
+
+        guard headerCollapseDistance > 0 else { return }
+        applyHeaderShift(min(max(headerShift + delta, 0), headerCollapseDistance))
+    }
+
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        guard scrollView === venueTableView else { return }
+        applyHeaderShift(0)
+    }
 }
 
 private extension ExploreViewController {
+    func applyHeaderShift(_ newShift: CGFloat) {
+        let diff = newShift - headerShift
+        guard abs(diff) > 0.01 else { return }
+
+        headerShift = newShift
+        isAdjustingHeader = true
+        headerTopConstraint.constant = -headerShift
+        view.layoutIfNeeded()
+        venueTableView.contentOffset.y -= diff
+        lastContentOffset = venueTableView.contentOffset.y
+        isAdjustingHeader = false
+
+        let progress = headerCollapseDistance == 0 ? 0 : headerShift / headerCollapseDistance
+        let alpha = max(0, 1 - progress * 2)
+        brandImageView.superview?.alpha = alpha
+        locationPillView.alpha = alpha
+        brandImageView.superview?.isUserInteractionEnabled = alpha > 0.05
+        locationPillView.isUserInteractionEnabled = alpha > 0.05
+    }
+
     func openVenueDetail(id: UUID) {
         let storyboard = UIStoryboard(name: "VenueDetail", bundle: nil)
         guard let controller = storyboard.instantiateInitialViewController() as? VenueDetailViewController else {

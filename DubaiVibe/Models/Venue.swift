@@ -17,10 +17,10 @@ enum VenueCategory: String, CaseIterable, Hashable {
         switch self {
         case .all: return "All"
         case .restaurants: return "Restaurants"
-        case .bars: return "Bars"
+        case .bars: return "Bars & Lounges"
         case .nightlife: return "Nightlife"
         case .cafes: return "Cafés"
-        case .brunches: return "Brunch"
+        case .brunches: return "Brunches"
         case .beachClubs: return "Beach Clubs"
         case .ladiesNights: return "Ladies Nights"
         case .gymsFitness: return "Gyms & Fitness"
@@ -32,17 +32,28 @@ enum VenueCategory: String, CaseIterable, Hashable {
     /// `nil` keeps the "All" chip text-only, as in the design.
     var icon: UIImage? {
         switch self {
-        case .all: return nil
-        case .restaurants: return UIImage(systemName: "fork.knife")
-        case .bars: return BrandGlyphs.martini
-        case .nightlife: return BrandGlyphs.discoBall
-        case .cafes: return BrandGlyphs.mug
-        case .brunches: return UIImage(systemName: "sun.horizon.fill")
-        case .beachClubs: return UIImage(systemName: "beach.umbrella")
-        case .ladiesNights: return UIImage(systemName: "figure.dance")
-        case .gymsFitness: return UIImage(systemName: "dumbbell")
-        case .padelTennis: return UIImage(systemName: "tennis.racket")
-        case .beautySalons: return UIImage(systemName: "scissors")
+        case .all:
+            return nil
+        case .restaurants:
+            return UIImage(named: "ExploreFood")
+        case .bars:
+            return UIImage(named: "ExploreDrink")
+        case .nightlife:
+            return UIImage(named: "ExploreNightlife")
+        case .cafes:
+            return UIImage(named: "ExploreCafe")
+        case .brunches:
+            return UIImage(named: "ExploreBrunch")
+        case .beachClubs:
+            return UIImage(named: "ExploreBeach")
+        case .ladiesNights:
+            return UIImage(named: "ExploreLadies")
+        case .gymsFitness:
+            return UIImage(named: "ExploreGym")
+        case .padelTennis:
+            return UIImage(named: "ExplorePadel")
+        case .beautySalons:
+            return UIImage(named: "ExploreBeauty")
         }
     }
 }
@@ -85,7 +96,7 @@ struct Venue: Hashable, Identifiable {
     var isVerified: Bool
     var artworkStyle: ArtworkStyle
 
-    var subtitle: String { "\(cuisine)  •  \(neighborhood)" }
+    var subtitle: String { "\(cuisine) • \(neighborhood)" }
 
     var ratingValueText: String { String(format: "%.1f", rating) }
 
@@ -93,5 +104,13 @@ struct Venue: Hashable, Identifiable {
         guard reviewCount >= 1000 else { return "(\(reviewCount))" }
         let value = Double(reviewCount) / 1000.0
         return String(format: value >= 10 ? "(%.0fK)" : "(%.1fK)", value)
+    }
+
+    var photoImage: UIImage? {
+        switch artworkStyle {
+        case .zuma: return UIImage(named: "VenueZuma")
+        case .rooftop: return UIImage(named: "VenueCeLaVi")
+        default: return nil
+        }
     }
 }

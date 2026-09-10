@@ -14,7 +14,12 @@ enum ArtworkCache {
         if let cached = cache.object(forKey: key) {
             return cached
         }
-        let image = ArtworkRenderer.render(venue: venue, size: size)
+        let image: UIImage
+        if let photo = venue.photoImage, size.width > 0, size.height > 0 {
+            image = ArtworkRenderer.renderPhoto(photo, size: size)
+        } else {
+            image = ArtworkRenderer.render(venue: venue, size: size)
+        }
         cache.setObject(image, forKey: key, cost: Int(size.width * size.height * 4))
         return image
     }
@@ -27,6 +32,20 @@ enum ArtworkCache {
 }
 
 enum ArtworkRenderer {
+    static func renderPhoto(_ photo: UIImage, size: CGSize) -> UIImage {
+        let format = UIGraphicsImageRendererFormat.preferred()
+        format.opaque = true
+        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            let scale = max(size.width / photo.size.width, size.height / photo.size.height)
+            let drawSize = CGSize(width: photo.size.width * scale, height: photo.size.height * scale)
+            let origin = CGPoint(
+                x: (size.width - drawSize.width) / 2,
+                y: (size.height - drawSize.height) / 2
+            )
+            photo.draw(in: CGRect(origin: origin, size: drawSize))
+        }
+    }
+
     static func render(venue: Venue, size: CGSize) -> UIImage {
         let format = UIGraphicsImageRendererFormat.preferred()
         format.opaque = true

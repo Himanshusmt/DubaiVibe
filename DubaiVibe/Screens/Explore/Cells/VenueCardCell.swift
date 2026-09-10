@@ -19,9 +19,13 @@ final class VenueCardCell: UITableViewCell {
     @IBOutlet private weak var dealDiscountLabel: UILabel!
     @IBOutlet private weak var dealDetailLabel: UILabel!
     @IBOutlet private weak var dealValidityLabel: UILabel!
-    @IBOutlet private weak var viewDealButton: UIButton!
+    @IBOutlet private weak var viewDealButton: GoldGradientButton!
     @IBOutlet private weak var dealHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var dealTopConstraint: NSLayoutConstraint!
+
+    private let dealFill = GoldGradientView()
+    private let dealBorder = GradientBorderView()
+    private let heroFade = GoldGradientView()
 
     var onFavorite: (() -> Void)?
     var onBookmark: (() -> Void)?
@@ -35,7 +39,7 @@ final class VenueCardCell: UITableViewCell {
         isOpaque = true
         contentView.isOpaque = true
 
-        cardView.backgroundColor = AppPalette.surface
+        cardView.backgroundColor = AppPalette.cardFill
         cardView.layer.cornerRadius = AppMetrics.cardRadius
         cardView.layer.cornerCurve = .continuous
         cardView.layer.borderWidth = 1
@@ -44,10 +48,20 @@ final class VenueCardCell: UITableViewCell {
 
         heroImageView.contentMode = .scaleAspectFill
         heroImageView.clipsToBounds = true
-        heroImageView.isOpaque = true
+        heroImageView.isOpaque = false
+
+        heroFade.kind = .heroFade
+        heroImageView.addSubview(heroFade)
+        heroFade.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            heroFade.topAnchor.constraint(equalTo: heroImageView.topAnchor),
+            heroFade.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor),
+            heroFade.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor),
+            heroFade.bottomAnchor.constraint(equalTo: heroImageView.bottomAnchor)
+        ])
 
         wordmarkLabel.textColor = .white
-        wordmarkLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        wordmarkLabel.font = AppTypography.font(.bold, size: 24)
         wordmarkLabel.adjustsFontSizeToFitWidth = true
         wordmarkLabel.minimumScaleFactor = 0.45
         wordmarkLabel.textAlignment = .center
@@ -56,53 +70,85 @@ final class VenueCardCell: UITableViewCell {
         wordmarkLabel.layer.shadowRadius = 8
         wordmarkLabel.layer.shadowOffset = .zero
 
-        nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        nameLabel.font = AppTypography.font(.bold, size: 15)
         nameLabel.textColor = AppPalette.primaryText
-        subtitleLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        subtitleLabel.font = AppTypography.font(.medium, size: 11.5)
         subtitleLabel.textColor = AppPalette.secondaryText
 
-        verifiedImageView.image = UIImage(systemName: "checkmark.circle.fill")
+        let verifiedConfig = UIImage.SymbolConfiguration(pointSize: 13, weight: .regular)
+        verifiedImageView.image = UIImage(systemName: "checkmark.seal.fill", withConfiguration: verifiedConfig)
         verifiedImageView.tintColor = AppPalette.verified
         verifiedImageView.contentMode = .scaleAspectFit
 
-        dealBannerView.backgroundColor = AppPalette.dealFill
-        dealBannerView.layer.cornerRadius = 14
+        dealBannerView.backgroundColor = .clear
+        dealBannerView.layer.cornerRadius = 12
         dealBannerView.layer.cornerCurve = .continuous
-        dealBannerView.layer.borderWidth = 1
-        dealBannerView.layer.borderColor = AppPalette.dealBorder.cgColor
+        dealBannerView.layer.borderWidth = 0
         dealBannerView.clipsToBounds = true
 
+        // Fill: #FFA903 @17% → #0B0B0C
+        dealFill.kind = .dealPanel
+        dealFill.layer.cornerRadius = 12
+        dealFill.layer.cornerCurve = .continuous
+        dealFill.layer.shadowOpacity = 0.1
+        dealFill.clipsToBounds = true
+        dealBannerView.insertSubview(dealFill, at: 0)
+        dealFill.translatesAutoresizingMaskIntoConstraints = false
+        // Border: 1px inner #FCE19B → #E2A645 → #B87B22
+        dealBorder.lineWidth = 1
+        dealBorder.layer.cornerRadius = 12
+        dealBorder.layer.cornerCurve = .continuous
+        dealBannerView.addSubview(dealBorder)
+        dealBorder.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dealFill.topAnchor.constraint(equalTo: dealBannerView.topAnchor),
+            dealFill.leadingAnchor.constraint(equalTo: dealBannerView.leadingAnchor),
+            dealFill.trailingAnchor.constraint(equalTo: dealBannerView.trailingAnchor),
+            dealFill.bottomAnchor.constraint(equalTo: dealBannerView.bottomAnchor),
+            dealBorder.topAnchor.constraint(equalTo: dealBannerView.topAnchor),
+            dealBorder.leadingAnchor.constraint(equalTo: dealBannerView.leadingAnchor),
+            dealBorder.trailingAnchor.constraint(equalTo: dealBannerView.trailingAnchor),
+            dealBorder.bottomAnchor.constraint(equalTo: dealBannerView.bottomAnchor)
+        ])
+
         crownBackgroundView.backgroundColor = AppPalette.crownFill
-        crownBackgroundView.layer.cornerRadius = 14
+        crownBackgroundView.layer.cornerRadius = 8
         crownBackgroundView.layer.cornerCurve = .continuous
         crownBackgroundView.layer.borderWidth = 1
-        crownBackgroundView.layer.borderColor = AppPalette.dealBorder.cgColor
-        crownImageView.image = BrandGlyphs.crown
-        crownImageView.tintColor = AppPalette.gold
+        crownBackgroundView.layer.borderColor = AppPalette.gold.withAlphaComponent(0.6).cgColor
+        crownImageView.image = UIImage(named: "ExploreCrown")
+        crownImageView.tintColor = nil
         crownImageView.contentMode = .scaleAspectFit
 
-        dealTitleLabel.font = UIFont.systemFont(ofSize: 9, weight: .bold)
-        dealDiscountLabel.font = UIFont.systemFont(ofSize: 21, weight: .bold)
-        dealDiscountLabel.textColor = AppPalette.gold
-        dealDetailLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        dealDetailLabel.textColor = AppPalette.primaryText
-        dealValidityLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        dealValidityLabel.textColor = AppPalette.primaryText
+        dealTitleLabel.font = AppTypography.font(.semibold, size: 8.5)
+        dealDiscountLabel.font = AppTypography.font(.bold, size: 17)
+        dealDiscountLabel.textColor = AppPalette.primaryText
+        dealDetailLabel.font = AppTypography.font(.regular, size: 10)
+        dealDetailLabel.textColor = AppPalette.dealDetailText
+        dealValidityLabel.font = AppTypography.font(.regular, size: 9.5)
+        dealValidityLabel.textColor = AppPalette.secondaryText
 
-        viewDealButton.layer.cornerRadius = 10
+        // Figma View Deal button: #F3CE85 → #D8A04D (diagonal)
+        viewDealButton.backgroundColor = .clear
+        viewDealButton.layer.cornerRadius = 12
+        viewDealButton.layer.cornerCurve = .continuous
+        viewDealButton.clipsToBounds = true
         viewDealButton.setTitle("View Deal", for: .normal)
         viewDealButton.setTitleColor(AppPalette.onGold, for: .normal)
-        viewDealButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        viewDealButton.titleLabel?.font = AppTypography.font(.bold, size: 12)
+        viewDealButton.tintColor = AppPalette.onGold
+        viewDealButton.setNeedsLayout()
+        viewDealButton.layoutIfNeeded()
 
-        favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        favoriteButton.setImage(UIImage(named: "ExploreHeart"), for: .normal)
         favoriteButton.tintColor = .white
-        favoriteButton.backgroundColor = UIColor.black.withAlphaComponent(0.35)
-        favoriteButton.layer.cornerRadius = 18
+        favoriteButton.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        favoriteButton.layer.cornerRadius = 16
         favoriteButton.clipsToBounds = true
         favoriteButton.accessibilityLabel = "Favorite"
 
-        bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
-        bookmarkButton.tintColor = AppPalette.gold
+        bookmarkButton.setImage(UIImage(named: "ExploreBookmark"), for: .normal)
+        bookmarkButton.tintColor = nil
         bookmarkButton.backgroundColor = .clear
         bookmarkButton.accessibilityLabel = "Bookmark"
 
@@ -121,9 +167,13 @@ final class VenueCardCell: UITableViewCell {
     }
 
     func configure(with venue: Venue) {
-        nameLabel.text = venue.name
+        nameLabel.attributedText = NSAttributedString(string: venue.name, attributes: [
+            .font: AppTypography.font(.bold, size: 15),
+            .foregroundColor: AppPalette.primaryText,
+            .kern: -0.375
+        ])
         subtitleLabel.text = venue.subtitle
-        wordmarkLabel.text = venue.wordmark
+        applyWordmark(venue)
         verifiedImageView.isHidden = !venue.isVerified
         ratingLabel.attributedText = Self.ratingAttributedText(for: venue)
 
@@ -141,9 +191,9 @@ final class VenueCardCell: UITableViewCell {
 
         if let deal = venue.deal {
             dealTitleLabel.attributedText = NSAttributedString(string: deal.badge, attributes: [
-                .font: UIFont.systemFont(ofSize: 9, weight: .bold),
-                .foregroundColor: AppPalette.gold,
-                .kern: 1.0
+                .font: AppTypography.font(.semibold, size: 8.5),
+                .foregroundColor: AppPalette.exclusiveGold,
+                .kern: 0.425
             ])
             dealDiscountLabel.text = deal.discount
             dealDetailLabel.text = deal.detail
@@ -151,32 +201,57 @@ final class VenueCardCell: UITableViewCell {
         }
     }
 
+    private func applyWordmark(_ venue: Venue) {
+        let font: UIFont
+        let kern: CGFloat
+        if venue.artworkStyle == .rooftop {
+            font = AppTypography.font(.bold, size: 18)
+            kern = 4.5
+        } else {
+            font = AppTypography.font(.bold, size: 24)
+            kern = -0.6
+        }
+        wordmarkLabel.attributedText = NSAttributedString(string: venue.wordmark, attributes: [
+            .font: font,
+            .foregroundColor: UIColor.white,
+            .kern: kern
+        ])
+    }
+
     private func updateFavorite(_ isFavorite: Bool) {
-        let name = isFavorite ? "heart.fill" : "heart"
-        favoriteButton.setImage(UIImage(systemName: name), for: .normal)
-        favoriteButton.tintColor = isFavorite ? .systemRed : .white
+        if isFavorite {
+            favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            favoriteButton.tintColor = .systemRed
+        } else {
+            favoriteButton.setImage(UIImage(named: "ExploreHeart"), for: .normal)
+            favoriteButton.tintColor = .white
+        }
         favoriteButton.accessibilityValue = isFavorite ? "Saved" : "Not saved"
     }
 
     private func updateBookmark(_ isBookmarked: Bool) {
-        let name = isBookmarked ? "bookmark.fill" : "bookmark"
-        bookmarkButton.setImage(UIImage(systemName: name), for: .normal)
+        if isBookmarked {
+            bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+            bookmarkButton.tintColor = AppPalette.gold
+        } else {
+            bookmarkButton.setImage(UIImage(named: "ExploreBookmark"), for: .normal)
+            bookmarkButton.tintColor = nil
+        }
     }
 
     private static func ratingAttributedText(for venue: Venue) -> NSAttributedString {
         let star = NSTextAttachment()
-        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)
-        star.image = UIImage(systemName: "star.fill", withConfiguration: config)?
-            .withTintColor(AppPalette.star, renderingMode: .alwaysOriginal)
-        star.bounds = CGRect(x: 0, y: -1.5, width: 14, height: 13)
+        let starImage = UIImage(named: "ExploreStar") ?? UIImage(systemName: "star.fill")
+        star.image = starImage
+        star.bounds = CGRect(x: 0, y: -1, width: 10.5, height: 10)
 
         let result = NSMutableAttributedString(attachment: star)
-        result.append(NSAttributedString(string: "  \(venue.ratingValueText)  ", attributes: [
-            .font: UIFont.systemFont(ofSize: 14, weight: .bold),
+        result.append(NSAttributedString(string: " \(venue.ratingValueText)", attributes: [
+            .font: AppTypography.font(.bold, size: 11),
             .foregroundColor: AppPalette.primaryText
         ]))
-        result.append(NSAttributedString(string: venue.reviewCountText, attributes: [
-            .font: UIFont.systemFont(ofSize: 13.5, weight: .regular),
+        result.append(NSAttributedString(string: " \(venue.reviewCountText)", attributes: [
+            .font: AppTypography.font(.regular, size: 11),
             .foregroundColor: AppPalette.secondaryText
         ]))
         return result
