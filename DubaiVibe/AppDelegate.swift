@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,8 +14,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        configureKeyboardManager()
         LaunchOverlay.begin()
         return true
+    }
+
+    private func configureKeyboardManager() {
+        let keyboard = IQKeyboardManager.shared
+        keyboard.isEnabled = true
+        keyboard.resignOnTouchOutside = true
     }
 
     // MARK: UISceneSession Lifecycle

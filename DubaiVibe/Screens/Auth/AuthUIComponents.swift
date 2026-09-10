@@ -350,6 +350,8 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
     private let count = 6
     private var boxes: [UILabel] = []
     private let hiddenField = UITextField()
+    private let caretView = UIView()
+    private var caretBlinkTimer: Timer?
 
     var code: String {
         hiddenField.text ?? ""
@@ -363,6 +365,10 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
+    }
+
+    deinit {
+        caretBlinkTimer?.invalidate()
     }
 
     private func commonInit() {
@@ -396,7 +402,12 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
         hiddenField.delegate = self
         hiddenField.addTarget(self, action: #selector(textChanged), for: .editingChanged)
 
+        caretView.backgroundColor = AppPalette.gold
+        caretView.isHidden = true
+        caretView.isUserInteractionEnabled = false
+
         addSubview(stack)
+        addSubview(caretView)
         addSubview(hiddenField)
 
         NSLayoutConstraint.activate([
@@ -414,11 +425,18 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(focus))
         addGestureRecognizer(tap)
         updateBorders()
+        updateCaret()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateCaret()
     }
 
     @objc func focus() {
         hiddenField.becomeFirstResponder()
         updateBorders()
+        updateCaret()
     }
 
     @objc private func textChanged() {
@@ -433,6 +451,7 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
             }
         }
         updateBorders()
+        updateCaret()
         if filtered.count == count {
             delegate?.authOTPViewDidComplete(filtered)
         }
@@ -446,6 +465,54 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
                 ? AppPalette.gold.cgColor
                 : AppPalette.separator.cgColor
         }
+    }
+
+    private func updateCaret() {
+        let length = (hiddenField.text ?? "").count
+        let shouldShow = hiddenField.isFirstResponder && length < count && length < boxes.count
+        caretView.isHidden = !shouldShow
+        guard shouldShow else {
+            stopCaretBlink()
+            return
+        }
+
+        let box = boxes[length]
+        let boxFrame = box.convert(box.bounds, to: self)
+        let caretWidth: CGFloat = 2
+        let caretHeight: CGFloat = 22
+        caretView.frame = CGRect(
+            x: boxFrame.midX - caretWidth / 2,
+            y: boxFrame.midY - caretHeight / 2,
+            width: caretWidth,
+            height: caretHeight
+        )
+        caretView.alpha = 1
+        startCaretBlink()
+    }
+
+    private func startCaretBlink() {
+        guard caretBlinkTimer == nil else { return }
+        caretView.alpha = 1
+        caretBlinkTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+            guard let self, !self.caretView.isHidden else { return }
+            self.caretView.alpha = self.caretView.alpha > 0.5 ? 0 : 1
+        }
+    }
+
+    private func stopCaretBlink() {
+        caretBlinkTimer?.invalidate()
+        caretBlinkTimer = nil
+        caretView.alpha = 1
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        updateBorders()
+        updateCaret()
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        updateBorders()
+        updateCaret()
     }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

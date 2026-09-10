@@ -8,7 +8,7 @@ final class EnterOTPVC: UIViewController {
     @IBOutlet private weak var otpView: AuthOTPView!
     @IBOutlet private weak var resendLabel: UILabel!
 
-    private var secondsRemaining = 25
+    private var secondsRemaining = 60
     private var timer: Timer?
     private var didAdvance = false
 
@@ -69,7 +69,7 @@ final class EnterOTPVC: UIViewController {
 
     private func startResendTimer() {
         timer?.invalidate()
-        secondsRemaining = 25
+        secondsRemaining = 60
         updateResendLabel()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             guard let self else { return }
@@ -102,7 +102,7 @@ final class EnterOTPVC: UIViewController {
             string: suffix,
             attributes: [
                 .foregroundColor: AppPalette.gold,
-                .font: UIFont.systemFont(ofSize: 14, weight: .medium),
+                .font: UIFont.monospacedDigitSystemFont(ofSize: 14, weight: .medium),
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
         ))

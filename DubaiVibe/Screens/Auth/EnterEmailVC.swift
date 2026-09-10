@@ -41,15 +41,49 @@ final class EnterEmailVC: UIViewController {
     }
 
     @IBAction private func createAccount(_ sender: Any?) {
+        view.endEditing(true)
+
         let first = (firstNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         let last = (lastNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !first.isEmpty, !last.isEmpty else {
-            showAlert(message: "Please enter your first and last name.")
+
+        if let error = validationMessage(forFirstName: first, lastName: last) {
+            showAlert(message: error)
             return
         }
+
         navigationController?.pushViewController(
             UIStoryboard.authentication.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
             animated: true
         )
+    }
+
+    private func validationMessage(forFirstName first: String, lastName last: String) -> String? {
+        if first.isEmpty {
+            return "Please enter your first name."
+        }
+        if first.count < 2 {
+            return "First name must be at least 2 characters."
+        }
+        if !isValidPersonName(first) {
+            return "Please enter a valid first name."
+        }
+        if last.isEmpty {
+            return "Please enter your last name."
+        }
+        if last.count < 2 {
+            return "Last name must be at least 2 characters."
+        }
+        if !isValidPersonName(last) {
+            return "Please enter a valid last name."
+        }
+        return nil
+    }
+
+    /// Letters, spaces, hyphen, and apostrophe only (e.g. Mary-Jane, O'Brien).
+    private func isValidPersonName(_ name: String) -> Bool {
+        let allowed = CharacterSet.letters
+            .union(.whitespaces)
+            .union(CharacterSet(charactersIn: "'-"))
+        return !name.isEmpty && name.unicodeScalars.allSatisfy { allowed.contains($0) }
     }
 }
