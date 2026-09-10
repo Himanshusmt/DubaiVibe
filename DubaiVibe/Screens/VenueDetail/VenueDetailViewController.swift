@@ -23,6 +23,8 @@ final class VenueDetailViewController: UIViewController {
     @IBOutlet private weak var ratingLabel: UILabel!
     @IBOutlet private weak var brandTileLabel: UILabel!
     @IBOutlet private weak var segmentCollection: UICollectionView!
+    @IBOutlet private weak var segmentCollectionHeight: NSLayoutConstraint!
+    @IBOutlet private weak var tabContentTopSpacing: NSLayoutConstraint!
     @IBOutlet private weak var tabContentContainer: UIView!
     @IBOutlet private weak var metaCardView: UIView!
     @IBOutlet private weak var addressLabel: UILabel!
@@ -99,9 +101,9 @@ private extension VenueDetailViewController {
 
         stylePillButton(photosButton, symbol: "photo.on.rectangle", title: photosButton.currentTitle ?? "Photos")
         photosButton.accessibilityLabel = "Photos"
-        configureVibeButton()
-        vibeButton.accessibilityLabel = "Watch Vibe"
-        vibeDiscView.layer.cornerRadius = 13
+        wordmarkLabel.isHidden = true
+        vibeButton.isHidden = true
+        vibeDiscView.isHidden = true
 
         brandTileLabel.backgroundColor = AppPalette.detailCardFill
         brandTileLabel.layer.cornerRadius = 14
@@ -118,6 +120,7 @@ private extension VenueDetailViewController {
 
         styleDirectionsButton()
         [callButton, websiteButton, instagramButton, shareActionButton, oneVibeButton].forEach(styleActionButton)
+        hideSegmentCollection()
 
         let symbol = UIImage.SymbolConfiguration(pointSize: 21, weight: .regular)
         instagramButton.setImage(BrandGlyphs.instagram.withConfiguration(symbol), for: .normal)
@@ -156,21 +159,6 @@ private extension VenueDetailViewController {
         button.configuration = config
     }
 
-    func configureVibeButton() {
-        var config = UIButton.Configuration.filled()
-        config.baseBackgroundColor = UIColor.black.withAlphaComponent(0.62)
-        config.baseForegroundColor = .white
-        config.title = "Watch Vibe"
-        config.cornerStyle = .capsule
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 44)
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-            return outgoing
-        }
-        vibeButton.configuration = config
-    }
-
     func styleDirectionsButton() {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "paperplane.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 11, weight: .semibold))
@@ -196,6 +184,13 @@ private extension VenueDetailViewController {
         button.layer.borderWidth = 1
         button.layer.borderColor = AppPalette.gold.withAlphaComponent(0.35).cgColor
     }
+
+    func hideSegmentCollection() {
+        segmentCollection.isHidden = true
+        segmentCollection.isUserInteractionEnabled = false
+        segmentCollectionHeight.constant = 0
+        tabContentTopSpacing.constant = 0
+    }
 }
 
 // MARK: - Binding
@@ -207,7 +202,6 @@ private extension VenueDetailViewController {
         renderedHeroWidth = 0
         updateHeroArtwork()
 
-        wordmarkLabel.text = detail.wordmark
         nameLabel.text = detail.name
         verifiedImageView.isHidden = !detail.isVerified
         subtitleLabel.text = detail.subtitle
@@ -220,7 +214,7 @@ private extension VenueDetailViewController {
         addressLabel.text = detail.address
         hoursLabel.text = detail.hoursText
 
-        segmentCollection.reloadData()
+        selectedTab = .deals
         renderTabContent()
         updateFavoriteIcon()
     }

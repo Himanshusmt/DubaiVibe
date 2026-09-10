@@ -58,6 +58,10 @@ enum AppPalette {
     /// Figma CTA / View Deal: #F3CE85 → #D8A04D
     static let goldGradientTop = UIColor(hex: 0xF3CE85)
     static let goldGradientBottom = UIColor(hex: 0xD8A04D)
+    /// Unlock Deal: linear-gradient(97.73deg, #FAD77A 0%, #E3A338 50%, #B87B14 100%)
+    static let unlockDealGradientStart = UIColor(hex: 0xFAD77A)
+    static let unlockDealGradientMid = UIColor(hex: 0xE3A338)
+    static let unlockDealGradientEnd = UIColor(hex: 0xB87B14)
     /// Exclusive deal panel fill: yellow wash (#FFA903 @ 17%) for top 17%, black (#0B0B0C) for remaining 83%.
     static let dealGradientWash = UIColor(hex: 0xFFA903, alpha: 0.17)
 }

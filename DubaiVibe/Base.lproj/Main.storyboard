@@ -308,7 +308,7 @@
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="heart" catalog="system"/>
                                                         </button>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="zuma" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-mark">
+                                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" text="zuma" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-mark">
                                                             <rect key="frame" x="24" y="67.5" width="334" height="41"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -321,7 +321,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="checkmark.seal.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ven-check">
-                                                            <rect key="frame" x="106" y="192" width="16" height="15"/>
+                                                            <rect key="frame" x="106" y="190.5" width="16" height="17.5"/>
                                                             <color key="tintColor" red="0.18431372549019609" green="0.54509803921568623" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="16" id="ver-h"/>
@@ -522,8 +522,8 @@
                     <connections>
                         <outlet property="bellDotView" destination="exp-belldot" id="eo-dot"/>
                         <outlet property="brandImageView" destination="exp-brand" id="eo-brd"/>
-                        <outlet property="headerTopConstraint" destination="ex-bt" id="eo-htc"/>
                         <outlet property="categoryCollectionView" destination="exp-cats" id="eo-cat"/>
+                        <outlet property="headerTopConstraint" destination="ex-bt" id="eo-htc"/>
                         <outlet property="locationButton" destination="exp-loc" id="eo-loc"/>
                         <outlet property="locationChevronImageView" destination="exp-chevron" id="eo-chv"/>
                         <outlet property="locationPillView" destination="exp-locpill" id="eo-lpl"/>
@@ -545,7 +545,7 @@
         <image name="LaunchLogo" width="1746" height="1704"/>
         <image name="bell.fill" catalog="system" width="123" height="128"/>
         <image name="bookmark" catalog="system" width="110" height="128"/>
-        <image name="checkmark.seal.fill" catalog="system" width="128" height="128"/>
+        <image name="checkmark.seal.fill" catalog="system" width="128" height="124"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="crown.fill" catalog="system" width="128" height="92"/>
         <image name="heart" catalog="system" width="128" height="107"/>

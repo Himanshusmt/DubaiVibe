@@ -47,7 +47,7 @@ final class GoldGradientView: UIView {
             // #FFA903 @17% opacity → #0B0B0C
             gradient.colors = [
                 AppPalette.dealGradientWash.cgColor.copy(alpha: 0.1) ?? 0.1,
-                AppPalette.dealFill.cgColor.copy(alpha: 0.26) ?? 0.26
+                AppPalette.dealFill.cgColor.copy(alpha: 0.15) ?? 0.15
             ]
             gradient.locations = [0, 0.37]
             gradient.startPoint = CGPoint(x: 0.5, y: 0)
@@ -123,7 +123,7 @@ final class GradientBorderView: UIView {
 
 /// Gold gradient CTA used by the deal card.
 final class GoldGradientButton: UIButton {
-    /// Figma View Deal: linear #F3CE85 → #D8A04D (top-left → bottom-right).
+    /// Unlock Deal: linear-gradient(97.73deg, #FAD77A 0%, #E3A338 50%, #B87B14 100%).
     private let gradientLayer = CAGradientLayer()
 
     override init(frame: CGRect) {
@@ -147,12 +147,17 @@ final class GoldGradientButton: UIButton {
         clipsToBounds = true
 
         gradientLayer.colors = [
-            AppPalette.goldGradientTop.cgColor,    // #F3CE85
-            AppPalette.goldGradientBottom.cgColor  // #D8A04D
+            AppPalette.unlockDealGradientStart.cgColor,
+            AppPalette.unlockDealGradientMid.cgColor,
+            AppPalette.unlockDealGradientEnd.cgColor
         ]
-        gradientLayer.locations = [0, 1]
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.locations = [0, 0.5, 1]
+        // CSS 97.73deg: 0° is up, clockwise. Maps to a near-horizontal left → right sweep.
+        let radians = (97.73 - 90) * CGFloat.pi / 180
+        let dx = cos(radians)
+        let dy = sin(radians)
+        gradientLayer.startPoint = CGPoint(x: 0.5 - dx / 2, y: 0.5 - dy / 2)
+        gradientLayer.endPoint = CGPoint(x: 0.5 + dx / 2, y: 0.5 + dy / 2)
         gradientLayer.cornerRadius = 12
         layer.insertSublayer(gradientLayer, at: 0)
     }
