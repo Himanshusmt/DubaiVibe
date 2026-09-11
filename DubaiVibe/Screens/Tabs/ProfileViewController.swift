@@ -2,6 +2,10 @@ import UIKit
 
 @objc(ProfileViewController)
 final class ProfileViewController: UIViewController {
+    @IBOutlet weak var brandImageView: UIImageView!
+    @IBOutlet weak var taglineLabel: UILabel!
+    @IBOutlet weak var notificationButton: UIButton!
+    @IBOutlet weak var bellDotView: UIView!
     @IBOutlet weak var avatarImageView: CircularImageView!
     @IBOutlet weak var cameraBadge: UIView!
     @IBOutlet weak var firstNameField: AuthDarkField!
@@ -29,11 +33,47 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = AppPalette.background
         authDismissKeyboardOnTap()
+        configureHeader()
         configureFields()
         configureAvatar()
         configureSaveButton()
         loadSavedProfile()
         updateSaveButtonState()
+    }
+
+    /// Mirrors the brand bar on Explore so both tabs share one header treatment.
+    private func configureHeader() {
+        brandImageView?.image = UIImage(named: "ExploreBrandLogo") ?? UIImage(named: "dubai vibe logo") ?? UIImage(named: "LaunchLogo")
+        brandImageView?.contentMode = .scaleAspectFit
+        brandImageView?.layer.cornerRadius = 14
+        brandImageView?.layer.cornerCurve = .continuous
+        brandImageView?.clipsToBounds = true
+        brandImageView?.accessibilityLabel = "Dubai Vibe"
+
+        taglineLabel?.attributedText = NSAttributedString(
+            string: "DUBAI • EAT • DRINK • EXPLORE",
+            attributes: [
+                .font: AppTypography.font(.medium, size: 9.5),
+                .foregroundColor: AppPalette.tagline,
+                .kern: 1.9
+            ]
+        )
+
+        notificationButton?.setImage(UIImage(named: "ExploreBell"), for: .normal)
+        notificationButton?.tintColor = nil
+        notificationButton?.accessibilityLabel = "Notifications"
+        notificationButton?.addTarget(self, action: #selector(handleNotifications), for: .touchUpInside)
+
+        bellDotView?.backgroundColor = AppPalette.badgeRed
+        bellDotView?.layer.cornerRadius = 4.5
+        bellDotView?.layer.borderWidth = 1.5
+        bellDotView?.layer.borderColor = AppPalette.background.cgColor
+        bellDotView?.isUserInteractionEnabled = false
+    }
+
+    @objc private func handleNotifications() {
+        bellDotView?.isHidden = true
+        showAlert(title: "Notifications", message: "Coming soon")
     }
 
     private func configureFields() {

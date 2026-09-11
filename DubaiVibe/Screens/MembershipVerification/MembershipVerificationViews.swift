@@ -1,9 +1,35 @@
 import UIKit
 
-/// Soft gold wash and diagonal wisps used behind the membership screen.
+/// Faint gold wash behind the membership screen: a broad bloom across the middle
+/// and a warmer one rising from the bottom edge. Pin this to the full screen.
+///
+/// Radii and opacities are sampled from the reference design, where the background
+/// stays near-black (peak gold opacity is 17% at the bottom edge).
 final class GoldAmbientGlowView: UIView {
-    private let blob = CAGradientLayer()
-    private let rayLayers: [CAGradientLayer] = (0..<4).map { _ in CAGradientLayer() }
+    private struct Bloom {
+        /// Center and radii as fractions of the view's bounds.
+        let center: CGPoint
+        let radius: CGSize
+        let innerOpacity: CGFloat
+        let midOpacity: CGFloat
+    }
+
+    private static let blooms = [
+        Bloom(
+            center: CGPoint(x: 0.5, y: 0.475),
+            radius: CGSize(width: 1.385, height: 0.43),
+            innerOpacity: 0.094,
+            midOpacity: 0.039
+        ),
+        Bloom(
+            center: CGPoint(x: 0.5, y: 0.977),
+            radius: CGSize(width: 0.77, height: 0.192),
+            innerOpacity: 0.17,
+            midOpacity: 0.07
+        )
+    ]
+
+    private let gradients = GoldAmbientGlowView.blooms.map { _ in CAGradientLayer() }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,42 +46,33 @@ final class GoldAmbientGlowView: UIView {
         backgroundColor = .clear
         clipsToBounds = false
 
-        blob.type = .radial
-        blob.colors = [
-            AppPalette.gold.withAlphaComponent(0.42).cgColor,
-            AppPalette.gold.withAlphaComponent(0.14).cgColor,
-            UIColor.clear.cgColor
-        ]
-        blob.locations = [0, 0.34, 1]
-        blob.startPoint = CGPoint(x: 0.5, y: 0.5)
-        blob.endPoint = CGPoint(x: 1, y: 1)
-        layer.addSublayer(blob)
-
-        for (index, ray) in rayLayers.enumerated() {
-            ray.type = .axial
-            ray.colors = [
-                UIColor.clear.cgColor,
-                AppPalette.gold.withAlphaComponent(index.isMultiple(of: 2) ? 0.22 : 0.14).cgColor,
+        for (bloom, gradient) in zip(Self.blooms, gradients) {
+            gradient.type = .radial
+            gradient.colors = [
+                AppPalette.gold.withAlphaComponent(bloom.innerOpacity).cgColor,
+                AppPalette.gold.withAlphaComponent(bloom.midOpacity).cgColor,
                 UIColor.clear.cgColor
             ]
-            ray.startPoint = CGPoint(x: 0, y: 0.5)
-            ray.endPoint = CGPoint(x: 1, y: 0.5)
-            layer.addSublayer(ray)
+            gradient.locations = [0, 0.45, 1]
+            gradient.startPoint = CGPoint(x: 0.5, y: 0.5)
+            gradient.endPoint = CGPoint(x: 1, y: 1)
+            layer.addSublayer(gradient)
         }
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        blob.frame = bounds
-
-        let angles: [CGFloat] = [-0.55, -0.18, 0.22, 0.58]
-        for (index, ray) in rayLayers.enumerated() {
-            let height = max(18, bounds.height * 0.08)
-            ray.bounds = CGRect(x: 0, y: 0, width: bounds.width * 1.35, height: height)
-            ray.position = CGPoint(x: bounds.midX, y: bounds.midY)
-            ray.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            ray.transform = CATransform3DMakeRotation(angles[index], 0, 0, 1)
-            ray.cornerRadius = height / 2
+        for (bloom, gradient) in zip(Self.blooms, gradients) {
+            let radius = CGSize(
+                width: bounds.width * bloom.radius.width,
+                height: bounds.height * bloom.radius.height
+            )
+            gradient.frame = CGRect(
+                x: bounds.width * bloom.center.x - radius.width,
+                y: bounds.height * bloom.center.y - radius.height,
+                width: radius.width * 2,
+                height: radius.height * 2
+            )
         }
     }
 }
@@ -79,11 +96,11 @@ final class GoldHaloView: UIView {
         backgroundColor = .clear
         glow.type = .radial
         glow.colors = [
-            AppPalette.gold.withAlphaComponent(0.55).cgColor,
-            AppPalette.gold.withAlphaComponent(0.16).cgColor,
+            AppPalette.gold.withAlphaComponent(0.34).cgColor,
+            AppPalette.gold.withAlphaComponent(0.26).cgColor,
             UIColor.clear.cgColor
         ]
-        glow.locations = [0, 0.4, 1]
+        glow.locations = [0, 0.55, 1]
         glow.startPoint = CGPoint(x: 0.5, y: 0.5)
         glow.endPoint = CGPoint(x: 1, y: 1)
         layer.addSublayer(glow)

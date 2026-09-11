@@ -31,6 +31,7 @@ final class MembershipVerificationViewController: UIViewController {
 
     private var voucherCode = "OV-7K92X4"
     private var issuedAt = Date()
+    private var lastCopyAt: TimeInterval = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +60,7 @@ private extension MembershipVerificationViewController {
         helpButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
 
         logoTileView.backgroundColor = .black
-        logoTileView.layer.cornerRadius = 12
+//        logoTileView.layer.cornerRadius = 12
         logoTileView.layer.cornerCurve = .continuous
 //        logoTileView.layer.borderWidth = 1.4
 //        logoTileView.layer.borderColor = AppPalette.gold.cgColor
@@ -67,7 +68,7 @@ private extension MembershipVerificationViewController {
         logoImageView.image = UIImage(named: "LaunchLogo")
         logoImageView.contentMode = .scaleAspectFit
 
-        profileImageView.image = Self.memberAvatar()
+        profileImageView.image = UIImage(named: "MemberAvatar") ?? Self.memberAvatar()
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.layer.borderWidth = 3
         profileImageView.layer.borderColor = AppPalette.gold.cgColor
@@ -81,49 +82,85 @@ private extension MembershipVerificationViewController {
         verifiedBadgeView.layer.borderWidth = 1
         verifiedBadgeView.layer.borderColor = AppPalette.gold.cgColor
 
-        codeCardView.backgroundColor = UIColor(hex: 0x0C0B09)
+        nameLabel.font = AppTypography.font(.bold, size: 20)
+        memberSinceLabel.font = AppTypography.font(.regular, size: 13)
+        memberSinceLabel.textColor = AppPalette.secondaryText
+
+        codeCardView.backgroundColor = UIColor(hex: 0x0A0908)
         codeCardView.layer.cornerRadius = 22
         codeCardView.layer.cornerCurve = .continuous
         codeCardView.layer.borderWidth = 1
-        codeCardView.layer.borderColor = AppPalette.gold.withAlphaComponent(0.9).cgColor
-        codeCardView.layer.shadowColor = AppPalette.gold.cgColor
-        codeCardView.layer.shadowOpacity = 0.28
-        codeCardView.layer.shadowRadius = 16
+        codeCardView.layer.borderColor = AppPalette.gold.withAlphaComponent(0.55).cgColor
+        // The design keeps the area just outside the card pure black, so no outer bloom.
+        codeCardView.layer.shadowOpacity = 0
         codeCardView.clipsToBounds = false
 
-        detailsPanelView.backgroundColor = UIColor(hex: 0x161410)
+        detailsPanelView.backgroundColor = UIColor(hex: 0x060505)
         detailsPanelView.layer.cornerRadius = 16
         detailsPanelView.layer.cornerCurve = .continuous
         detailsPanelView.layer.borderWidth = 0.5
-        detailsPanelView.layer.borderColor = UIColor.white.withAlphaComponent(0.12).cgColor
+        detailsPanelView.layer.borderColor = UIColor.white.withAlphaComponent(0.08).cgColor
 
-        sparkleLeftStack.transform = CGAffineTransform(rotationAngle: -0.42)
-        sparkleRightStack.transform = CGAffineTransform(rotationAngle: 0.42)
+        // The dashes radiate away from the shield; Interface Builder can't set a rotation.
+        angleSparkles(in: sparkleLeftStack, clockwiseFirst: true)
+        angleSparkles(in: sparkleRightStack, clockwiseFirst: false)
 
         captionLabel.attributedText = NSAttributedString(string: "YOUR VERIFIED CODE", attributes: [
-            .font: UIFont.systemFont(ofSize: 11, weight: .semibold),
+            .font: AppTypography.font(.semibold, size: 11),
             .foregroundColor: AppPalette.gold,
-            .kern: 1.8
+            .kern: 2.4
         ])
 
-        codeBarView.backgroundColor = UIColor(hex: 0x1C1A16)
+        codeBarView.backgroundColor = UIColor(hex: 0x111112)
         codeBarView.layer.cornerRadius = 12
         codeBarView.layer.cornerCurve = .continuous
+        codeBarView.clipsToBounds = true
+        codeBarView.isUserInteractionEnabled = true
         codeLabel.textAlignment = .center
+        codeLabel.isUserInteractionEnabled = false
 
-        let copyConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
-        copyButton.setImage(UIImage(systemName: "square.on.square", withConfiguration: copyConfig), for: .normal)
-        copyButton.tintColor = AppPalette.primaryText
+        configureCopyButton()
+    }
+
+    /// Tilts a sparkle stack's two dashes so they point away from the shield.
+    func angleSparkles(in stack: UIStackView, clockwiseFirst: Bool) {
+        let tilt = 25.0 * .pi / 180.0
+        for (index, dash) in stack.arrangedSubviews.enumerated() {
+            let clockwise = (index == 0) == clockwiseFirst
+            dash.transform = CGAffineTransform(rotationAngle: clockwise ? tilt : -tilt)
+        }
+    }
+
+    func configureCopyButton(icon: String = "square.on.square", tint: UIColor = AppPalette.primaryText, weight: UIImage.SymbolWeight = .medium) {
+        let symbol = UIImage.SymbolConfiguration(pointSize: 16, weight: weight)
+        copyButton.setImage(UIImage(systemName: icon, withConfiguration: symbol), for: .normal)
+        copyButton.tintColor = tint
+        copyButton.accessibilityLabel = "Copy code"
+        copyButton.accessibilityHint = "Copies the verified membership code"
+        copyButton.isUserInteractionEnabled = true
+        copyButton.isExclusiveTouch = true
+        codeBarView.bringSubviewToFront(copyButton)
+
+        if codeBarView.gestureRecognizers?.contains(where: { $0.name == "copy-code" }) != true {
+            let tap = UITapGestureRecognizer(target: self, action: #selector(handleCopyCode))
+            tap.name = "copy-code"
+            codeBarView.addGestureRecognizer(tap)
+        }
     }
 
     func bindVoucher(issuedAt: Date) {
         self.issuedAt = issuedAt
-        voucherCode = Self.makeCode()
+        voucherCode = "OV-7K92X4"
         let expires = issuedAt.addingTimeInterval(Metric.validity)
 
         nameLabel.text = "Alex R."
         memberSinceLabel.text = "OneVibe Member since 2024"
-        codeLabel.text = voucherCode
+        codeLabel.attributedText = NSAttributedString(string: voucherCode, attributes: [
+            .font: AppTypography.font(.bold, size: 24),
+            .foregroundColor: UIColor.white,
+            .kern: 3.0
+        ])
+        codeLabel.textAlignment = .center
         dateValueLabel.text = Self.dateFormatter.string(from: issuedAt)
         timeValueLabel.text = Self.timeFormatter.string(from: issuedAt)
         validUntilValueLabel.text = Self.untilFormatter.string(from: expires)
@@ -131,14 +168,14 @@ private extension MembershipVerificationViewController {
             let text = NSMutableAttributedString(
                 string: "15 ",
                 attributes: [
-                    .font: UIFont.systemFont(ofSize: 15, weight: .bold),
+                    .font: AppTypography.font(.bold, size: 15),
                     .foregroundColor: UIColor.white
                 ]
             )
             text.append(NSAttributedString(
                 string: "minutes",
                 attributes: [
-                    .font: UIFont.systemFont(ofSize: 15, weight: .semibold),
+                    .font: AppTypography.font(.semibold, size: 15),
                     .foregroundColor: UIColor.white
                 ]
             ))
@@ -227,16 +264,19 @@ private extension MembershipVerificationViewController {
     }
 
     @IBAction func handleCopyCode() {
-        UIPasteboard.general.string = voucherCode
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        let now = ProcessInfo.processInfo.systemUptime
+        guard now - lastCopyAt > 0.35 else { return }
+        lastCopyAt = now
 
-        let check = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        copyButton.setImage(UIImage(systemName: "checkmark", withConfiguration: check), for: .normal)
-        copyButton.tintColor = AppPalette.gold
+        let code = codeLabel.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let value = (code?.isEmpty == false ? code : voucherCode) ?? voucherCode
+        UIPasteboard.general.string = value
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        UIAccessibility.post(notification: .announcement, argument: "Code copied")
+
+        configureCopyButton(icon: "checkmark", tint: AppPalette.gold, weight: .semibold)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak self] in
-            let copy = UIImage.SymbolConfiguration(pointSize: 16, weight: .medium)
-            self?.copyButton.setImage(UIImage(systemName: "square.on.square", withConfiguration: copy), for: .normal)
-            self?.copyButton.tintColor = AppPalette.primaryText
+            self?.configureCopyButton()
         }
     }
 }

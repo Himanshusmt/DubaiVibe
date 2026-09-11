@@ -62,8 +62,57 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="prf-bg">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-brandbar">
+                                <rect key="frame" x="0.0" y="44" width="414" height="68"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="prf-brand">
+                                        <rect key="frame" x="16" y="1" width="70" height="66"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="66" id="prf-brd-h"/>
+                                            <constraint firstAttribute="width" constant="70" id="prf-brd-w"/>
+                                        </constraints>
+                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="DUBAI • EAT • DRINK • EXPLORE" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-tagline">
+                                        <rect key="frame" x="100" y="28.5" width="148" height="11"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="9"/>
+                                        <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-bell">
+                                        <rect key="frame" x="366" y="18" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="prf-bel-h"/>
+                                            <constraint firstAttribute="width" constant="32" id="prf-bel-w"/>
+                                        </constraints>
+                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="bell.fill" catalog="system"/>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-belldot">
+                                        <rect key="frame" x="389.5" y="17.5" width="9" height="9"/>
+                                        <color key="backgroundColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="9" id="prf-dot-h"/>
+                                            <constraint firstAttribute="width" constant="9" id="prf-dot-w"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="prf-bell" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="prf-tagline" secondAttribute="trailing" constant="8" id="prf-bel-l"/>
+                                    <constraint firstItem="prf-bell" firstAttribute="trailing" secondItem="prf-brandbar" secondAttribute="trailing" constant="-16" id="prf-bel-t"/>
+                                    <constraint firstItem="prf-bell" firstAttribute="centerY" secondItem="prf-brandbar" secondAttribute="centerY" id="prf-bel-y"/>
+                                    <constraint firstAttribute="height" constant="68" id="prf-brb-h"/>
+                                    <constraint firstItem="prf-brand" firstAttribute="leading" secondItem="prf-brandbar" secondAttribute="leading" constant="16" id="prf-brd-l"/>
+                                    <constraint firstItem="prf-brand" firstAttribute="centerY" secondItem="prf-brandbar" secondAttribute="centerY" id="prf-brd-y"/>
+                                    <constraint firstItem="prf-belldot" firstAttribute="centerX" secondItem="prf-bell" secondAttribute="trailing" constant="-4" id="prf-dot-x"/>
+                                    <constraint firstItem="prf-belldot" firstAttribute="centerY" secondItem="prf-bell" secondAttribute="top" constant="4" id="prf-dot-y"/>
+                                    <constraint firstItem="prf-tagline" firstAttribute="leading" secondItem="prf-brand" secondAttribute="trailing" constant="14" id="prf-tag-l"/>
+                                    <constraint firstItem="prf-tagline" firstAttribute="centerY" secondItem="prf-brandbar" secondAttribute="centerY" id="prf-tag-y"/>
+                                </constraints>
+                            </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="prf-scroll">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="764"/>
+                                <rect key="frame" x="0.0" y="112" width="414" height="696"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-content">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="480"/>
@@ -164,19 +213,26 @@
                             <constraint firstItem="prf-bg" firstAttribute="leading" secondItem="prf-view" secondAttribute="leading" id="prf-bg-l"/>
                             <constraint firstAttribute="trailing" secondItem="prf-bg" secondAttribute="trailing" id="prf-bg-r"/>
                             <constraint firstItem="prf-bg" firstAttribute="top" secondItem="prf-view" secondAttribute="top" id="prf-bg-t"/>
+                            <constraint firstItem="prf-brandbar" firstAttribute="leading" secondItem="prf-view" secondAttribute="leading" id="prf-brb-l"/>
+                            <constraint firstItem="prf-brandbar" firstAttribute="trailing" secondItem="prf-view" secondAttribute="trailing" id="prf-brb-r"/>
+                            <constraint firstItem="prf-brandbar" firstAttribute="top" secondItem="prf-safe" secondAttribute="top" id="prf-brb-t"/>
                             <constraint firstItem="prf-safe" firstAttribute="bottom" secondItem="prf-scroll" secondAttribute="bottom" id="prf-sc-b"/>
                             <constraint firstItem="prf-scroll" firstAttribute="leading" secondItem="prf-safe" secondAttribute="leading" id="prf-sc-l"/>
                             <constraint firstItem="prf-safe" firstAttribute="trailing" secondItem="prf-scroll" secondAttribute="trailing" id="prf-sc-r"/>
-                            <constraint firstItem="prf-scroll" firstAttribute="top" secondItem="prf-safe" secondAttribute="top" id="prf-sc-t"/>
+                            <constraint firstItem="prf-scroll" firstAttribute="top" secondItem="prf-brandbar" secondAttribute="bottom" id="prf-sc-t"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="person" catalog="system" selectedImage="person.fill" id="prf-tab"/>
                     <connections>
                         <outlet property="avatarImageView" destination="prf-avatar" id="prf-o-av"/>
+                        <outlet property="bellDotView" destination="prf-belldot" id="prf-o-dot"/>
+                        <outlet property="brandImageView" destination="prf-brand" id="prf-o-brand"/>
                         <outlet property="cameraBadge" destination="prf-cam" id="prf-o-cam"/>
                         <outlet property="firstNameField" destination="prf-first" id="prf-o-first"/>
                         <outlet property="lastNameField" destination="prf-last" id="prf-o-last"/>
+                        <outlet property="notificationButton" destination="prf-bell" id="prf-o-bell"/>
                         <outlet property="saveButton" destination="prf-save" id="prf-o-save"/>
+                        <outlet property="taglineLabel" destination="prf-tagline" id="prf-o-tag"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="prf-fr" sceneMemberID="firstResponder"/>
