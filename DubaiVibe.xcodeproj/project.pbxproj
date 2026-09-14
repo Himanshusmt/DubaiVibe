@@ -87,6 +87,9 @@
 		F03A11E13060110300000004 /* AppleAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E13060110300000002 /* AppleAuthAPI.swift */; };
 		F03A11E23060110400000003 /* GoogleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E23060110400000001 /* GoogleSignInService.swift */; };
 		F03A11E23060110400000004 /* GoogleAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E23060110400000002 /* GoogleAuthAPI.swift */; };
+		F05B33F13060500100000011 /* VenuePhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05B33F13060500100000001 /* VenuePhotosViewController.swift */; };
+		F05B33F13060500100000012 /* VenueDemoPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05B33F13060500100000002 /* VenueDemoPhotos.swift */; };
+		F05B33F13060500100000013 /* VenuePhotoPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05B33F13060500100000003 /* VenuePhotoPreviewViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -175,6 +178,9 @@
 		F03A11E13060110300000005 /* DubaiVibe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DubaiVibe.entitlements; sourceTree = "<group>"; };
 		F03A11E23060110400000001 /* GoogleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInService.swift; sourceTree = "<group>"; };
 		F03A11E23060110400000002 /* GoogleAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthAPI.swift; sourceTree = "<group>"; };
+		F05B33F13060500100000001 /* VenuePhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePhotosViewController.swift; sourceTree = "<group>"; };
+		F05B33F13060500100000002 /* VenueDemoPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDemoPhotos.swift; sourceTree = "<group>"; };
+		F05B33F13060500100000003 /* VenuePhotoPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePhotoPreviewViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -425,6 +431,9 @@
 			children = (
 				DF7DD7B8305028EE002BFA4F /* VenueDetailSegmentCell.swift */,
 				DF7DD7B9305028EE002BFA4F /* VenueDetailViewController.swift */,
+				F05B33F13060500100000001 /* VenuePhotosViewController.swift */,
+				F05B33F13060500100000003 /* VenuePhotoPreviewViewController.swift */,
+				F05B33F13060500100000002 /* VenueDemoPhotos.swift */,
 				DF7DD7BA305028EE002BFA4F /* VenueDetailViews.swift */,
 			);
 			path = VenueDetail;
@@ -616,6 +625,9 @@
 				8008018B304FE3DE005FC893 /* UIColorExtension.swift in Sources */,
 				F01A2B3C3060110100000031 /* UIFont+Inter.swift in Sources */,
 				DF7DD7BF305028EE002BFA4F /* VenueDetailViewController.swift in Sources */,
+				F05B33F13060500100000011 /* VenuePhotosViewController.swift in Sources */,
+				F05B33F13060500100000013 /* VenuePhotoPreviewViewController.swift in Sources */,
+				F05B33F13060500100000012 /* VenueDemoPhotos.swift in Sources */,
 				DF8EE8A6305030AA002BFA4F /* MembershipVerificationViewController.swift in Sources */,
 				DF8EE8A7305030AA002BFA4F /* MembershipVerificationViews.swift in Sources */,
 				DF7DD7C0305028EE002BFA4F /* VenueDetailRepository.swift in Sources */,

@@ -1163,7 +1163,7 @@ final class NetworkManager {
     }
 
     private func navigateToSignUpAfterUnauthorized() {
-        let signupVC = SignUpViewController.fetchInstance()
+        let signupVC = WelcomeVC()
         let navigationController = UINavigationController(rootViewController: signupVC)
         navigationController.setNavigationBarHidden(true, animated: false)
 
@@ -1619,8 +1619,6 @@ final class TokenManager {
         defaults.removeObject(forKey: "AppleSignInFamilyName")
 
         FCMNotificationManager.clearDeviceId()
-        LiveLocationSharingManager.shared.stopSharing()
-        LiveLocationSocketService.shared.disconnect()
 
         defaults.synchronize()
     }

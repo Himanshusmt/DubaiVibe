@@ -184,21 +184,19 @@ final class VenueCardCell: UITableViewCell {
         updateFavorite(venue.isFavorite)
         updateBookmark(venue.isBookmarked)
 
-        let showDeal = venue.deal != nil
-        dealBannerView.isHidden = !showDeal
-        dealHeightConstraint.constant = showDeal ? AppMetrics.dealHeight : 0
-        dealTopConstraint.constant = showDeal ? 12 : 0
+        let deal = venue.deal ?? .fallback
+        dealBannerView.isHidden = false
+        dealHeightConstraint.constant = AppMetrics.dealHeight
+        dealTopConstraint.constant = 12
 
-        if let deal = venue.deal {
-            dealTitleLabel.attributedText = NSAttributedString(string: deal.badge, attributes: [
-                .font: AppTypography.font(.semibold, size: 8.5),
-                .foregroundColor: AppPalette.exclusiveGold,
-                .kern: 0.425
-            ])
-            dealDiscountLabel.text = deal.discount
-            dealDetailLabel.text = deal.detail
-            dealValidityLabel.text = deal.validity
-        }
+        dealTitleLabel.attributedText = NSAttributedString(string: deal.badge, attributes: [
+            .font: AppTypography.font(.semibold, size: 8.5),
+            .foregroundColor: AppPalette.exclusiveGold,
+            .kern: 0.425
+        ])
+        dealDiscountLabel.text = deal.discount
+        dealDetailLabel.text = deal.detail
+        dealValidityLabel.text = deal.validity
     }
 
     private func applyWordmark(_ venue: Venue) {

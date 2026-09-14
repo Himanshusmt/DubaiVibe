@@ -1,3 +1,4 @@
+import SDWebImage
 import UIKit
 
 /// Diagonal gold fill used by chips, deal CTAs, and offer panels.
@@ -187,9 +188,37 @@ final class GoldGradientButton: UIButton {
     }
 }
 
-/// Bottom-fading hero container so the overlay pills stay readable.
+/// Paging hero carousel with auto-scroll and a bottom fade so overlay pills stay readable.
 final class HeroImageView: UIImageView {
+    private enum Metric {
+        static let autoScrollInterval: TimeInterval = 3
+    }
+
+    private let fadeView = UIView()
     private let fade = CAGradientLayer()
+    private let pageControl = UIPageControl()
+    private var imageURLs: [URL] = []
+    private var currentPage = 0
+    private var laidOutSize: CGSize = .zero
+    private var autoScrollTimer: Timer?
+
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = .zero
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.isPagingEnabled = true
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = .clear
+        view.contentInsetAdjustmentBehavior = .never
+        view.bounces = false
+        view.register(VenueHeroImageCell.self, forCellWithReuseIdentifier: VenueHeroImageCell.reuseIdentifier)
+        view.dataSource = self
+        view.delegate = self
+        return view
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -201,23 +230,236 @@ final class HeroImageView: UIImageView {
         setup()
     }
 
+    deinit {
+        autoScrollTimer?.invalidate()
+    }
+
+    func configure(urls: [URL]) {
+        imageURLs = urls
+        currentPage = 0
+        pageControl.numberOfPages = urls.count
+        pageControl.currentPage = 0
+        pageControl.isHidden = urls.count <= 1
+        collectionView.reloadData()
+        collectionView.setContentOffset(.zero, animated: false)
+        if !urls.isEmpty {
+            SDWebImagePrefetcher.shared.prefetchURLs(urls)
+        }
+        startAutoScroll()
+    }
+
+    func startAutoScroll() {
+        stopAutoScroll()
+        guard imageURLs.count > 1, window != nil else { return }
+        let timer = Timer(timeInterval: Metric.autoScrollInterval, repeats: true) { [weak self] _ in
+            self?.advancePage()
+        }
+        timer.tolerance = 0.25
+        RunLoop.main.add(timer, forMode: .common)
+        autoScrollTimer = timer
+    }
+
+    func stopAutoScroll() {
+        autoScrollTimer?.invalidate()
+        autoScrollTimer = nil
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window == nil {
+            stopAutoScroll()
+        } else {
+            startAutoScroll()
+        }
+    }
+
     private func setup() {
         contentMode = .scaleAspectFill
         clipsToBounds = true
-        // UIImageView opts out of touch delivery, but the hero hosts overlay controls.
+        // UIImageView opts out of touch delivery, but the hero hosts the pager.
         isUserInteractionEnabled = true
+
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(collectionView)
+
+        fadeView.isUserInteractionEnabled = false
+        fadeView.translatesAutoresizingMaskIntoConstraints = false
         fade.colors = [
             UIColor.clear.cgColor,
             UIColor.black.withAlphaComponent(0.30).cgColor,
             UIColor.black.withAlphaComponent(0.62).cgColor
         ]
         fade.locations = [0.35, 0.72, 1]
-        layer.addSublayer(fade)
+        fadeView.layer.addSublayer(fade)
+        addSubview(fadeView)
+
+        pageControl.hidesForSinglePage = true
+        pageControl.currentPageIndicatorTintColor = .white
+        pageControl.pageIndicatorTintColor = UIColor.white.withAlphaComponent(0.38)
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.addTarget(self, action: #selector(handlePageControlChanged), for: .valueChanged)
+        addSubview(pageControl)
+
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            fadeView.topAnchor.constraint(equalTo: topAnchor),
+            fadeView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            fadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            fadeView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+        ])
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        fade.frame = bounds
+        fade.frame = fadeView.bounds
+        let size = collectionView.bounds.size
+        guard size.width > 1, size.height > 1, size != laidOutSize else { return }
+        laidOutSize = size
+        collectionView.collectionViewLayout.invalidateLayout()
+        let offset = CGFloat(currentPage) * size.width
+        collectionView.setContentOffset(CGPoint(x: offset, y: 0), animated: false)
+    }
+
+    private func advancePage() {
+        guard imageURLs.count > 1,
+              collectionView.bounds.width > 1,
+              !collectionView.isDragging,
+              !collectionView.isDecelerating else { return }
+        let next = (currentPage + 1) % imageURLs.count
+        let wrapsToStart = next == 0 && currentPage == imageURLs.count - 1
+        scrollToPage(next, animated: !wrapsToStart)
+    }
+
+    private func scrollToPage(_ page: Int, animated: Bool) {
+        let indexPath = IndexPath(item: page, section: 0)
+        guard imageURLs.indices.contains(page),
+              collectionView.numberOfItems(inSection: 0) > page else { return }
+        currentPage = page
+        pageControl.currentPage = page
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+    }
+
+    private func syncPageFromOffset() {
+        guard collectionView.bounds.width > 0, !imageURLs.isEmpty else { return }
+        let page = Int(round(collectionView.contentOffset.x / collectionView.bounds.width))
+        currentPage = min(max(page, 0), imageURLs.count - 1)
+        pageControl.currentPage = currentPage
+    }
+
+    @objc private func handlePageControlChanged() {
+        scrollToPage(pageControl.currentPage, animated: true)
+        startAutoScroll()
+    }
+}
+
+extension HeroImageView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        imageURLs.count
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: VenueHeroImageCell.reuseIdentifier,
+            for: indexPath
+        ) as? VenueHeroImageCell else {
+            return UICollectionViewCell()
+        }
+        cell.configure(url: imageURLs[indexPath.item])
+        return cell
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        let size = collectionView.bounds.size
+        return CGSize(width: max(size.width, 1), height: max(size.height, 1))
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        stopAutoScroll()
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            syncPageFromOffset()
+            startAutoScroll()
+        }
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        syncPageFromOffset()
+        startAutoScroll()
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        syncPageFromOffset()
+    }
+}
+
+private final class VenueHeroImageCell: UICollectionViewCell {
+    static let reuseIdentifier = "VenueHeroImageCell"
+
+    private let imageView = UIImageView()
+    private let spinner = UIActivityIndicatorView(style: .medium)
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        clipsToBounds = true
+        contentView.backgroundColor = AppPalette.surface
+
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(imageView)
+
+        spinner.color = AppPalette.gold
+        spinner.hidesWhenStopped = true
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(spinner)
+
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            spinner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.sd_cancelCurrentImageLoad()
+        imageView.image = nil
+        spinner.stopAnimating()
+    }
+
+    func configure(url: URL) {
+        spinner.startAnimating()
+        imageView.sd_setImage(
+            with: url,
+            placeholderImage: nil,
+            options: [.retryFailed, .highPriority, .scaleDownLargeImages]
+        ) { [weak self] _, _, _, _ in
+            self?.spinner.stopAnimating()
+        }
     }
 }
 

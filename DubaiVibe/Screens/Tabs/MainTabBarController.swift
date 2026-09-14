@@ -380,15 +380,15 @@ private enum TabDesign {
 
     private var unselectedAsset: String {
         switch self {
-        case .home: return "ic_home_unsel"
-        case .profile: return "ic_profile_unsele"
+        case .home: return "ic_newhome_unselected"
+        case .profile: return "ic_newprofile_unselected"
         }
     }
 
     private var selectedAsset: String {
         switch self {
-        case .home: return "ic_home_selected"
-        case .profile: return "ic_profile_selected"
+        case .home: return "ic_newhome_selected"
+        case .profile: return "ic_newprofile_selected"
         }
     }
 

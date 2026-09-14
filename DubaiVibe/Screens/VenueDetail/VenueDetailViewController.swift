@@ -3,7 +3,6 @@ import UIKit
 final class VenueDetailViewController: UIViewController {
     private enum Metric {
         static let gutter: CGFloat = 12
-        static let heroHeight: CGFloat = 210
         static let heroRadius: CGFloat = 20
         static let cardRadius: CGFloat = 16
     }
@@ -40,7 +39,6 @@ final class VenueDetailViewController: UIViewController {
     private var detail: VenueDetail!
     private var selectedTab: VenueDetailTab = .deals
     private var isFavorite = false
-    private var renderedHeroWidth: CGFloat = 0
 
     init?(coder: NSCoder, repository: VenueDetailRepositorying) {
         self.repository = repository
@@ -74,11 +72,12 @@ final class VenueDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        heroImageView.startAutoScroll()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateHeroArtwork()
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        heroImageView.stopAutoScroll()
     }
 }
 
@@ -101,6 +100,8 @@ private extension VenueDetailViewController {
 
         stylePillButton(photosButton, symbol: "photo.on.rectangle", title: photosButton.currentTitle ?? "Photos")
         photosButton.accessibilityLabel = "Photos"
+        photosButton.removeTarget(nil, action: nil, for: .touchUpInside)
+        photosButton.addTarget(self, action: #selector(handlePhotos), for: .touchUpInside)
         wordmarkLabel.isHidden = true
         vibeButton.isHidden = true
         vibeDiscView.isHidden = true
@@ -111,6 +112,11 @@ private extension VenueDetailViewController {
         brandTileLabel.layer.borderWidth = 1
         brandTileLabel.layer.borderColor = AppPalette.gold.withAlphaComponent(0.7).cgColor
         brandTileLabel.clipsToBounds = true
+        brandTileLabel.textAlignment = .center
+        brandTileLabel.numberOfLines = 1
+        brandTileLabel.lineBreakMode = .byClipping
+        brandTileLabel.adjustsFontSizeToFitWidth = true
+        brandTileLabel.minimumScaleFactor = 0.7
 
         metaCardView.backgroundColor = AppPalette.detailCardFill
         metaCardView.layer.cornerRadius = Metric.cardRadius
@@ -199,8 +205,7 @@ private extension VenueDetailViewController {
     func bind() {
         guard let detail else { return }
 
-        renderedHeroWidth = 0
-        updateHeroArtwork()
+        heroImageView.configure(urls: VenueDemoPhotos.heroURLs)
 
         nameLabel.text = detail.name
         verifiedImageView.isHidden = !detail.isVerified
@@ -209,42 +214,14 @@ private extension VenueDetailViewController {
             value: detail.ratingValueText,
             count: detail.reviewCountText
         )
-        brandTileLabel.text = detail.wordmark
-        photosButton.configuration?.title = detail.photoCountText
+        brandTileLabel.text = Self.brandTileTitle(from: detail.name)
+        photosButton.configuration?.title = "\(VenueDemoPhotos.count) Photos"
         addressLabel.text = detail.address
         hoursLabel.text = detail.hoursText
 
         selectedTab = .deals
         renderTabContent()
         updateFavoriteIcon()
-    }
-
-    /// Renders the hero artwork once the real card width is known.
-    func updateHeroArtwork() {
-        guard let detail else { return }
-        let width = heroImageView.bounds.width
-        guard width > 1, width != renderedHeroWidth else { return }
-        renderedHeroWidth = width
-
-        let venue = Venue(
-            id: detail.venueID,
-            name: detail.name,
-            wordmark: detail.wordmark,
-            category: .restaurants,
-            cuisine: detail.cuisine,
-            neighborhood: detail.neighborhood,
-            rating: detail.rating,
-            reviewCount: detail.reviewCount,
-            deal: nil,
-            isFavorite: false,
-            isBookmarked: false,
-            isVerified: detail.isVerified,
-            artworkStyle: detail.artworkStyle
-        )
-        heroImageView.image = ArtworkCache.image(
-            for: venue,
-            size: CGSize(width: width, height: Metric.heroHeight)
-        )
     }
 
     func ratingAttributedText(value: String, count: String) -> NSAttributedString {
@@ -525,6 +502,13 @@ private extension VenueDetailViewController {
         presentAlert(title: "Instagram", message: "@\(detail?.instagram ?? "")")
     }
 
+    @objc func handlePhotos() {
+        let name = detail?.name ?? "Venue"
+        let controller = VenuePhotosViewController(venueName: name)
+        controller.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(controller, animated: true)
+    }
+
     @IBAction func handleSoon(_ sender: UIButton) {
         let title = sender.accessibilityLabel ?? sender.configuration?.title ?? "Coming soon"
         presentAlert(title: title, message: "Coming soon")
@@ -534,6 +518,21 @@ private extension VenueDetailViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+
+    /// Brand tile: first word only; long words truncate to 4 characters + ellipsis.
+    static func brandTileTitle(from name: String) -> String {
+        let firstWord = name
+            .split(whereSeparator: \.isWhitespace)
+            .first
+            .map(String.init)?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            ?? ""
+        guard !firstWord.isEmpty else { return "" }
+        if firstWord.count > 4 {
+            return String(firstWord.prefix(4)) + "..."
+        }
+        return firstWord
     }
 }
 

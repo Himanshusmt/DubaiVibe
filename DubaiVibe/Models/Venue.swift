@@ -75,6 +75,13 @@ enum ArtworkStyle: String, Hashable {
 struct Deal: Hashable {
     static let exclusiveBadge = "DUBAI VIBE EXCLUSIVE"
 
+    /// Used when a venue has no API/mock deal so every Explore card still shows the banner.
+    static let fallback = Deal(
+        discount: "15% OFF",
+        detail: "Your total bill",
+        validity: "Sunday – Thursday"
+    )
+
     var badge: String = Deal.exclusiveBadge
     let discount: String
     let detail: String

@@ -68,7 +68,7 @@ private extension MembershipVerificationViewController {
         logoImageView.image = UIImage(named: "LaunchLogo")
         logoImageView.contentMode = .scaleAspectFit
 
-        profileImageView.image = UIImage(named: "MemberAvatar") ?? Self.memberAvatar()
+        profileImageView.image = UIImage(named: "p3") ?? Self.memberAvatar()
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.layer.borderWidth = 3
         profileImageView.layer.borderColor = AppPalette.gold.cgColor
