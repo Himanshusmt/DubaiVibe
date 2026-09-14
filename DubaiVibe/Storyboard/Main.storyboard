@@ -39,7 +39,7 @@
         <scene sceneID="exp-nav-scene">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="exp-nav" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" selectedImage="house.fill" id="exp-tab"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="ic_home_unsel" selectedImage="ic_home_selected" id="exp-tab"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="exp-navbar">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -222,7 +222,7 @@
                             <constraint firstItem="prf-scroll" firstAttribute="top" secondItem="prf-brandbar" secondAttribute="bottom" id="prf-sc-t"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Profile" image="person" catalog="system" selectedImage="person.fill" id="prf-tab"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="ic_profile_unsele" selectedImage="ic_profile_selected" id="prf-tab"/>
                     <connections>
                         <outlet property="avatarImageView" destination="prf-avatar" id="prf-o-av"/>
                         <outlet property="bellDotView" destination="prf-belldot" id="prf-o-dot"/>
@@ -697,10 +697,10 @@
         <image name="chevron.down" catalog="system" width="128" height="70"/>
         <image name="crown.fill" catalog="system" width="128" height="92"/>
         <image name="heart" catalog="system" width="128" height="107"/>
-        <image name="house" catalog="system" width="128" height="104"/>
-        <image name="house.fill" catalog="system" width="128" height="104"/>
+        <image name="ic_home_selected" width="24" height="24"/>
+        <image name="ic_home_unsel" width="96" height="96"/>
+        <image name="ic_profile_selected" width="96" height="96"/>
+        <image name="ic_profile_unsele" width="24" height="24"/>
         <image name="mappin.circle.fill" catalog="system" width="128" height="123"/>
-        <image name="person" catalog="system" width="128" height="121"/>
-        <image name="person.fill" catalog="system" width="128" height="120"/>
     </resources>
 </document>

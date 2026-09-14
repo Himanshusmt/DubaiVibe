@@ -271,8 +271,10 @@ final class FloatingTabBar: UITabBar {
 
                 let overlay = itemOverlays[index]
                 overlay.frame = button.frame
-                overlay.iconView.image = barItems[index].image
-                overlay.titleLabel.text = barItems[index].title
+                let item = barItems[index]
+                let isSelected = item === selectedItem
+                overlay.iconView.image = isSelected ? (item.selectedImage ?? item.image) : item.image
+                overlay.titleLabel.text = item.title
 
                 overlay.iconView.frame = CGRect(
                     x: (overlay.bounds.width - iconSize) / 2,
@@ -366,33 +368,31 @@ private enum TabDesign {
     }
 
     func makeItem() -> UITabBarItem {
-        let icon = tabIcon()
-        let item = UITabBarItem(title: title, image: icon, selectedImage: icon)
+        let item = UITabBarItem(
+            title: title,
+            image: tabIcon(named: unselectedAsset),
+            selectedImage: tabIcon(named: selectedAsset)
+        )
         item.imageInsets = .zero
         item.titlePositionAdjustment = .zero
         return item
     }
 
-    private var assetName: String {
+    private var unselectedAsset: String {
         switch self {
-        case .home: return "TabHome"
-        case .profile: return "TabProfile"
+        case .home: return "ic_home_unsel"
+        case .profile: return "ic_profile_unsele"
         }
     }
 
-    /// Figma icons sit in a 24pt box; keep the exported glyph centered at its native size.
-    private func tabIcon() -> UIImage? {
-        guard let image = UIImage(named: assetName) else { return nil }
-        let canvas = AppMetrics.floatingTabIconSize
-        let format = UIGraphicsImageRendererFormat.default()
-        format.opaque = false
-        let size = CGSize(width: canvas, height: canvas)
-        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
-            let origin = CGPoint(
-                x: (canvas - image.size.width) / 2,
-                y: (canvas - image.size.height) / 2
-            )
-            image.draw(in: CGRect(origin: origin, size: image.size))
-        }.withRenderingMode(.alwaysOriginal)
+    private var selectedAsset: String {
+        switch self {
+        case .home: return "ic_home_selected"
+        case .profile: return "ic_profile_selected"
+        }
+    }
+
+    private func tabIcon(named name: String) -> UIImage? {
+        UIImage(named: name)?.withRenderingMode(.alwaysOriginal)
     }
 }
