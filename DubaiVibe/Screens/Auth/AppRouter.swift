@@ -1,14 +1,25 @@
 import UIKit
 
 enum AppRouter {
+    /// Token present and `is_onboarding_complete == true` → Explore.
+    /// Otherwise (no token, or onboarding still false) → Welcome.
+    static func hasCompletedOnboarding() -> Bool {
+        let token = TokenManager.shared.accessToken?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return !token.isEmpty && TokenManager.shared.isOnboardingCompleted
+    }
+
     static func isLoggedIn() -> Bool {
-        UserDefaults.standard.isLoggedIn() || TokenManager.shared.isLoggedIn
+        hasCompletedOnboarding()
+    }
+
+    static func completeOnboarding() {
+        TokenManager.shared.isOnboardingCompleted = true
+        UserDefaults.standard.setLoggedIn(value: true)
     }
 
     static func markMockSessionComplete() {
-        UserDefaults.standard.setLoggedIn(value: true)
-        TokenManager.shared.saveAccessToken("mock-token")
-        TokenManager.shared.isOnboardingCompleted = true
+        completeOnboarding()
     }
 
     static func makeAuthRoot() -> UIViewController {
@@ -32,7 +43,7 @@ enum AppRouter {
     }
 
     static func configureRoot(for window: UIWindow) {
-        if isLoggedIn() {
+        if hasCompletedOnboarding() {
             window.rootViewController = UIStoryboard.main.instantiateViewController(
                 withIdentifier: "MainTabBarController"
             )
@@ -40,6 +51,27 @@ enum AppRouter {
             window.rootViewController = makeAuthRoot()
         }
         window.makeKeyAndVisible()
+    }
+
+    /// After login: Explore if onboarding is complete, otherwise continue the welcome/profile flow.
+    static func continueAfterLogin(
+        from viewController: UIViewController,
+        user: AuthUser?,
+        firstName: String? = nil,
+        lastName: String? = nil
+    ) {
+        if hasCompletedOnboarding() {
+            setRootMain(animated: true)
+            return
+        }
+
+        guard let nameVC = UIStoryboard.authentication
+            .instantiateViewController(withIdentifier: "OnboardingNameVC") as? OnboardingNameVC
+        else { return }
+
+        nameVC.prefillFirstName = firstName
+        nameVC.prefillLastName = lastName
+        viewController.navigationController?.pushViewController(nameVC, animated: true)
     }
 
     private static func setRoot(_ root: UIViewController?, on window: UIWindow, animated: Bool) {

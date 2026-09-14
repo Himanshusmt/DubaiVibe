@@ -36,28 +36,21 @@ final class VenueDetailViewController: UIViewController {
     @IBOutlet private weak var shareActionButton: UIButton!
     @IBOutlet private weak var oneVibeButton: UIButton!
 
-    private let repository: VenueDetailRepositorying
-    private var detail: VenueDetail!
+    private let viewModel = VenueDetailViewModel()
+    private var businessID = ""
+    private var detail: VenueDetail?
     private var selectedTab: VenueDetailTab = .deals
     private var isFavorite = false
-    private var renderedHeroWidth: CGFloat = 0
-
-    init?(coder: NSCoder, repository: VenueDetailRepositorying) {
-        self.repository = repository
-        super.init(coder: coder)
-    }
+    private var didLoadHero = false
 
     required init?(coder: NSCoder) {
-        self.repository = VenueDetailRepository()
         super.init(coder: coder)
     }
 
-    func configure(venueID: UUID) {
-        guard let detail = repository.detail(for: venueID) else { return }
-        self.detail = detail
-        selectedTab = detail.defaultTab
+    func configure(businessID: String) {
+        self.businessID = businessID
         if isViewLoaded {
-            bind()
+            fetchDetail()
         }
     }
 
@@ -66,9 +59,7 @@ final class VenueDetailViewController: UIViewController {
         view.backgroundColor = AppPalette.background
         navigationController?.setNavigationBarHidden(true, animated: false)
         configureChrome()
-        if detail != nil {
-            bind()
-        }
+        fetchDetail()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -196,10 +187,24 @@ private extension VenueDetailViewController {
 // MARK: - Binding
 
 private extension VenueDetailViewController {
+    func fetchDetail() {
+        viewModel.load(businessID: businessID) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let detail):
+                self.detail = detail
+                self.selectedTab = detail.defaultTab
+                self.bind()
+            case .failure(let error):
+                self.showErrorPopup(error)
+            }
+        }
+    }
+
     func bind() {
         guard let detail else { return }
 
-        renderedHeroWidth = 0
+        didLoadHero = false
         updateHeroArtwork()
 
         nameLabel.text = detail.name
@@ -214,17 +219,17 @@ private extension VenueDetailViewController {
         addressLabel.text = detail.address
         hoursLabel.text = detail.hoursText
 
-        selectedTab = .deals
+        selectedTab = detail.defaultTab
         renderTabContent()
         updateFavoriteIcon()
     }
 
-    /// Renders the hero artwork once the real card width is known.
+    /// Loads the hero with SDWebImage once the card width is known.
     func updateHeroArtwork() {
-        guard let detail else { return }
+        guard let detail, !didLoadHero else { return }
         let width = heroImageView.bounds.width
-        guard width > 1, width != renderedHeroWidth else { return }
-        renderedHeroWidth = width
+        guard width > 1 else { return }
+        didLoadHero = true
 
         let venue = Venue(
             id: detail.venueID,
@@ -241,10 +246,11 @@ private extension VenueDetailViewController {
             isVerified: detail.isVerified,
             artworkStyle: detail.artworkStyle
         )
-        heroImageView.image = ArtworkCache.image(
+        let placeholder = ArtworkCache.image(
             for: venue,
             size: CGSize(width: width, height: Metric.heroHeight)
         )
+        heroImageView.setBusinessImage(urlString: detail.imageURL, placeholder: placeholder)
     }
 
     func ratingAttributedText(value: String, count: String) -> NSAttributedString {
@@ -267,6 +273,7 @@ private extension VenueDetailViewController {
     }
 
     func renderTabContent() {
+        guard let detail else { return }
         tabContentContainer.subviews.forEach { $0.removeFromSuperview() }
 
         let content: UIView
@@ -329,7 +336,7 @@ private extension VenueDetailViewController {
     }
 
     func makeDealsContent() -> UIView {
-        guard let deal = detail.deal else {
+        guard let deal = detail?.deal else {
             return makePlainContent(title: "Deals", body: "No exclusive deals available for this venue right now.")
         }
 

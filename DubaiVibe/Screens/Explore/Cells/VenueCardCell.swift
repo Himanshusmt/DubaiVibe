@@ -162,7 +162,7 @@ final class VenueCardCell: UITableViewCell {
         onFavorite = nil
         onBookmark = nil
         onViewDeal = nil
-        heroImageView.image = nil
+        heroImageView.setBusinessImage(urlString: nil)
         wordmarkLabel.text = nil
     }
 
@@ -179,7 +179,8 @@ final class VenueCardCell: UITableViewCell {
 
         let cardWidth = ScreenMetrics.width(for: self) - AppMetrics.cardGutter * 2
         let imageSize = CGSize(width: cardWidth, height: AppMetrics.heroHeight)
-        heroImageView.image = ArtworkCache.image(for: venue, size: imageSize)
+        let placeholder = ArtworkCache.image(for: venue, size: imageSize)
+        heroImageView.setBusinessImage(urlString: venue.imageURL, placeholder: placeholder)
 
         updateFavorite(venue.isFavorite)
         updateBookmark(venue.isBookmarked)

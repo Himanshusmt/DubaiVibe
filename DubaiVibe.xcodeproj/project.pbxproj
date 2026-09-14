@@ -48,7 +48,7 @@
 		A1B2C3D43060100100000002 /* WelcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000012 /* WelcomeVC.swift */; };
 		A1B2C3D43060100100000003 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000013 /* SignUpViewController.swift */; };
 		A1B2C3D43060100100000004 /* EnterOTPVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000014 /* EnterOTPVC.swift */; };
-		A1B2C3D43060100100000005 /* EnterEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000015 /* EnterEmailVC.swift */; };
+		A1B2C3D43060100100000005 /* OnboardingNameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000015 /* OnboardingNameVC.swift */; };
 		A1B2C3D43060100100000006 /* WelcomeSuccessVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000016 /* WelcomeSuccessVC.swift */; };
 		A1B2C3D43060100100000007 /* NotificationsPermissionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000017 /* NotificationsPermissionVC.swift */; };
 		A1B2C3D43060100100000008 /* AuthUIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000018 /* AuthUIComponents.swift */; };
@@ -87,6 +87,13 @@
 		F03A11E13060110300000004 /* AppleAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E13060110300000002 /* AppleAuthAPI.swift */; };
 		F03A11E23060110400000003 /* GoogleSignInService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E23060110400000001 /* GoogleSignInService.swift */; };
 		F03A11E23060110400000004 /* GoogleAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03A11E23060110400000002 /* GoogleAuthAPI.swift */; };
+		F04A22E13060120100000011 /* AuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04A22E13060120100000001 /* AuthModels.swift */; };
+		F04A22E13060120100000012 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04A22E13060120100000002 /* AuthViewModel.swift */; };
+		F05B33F13060300100000011 /* BusinessModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05B33F13060300100000001 /* BusinessModels.swift */; };
+		F05B33F13060300100000012 /* ExploreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05B33F13060300100000002 /* ExploreViewModel.swift */; };
+		F06C44A13060400100000011 /* BusinessAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06C44A13060400100000001 /* BusinessAPI.swift */; };
+		F06C44A13060400100000012 /* VenueDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06C44A13060400100000002 /* VenueDetailViewModel.swift */; };
+		F06C44A13060400100000013 /* UIImageView+BusinessImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06C44A13060400100000003 /* UIImageView+BusinessImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -135,7 +142,7 @@
 		A1B2C3D43060100100000012 /* WelcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000013 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000014 /* EnterOTPVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterOTPVC.swift; sourceTree = "<group>"; };
-		A1B2C3D43060100100000015 /* EnterEmailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterEmailVC.swift; sourceTree = "<group>"; };
+		A1B2C3D43060100100000015 /* OnboardingNameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNameVC.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000016 /* WelcomeSuccessVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeSuccessVC.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000017 /* NotificationsPermissionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPermissionVC.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000018 /* AuthUIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthUIComponents.swift; sourceTree = "<group>"; };
@@ -175,6 +182,13 @@
 		F03A11E13060110300000005 /* DubaiVibe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DubaiVibe.entitlements; sourceTree = "<group>"; };
 		F03A11E23060110400000001 /* GoogleSignInService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInService.swift; sourceTree = "<group>"; };
 		F03A11E23060110400000002 /* GoogleAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthAPI.swift; sourceTree = "<group>"; };
+		F04A22E13060120100000001 /* AuthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModels.swift; sourceTree = "<group>"; };
+		F04A22E13060120100000002 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		F05B33F13060300100000001 /* BusinessModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessModels.swift; sourceTree = "<group>"; };
+		F05B33F13060300100000002 /* ExploreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewModel.swift; sourceTree = "<group>"; };
+		F06C44A13060400100000001 /* BusinessAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessAPI.swift; sourceTree = "<group>"; };
+		F06C44A13060400100000002 /* VenueDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailViewModel.swift; sourceTree = "<group>"; };
+		F06C44A13060400100000003 /* UIImageView+BusinessImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+BusinessImage.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,6 +259,7 @@
 				80080131304FE3DE005FC893 /* TextFieldExtension.swift */,
 				80080132304FE3DE005FC893 /* UIColorExtension.swift */,
 				F01A2B3C3060110100000030 /* UIFont+Inter.swift */,
+				F06C44A13060400100000003 /* UIImageView+BusinessImage.swift */,
 				80080133304FE3DE005FC893 /* UIStoryborad+Util.swift */,
 				80080134304FE3DE005FC893 /* UIViewControllerExtension.swift */,
 				80080135304FE3DE005FC893 /* ViewExtension.swift */,
@@ -256,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				8008014E304FE3DE005FC893 /* APIEndpoint.swift */,
+				F06C44A13060400100000001 /* BusinessAPI.swift */,
 				8008014F304FE3DE005FC893 /* DemoViewController.swift */,
 				80080150304FE3DE005FC893 /* DemoViewModel.swift */,
 				80080151304FE3DE005FC893 /* NetworkManager.swift */,
@@ -335,6 +351,7 @@
 			children = (
 				A1B2C3D43060100100000011 /* AppRouter.swift */,
 				A1B2C3D43060100100000018 /* AuthUIComponents.swift */,
+				F04A22E13060120100000002 /* AuthViewModel.swift */,
 				F03A11E13060110300000001 /* AppleSignInService.swift */,
 				F03A11E13060110300000002 /* AppleAuthAPI.swift */,
 				F03A11E23060110400000001 /* GoogleSignInService.swift */,
@@ -342,7 +359,7 @@
 				A1B2C3D43060100100000012 /* WelcomeVC.swift */,
 				A1B2C3D43060100100000013 /* SignUpViewController.swift */,
 				A1B2C3D43060100100000014 /* EnterOTPVC.swift */,
-				A1B2C3D43060100100000015 /* EnterEmailVC.swift */,
+				A1B2C3D43060100100000015 /* OnboardingNameVC.swift */,
 				A1B2C3D43060100100000016 /* WelcomeSuccessVC.swift */,
 				A1B2C3D43060100100000017 /* NotificationsPermissionVC.swift */,
 			);
@@ -370,6 +387,8 @@
 		DF7DD7AB305028EE002BFA4F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F04A22E13060120100000001 /* AuthModels.swift */,
+				F05B33F13060300100000001 /* BusinessModels.swift */,
 				DF7DD7A9305028EE002BFA4F /* Venue.swift */,
 				DF7DD7AA305028EE002BFA4F /* VenueDetail.swift */,
 			);
@@ -397,6 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				DF7DD7B0305028EE002BFA4F /* Cells */,
+				F05B33F13060300100000002 /* ExploreViewModel.swift */,
 				DF7DD7B1305028EE002BFA4F /* ExploreViewController.swift */,
 			);
 			path = Explore;
@@ -424,6 +444,7 @@
 			isa = PBXGroup;
 			children = (
 				DF7DD7B8305028EE002BFA4F /* VenueDetailSegmentCell.swift */,
+				F06C44A13060400100000002 /* VenueDetailViewModel.swift */,
 				DF7DD7B9305028EE002BFA4F /* VenueDetailViewController.swift */,
 				DF7DD7BA305028EE002BFA4F /* VenueDetailViews.swift */,
 			);
@@ -591,9 +612,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DubaiVibe/Pods-DubaiVibe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DubaiVibe/Pods-DubaiVibe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -664,7 +689,7 @@
 				A1B2C3D43060100100000002 /* WelcomeVC.swift in Sources */,
 				A1B2C3D43060100100000003 /* SignUpViewController.swift in Sources */,
 				A1B2C3D43060100100000004 /* EnterOTPVC.swift in Sources */,
-				A1B2C3D43060100100000005 /* EnterEmailVC.swift in Sources */,
+				A1B2C3D43060100100000005 /* OnboardingNameVC.swift in Sources */,
 				A1B2C3D43060100100000006 /* WelcomeSuccessVC.swift in Sources */,
 				A1B2C3D43060100100000007 /* NotificationsPermissionVC.swift in Sources */,
 				A1B2C3D43060100100000008 /* AuthUIComponents.swift in Sources */,
@@ -672,6 +697,13 @@
 				F03A11E13060110300000004 /* AppleAuthAPI.swift in Sources */,
 				F03A11E23060110400000003 /* GoogleSignInService.swift in Sources */,
 				F03A11E23060110400000004 /* GoogleAuthAPI.swift in Sources */,
+				F04A22E13060120100000011 /* AuthModels.swift in Sources */,
+				F04A22E13060120100000012 /* AuthViewModel.swift in Sources */,
+				F05B33F13060300100000011 /* BusinessModels.swift in Sources */,
+				F05B33F13060300100000012 /* ExploreViewModel.swift in Sources */,
+				F06C44A13060400100000011 /* BusinessAPI.swift in Sources */,
+				F06C44A13060400100000012 /* VenueDetailViewModel.swift in Sources */,
+				F06C44A13060400100000013 /* UIImageView+BusinessImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

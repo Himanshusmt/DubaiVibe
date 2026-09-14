@@ -449,6 +449,13 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
         updateCaret()
     }
 
+    func clear() {
+        hiddenField.text = ""
+        boxes.forEach { $0.text = "" }
+        updateBorders()
+        updateCaret()
+    }
+
     @objc private func textChanged() {
         let filtered = String((hiddenField.text ?? "").filter(\.isNumber).prefix(count))
         hiddenField.text = filtered

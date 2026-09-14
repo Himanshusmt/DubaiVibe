@@ -95,6 +95,13 @@ struct Venue: Hashable, Identifiable {
     var isBookmarked: Bool
     var isVerified: Bool
     var artworkStyle: ArtworkStyle
+    var imageURL: String? = nil
+    var businessID: String = ""
+
+    var resolvedBusinessID: String {
+        let trimmed = businessID.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? id.uuidString : trimmed
+    }
 
     var subtitle: String { "\(cuisine) • \(neighborhood)" }
 

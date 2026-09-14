@@ -1,13 +1,14 @@
 import UIKit
 
-final class EnterEmailVC: UIViewController {
+final class OnboardingNameVC: UIViewController {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var subtitleLabel: UILabel!
     @IBOutlet private weak var firstNameField: AuthDarkField!
     @IBOutlet private weak var lastNameField: AuthDarkField!
     @IBOutlet private weak var createButton: GoldGradientButton!
 
-    /// Prefill from Apple / Google social login (first authorization only usually).
+    private let viewModel = AuthViewModel()
+    private var isSubmitting = false
     var prefillFirstName: String?
     var prefillLastName: String?
 
@@ -26,10 +27,15 @@ final class EnterEmailVC: UIViewController {
         lastNameField?.textField.returnKeyType = .done
         lastNameField?.textField.addTarget(self, action: #selector(lastReturn), for: .editingDidEndOnExit)
 
-        if let prefillFirstName, !prefillFirstName.isEmpty {
+        firstNameField?.placeholder = "First Name"
+        lastNameField?.placeholder = "Last Name"
+        firstNameField?.text = ""
+        lastNameField?.text = ""
+
+        if let prefillFirstName, Self.isPersonName(prefillFirstName) {
             firstNameField?.text = prefillFirstName
         }
-        if let prefillLastName, !prefillLastName.isEmpty {
+        if let prefillLastName, Self.isPersonName(prefillLastName) {
             lastNameField?.text = prefillLastName
         }
 
@@ -53,6 +59,7 @@ final class EnterEmailVC: UIViewController {
 
     @IBAction private func createAccount(_ sender: Any?) {
         view.endEditing(true)
+        guard !isSubmitting else { return }
 
         let first = (firstNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         let last = (lastNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
@@ -62,10 +69,26 @@ final class EnterEmailVC: UIViewController {
             return
         }
 
-        navigationController?.pushViewController(
-            UIStoryboard.authentication.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
-            animated: true
-        )
+        let fullName = "\(first) \(last)".trimmingCharacters(in: .whitespacesAndNewlines)
+        UserDefaults.standard.set(first, forKey: "profile.firstName")
+        UserDefaults.standard.set(last, forKey: "profile.lastName")
+        TokenManager.shared.saveSocialFullName(fullName)
+
+        isSubmitting = true
+        viewModel.updateProfileName(fullName) { [weak self] result in
+            guard let self else { return }
+            self.isSubmitting = false
+            switch result {
+            case .success(let response):
+                self.showSuccessToast(response.message, fallback: "Profile updated")
+                self.navigationController?.pushViewController(
+                    UIStoryboard.authentication.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
+                    animated: true
+                )
+            case .failure(let error):
+                self.showErrorPopup(error)
+            }
+        }
     }
 
     private func validationMessage(forFirstName first: String, lastName last: String) -> String? {
@@ -92,9 +115,15 @@ final class EnterEmailVC: UIViewController {
 
     /// Letters, spaces, hyphen, and apostrophe only (e.g. Mary-Jane, O'Brien).
     private func isValidPersonName(_ name: String) -> Bool {
+        Self.isPersonName(name)
+    }
+
+    private static func isPersonName(_ name: String) -> Bool {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.count >= 2 else { return false }
         let allowed = CharacterSet.letters
             .union(.whitespaces)
             .union(CharacterSet(charactersIn: "'-"))
-        return !name.isEmpty && name.unicodeScalars.allSatisfy { allowed.contains($0) }
+        return trimmed.unicodeScalars.allSatisfy { allowed.contains($0) }
     }
 }

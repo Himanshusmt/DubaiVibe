@@ -573,10 +573,10 @@ Terms of Service and Privacy Policy.</string>
             </objects>
             <point key="canvasLocation" x="1500" y="20"/>
         </scene>
-        <!--Enter EmailVC-->
+        <!--Onboarding NameVC-->
         <scene sceneID="name-scene">
             <objects>
-                <viewController storyboardIdentifier="EnterEmailVC" id="name-vc" customClass="EnterEmailVC" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OnboardingNameVC" id="name-vc" customClass="OnboardingNameVC" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="name-root">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

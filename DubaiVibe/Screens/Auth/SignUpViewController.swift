@@ -8,6 +8,7 @@ final class SignUpViewController: UIViewController {
     @IBOutlet private weak var phoneTextField: UITextField!
     @IBOutlet private weak var sendButton: GoldGradientButton!
 
+    private let viewModel = AuthViewModel()
     private let dialCode = "+971"
 
     override func viewDidLoad() {
@@ -22,6 +23,7 @@ final class SignUpViewController: UIViewController {
             attributes: [.foregroundColor: AppPalette.secondaryText]
         )
         phoneTextField?.tintColor = AppPalette.gold
+        phoneTextField?.keyboardType = .phonePad
 
         sendButton?.layer.cornerRadius = 14
         sendButton?.clipsToBounds = true
@@ -50,15 +52,39 @@ final class SignUpViewController: UIViewController {
     }
 
     @IBAction private func sendOTPTapped(_ sender: Any) {
+        view.endEditing(true)
         let phone = (phoneTextField?.text ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !phone.isEmpty else {
             showAlert(message: "Please enter your phone number.")
             return
         }
+        guard AuthViewModel.isValidNationalNumber(phone) else {
+            showAlert(message: "Please enter a valid mobile number.")
+            return
+        }
+
+        viewModel.requestPhoneOTP(phoneCode: dialCode, phone: phone) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let response):
+                self.showSuccessToast(response.message, fallback: "OTP sent")
+                self.pushOTPScreen(phone: phone, debugCode: response.data?.debugCode)
+            case .failure(let error):
+                self.showErrorPopup(error)
+            }
+        }
+    }
+
+    private func pushOTPScreen(phone: String, debugCode: String?) {
         let otp = UIStoryboard.authentication
             .instantiateViewController(withIdentifier: "EnterOTPVC") as! EnterOTPVC
-        otp.phoneNumberDisplay = "\(dialCode) \(phone)"
+        otp.phoneCode = dialCode
+        otp.phoneNumber = AuthViewModel.sanitizedNationalNumber(phone)
+        otp.phoneNumberDisplay = "\(dialCode) \(AuthViewModel.sanitizedNationalNumber(phone))"
+        #if DEBUG
+        otp.debugOTPCode = debugCode
+        #endif
         navigationController?.pushViewController(otp, animated: true)
     }
 }
