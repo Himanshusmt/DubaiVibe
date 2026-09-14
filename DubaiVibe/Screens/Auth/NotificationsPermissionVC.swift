@@ -22,7 +22,8 @@ final class NotificationsPermissionVC: UIViewController {
     }
 
     private func finishOnboarding() {
-        AppRouter.markMockSessionComplete()
+        // Stay on Explore only for this session — do not persist login,
+        // so a cold start after kill returns to Welcome.
         AppRouter.setRootMain(animated: true)
     }
 }
