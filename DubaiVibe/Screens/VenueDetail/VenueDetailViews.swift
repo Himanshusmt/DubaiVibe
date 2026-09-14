@@ -144,7 +144,7 @@ final class GoldGradientButton: UIButton {
         backgroundColor = .clear
         tintColor = AppPalette.onGold
         setTitleColor(AppPalette.onGold, for: .normal)
-        titleLabel?.font = AppTypography.font(.bold, size: 12)
+        titleLabel?.font = AppTypography.font(.bold, size: 16)
         layer.cornerRadius = 12
         layer.cornerCurve = .continuous
         clipsToBounds = true
