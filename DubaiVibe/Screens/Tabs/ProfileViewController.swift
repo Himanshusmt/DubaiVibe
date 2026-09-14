@@ -6,7 +6,7 @@ final class ProfileViewController: UIViewController {
     @IBOutlet weak var taglineLabel: UILabel!
     @IBOutlet weak var notificationButton: UIButton!
     @IBOutlet weak var bellDotView: UIView!
-    @IBOutlet weak var avatarImageView: CircularImageView!
+    @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var cameraBadge: UIView!
     @IBOutlet weak var firstNameField: AuthDarkField!
     @IBOutlet weak var lastNameField: AuthDarkField!
@@ -39,6 +39,14 @@ final class ProfileViewController: UIViewController {
         configureSaveButton()
         loadSavedProfile()
         updateSaveButtonState()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+//        applyCircularAvatar()
+        if let cameraBadge {
+            cameraBadge.layer.cornerRadius = min(cameraBadge.bounds.width, cameraBadge.bounds.height) / 2
+        }
     }
 
     /// Mirrors the brand bar on Explore so both tabs share one header treatment.
@@ -97,8 +105,8 @@ final class ProfileViewController: UIViewController {
         avatarImageView?.tintAdjustmentMode = .normal
         avatarImageView?.layer.borderWidth = 3
         avatarImageView?.layer.borderColor = AppPalette.gold.cgColor
-        avatarImageView?.layer.cornerCurve = .circular
-        avatarImageView?.clipsToBounds = true
+        avatarImageView?.layer.cornerRadius = avatarImageView.frame.height / 2
+//        applyCircularAvatar()
         applyPlaceholderAvatar()
 
         cameraBadge?.backgroundColor = AppPalette.gold
@@ -123,6 +131,20 @@ final class ProfileViewController: UIViewController {
 
         imagePicker = TDImagePicker(presentationController: self, delegate: self)
     }
+
+//    private func applyCircularAvatar() {
+//        guard let avatarImageView else { return }
+//        avatarImageView.clipsToBounds = true
+//        avatarImageView.layer.masksToBounds = true
+//        avatarImageView.layer.cornerCurve = .circular
+//        avatarImageView.layer.maskedCorners = [
+//            .layerMinXMinYCorner,
+//            .layerMaxXMinYCorner,
+//            .layerMinXMaxYCorner,
+//            .layerMaxXMaxYCorner
+//        ]
+//        
+//    }
 
     private func configureSaveButton() {
         saveButton?.setTitle("Save", for: .normal)
@@ -163,6 +185,7 @@ final class ProfileViewController: UIViewController {
         avatarImageView?.image = image
         avatarImageView?.tintColor = nil
         avatarImageView?.contentMode = .scaleAspectFill
+//        applyCircularAvatar()
     }
 
     @objc private func fieldsChanged() {

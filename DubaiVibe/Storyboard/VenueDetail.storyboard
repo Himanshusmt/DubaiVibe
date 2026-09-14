@@ -653,7 +653,9 @@
                                                                     <constraint firstAttribute="height" constant="54" id="vd-ov-h"/>
                                                                     <constraint firstAttribute="width" constant="54" id="vd-ov-w"/>
                                                                 </constraints>
-                                                                <state key="normal" image="LaunchLogo"/>
+                                                                <state key="normal" image="onevibe_logo1">
+                                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                                                </state>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                                         <real key="value" value="27"/>
@@ -784,7 +786,6 @@
     </scenes>
     <resources>
         <image name="ExplorePin" width="16" height="16"/>
-        <image name="LaunchLogo" width="1746" height="1704"/>
         <image name="camera" catalog="system" width="128" height="93"/>
         <image name="checkmark.seal.fill" catalog="system" width="128" height="124"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
@@ -794,6 +795,7 @@
         <image name="directionIcon" width="14" height="14"/>
         <image name="globe" catalog="system" width="128" height="123"/>
         <image name="heart" catalog="system" width="128" height="107"/>
+        <image name="onevibe_logo1" width="20" height="20"/>
         <image name="phone.fill" catalog="system" width="128" height="114"/>
         <image name="photo.on.rectangle" catalog="system" width="128" height="98"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>

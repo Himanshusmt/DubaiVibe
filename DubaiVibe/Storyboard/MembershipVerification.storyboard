@@ -422,7 +422,7 @@ to unlock this exclusive offer.</string>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mv-code-bar">
                                                         <rect key="frame" x="16" y="91.333333333333371" width="321" height="52"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="OV-7K92X4" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-code">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="DV-7K92X4" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-code">
                                                                 <rect key="frame" x="44" y="11.666666666666631" width="233" height="28.666666666666671"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

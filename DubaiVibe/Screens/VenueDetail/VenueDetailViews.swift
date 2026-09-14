@@ -191,7 +191,7 @@ final class GoldGradientButton: UIButton {
 /// Paging hero carousel with auto-scroll and a bottom fade so overlay pills stay readable.
 final class HeroImageView: UIImageView {
     private enum Metric {
-        static let autoScrollInterval: TimeInterval = 3
+        static let autoScrollInterval: TimeInterval = 1
     }
 
     private let fadeView = UIView()
@@ -254,7 +254,7 @@ final class HeroImageView: UIImageView {
         let timer = Timer(timeInterval: Metric.autoScrollInterval, repeats: true) { [weak self] _ in
             self?.advancePage()
         }
-        timer.tolerance = 0.25
+        timer.tolerance = 0.05
         RunLoop.main.add(timer, forMode: .common)
         autoScrollTimer = timer
     }

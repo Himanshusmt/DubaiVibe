@@ -29,7 +29,7 @@ final class MembershipVerificationViewController: UIViewController {
     @IBOutlet private weak var validForValueLabel: UILabel!
     @IBOutlet private weak var usageValueLabel: UILabel!
 
-    private var voucherCode = "OV-7K92X4"
+    private var voucherCode = "DV-7K92X4"
     private var issuedAt = Date()
     private var lastCopyAt: TimeInterval = 0
 
@@ -68,7 +68,7 @@ private extension MembershipVerificationViewController {
         logoImageView.image = UIImage(named: "LaunchLogo")
         logoImageView.contentMode = .scaleAspectFit
 
-        profileImageView.image = UIImage(named: "p3") ?? Self.memberAvatar()
+        profileImageView.image = UIImage(named: "p1") ?? Self.memberAvatar()
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.layer.borderWidth = 3
         profileImageView.layer.borderColor = AppPalette.gold.cgColor
@@ -150,7 +150,7 @@ private extension MembershipVerificationViewController {
 
     func bindVoucher(issuedAt: Date) {
         self.issuedAt = issuedAt
-        voucherCode = "OV-7K92X4"
+        voucherCode = "DV-7K92X4"
         let expires = issuedAt.addingTimeInterval(Metric.validity)
 
         nameLabel.text = "Alex R."

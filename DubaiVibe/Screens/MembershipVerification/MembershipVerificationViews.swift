@@ -143,15 +143,53 @@ final class GoldGradientCircleView: CircleView {
     }
 }
 
-/// Keeps a square (or circle) clipped to its bounds so storyboard corner radii stay round on any size.
+/// Clips its image to a true circle after every layout pass.
 final class CircularImageView: UIImageView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        contentMode = .scaleAspectFill
+        clipsToBounds = true
+        layer.masksToBounds = true
+        layer.cornerCurve = .circular
+        layer.maskedCorners = [
+            .layerMinXMinYCorner,
+            .layerMaxXMinYCorner,
+            .layerMinXMaxYCorner,
+            .layerMaxXMaxYCorner
+        ]
+        setContentHuggingPriority(.defaultLow, for: .horizontal)
+        setContentHuggingPriority(.defaultLow, for: .vertical)
+        setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
+        applyCircleClip()
+    }
+
+    override var bounds: CGRect {
+        didSet {
+            guard bounds != oldValue else { return }
+            applyCircleClip()
+        }
+    }
+
+    private func applyCircleClip() {
         let side = min(bounds.width, bounds.height)
+        guard side > 0 else { return }
         layer.cornerRadius = side / 2
         layer.cornerCurve = .circular
         clipsToBounds = true
-        // Border is centered on the edge; without this, half the stroke can look clipped.
         layer.masksToBounds = true
     }
 }
