@@ -1163,19 +1163,19 @@ final class NetworkManager {
     }
 
     private func navigateToSignUpAfterUnauthorized() {
-//        let signupVC = SignUpViewController.fetchInstance()
-//        let navigationController = UINavigationController(rootViewController: signupVC)
-//        navigationController.setNavigationBarHidden(true, animated: false)
-//
-//        guard let window = UIApplication.shared.connectedScenes
-//            .compactMap({ $0 as? UIWindowScene })
-//            .flatMap(\.windows)
-//            .first(where: \.isKeyWindow) else {
-//            return
-//        }
-//
-//        window.rootViewController = navigationController
-//        window.makeKeyAndVisible()
+        let signupVC = SignUpViewController.fetchInstance()
+        let navigationController = UINavigationController(rootViewController: signupVC)
+        navigationController.setNavigationBarHidden(true, animated: false)
+
+        guard let window = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap(\.windows)
+            .first(where: \.isKeyWindow) else {
+            return
+        }
+
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
     }
 
     private static func topViewControllerForSessionAlert(
@@ -1619,6 +1619,8 @@ final class TokenManager {
         defaults.removeObject(forKey: "AppleSignInFamilyName")
 
         FCMNotificationManager.clearDeviceId()
+        LiveLocationSharingManager.shared.stopSharing()
+        LiveLocationSocketService.shared.disconnect()
 
         defaults.synchronize()
     }
@@ -1677,3 +1679,112 @@ extension Notification.Name {
 //        response.accessToken
 //    )
 //}
+
+//use latitude = values.decodeFlexibleIfPresent(forKey: .latitude)
+protocol FlexibleDecodable: Codable {
+    static func decodeFlexible(from container: SingleValueDecodingContainer) -> Self?
+}
+
+// MARK: - Type conversions
+
+extension Double: FlexibleDecodable {
+    static func decodeFlexible(from container: SingleValueDecodingContainer) -> Double? {
+        if let value = try? container.decode(Double.self) { return value }
+        if let value = try? container.decode(Int.self) { return Double(value) }
+        if let value = try? container.decode(String.self) {
+            return Double(value.trimmingCharacters(in: .whitespacesAndNewlines))
+        }
+        return nil
+    }
+}
+
+extension Int: FlexibleDecodable {
+    static func decodeFlexible(from container: SingleValueDecodingContainer) -> Int? {
+        if let value = try? container.decode(Int.self) { return value }
+        if let value = try? container.decode(Double.self) { return Int(value) }
+        if let value = try? container.decode(String.self) {
+            let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+            if let intValue = Int(trimmed) { return intValue }
+            if let doubleValue = Double(trimmed) { return Int(doubleValue) }
+        }
+        return nil
+    }
+}
+
+extension Bool: FlexibleDecodable {
+    static func decodeFlexible(from container: SingleValueDecodingContainer) -> Bool? {
+        if let value = try? container.decode(Bool.self) { return value }
+        if let value = try? container.decode(Int.self) { return value != 0 }
+        if let value = try? container.decode(Double.self) { return value != 0 }
+        if let value = try? container.decode(String.self) {
+            switch value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+            case "true", "1", "yes", "y": return true
+            case "false", "0", "no", "n": return false
+            default: return nil
+            }
+        }
+        return nil
+    }
+}
+
+extension String: FlexibleDecodable {
+    static func decodeFlexible(from container: SingleValueDecodingContainer) -> String? {
+        if let value = try? container.decode(String.self) { return value }
+        if let value = try? container.decode(Int.self) { return String(value) }
+        if let value = try? container.decode(Double.self) { return String(value) }
+        if let value = try? container.decode(Bool.self) { return value ? "true" : "false" }
+        return nil
+    }
+}
+
+// MARK: - KeyedDecodingContainer
+
+extension KeyedDecodingContainer {
+
+    /// Infers the type from the property: `Double?`, `Int?`, `Bool?`, or `String?`.
+    func decodeFlexibleIfPresent<T: FlexibleDecodable>(
+        _ type: T.Type = T.self,
+        forKey key: Key
+    ) -> T? {
+        guard contains(key) else { return nil }
+        guard let container = try? superDecoder(forKey: key).singleValueContainer() else {
+            return nil
+        }
+        if (try? container.decodeNil()) == true { return nil }
+        return T.decodeFlexible(from: container)
+    }
+}
+
+// MARK: - Property wrapper (no custom init needed)
+
+@propertyWrapper
+struct Flexible<Value: FlexibleDecodable>: Codable {
+    var wrappedValue: Value?
+
+    init(wrappedValue: Value? = nil) {
+        self.wrappedValue = wrappedValue
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
+            wrappedValue = nil
+        } else {
+            wrappedValue = Value.decodeFlexible(from: container)
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(wrappedValue)
+    }
+}
+
+extension KeyedDecodingContainer {
+    func decode<T: FlexibleDecodable>(
+        _ type: Flexible<T>.Type,
+        forKey key: Key
+    ) throws -> Flexible<T> {
+        Flexible(wrappedValue: decodeFlexibleIfPresent(forKey: key))
+    }
+}
