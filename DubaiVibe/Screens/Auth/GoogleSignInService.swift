@@ -1,8 +1,9 @@
+import FirebaseCore
 import Foundation
 import GoogleSignIn
 import UIKit
 
-/// Reads OAuth ids from `GoogleService-Info.plist` (add `CLIENT_ID` / `REVERSED_CLIENT_ID` when ready).
+/// Reads OAuth ids from `GoogleService-Info.plist` (or Firebase `clientID` fallback).
 enum GoogleServiceConfig {
     static var values: [String: Any]? {
         guard
@@ -14,10 +15,12 @@ enum GoogleServiceConfig {
 
     static var clientID: String? {
         nonEmpty(values?["CLIENT_ID"] as? String)
+            ?? nonEmpty(FirebaseApp.app()?.options.clientID)
     }
 
     static var reversedClientID: String? {
         nonEmpty(values?["REVERSED_CLIENT_ID"] as? String)
+            ?? reversedClientID(from: clientID)
     }
 
     static var isConfigured: Bool { clientID != nil }
@@ -38,13 +41,20 @@ enum GoogleServiceConfig {
         }
     }
 
+    static func reversedClientID(from clientID: String?) -> String? {
+        guard let clientID, clientID.hasSuffix(".apps.googleusercontent.com") else { return nil }
+        let prefix = String(clientID.dropLast(".apps.googleusercontent.com".count))
+        guard !prefix.isEmpty else { return nil }
+        return "com.googleusercontent.apps.\(prefix)"
+    }
+
     private static func nonEmpty(_ value: String?) -> String? {
         let trimmed = value?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return trimmed.isEmpty ? nil : trimmed
     }
 }
 
-/// Native Google Sign-In via GoogleSignIn SDK. Backend API not wired yet.
+/// Native Google Sign-In via GoogleSignIn SDK.
 final class GoogleSignInService {
     struct Credential {
         let userId: String
@@ -84,13 +94,13 @@ final class GoogleSignInService {
         completion: @escaping (Result<Credential, SignInError>) -> Void
     ) {
         guard let clientID = GoogleServiceConfig.clientID else {
-            completion(.failure(.missingClientID))
+            finish(.failure(.missingClientID), completion)
             return
         }
 
         if let reversed = GoogleServiceConfig.reversedClientID,
            !GoogleServiceConfig.hasMatchingURLScheme {
-            completion(.failure(.missingURLScheme(reversed)))
+            finish(.failure(.missingURLScheme(reversed)), completion)
             return
         }
 
@@ -100,10 +110,10 @@ final class GoogleSignInService {
             if let error {
                 let nsError = error as NSError
                 if nsError.domain == "com.google.GIDSignIn", nsError.code == GIDSignInError.canceled.rawValue {
-                    completion(.failure(.canceled))
+                    self.finish(.failure(.canceled), completion)
                     return
                 }
-                completion(.failure(.underlying(error)))
+                self.finish(.failure(.underlying(error)), completion)
                 return
             }
 
@@ -112,7 +122,7 @@ final class GoogleSignInService {
                 let idToken = user.idToken?.tokenString,
                 !idToken.isEmpty
             else {
-                completion(.failure(.missingIDToken))
+                self.finish(.failure(.missingIDToken), completion)
                 return
             }
 
@@ -121,7 +131,7 @@ final class GoogleSignInService {
             let family = Self.trimmed(profile?.familyName)
             let full = Self.trimmed(profile?.name)
 
-            completion(.success(Credential(
+            self.finish(.success(Credential(
                 userId: user.userID ?? "",
                 idToken: idToken,
                 accessToken: user.accessToken.tokenString,
@@ -129,7 +139,20 @@ final class GoogleSignInService {
                 fullName: full,
                 givenName: given,
                 familyName: family
-            )))
+            )), completion)
+        }
+    }
+
+    static func signOut() {
+        GIDSignIn.sharedInstance.signOut()
+    }
+
+    private func finish(
+        _ result: Result<Credential, SignInError>,
+        _ completion: @escaping (Result<Credential, SignInError>) -> Void
+    ) {
+        DispatchQueue.main.async {
+            completion(result)
         }
     }
 

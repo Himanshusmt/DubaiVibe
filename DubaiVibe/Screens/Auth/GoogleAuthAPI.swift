@@ -21,7 +21,9 @@ enum GoogleAuthAPI {
             endpoint: .googleLogin,
             method: .POST,
             parameters: requestBody(for: credential),
-            showLoader: showLoader
+            showLoader: showLoader,
+            showErrorAlert: false,
+            retryCount: 0
         )
     }
 }

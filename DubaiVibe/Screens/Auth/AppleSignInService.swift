@@ -1,4 +1,6 @@
 import AuthenticationServices
+import CryptoKit
+import Security
 import UIKit
 
 /// Native Sign in with Apple via AuthenticationServices.
@@ -7,6 +9,7 @@ final class AppleSignInService: NSObject {
         let userId: String
         let identityToken: String
         let authorizationCode: String?
+        let nonce: String?
         let email: String?
         let fullName: String?
         let givenName: String?
@@ -16,6 +19,7 @@ final class AppleSignInService: NSObject {
     enum SignInError: LocalizedError {
         case canceled
         case missingToken
+        case missingWindow
         case underlying(Error)
 
         var errorDescription: String? {
@@ -24,6 +28,8 @@ final class AppleSignInService: NSObject {
                 return nil
             case .missingToken:
                 return L10n.appleMissingToken
+            case .missingWindow:
+                return "Unable to present Apple Sign-In. Please try again."
             case .underlying(let error):
                 return error.localizedDescription
             }
@@ -32,22 +38,41 @@ final class AppleSignInService: NSObject {
 
     private var completion: ((Result<Credential, SignInError>) -> Void)?
     private weak var presentationAnchor: ASPresentationAnchor?
+    /// Must be retained for the lifetime of the system sheet.
+    private var authorizationController: ASAuthorizationController?
+    private var currentRawNonce: String?
 
     func signIn(
         from viewController: UIViewController,
         completion: @escaping (Result<Credential, SignInError>) -> Void
     ) {
-        self.completion = completion
-        presentationAnchor = viewController.view.window
+        let anchor = viewController.view.window
             ?? UIApplication.shared.connectedScenes
                 .compactMap { $0 as? UIWindowScene }
                 .flatMap(\.windows)
                 .first(where: \.isKeyWindow)
+            ?? UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap(\.windows)
+                .first
+
+        guard let anchor else {
+            completion(.failure(.missingWindow))
+            return
+        }
+
+        self.completion = completion
+        presentationAnchor = anchor
+
+        let rawNonce = Self.randomNonce()
+        currentRawNonce = rawNonce
 
         let request = ASAuthorizationAppleIDProvider().createRequest()
         request.requestedScopes = [.fullName, .email]
+        request.nonce = Self.sha256(rawNonce)
 
         let controller = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController = controller
         controller.delegate = self
         controller.presentationContextProvider = self
         controller.performRequests()
@@ -56,9 +81,26 @@ final class AppleSignInService: NSObject {
     private func finish(_ result: Result<Credential, SignInError>) {
         let callback = completion
         completion = nil
+        authorizationController = nil
+        currentRawNonce = nil
         DispatchQueue.main.async {
             callback?(result)
         }
+    }
+
+    private static func randomNonce(length: Int = 32) -> String {
+        let charset = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        var bytes = [UInt8](repeating: 0, count: length)
+        let status = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+        guard status == errSecSuccess else {
+            return UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        }
+        return String(bytes.map { charset[Int($0) % charset.count] })
+    }
+
+    private static func sha256(_ value: String) -> String {
+        let hash = SHA256.hash(data: Data(value.utf8))
+        return hash.map { String(format: "%02x", $0) }.joined()
     }
 }
 
@@ -94,6 +136,7 @@ extension AppleSignInService: ASAuthorizationControllerDelegate {
             userId: appleID.user,
             identityToken: identityToken,
             authorizationCode: code,
+            nonce: currentRawNonce,
             email: appleID.email,
             fullName: fullName,
             givenName: given?.isEmpty == false ? given : nil,

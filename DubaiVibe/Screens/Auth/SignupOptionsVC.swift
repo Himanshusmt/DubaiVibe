@@ -1,3 +1,4 @@
+import Combine
 import UIKit
 
 /// Welcome / auth entry screen. Layout and button chrome live in Authentication.storyboard.
@@ -8,6 +9,7 @@ final class SignupOptionsVC: UIViewController {
     private let appleSignIn = AppleSignInService()
     private let googleSignIn = GoogleSignInService()
     private let viewModel = AuthViewModel()
+    private var isSocialSignInInFlight = false
 
     private enum Link {
         static let terms = URL(string: "dubaivibe://terms")!
@@ -92,33 +94,37 @@ final class SignupOptionsVC: UIViewController {
     }
 
     @IBAction private func continueWithApple(_ sender: Any) {
+        guard !isSocialSignInInFlight else { return }
+        isSocialSignInInFlight = true
+
         appleSignIn.signIn(from: self) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let credential):
                 self.handleAppleCredential(credential)
             case .failure(.canceled):
-                break
+                self.isSocialSignInInFlight = false
             case .failure(let error):
-                if let message = error.errorDescription, !message.isEmpty {
-                    self.showAlert(message: message)
-                }
+                self.isSocialSignInInFlight = false
+                self.showSocialSignInError(error.errorDescription)
             }
         }
     }
 
     @IBAction private func continueWithGoogle(_ sender: Any) {
+        guard !isSocialSignInInFlight else { return }
+        isSocialSignInInFlight = true
+
         googleSignIn.signIn(from: self) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let credential):
                 self.handleGoogleCredential(credential)
             case .failure(.canceled):
-                break
+                self.isSocialSignInInFlight = false
             case .failure(let error):
-                if let message = error.errorDescription, !message.isEmpty {
-                    self.showAlert(message: message)
-                }
+                self.isSocialSignInInFlight = false
+                self.showSocialSignInError(error.errorDescription)
             }
         }
     }
@@ -128,6 +134,7 @@ final class SignupOptionsVC: UIViewController {
         persistAppleProfile(from: credential)
         viewModel.loginWithApple(credential: credential) { [weak self] result in
             guard let self else { return }
+            self.isSocialSignInInFlight = false
             switch result {
             case .success(let response):
                 self.showSuccessToast(response.message, fallback: "Signed in")
@@ -151,14 +158,10 @@ final class SignupOptionsVC: UIViewController {
 
     /// Native Google Sign-In, then exchange the ID token with DubaiVibe auth.
     private func handleGoogleCredential(_ credential: GoogleSignInService.Credential) {
-        if let email = credential.email, !email.isEmpty {
-            UserDefaults.standard.set(email, forKey: "GoogleSignInEmail")
-        }
-        if let fullName = credential.fullName, !fullName.isEmpty {
-            TokenManager.shared.saveSocialFullName(fullName)
-        }
+        persistGoogleProfile(from: credential)
         viewModel.loginWithGoogle(credential: credential) { [weak self] result in
             guard let self else { return }
+            self.isSocialSignInInFlight = false
             switch result {
             case .success(let response):
                 self.showSuccessToast(response.message, fallback: "Signed in")
@@ -179,7 +182,17 @@ final class SignupOptionsVC: UIViewController {
         }
     }
 
+    private func showSocialSignInError(_ message: String?) {
+        guard let message, !message.isEmpty else { return }
+        showAnimatedAlert(
+            title: L10n.error,
+            message: message,
+            style: .warning
+        )
+    }
+
     private func persistAppleProfile(from credential: AppleSignInService.Credential) {
+        UserDefaults.standard.set(credential.userId, forKey: "AppleSignInUserId")
         if let email = credential.email, !email.isEmpty {
             UserDefaults.standard.set(email, forKey: "AppleSignInEmail")
         }
@@ -193,6 +206,20 @@ final class SignupOptionsVC: UIViewController {
         let cached = TokenManager.shared.appleUserName(for: credential.userId)
         let resolvedName = credential.fullName ?? cached
         TokenManager.shared.saveAppleUserName(appleUserId: credential.userId, fullName: resolvedName)
+    }
+
+    private func persistGoogleProfile(from credential: GoogleSignInService.Credential) {
+        UserDefaults.standard.set(credential.userId, forKey: "GoogleSignInUserId")
+        if let email = credential.email, !email.isEmpty {
+            UserDefaults.standard.set(email, forKey: "GoogleSignInEmail")
+        }
+        if let given = credential.givenName, !given.isEmpty {
+            UserDefaults.standard.set(given, forKey: "GoogleSignInGivenName")
+        }
+        if let family = credential.familyName, !family.isEmpty {
+            UserDefaults.standard.set(family, forKey: "GoogleSignInFamilyName")
+        }
+        TokenManager.shared.saveSocialFullName(credential.fullName)
     }
 
     static func splitPersonName(
@@ -234,9 +261,17 @@ extension SignupOptionsVC: UITextViewDelegate {
     ) -> Bool {
         switch URL {
         case Link.terms:
-            showAlert(title: L10n.termsOfService, message: L10n.termsSoon)
+            showAnimatedAlert(
+                title: L10n.termsOfService,
+                message: L10n.termsSoon,
+                style: .info
+            )
         case Link.privacy:
-            showAlert(title: L10n.privacyPolicy, message: L10n.privacySoon)
+            showAnimatedAlert(
+                title: L10n.privacyPolicy,
+                message: L10n.privacySoon,
+                style: .info
+            )
         default:
             break
         }

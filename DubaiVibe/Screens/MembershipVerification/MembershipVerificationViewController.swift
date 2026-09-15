@@ -260,13 +260,11 @@ private extension MembershipVerificationViewController {
     }
 
     @IBAction func handleHelp() {
-        let alert = UIAlertController(
+        showAnimatedAlert(
             title: L10n.help,
             message: L10n.membershipHelp,
-            preferredStyle: .alert
+            style: .info
         )
-        alert.addAction(UIAlertAction(title: L10n.ok, style: .default))
-        presentStyledAlert(alert)
     }
 
     @IBAction func handleCopyCode() {

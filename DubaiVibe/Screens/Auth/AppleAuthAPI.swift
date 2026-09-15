@@ -13,6 +13,9 @@ enum AppleAuthAPI {
         if let familyName = credential.familyName, !familyName.isEmpty {
             parameters["lastName"] = familyName
         }
+        if let nonce = credential.nonce, !nonce.isEmpty {
+            parameters["nonce"] = nonce
+        }
         if let email = credential.email, !email.isEmpty {
             parameters["email"] = email
         }
@@ -27,7 +30,9 @@ enum AppleAuthAPI {
             endpoint: .appleLogin,
             method: .POST,
             parameters: requestBody(for: credential),
-            showLoader: showLoader
+            showLoader: showLoader,
+            showErrorAlert: false,
+            retryCount: 0
         )
     }
 }

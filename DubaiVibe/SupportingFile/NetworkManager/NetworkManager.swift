@@ -552,7 +552,8 @@ final class NetworkManager {
         parameters: [String: Any]? = nil,
         headers: [String: String] = [:],
         showLoader: Bool = true,
-        showErrorAlert: Bool = true
+        showErrorAlert: Bool = true,
+        retryCount: Int = 2
     ) -> AnyPublisher<T, APIError> {
         
         // MARK: Internet Check
@@ -624,7 +625,7 @@ final class NetworkManager {
             .dataTaskPublisher(
                 for: request
             )
-            .retry(2)
+            .retry(max(0, retryCount))
             .tryMap { output in
                 
                 NetworkLogger.logResponse(
@@ -1105,16 +1106,14 @@ final class NetworkManager {
             return
         }
 
-        let alert = UIAlertController(
+        presenter.showAnimatedAlert(
             title: L10n.sessionExpired,
             message: L10n.sessionExpiredMessage,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: L10n.ok, style: .default) { [weak self] _ in
+            style: .warning
+        ) { [weak self] in
             self?.navigateToSignUpAfterUnauthorized()
             self?.isHandlingUnauthorizedSession = false
-        })
-        presenter.presentStyledAlert(alert)
+        }
     }
 
     private func navigateToSignUpAfterUnauthorized() {
@@ -1346,26 +1345,23 @@ extension UIViewController {
         title: String = L10n.error,
         message: String
     ) {
-        
-        let alert =
-        UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(
-            UIAlertAction(
-                title: L10n.ok,
-                style: .default
-            )
-        )
-
-        presentStyledAlert(alert)
+        let style = AuthAlertStyle.inferred(fromTitle: title, message: message)
+        let lowered = message.lowercased()
+        let isValidation = lowered.contains("please enter")
+            || lowered.contains("valid")
+            || lowered.contains("must be")
+            || lowered.contains("needed")
+        let resolvedTitle: String
+        if title == L10n.error || title == "Error" {
+            resolvedTitle = isValidation ? "Check your details" : "Something went wrong"
+        } else {
+            resolvedTitle = title
+        }
+        showAnimatedAlert(title: resolvedTitle, message: message, style: style)
     }
 
     func showErrorPopup(_ error: APIError) {
-        showAlert(title: "Error", message: error.userFacingMessage)
+        showAlert(title: L10n.error, message: error.userFacingMessage)
     }
 
     func showSuccessToast(_ message: String?, fallback: String) {
@@ -1654,9 +1650,16 @@ final class TokenManager {
         defaults.removeObject(forKey: "SelectedAlertsDraftKey")
         defaults.removeObject(forKey: "AdditionalAlertsDraftKey")
         defaults.removeObject(forKey: "PersonalInfoDraftKey")
+        defaults.removeObject(forKey: "AppleSignInUserId")
         defaults.removeObject(forKey: "AppleSignInEmail")
         defaults.removeObject(forKey: "AppleSignInGivenName")
         defaults.removeObject(forKey: "AppleSignInFamilyName")
+        defaults.removeObject(forKey: "GoogleSignInUserId")
+        defaults.removeObject(forKey: "GoogleSignInEmail")
+        defaults.removeObject(forKey: "GoogleSignInGivenName")
+        defaults.removeObject(forKey: "GoogleSignInFamilyName")
+
+        GoogleSignInService.signOut()
 
         defaults.setLoggedIn(value: false)
         defaults.removeObject(forKey: UserDefaultsKeys.loginData.rawValue)
