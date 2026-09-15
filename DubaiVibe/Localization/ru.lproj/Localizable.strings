@@ -1,0 +1,153 @@
+/* Common */
+"common.ok" = "ОК";
+"common.cancel" = "Отмена";
+"common.error" = "Ошибка";
+"common.help" = "Помощь";
+"common.comingSoon" = "Скоро";
+"common.save" = "Сохранить";
+"common.notifications" = "Уведомления";
+"common.back" = "Назад";
+"common.close" = "Закрыть";
+"common.clear" = "Очистить";
+"common.done" = "Готово";
+"common.brandName" = "Dubai Vibe";
+
+/* Tabs */
+"tab.home" = "Главная";
+"tab.profile" = "Профиль";
+
+/* Explore */
+"explore.tagline" = "ДУБАЙ • ЕДА • НАПИТКИ • ОТКРЫТИЯ";
+"explore.searchPlaceholder" = "Поиск ресторанов, баров, клубов, пляжей...";
+"explore.cityDubai" = "Дубай";
+"explore.cityAbuDhabi" = "Абу-Даби";
+"explore.cityDubaiAccessibility" = "Город: Дубай";
+
+/* Profile */
+"profile.firstName" = "Имя";
+"profile.lastName" = "Фамилия";
+"profile.saved" = "Сохранено";
+"profile.updated" = "Ваш профиль обновлён.";
+"profile.language" = "Язык";
+"profile.enterFirstName" = "Пожалуйста, введите имя.";
+"profile.firstNameTooShort" = "Имя должно содержать не менее 2 символов.";
+"profile.invalidFirstName" = "Пожалуйста, введите корректное имя.";
+"profile.enterLastName" = "Пожалуйста, введите фамилию.";
+"profile.lastNameTooShort" = "Фамилия должна содержать не менее 2 символов.";
+"profile.invalidLastName" = "Пожалуйста, введите корректную фамилию.";
+
+/* Categories */
+"category.all" = "Все";
+"category.restaurants" = "Рестораны";
+"category.bars" = "Бары и лаунжи";
+"category.nightlife" = "Ночная жизнь";
+"category.cafes" = "Кафе";
+"category.brunches" = "Бранчи";
+"category.beachClubs" = "Пляжные клубы";
+"category.ladiesNights" = "Ladies Nights";
+"category.gyms" = "Залы и фитнес";
+"category.padel" = "Падел и теннис";
+"category.beauty" = "Красота и салоны";
+
+/* Deals */
+"deal.view" = "Смотреть";
+"deal.unlock" = "Открыть предложение";
+"deal.exclusiveBadge" = "ЭКСКЛЮЗИВ DUBAI VIBE";
+"deal.favorite" = "Избранное";
+"deal.bookmark" = "Закладка";
+
+/* Auth */
+"auth.realPeople" = "НАСТОЯЩИЕ ЛЮДИ";
+"auth.realExperiences" = "НАСТОЯЩИЕ ВПЕЧАТЛЕНИЯ";
+"auth.continuePhone" = "Продолжить с номером телефона";
+"auth.continueApple" = "Продолжить с Apple";
+"auth.continueGoogle" = "Продолжить с Google";
+"auth.or" = "или";
+"auth.termsPrefix" = "Продолжая, вы соглашаетесь с\n";
+"auth.termsOfService" = "Условиями использования";
+"auth.termsAnd" = " и ";
+"auth.privacyPolicy" = "Политикой конфиденциальности";
+"auth.privacyPolicyPeriod" = ".";
+"auth.termsSoon" = "Условия использования скоро появятся.";
+"auth.privacySoon" = "Политика конфиденциальности скоро появится.";
+"auth.phoneTitle" = "Какой у вас номер телефона?";
+"auth.phoneSubtitle" = "Мы отправим код подтверждения, чтобы начать.";
+"auth.enterMobile" = "Введите номер телефона";
+"auth.sendOTP" = "Отправить код";
+"auth.phoneSecure" = "Ваш номер в безопасности и не будет передан третьим лицам.";
+"auth.phoneHelp" = "Введите номер телефона, чтобы получить одноразовый код подтверждения.";
+"auth.enterPhone" = "Пожалуйста, введите номер телефона.";
+"auth.invalidUAEPhone" = "Пожалуйста, введите действующий номер телефона ОАЭ.";
+"auth.otpTitle" = "Введите 6-значный код";
+"auth.otpSentPrefix" = "Мы отправили код подтверждения на\n";
+"auth.otpDidntReceive" = "Не получили код? ";
+"auth.otpResend" = "Отправить снова";
+"auth.otpResendIn" = "Повторно через %02d:%02d";
+"auth.nameTitle" = "Как вас зовут?";
+"auth.nameSubtitle" = "Это будет отображаться в вашем профиле.";
+"auth.createAccount" = "Создать аккаунт";
+"auth.welcomeTitle" = "Добро пожаловать в DubaiVibe!";
+"auth.welcomeSubtitle" = "Ваш аккаунт готов.";
+"auth.connectPeople" = "Знакомьтесь с людьми";
+"auth.discoverPlaces" = "Открывайте места";
+"auth.getExclusiveDeal" = "Эксклюзивные предложения";
+"auth.startExploring" = "Начать";
+"auth.enableNotifications" = "Включить уведомления";
+"auth.newMessages" = "Новые сообщения";
+"auth.exclusiveDeals" = "Эксклюзивные предложения";
+"auth.peopleNearYou" = "Люди рядом";
+"auth.appleMissingToken" = "Вход через Apple не вернул токен. Попробуйте ещё раз.";
+"auth.googleNotConfigured" = "Вход через Google ещё не настроен. Добавьте CLIENT_ID (и REVERSED_CLIENT_ID) в GoogleService-Info.plist, затем укажите тот же REVERSED_CLIENT_ID как URL-схему в Info.plist.";
+"auth.googleMissingScheme" = "Добавьте URL-схему «%@» в Info.plist (CFBundleURLTypes). Она должна совпадать с REVERSED_CLIENT_ID из GoogleService-Info.plist.";
+"auth.googleMissingToken" = "Вход через Google не вернул ID-токен. Попробуйте ещё раз.";
+
+/* Venue */
+"venue.photos" = "Фото";
+"venue.photosCount" = "%d фото";
+"venue.directions" = "Маршрут";
+"venue.openingHours" = "Часы работы";
+"venue.call" = "Звонок";
+"venue.website" = "Сайт";
+"venue.instagram" = "Instagram";
+"venue.share" = "Поделиться";
+"venue.oneVibe" = "OneVibe";
+"venue.about" = "О месте";
+"venue.menu" = "Меню";
+"venue.vibes" = "Атмосфера";
+"venue.deals" = "Предложения";
+"venue.reviews" = "Отзывы";
+"venue.menuComingSoon" = "Полное меню скоро появится. Сезонные блюда и фирменные позиции будут здесь.";
+"venue.vibesComingSoon" = "Видео атмосферы и моменты гостей появятся здесь.";
+"venue.reviewsComingSoon" = "Отзывы гостей и рейтинг появятся здесь.";
+"venue.noDeals" = "Сейчас нет эксклюзивных предложений для этого места.";
+"venue.watchVibe" = "Смотреть";
+
+/* Membership */
+"membership.almostThere" = "Почти готово!";
+"membership.subtitle" = "Подтвердите членство,\nчтобы открыть это предложение.";
+"membership.verifiedMember" = "Проверенный участник";
+"membership.memberSince" = "Участник OneVibe с %d";
+"membership.yourVerifiedCode" = "ВАШ ПОДТВЕРЖДЁННЫЙ КОД";
+"membership.copyCode" = "Скопировать код";
+"membership.copyHint" = "Копирует подтверждённый код членства";
+"membership.codeCopied" = "Код скопирован";
+"membership.date" = "Дата";
+"membership.time" = "Время";
+"membership.validUntil" = "Действует до";
+"membership.validFor" = "Срок";
+"membership.minutes" = "минут";
+"membership.oneTimeUse" = "Только одно использование";
+"membership.codeOnce" = "Этот код можно использовать только один раз.";
+"membership.betterExperiences" = "Лучшие впечатления";
+"membership.showCodeToStaff" = "Покажите этот код сотрудникам,\nчтобы получить скидку.";
+"membership.helpMessage" = "Покажите этот код сотрудникам заведения, чтобы получить эксклюзив OneVibe. Код действует 15 минут и может быть использован только один раз.";
+"membership.usage" = "Использование";
+"membership.realPeople" = "Настоящие люди";
+
+/* Image picker */
+"picker.takePhoto" = "Сделать фото";
+"picker.photoLibrary" = "Галерея";
+
+/* Session */
+"session.expiredTitle" = "Сессия истекла";
+"session.expiredMessage" = "Ваша сессия истекла. Пожалуйста, войдите снова.";

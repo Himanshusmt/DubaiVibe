@@ -98,8 +98,8 @@ private extension VenueDetailViewController {
         styleCircleButton(shareTopButton, symbol: "square.and.arrow.up")
         styleCircleButton(favoriteButton, symbol: "heart")
 
-        stylePillButton(photosButton, symbol: "photo.on.rectangle", title: photosButton.currentTitle ?? "Photos")
-        photosButton.accessibilityLabel = "Photos"
+        stylePillButton(photosButton, symbol: "photo.on.rectangle", title: L10n.photos)
+        photosButton.accessibilityLabel = L10n.photos
         photosButton.removeTarget(nil, action: nil, for: .touchUpInside)
         photosButton.addTarget(self, action: #selector(handlePhotos), for: .touchUpInside)
         wordmarkLabel.isHidden = true
@@ -127,11 +127,12 @@ private extension VenueDetailViewController {
         styleDirectionsButton()
         [callButton, websiteButton, instagramButton, shareActionButton, oneVibeButton].forEach(styleActionButton)
         hideSegmentCollection()
+        applyLocalizedStoryboardCopy()
 
         let symbol = UIImage.SymbolConfiguration(pointSize: 21, weight: .regular)
         instagramButton.setImage(BrandGlyphs.instagram.withConfiguration(symbol), for: .normal)
         shareActionButton.setImage(BrandGlyphs.shareNodes.withConfiguration(symbol), for: .normal)
-        oneVibeButton.accessibilityLabel = "OneVibe"
+        oneVibeButton.accessibilityLabel = L10n.oneVibe
         oneVibeButton.imageView?.contentMode = .scaleAspectFit
         oneVibeButton.imageEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
         oneVibeButton.clipsToBounds = true
@@ -168,7 +169,7 @@ private extension VenueDetailViewController {
     func styleDirectionsButton() {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "paperplane.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 11, weight: .semibold))
-        config.title = "Directions"
+        config.title = L10n.directions
         config.imagePadding = 6
         config.baseForegroundColor = AppPalette.primaryText
         config.background.strokeColor = AppPalette.gold.withAlphaComponent(0.55)
@@ -251,13 +252,13 @@ private extension VenueDetailViewController {
         case .deals:
             content = makeDealsContent()
         case .about:
-            content = makePlainContent(title: "About", body: detail.aboutText)
+            content = makePlainContent(title: L10n.about, body: detail.aboutText)
         case .menu:
-            content = makePlainContent(title: "Menu", body: "Full menu coming soon. Seasonal specials and signature dishes will appear here.")
+            content = makePlainContent(title: L10n.menu, body: L10n.menuComingSoon)
         case .vibes:
-            content = makePlainContent(title: "Vibes", body: "Watch Vibe videos and guest moments will appear here.")
+            content = makePlainContent(title: L10n.vibes, body: L10n.vibesComingSoon)
         case .reviews:
-            content = makePlainContent(title: "Reviews", body: "Guest reviews and ratings breakdown will appear here.")
+            content = makePlainContent(title: L10n.reviews, body: L10n.reviewsComingSoon)
         }
 
         content.translatesAutoresizingMaskIntoConstraints = false
@@ -307,7 +308,7 @@ private extension VenueDetailViewController {
 
     func makeDealsContent() -> UIView {
         guard let deal = detail.deal else {
-            return makePlainContent(title: "Deals", body: "No exclusive deals available for this venue right now.")
+            return makePlainContent(title: L10n.deals, body: L10n.noDeals)
         }
 
         let card = UIView()
@@ -363,7 +364,7 @@ private extension VenueDetailViewController {
         }
 
         let unlock = GoldGradientButton(type: .system)
-        unlock.setTitle(deal.ctaTitle, for: .normal)
+        unlock.setTitle(L10n.unlockDeal, for: .normal)
         unlock.setTitleColor(AppPalette.onGold, for: .normal)
         unlock.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         unlock.addTarget(self, action: #selector(handleUnlockDeal), for: .touchUpInside)
@@ -483,23 +484,23 @@ private extension VenueDetailViewController {
     }
 
     @IBAction func handleDirections() {
-        presentAlert(title: "Directions", message: detail?.address ?? "")
+        presentAlert(title: L10n.directions, message: detail?.address ?? "")
     }
 
     @IBAction func handleHours() {
-        presentAlert(title: "Opening hours", message: detail?.hoursText ?? "")
+        presentAlert(title: L10n.openingHours, message: detail?.hoursText ?? "")
     }
 
     @IBAction func handleCall() {
-        presentAlert(title: "Call", message: detail?.phone ?? "")
+        presentAlert(title: L10n.call, message: detail?.phone ?? "")
     }
 
     @IBAction func handleWebsite() {
-        presentAlert(title: "Website", message: detail?.website ?? "")
+        presentAlert(title: L10n.website, message: detail?.website ?? "")
     }
 
     @IBAction func handleInstagram() {
-        presentAlert(title: "Instagram", message: "@\(detail?.instagram ?? "")")
+        presentAlert(title: L10n.instagram, message: "@\(detail?.instagram ?? "")")
     }
 
     @objc func handlePhotos() {
@@ -510,14 +511,14 @@ private extension VenueDetailViewController {
     }
 
     @IBAction func handleSoon(_ sender: UIButton) {
-        let title = sender.accessibilityLabel ?? sender.configuration?.title ?? "Coming soon"
-        presentAlert(title: title, message: "Coming soon")
+        let title = sender.accessibilityLabel ?? sender.configuration?.title ?? L10n.comingSoon
+        presentAlert(title: title, message: L10n.comingSoon)
     }
 
     func presentAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        alert.addAction(UIAlertAction(title: L10n.ok, style: .default))
+        presentStyledAlert(alert)
     }
 
     /// Brand tile: first word only; long words truncate to 4 characters + ellipsis.

@@ -39,6 +39,7 @@ final class MembershipVerificationViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         configureChrome()
         bindVoucher(issuedAt: Date())
+        applyLocalizedStoryboardCopy()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -56,6 +57,7 @@ private extension MembershipVerificationViewController {
         let chevron = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
         backButton.setImage(UIImage(systemName: "chevron.left", withConfiguration: chevron), for: .normal)
         backButton.tintColor = AppPalette.gold
+        helpButton.setTitle(L10n.help, for: .normal)
         helpButton.setTitleColor(AppPalette.gold, for: .normal)
         helpButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
 
@@ -105,7 +107,7 @@ private extension MembershipVerificationViewController {
         angleSparkles(in: sparkleLeftStack, clockwiseFirst: true)
         angleSparkles(in: sparkleRightStack, clockwiseFirst: false)
 
-        captionLabel.attributedText = NSAttributedString(string: "YOUR VERIFIED CODE", attributes: [
+        captionLabel.attributedText = NSAttributedString(string: L10n.yourVerifiedCode, attributes: [
             .font: AppTypography.font(.semibold, size: 11),
             .foregroundColor: AppPalette.gold,
             .kern: 2.4
@@ -135,8 +137,8 @@ private extension MembershipVerificationViewController {
         let symbol = UIImage.SymbolConfiguration(pointSize: 16, weight: weight)
         copyButton.setImage(UIImage(systemName: icon, withConfiguration: symbol), for: .normal)
         copyButton.tintColor = tint
-        copyButton.accessibilityLabel = "Copy code"
-        copyButton.accessibilityHint = "Copies the verified membership code"
+        copyButton.accessibilityLabel = L10n.copyCode
+        copyButton.accessibilityHint = L10n.copyCodeHint
         copyButton.isUserInteractionEnabled = true
         copyButton.isExclusiveTouch = true
         codeBarView.bringSubviewToFront(copyButton)
@@ -152,9 +154,13 @@ private extension MembershipVerificationViewController {
         self.issuedAt = issuedAt
         voucherCode = "DV-7K92X4"
         let expires = issuedAt.addingTimeInterval(Metric.validity)
+        let locale = LocalizationManager.shared.locale
+        Self.dateFormatter.locale = locale
+        Self.timeFormatter.locale = locale
+        Self.untilFormatter.locale = locale
 
         nameLabel.text = "Alex R."
-        memberSinceLabel.text = "OneVibe Member since 2024"
+        memberSinceLabel.text = L10n.memberSince(2024)
         codeLabel.attributedText = NSAttributedString(string: voucherCode, attributes: [
             .font: AppTypography.font(.bold, size: 24),
             .foregroundColor: UIColor.white,
@@ -173,7 +179,7 @@ private extension MembershipVerificationViewController {
                 ]
             )
             text.append(NSAttributedString(
-                string: "minutes",
+                string: L10n.minutes,
                 attributes: [
                     .font: AppTypography.font(.semibold, size: 15),
                     .foregroundColor: UIColor.white
@@ -181,7 +187,7 @@ private extension MembershipVerificationViewController {
             ))
             return text
         }()
-        usageValueLabel.text = "One-time use only"
+        usageValueLabel.text = L10n.oneTimeUse
     }
 
     static func makeCode() -> String {
@@ -226,7 +232,7 @@ private extension MembershipVerificationViewController {
 
     static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_GB")
+        formatter.locale = LocalizationManager.shared.locale
         formatter.dateFormat = "d MMM yyyy"
         return formatter
     }()
@@ -240,7 +246,7 @@ private extension MembershipVerificationViewController {
 
     static let untilFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_GB")
+        formatter.locale = LocalizationManager.shared.locale
         formatter.dateFormat = "d MMM yyyy, HH:mm"
         return formatter
     }()
@@ -255,12 +261,12 @@ private extension MembershipVerificationViewController {
 
     @IBAction func handleHelp() {
         let alert = UIAlertController(
-            title: "Help",
-            message: "Show this verified code to venue staff to redeem your OneVibe exclusive. The code expires in 15 minutes and can only be used once.",
+            title: L10n.help,
+            message: L10n.membershipHelp,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        alert.addAction(UIAlertAction(title: L10n.ok, style: .default))
+        presentStyledAlert(alert)
     }
 
     @IBAction func handleCopyCode() {
@@ -272,7 +278,7 @@ private extension MembershipVerificationViewController {
         let value = (code?.isEmpty == false ? code : voucherCode) ?? voucherCode
         UIPasteboard.general.string = value
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        UIAccessibility.post(notification: .announcement, argument: "Code copied")
+        UIAccessibility.post(notification: .announcement, argument: L10n.codeCopied)
 
         configureCopyButton(icon: "checkmark", tint: AppPalette.gold, weight: .semibold)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak self] in

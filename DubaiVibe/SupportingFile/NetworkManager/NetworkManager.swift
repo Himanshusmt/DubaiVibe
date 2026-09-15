@@ -1151,19 +1151,19 @@ final class NetworkManager {
         }
 
         let alert = UIAlertController(
-            title: "Session Expired",
-            message: "Your session has expired. Please sign in again.",
+            title: L10n.sessionExpired,
+            message: L10n.sessionExpiredMessage,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: L10n.ok, style: .default) { [weak self] _ in
             self?.navigateToSignUpAfterUnauthorized()
             self?.isHandlingUnauthorizedSession = false
         })
-        presenter.present(alert, animated: true)
+        presenter.presentStyledAlert(alert)
     }
 
     private func navigateToSignUpAfterUnauthorized() {
-        let signupVC = WelcomeVC()
+        let signupVC = SignupOptionsVC()
         let navigationController = UINavigationController(rootViewController: signupVC)
         navigationController.setNavigationBarHidden(true, animated: false)
 
@@ -1416,7 +1416,7 @@ private extension Data {
 extension UIViewController {
     
     func showAlert(
-        title: String = "Error",
+        title: String = L10n.error,
         message: String
     ) {
         
@@ -1429,15 +1429,12 @@ extension UIViewController {
         
         alert.addAction(
             UIAlertAction(
-                title: "OK",
+                title: L10n.ok,
                 style: .default
             )
         )
-        
-        present(
-            alert,
-            animated: true
-        )
+
+        presentStyledAlert(alert)
     }
 }
 

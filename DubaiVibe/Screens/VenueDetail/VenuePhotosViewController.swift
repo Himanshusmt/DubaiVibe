@@ -75,10 +75,10 @@ private extension VenuePhotosViewController {
         backButton.tintColor = AppPalette.gold
         backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
-        backButton.accessibilityLabel = "Back"
+        backButton.accessibilityLabel = L10n.back
         headerView.addSubview(backButton)
 
-        titleLabel.text = "\(imageURLs.count) Photos"
+        titleLabel.text = L10n.photosCount(imageURLs.count)
         titleLabel.font = AppTypography.font(.semibold, size: 17)
         titleLabel.textColor = AppPalette.primaryText
         titleLabel.textAlignment = .center

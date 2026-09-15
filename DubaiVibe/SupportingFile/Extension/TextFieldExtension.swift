@@ -139,14 +139,17 @@ extension UITextField {
     }
 
     func applyCurrentPhoneNumberFormatting() {
-        let digits = String((text ?? "").filter { $0.isNumber }.prefix(15))
+        let raw = text ?? ""
 
-        guard phoneFormattingCountryCode.uppercased() == "US" else {
-            text = digits
-            return
+        switch phoneFormattingCountryCode.uppercased() {
+        case "US":
+            let digits = String(raw.filter { $0.isNumber }.prefix(15))
+            text = Self.usFormattedPhoneNumber(from: digits)
+        case "AE":
+            text = raw.uaeFormattedPhoneNumber
+        default:
+            text = String(raw.filter { $0.isNumber }.prefix(15))
         }
-
-        text = Self.usFormattedPhoneNumber(from: digits)
     }
     
     @objc func formatPhoneNumber1() {

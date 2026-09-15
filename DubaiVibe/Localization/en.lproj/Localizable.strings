@@ -1,0 +1,152 @@
+/* Common */
+"common.ok" = "OK";
+"common.cancel" = "Cancel";
+"common.error" = "Error";
+"common.help" = "Help";
+"common.comingSoon" = "Coming soon";
+"common.save" = "Save";
+"common.notifications" = "Notifications";
+"common.back" = "Back";
+"common.close" = "Close";
+"common.clear" = "Clear";
+"common.done" = "Done";
+"common.brandName" = "Dubai Vibe";
+
+/* Tabs */
+"tab.home" = "Home";
+"tab.profile" = "Profile";
+
+/* Explore */
+"explore.tagline" = "DUBAI • EAT • DRINK • EXPLORE";
+"explore.searchPlaceholder" = "Search restaurants, bars, nightlife, beaches...";
+"explore.cityDubai" = "Dubai";
+"explore.cityAbuDhabi" = "Abu Dhabi";
+"explore.cityDubaiAccessibility" = "City: Dubai";
+
+/* Profile */
+"profile.firstName" = "First Name";
+"profile.lastName" = "Last Name";
+"profile.saved" = "Saved";
+"profile.updated" = "Your profile has been updated.";
+"profile.language" = "Language";
+"profile.enterFirstName" = "Please enter your first name.";
+"profile.firstNameTooShort" = "First name must be at least 2 characters.";
+"profile.invalidFirstName" = "Please enter a valid first name.";
+"profile.enterLastName" = "Please enter your last name.";
+"profile.lastNameTooShort" = "Last name must be at least 2 characters.";
+"profile.invalidLastName" = "Please enter a valid last name.";
+
+/* Categories */
+"category.all" = "All";
+"category.restaurants" = "Restaurants";
+"category.bars" = "Bars & Lounges";
+"category.nightlife" = "Nightlife";
+"category.cafes" = "Cafés";
+"category.brunches" = "Brunches";
+"category.beachClubs" = "Beach Clubs";
+"category.ladiesNights" = "Ladies Nights";
+"category.gyms" = "Gyms & Fitness";
+"category.padel" = "Padel & Tennis";
+"category.beauty" = "Beauty & Salons";
+
+/* Deals */
+"deal.view" = "View Deal";
+"deal.unlock" = "Unlock Deal";
+"deal.exclusiveBadge" = "DUBAI VIBE EXCLUSIVE";
+"deal.favorite" = "Favorite";
+"deal.bookmark" = "Bookmark";
+
+/* Auth */
+"auth.realPeople" = "REAL PEOPLE";
+"auth.realExperiences" = "REAL EXPERIENCES";
+"auth.continuePhone" = "Continue with Phone Number";
+"auth.continueApple" = "Continue with Apple";
+"auth.continueGoogle" = "Continue with Google";
+"auth.or" = "or";
+"auth.termsPrefix" = "By continuing, you agree to our\n";
+"auth.termsOfService" = "Terms of Service";
+"auth.termsAnd" = " and ";
+"auth.privacyPolicy" = "Privacy Policy";
+"auth.termsSoon" = "Terms of Service will be available soon.";
+"auth.privacySoon" = "Privacy Policy will be available soon.";
+"auth.phoneTitle" = "What's your phone number?";
+"auth.phoneSubtitle" = "We'll send you a verification code to get you started.";
+"auth.enterMobile" = "Enter mobile number";
+"auth.sendOTP" = "Send OTP";
+"auth.phoneSecure" = "Your number is secure and will never be shared with anyone.";
+"auth.phoneHelp" = "Enter your mobile number to receive a one-time verification code.";
+"auth.enterPhone" = "Please enter your phone number.";
+"auth.invalidUAEPhone" = "Please enter a valid UAE mobile number.";
+"auth.otpTitle" = "Enter the 6-digit code";
+"auth.otpSentPrefix" = "We sent a verification code to\n";
+"auth.otpDidntReceive" = "Didn't receive the code? ";
+"auth.otpResend" = "Resend";
+"auth.otpResendIn" = "Resend in %02d:%02d";
+"auth.nameTitle" = "What's your full name?";
+"auth.nameSubtitle" = "This will be shown on your profile.";
+"auth.createAccount" = "Create Account";
+"auth.welcomeTitle" = "Welcome to DubaiVibe!";
+"auth.welcomeSubtitle" = "Your account is ready.";
+"auth.connectPeople" = "Connect with people";
+"auth.discoverPlaces" = "Discover amazing places";
+"auth.getExclusiveDeal" = "Get exclusive deal";
+"auth.startExploring" = "Start Exploring";
+"auth.enableNotifications" = "Enable Notifications";
+"auth.newMessages" = "New Messages";
+"auth.exclusiveDeals" = "Exclusive Deals";
+"auth.peopleNearYou" = "People Near You";
+"auth.appleMissingToken" = "Apple Sign-In did not return an identity token. Please try again.";
+"auth.googleNotConfigured" = "Google Sign-In is not configured yet. Add CLIENT_ID (and REVERSED_CLIENT_ID) to GoogleService-Info.plist, then set the same REVERSED_CLIENT_ID as a URL scheme in Info.plist.";
+"auth.googleMissingScheme" = "Add URL scheme \"%@\" to Info.plist (CFBundleURLTypes). It must match REVERSED_CLIENT_ID from GoogleService-Info.plist.";
+"auth.googleMissingToken" = "Google Sign-In did not return an ID token. Please try again.";
+
+/* Venue */
+"venue.photos" = "Photos";
+"venue.photosCount" = "%d Photos";
+"venue.directions" = "Directions";
+"venue.openingHours" = "Opening hours";
+"venue.call" = "Call";
+"venue.website" = "Website";
+"venue.instagram" = "Instagram";
+"venue.share" = "Share";
+"venue.oneVibe" = "OneVibe";
+"venue.about" = "About";
+"venue.menu" = "Menu";
+"venue.vibes" = "Vibes";
+"venue.deals" = "Deals";
+"venue.reviews" = "Reviews";
+"venue.menuComingSoon" = "Full menu coming soon. Seasonal specials and signature dishes will appear here.";
+"venue.vibesComingSoon" = "Watch Vibe videos and guest moments will appear here.";
+"venue.reviewsComingSoon" = "Guest reviews and ratings breakdown will appear here.";
+"venue.noDeals" = "No exclusive deals available for this venue right now.";
+"venue.watchVibe" = "Watch Vibe";
+
+/* Membership */
+"membership.almostThere" = "Almost there!";
+"membership.subtitle" = "Verify your membership\nto unlock this exclusive offer.";
+"membership.verifiedMember" = "Verified Member";
+"membership.memberSince" = "OneVibe Member since %d";
+"membership.yourVerifiedCode" = "YOUR VERIFIED CODE";
+"membership.copyCode" = "Copy code";
+"membership.copyHint" = "Copies the verified membership code";
+"membership.codeCopied" = "Code copied";
+"membership.date" = "Date";
+"membership.time" = "Time";
+"membership.validUntil" = "Valid Until";
+"membership.validFor" = "Valid For";
+"membership.minutes" = "minutes";
+"membership.oneTimeUse" = "One-time use only";
+"membership.codeOnce" = "This code can only be used once.";
+"membership.betterExperiences" = "Better Experiences";
+"membership.showCodeToStaff" = "Show this code to the staff\nto get your exclusive discount.";
+"membership.helpMessage" = "Show this verified code to venue staff to redeem your OneVibe exclusive. The code expires in 15 minutes and can only be used once.";
+"membership.usage" = "Usage";
+"membership.realPeople" = "Real People";
+
+/* Image picker */
+"picker.takePhoto" = "Take photo";
+"picker.photoLibrary" = "Photo library";
+
+/* Session */
+"session.expiredTitle" = "Session Expired";
+"session.expiredMessage" = "Your session has expired. Please sign in again.";

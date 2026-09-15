@@ -6,6 +6,7 @@ final class OnboardingNameVC: UIViewController {
     @IBOutlet private weak var firstNameField: AuthDarkField!
     @IBOutlet private weak var lastNameField: AuthDarkField!
     @IBOutlet private weak var createButton: GoldGradientButton!
+    @IBOutlet private weak var contentScrollView: UIScrollView?
 
     /// Prefill from Apple / Google social login (first authorization only usually).
     var prefillFirstName: String?
@@ -16,15 +17,18 @@ final class OnboardingNameVC: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         authDismissKeyboardOnTap()
 
-        firstNameField?.placeholder = "First Name"
+        firstNameField?.placeholder = L10n.firstName
         firstNameField?.textField.autocapitalizationType = .words
         firstNameField?.textField.returnKeyType = .next
         firstNameField?.textField.addTarget(self, action: #selector(firstReturn), for: .editingDidEndOnExit)
 
-        lastNameField?.placeholder = "Last Name"
+        lastNameField?.placeholder = L10n.lastName
         lastNameField?.textField.autocapitalizationType = .words
         lastNameField?.textField.returnKeyType = .done
         lastNameField?.textField.addTarget(self, action: #selector(lastReturn), for: .editingDidEndOnExit)
+        if let contentScrollView {
+            pinAuthScrollViewToKeyboard(contentScrollView)
+        }
 
         if let prefillFirstName, !prefillFirstName.isEmpty {
             firstNameField?.text = prefillFirstName
@@ -36,6 +40,10 @@ final class OnboardingNameVC: UIViewController {
         createButton?.setTitleColor(AppPalette.onGold, for: .normal)
         createButton?.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         createButton?.clipsToBounds = true
+        createButton?.setTitle(L10n.createAccount, for: .normal)
+        titleLabel?.text = L10n.nameTitle
+        subtitleLabel?.text = L10n.nameSubtitle
+        applyLocalizedStoryboardCopy()
     }
 
     @IBAction private func backTapped(_ sender: Any) {
@@ -74,22 +82,22 @@ final class OnboardingNameVC: UIViewController {
 
     private func validationMessage(forFirstName first: String, lastName last: String) -> String? {
         if first.isEmpty {
-            return "Please enter your first name."
+            return L10n.enterFirstName
         }
         if first.count < 2 {
-            return "First name must be at least 2 characters."
+            return L10n.firstNameTooShort
         }
         if !isValidPersonName(first) {
-            return "Please enter a valid first name."
+            return L10n.invalidFirstName
         }
         if last.isEmpty {
-            return "Please enter your last name."
+            return L10n.enterLastName
         }
         if last.count < 2 {
-            return "Last name must be at least 2 characters."
+            return L10n.lastNameTooShort
         }
         if !isValidPersonName(last) {
-            return "Please enter a valid last name."
+            return L10n.invalidLastName
         }
         return nil
     }

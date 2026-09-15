@@ -1,7 +1,7 @@
 import UIKit
 
 /// Welcome / auth entry screen. Layout and button chrome live in Authentication.storyboard.
-final class WelcomeVC: UIViewController {
+final class SignupOptionsVC: UIViewController {
     @IBOutlet private weak var phoneButton: GoldGradientButton!
     @IBOutlet private weak var termsTextView: UITextView!
 
@@ -17,6 +17,8 @@ final class WelcomeVC: UIViewController {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)
         phoneButton?.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        phoneButton?.setTitle(L10n.continueWithPhone, for: .normal)
+        applyLocalizedStoryboardCopy()
         configureTermsLinks()
     }
 
@@ -29,7 +31,7 @@ final class WelcomeVC: UIViewController {
         paragraph.alignment = .center
 
         let text = NSMutableAttributedString(
-            string: "By continuing, you agree to our\n",
+            string: L10n.termsPrefix,
             attributes: [
                 .foregroundColor: AppPalette.secondaryText,
                 .font: font,
@@ -37,7 +39,7 @@ final class WelcomeVC: UIViewController {
             ]
         )
         text.append(NSAttributedString(
-            string: "Terms of Service",
+            string: L10n.termsOfService,
             attributes: [
                 .link: Link.terms,
                 .font: UIFont.systemFont(ofSize: 14, weight: .medium),
@@ -46,7 +48,7 @@ final class WelcomeVC: UIViewController {
             ]
         ))
         text.append(NSAttributedString(
-            string: " and ",
+            string: L10n.termsAnd,
             attributes: [
                 .foregroundColor: AppPalette.secondaryText,
                 .font: font,
@@ -54,7 +56,7 @@ final class WelcomeVC: UIViewController {
             ]
         ))
         text.append(NSAttributedString(
-            string: "Privacy Policy",
+            string: L10n.privacyPolicy,
             attributes: [
                 .link: Link.privacy,
                 .font: UIFont.systemFont(ofSize: 14, weight: .medium),
@@ -83,8 +85,9 @@ final class WelcomeVC: UIViewController {
 
     @IBAction private func continueWithPhone(_ sender: Any) {
         // TODO: Phone authentication — UI navigation stub only.
-        let phone = UIStoryboard.authentication
-            .instantiateViewController(withIdentifier: "SignUpViewController")
+        guard let phone = UIStoryboard.authentication
+            .instantiateViewController(withIdentifier: "SignupWithPhoneNumberVC") as? SignupWithPhoneNumberVC
+        else { return }
         navigationController?.pushViewController(phone, animated: true)
     }
 
@@ -166,7 +169,7 @@ final class WelcomeVC: UIViewController {
 
     private func routeToNameEntry(firstName: String?, lastName: String?) {
         guard let enterEmail = UIStoryboard.authentication
-            .instantiateViewController(withIdentifier: "EnterEmailVC") as? EnterEmailVC
+            .instantiateViewController(withIdentifier: "OnboardingNameVC") as? OnboardingNameVC
         else { return }
 
         enterEmail.prefillFirstName = firstName
@@ -204,7 +207,7 @@ final class WelcomeVC: UIViewController {
     }
 }
 
-extension WelcomeVC: UITextViewDelegate {
+extension SignupOptionsVC: UITextViewDelegate {
     func textView(
         _ textView: UITextView,
         shouldInteractWith URL: URL,
@@ -213,9 +216,9 @@ extension WelcomeVC: UITextViewDelegate {
     ) -> Bool {
         switch URL {
         case Link.terms:
-            showAlert(title: "Terms of Service", message: "Terms of Service will be available soon.")
+            showAlert(title: L10n.termsOfService, message: L10n.termsSoon)
         case Link.privacy:
-            showAlert(title: "Privacy Policy", message: "Privacy Policy will be available soon.")
+            showAlert(title: L10n.privacyPolicy, message: L10n.privacySoon)
         default:
             break
         }

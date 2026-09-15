@@ -362,8 +362,8 @@ private enum TabDesign {
 
     var title: String {
         switch self {
-        case .home: return "Home"
-        case .profile: return "Profile"
+        case .home: return L10n.home
+        case .profile: return L10n.profile
         }
     }
 

@@ -13,6 +13,10 @@ final class WelcomeSuccessVC: UIViewController {
         continueButton?.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         continueButton?.clipsToBounds = true
         continueButton?.layer.cornerRadius = 14
+        titleLabel?.text = L10n.welcomeTitle
+        subtitleLabel?.text = L10n.welcomeSubtitle
+        continueButton?.setTitle(L10n.startExploring, for: .normal)
+        applyLocalizedStoryboardCopy()
     }
 
     @IBAction private func startExploring(_ sender: Any) {

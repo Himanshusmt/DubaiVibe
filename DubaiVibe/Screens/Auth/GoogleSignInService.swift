@@ -66,11 +66,11 @@ final class GoogleSignInService {
         var errorDescription: String? {
             switch self {
             case .missingClientID:
-                return "Google Sign-In is not configured yet. Add CLIENT_ID (and REVERSED_CLIENT_ID) to GoogleService-Info.plist, then set the same REVERSED_CLIENT_ID as a URL scheme in Info.plist."
+                return L10n.googleNotConfigured
             case .missingURLScheme(let scheme):
-                return "Add URL scheme \"\(scheme)\" to Info.plist (CFBundleURLTypes). It must match REVERSED_CLIENT_ID from GoogleService-Info.plist."
+                return L10n.googleMissingScheme(scheme)
             case .missingIDToken:
-                return "Google Sign-In did not return an ID token. Please try again."
+                return L10n.googleMissingToken
             case .canceled:
                 return nil
             case .underlying(let error):

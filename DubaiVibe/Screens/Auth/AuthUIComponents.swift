@@ -81,7 +81,7 @@ final class AuthTopBar: UIView {
         backButton.tintColor = AppPalette.primaryText
 
         helpButton.translatesAutoresizingMaskIntoConstraints = false
-        helpButton.setTitle("Help", for: .normal)
+        helpButton.setTitle(L10n.help, for: .normal)
         helpButton.setTitleColor(AppPalette.gold, for: .normal)
         helpButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         helpButton.isHidden = true
@@ -160,10 +160,13 @@ final class AuthDarkField: UIView, UITextFieldDelegate {
         textField.autocorrectionType = .no
 
         addSubview(textField)
+        // Fill the chrome so taps on the padded field hit the UITextField (UIControl),
+        // not the wrapper — otherwise keyboard-dismiss gestures resign instead of focusing.
         var constraints: [NSLayoutConstraint] = [
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            textField.centerYAnchor.constraint(equalTo: centerYAnchor)
+            textField.topAnchor.constraint(equalTo: topAnchor),
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor)
         ]
         let hasHeight = self.constraints.contains {
             $0.firstAttribute == .height && $0.secondItem == nil
@@ -172,6 +175,14 @@ final class AuthDarkField: UIView, UITextFieldDelegate {
             constraints.append(heightAnchor.constraint(equalToConstant: AuthMetrics.fieldHeight))
         }
         NSLayoutConstraint.activate(constraints)
+
+        let focusTap = UITapGestureRecognizer(target: self, action: #selector(focusTextField))
+        focusTap.cancelsTouchesInView = false
+        addGestureRecognizer(focusTap)
+    }
+
+    @objc private func focusTextField() {
+        textField.becomeFirstResponder()
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -536,11 +547,100 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
 
 // MARK: - Helpers
 
+private var authKeyboardScrollViewKey: UInt8 = 0
+private var authKeyboardDismissTapFilterKey: UInt8 = 0
+
+/// Ignores taps on text inputs / field chrome so switching fields doesn't dismiss the keyboard.
+private final class AuthKeyboardDismissTapFilter: NSObject, UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        var hit = touch.view
+        while let current = hit {
+            if current is UIControl || current is UITextView { return false }
+            if current is AuthDarkField || current is AuthPhoneInputView || current is AuthOTPView {
+                return false
+            }
+            hit = current.superview
+        }
+        return true
+    }
+}
+
 extension UIViewController {
     func authDismissKeyboardOnTap() {
+        let filter = AuthKeyboardDismissTapFilter()
+        objc_setAssociatedObject(self, &authKeyboardDismissTapFilterKey, filter, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         tap.cancelsTouchesInView = false
+        tap.delegate = filter
         view.addGestureRecognizer(tap)
+    }
+
+    /// Shrinks `scrollView` with the keyboard and keeps the focused field on screen.
+    func pinAuthScrollViewToKeyboard(_ scrollView: UIScrollView) {
+        objc_setAssociatedObject(self, &authKeyboardScrollViewKey, scrollView, .OBJC_ASSOCIATION_ASSIGN)
+
+        scrollView.keyboardDismissMode = .interactive
+        scrollView.alwaysBounceVertical = true
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.clipsToBounds = true
+
+        view.constraints
+            .filter { constraint in
+                let involvesScroll = (constraint.firstItem as AnyObject?) === scrollView
+                    || (constraint.secondItem as AnyObject?) === scrollView
+                let isBottom = constraint.firstAttribute == .bottom || constraint.secondAttribute == .bottom
+                return involvesScroll && isBottom
+            }
+            .forEach { $0.isActive = false }
+
+        scrollView.bottomAnchor.constraint(
+            equalTo: view.keyboardLayoutGuide.topAnchor,
+            constant: -12
+        ).isActive = true
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(authKeyboardFrameChanged(_:)),
+            name: UIResponder.keyboardDidChangeFrameNotification,
+            object: nil
+        )
+    }
+
+    @objc func authKeyboardFrameChanged(_ notification: Notification) {
+        guard let scrollView = objc_getAssociatedObject(self, &authKeyboardScrollViewKey) as? UIScrollView else {
+            return
+        }
+        guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        let keyboardInView = view.convert(frame, from: nil)
+        view.layoutIfNeeded()
+        guard keyboardInView.intersects(view.bounds.insetBy(dx: 0, dy: 1)) else { return }
+        scrollAuthFocusedField(in: scrollView)
+    }
+
+    func scrollAuthFocusedField(in scrollView: UIScrollView, extraBottomSpace: CGFloat = 110) {
+        guard let focused = authFirstResponder(in: scrollView) else { return }
+
+        var target = focused
+        while let parent = target.superview, parent !== scrollView {
+            if parent.superview === scrollView { break }
+            target = parent
+        }
+
+        var rect = target.convert(target.bounds, to: scrollView)
+        rect.origin.y -= 16
+        rect.size.height += 16 + extraBottomSpace
+        scrollView.scrollRectToVisible(rect, animated: true)
+    }
+
+    private func authFirstResponder(in view: UIView) -> UIView? {
+        if view.isFirstResponder { return view }
+        for subview in view.subviews {
+            if let found = authFirstResponder(in: subview) { return found }
+        }
+        return nil
     }
 
     func makeAuthTitle(_ text: String) -> UILabel {

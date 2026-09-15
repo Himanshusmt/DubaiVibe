@@ -133,7 +133,7 @@ final class VenueCardCell: UITableViewCell {
         viewDealButton.layer.cornerRadius = 12
         viewDealButton.layer.cornerCurve = .continuous
         viewDealButton.clipsToBounds = true
-        viewDealButton.setTitle("View Deal", for: .normal)
+        viewDealButton.setTitle(L10n.viewDeal, for: .normal)
         viewDealButton.setTitleColor(AppPalette.onGold, for: .normal)
         viewDealButton.titleLabel?.font = AppTypography.font(.bold, size: 12)
         viewDealButton.tintColor = AppPalette.onGold
@@ -145,12 +145,12 @@ final class VenueCardCell: UITableViewCell {
         favoriteButton.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         favoriteButton.layer.cornerRadius = 16
         favoriteButton.clipsToBounds = true
-        favoriteButton.accessibilityLabel = "Favorite"
+        favoriteButton.accessibilityLabel = L10n.favorite
 
         bookmarkButton.setImage(UIImage(named: "ExploreBookmark"), for: .normal)
         bookmarkButton.tintColor = nil
         bookmarkButton.backgroundColor = .clear
-        bookmarkButton.accessibilityLabel = "Bookmark"
+        bookmarkButton.accessibilityLabel = L10n.bookmark
 
         favoriteButton.addTarget(self, action: #selector(handleFavorite), for: .touchUpInside)
         bookmarkButton.addTarget(self, action: #selector(handleBookmark), for: .touchUpInside)

@@ -7,6 +7,7 @@ final class EnterOTPVC: UIViewController {
     @IBOutlet private weak var subtitleLabel: UILabel!
     @IBOutlet private weak var otpView: AuthOTPView!
     @IBOutlet private weak var resendLabel: UILabel!
+    @IBOutlet private weak var contentScrollView: UIScrollView?
 
     private var secondsRemaining = 60
     private var timer: Timer?
@@ -19,14 +20,19 @@ final class EnterOTPVC: UIViewController {
 
         configureSubtitle()
         otpView?.delegate = self
+        if let contentScrollView {
+            pinAuthScrollViewToKeyboard(contentScrollView)
+        }
         resendLabel?.isUserInteractionEnabled = true
         resendLabel?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(resendTapped)))
 
         startResendTimer()
+        applyLocalizedStoryboardCopy()
     }
 
     private func configureSubtitle() {
-        let prefix = "We sent a verification code to\n"
+        titleLabel?.text = L10n.otpTitle
+        let prefix = L10n.otpSentPrefix
         let phone = phoneNumberDisplay.isEmpty ? "" : phoneNumberDisplay
         let text = NSMutableAttributedString(
             string: prefix,
@@ -82,14 +88,14 @@ final class EnterOTPVC: UIViewController {
     }
 
     private func updateResendLabel() {
-        let prefix = "Didn't receive the code? "
+        let prefix = L10n.otpDidntReceive
         let suffix: String
         if secondsRemaining > 0 {
             let minutes = secondsRemaining / 60
             let seconds = secondsRemaining % 60
-            suffix = String(format: "Resend in %02d:%02d", minutes, seconds)
+            suffix = L10n.otpResendIn(minutes: minutes, seconds: seconds)
         } else {
-            suffix = "Resend"
+            suffix = L10n.otpResend
         }
         let text = NSMutableAttributedString(
             string: prefix,
@@ -113,7 +119,7 @@ final class EnterOTPVC: UIViewController {
         guard !didAdvance else { return }
         didAdvance = true
         navigationController?.pushViewController(
-            UIStoryboard.authentication.instantiateViewController(withIdentifier: "EnterEmailVC"),
+            UIStoryboard.authentication.instantiateViewController(withIdentifier: "OnboardingNameVC"),
             animated: true
         )
     }

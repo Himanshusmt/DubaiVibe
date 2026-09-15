@@ -23,7 +23,7 @@ final class AppleSignInService: NSObject {
             case .canceled:
                 return nil
             case .missingToken:
-                return "Apple Sign-In did not return an identity token. Please try again."
+                return L10n.appleMissingToken
             case .underlying(let error):
                 return error.localizedDescription
             }

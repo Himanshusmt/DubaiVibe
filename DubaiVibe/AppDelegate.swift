@@ -7,9 +7,11 @@ import IQKeyboardManagerSwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        LocalizationManager.shared.applySavedLanguage()
         FirebaseApp.configure()
         GoogleServiceConfig.configureGIDSignInIfPossible()
         UIFont.installInterAsSystemFont()
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = AppPalette.gold
         configureKeyboardManager()
         LaunchOverlay.begin()
         return true
@@ -19,6 +21,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let keyboard = IQKeyboardManager.shared
         keyboard.isEnabled = true
         keyboard.resignOnTouchOutside = true
+        keyboard.keyboardDistance = 24
+        keyboard.disabledDistanceHandlingClasses.append(contentsOf: [
+            SignupWithPhoneNumberVC.self,
+            EnterOTPVC.self,
+            OnboardingNameVC.self
+        ])
+        // Auth fields wrap UITextField in UIView chrome; treat the chrome as a control
+        // so tapping another field focuses it instead of resigning the keyboard.
+        keyboard.touchResignedGestureIgnoreClasses.append(contentsOf: [
+            AuthDarkField.self,
+            AuthPhoneInputView.self,
+            AuthOTPView.self
+        ])
     }
 
     func application(

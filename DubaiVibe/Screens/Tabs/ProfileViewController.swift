@@ -12,6 +12,7 @@ final class ProfileViewController: UIViewController {
     @IBOutlet weak var lastNameField: AuthDarkField!
     @IBOutlet weak var saveButton: GoldGradientButton!
 
+    private let languageRow = LanguageSettingRow()
     private var imagePicker: TDImagePicker?
     private var pendingAvatarImage: UIImage?
     private var baselineFirstName = ""
@@ -35,10 +36,12 @@ final class ProfileViewController: UIViewController {
         authDismissKeyboardOnTap()
         configureHeader()
         configureFields()
+        configureLanguageRow()
         configureAvatar()
         configureSaveButton()
         loadSavedProfile()
         updateSaveButtonState()
+        applyLocalizedStoryboardCopy()
     }
 
     override func viewDidLayoutSubviews() {
@@ -56,10 +59,10 @@ final class ProfileViewController: UIViewController {
         brandImageView?.layer.cornerRadius = 14
         brandImageView?.layer.cornerCurve = .continuous
         brandImageView?.clipsToBounds = true
-        brandImageView?.accessibilityLabel = "Dubai Vibe"
+        brandImageView?.accessibilityLabel = L10n.brandName
 
         taglineLabel?.attributedText = NSAttributedString(
-            string: "DUBAI • EAT • DRINK • EXPLORE",
+            string: L10n.tagline,
             attributes: [
                 .font: AppTypography.font(.medium, size: 9.5),
                 .foregroundColor: AppPalette.tagline,
@@ -69,7 +72,7 @@ final class ProfileViewController: UIViewController {
 
         notificationButton?.setImage(UIImage(named: "ExploreBell"), for: .normal)
         notificationButton?.tintColor = nil
-        notificationButton?.accessibilityLabel = "Notifications"
+        notificationButton?.accessibilityLabel = L10n.notifications
         notificationButton?.addTarget(self, action: #selector(handleNotifications), for: .touchUpInside)
 
         bellDotView?.backgroundColor = AppPalette.badgeRed
@@ -81,21 +84,68 @@ final class ProfileViewController: UIViewController {
 
     @objc private func handleNotifications() {
         bellDotView?.isHidden = true
-        showAlert(title: "Notifications", message: "Coming soon")
+        showAlert(title: L10n.notifications, message: L10n.comingSoon)
     }
 
     private func configureFields() {
-        firstNameField?.placeholder = "First Name"
+        firstNameField?.placeholder = L10n.firstName
         firstNameField?.textField.autocapitalizationType = .words
         firstNameField?.textField.returnKeyType = .next
         firstNameField?.textField.addTarget(self, action: #selector(firstReturn), for: .editingDidEndOnExit)
         firstNameField?.textField.addTarget(self, action: #selector(fieldsChanged), for: .editingChanged)
 
-        lastNameField?.placeholder = "Last Name"
+        lastNameField?.placeholder = L10n.lastName
         lastNameField?.textField.autocapitalizationType = .words
         lastNameField?.textField.returnKeyType = .done
         lastNameField?.textField.addTarget(self, action: #selector(lastReturn), for: .editingDidEndOnExit)
         lastNameField?.textField.addTarget(self, action: #selector(fieldsChanged), for: .editingChanged)
+    }
+
+    private func configureLanguageRow() {
+        guard let lastNameField, let saveButton, let content = lastNameField.superview else { return }
+
+        languageRow.refresh()
+        languageRow.addTarget(self, action: #selector(languageRowTapped), for: .touchUpInside)
+        content.addSubview(languageRow)
+
+        content.constraints
+            .filter { constraint in
+                constraint.firstItem === saveButton
+                    && constraint.firstAttribute == .top
+                    && constraint.secondItem === lastNameField
+            }
+            .forEach { $0.isActive = false }
+
+        NSLayoutConstraint.activate([
+            languageRow.leadingAnchor.constraint(equalTo: lastNameField.leadingAnchor),
+            languageRow.trailingAnchor.constraint(equalTo: lastNameField.trailingAnchor),
+            languageRow.topAnchor.constraint(equalTo: lastNameField.bottomAnchor, constant: 14),
+            saveButton.topAnchor.constraint(equalTo: languageRow.bottomAnchor, constant: 30)
+        ])
+    }
+
+    @objc private func languageRowTapped() {
+        let sheet = UIAlertController(title: L10n.language, message: nil, preferredStyle: .actionSheet)
+        let current = LocalizationManager.shared.language
+        for language in AppLanguage.allCases {
+            let title = language == current
+                ? "✓ \(language.nativeName)"
+                : language.nativeName
+            sheet.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
+                self?.changeLanguage(to: language)
+            })
+        }
+        sheet.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
+        if let popover = sheet.popoverPresentationController {
+            popover.sourceView = languageRow
+            popover.sourceRect = languageRow.bounds
+        }
+        presentStyledAlert(sheet)
+    }
+
+    private func changeLanguage(to language: AppLanguage) {
+        guard LocalizationManager.shared.setLanguage(language) else { return }
+        AppRouter.reloadInterface(selectingProfile: true)
     }
 
     private func configureAvatar() {
@@ -105,14 +155,12 @@ final class ProfileViewController: UIViewController {
         avatarImageView?.tintAdjustmentMode = .normal
         avatarImageView?.layer.borderWidth = 3
         avatarImageView?.layer.borderColor = AppPalette.gold.cgColor
-        avatarImageView?.layer.cornerRadius = avatarImageView.frame.height / 2
-//        applyCircularAvatar()
-        applyPlaceholderAvatar()
 
         cameraBadge?.backgroundColor = AppPalette.gold
         cameraBadge?.layer.cornerRadius = 16
         cameraBadge?.clipsToBounds = true
         cameraBadge?.tintAdjustmentMode = .normal
+
         if let iconView = cameraBadge?.subviews.first as? UIImageView {
             let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold)
             iconView.image = UIImage(systemName: "camera.fill", withConfiguration: config)?
@@ -132,22 +180,8 @@ final class ProfileViewController: UIViewController {
         imagePicker = TDImagePicker(presentationController: self, delegate: self)
     }
 
-//    private func applyCircularAvatar() {
-//        guard let avatarImageView else { return }
-//        avatarImageView.clipsToBounds = true
-//        avatarImageView.layer.masksToBounds = true
-//        avatarImageView.layer.cornerCurve = .circular
-//        avatarImageView.layer.maskedCorners = [
-//            .layerMinXMinYCorner,
-//            .layerMaxXMinYCorner,
-//            .layerMinXMaxYCorner,
-//            .layerMaxXMaxYCorner
-//        ]
-//        
-//    }
-
     private func configureSaveButton() {
-        saveButton?.setTitle("Save", for: .normal)
+        saveButton?.setTitle(L10n.save, for: .normal)
         saveButton?.setTitleColor(AppPalette.onGold, for: .normal)
         saveButton?.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         saveButton?.clipsToBounds = true
@@ -169,23 +203,15 @@ final class ProfileViewController: UIViewController {
         if let image = loadAvatarFromDisk() {
             pendingAvatarImage = image
             applyPhotoAvatar(image)
+        } else {
+           //
         }
-    }
-
-    private func applyPlaceholderAvatar() {
-        // Keep icon inset so the circle rim stays round (aspectFill was clipping top/bottom).
-        let config = UIImage.SymbolConfiguration(pointSize: 36, weight: .regular)
-        avatarImageView?.image = UIImage(systemName: "person.fill", withConfiguration: config)?
-            .withRenderingMode(.alwaysTemplate)
-        avatarImageView?.tintColor = AppPalette.gold
-        avatarImageView?.contentMode = .center
     }
 
     private func applyPhotoAvatar(_ image: UIImage) {
         avatarImageView?.image = image
         avatarImageView?.tintColor = nil
         avatarImageView?.contentMode = .scaleAspectFill
-//        applyCircularAvatar()
     }
 
     @objc private func fieldsChanged() {
@@ -245,27 +271,27 @@ final class ProfileViewController: UIViewController {
         avatarChanged = false
         updateSaveButtonState()
 
-        showAlert(title: "Saved", message: "Your profile has been updated.")
+        showAlert(title: L10n.saved, message: L10n.profileUpdated)
     }
 
     private func validationMessage(forFirstName first: String, lastName last: String) -> String? {
         if first.isEmpty {
-            return "Please enter your first name."
+            return L10n.enterFirstName
         }
         if first.count < 2 {
-            return "First name must be at least 2 characters."
+            return L10n.firstNameTooShort
         }
         if !isValidPersonName(first) {
-            return "Please enter a valid first name."
+            return L10n.invalidFirstName
         }
         if last.isEmpty {
-            return "Please enter your last name."
+            return L10n.enterLastName
         }
         if last.count < 2 {
-            return "Last name must be at least 2 characters."
+            return L10n.lastNameTooShort
         }
         if !isValidPersonName(last) {
-            return "Please enter a valid last name."
+            return L10n.invalidLastName
         }
         return nil
     }

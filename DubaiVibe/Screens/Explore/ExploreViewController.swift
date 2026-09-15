@@ -52,6 +52,7 @@ final class ExploreViewController: UIViewController {
         configureCategories()
         configureTable()
         loadFeed()
+        applyLocalizedStoryboardCopy()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -95,10 +96,10 @@ private extension ExploreViewController {
         brandImageView.layer.cornerRadius = 14
         brandImageView.layer.cornerCurve = .continuous
         brandImageView.clipsToBounds = true
-        brandImageView.accessibilityLabel = "Dubai Vibe"
+        brandImageView.accessibilityLabel = L10n.brandName
 
         taglineLabel.attributedText = NSAttributedString(
-            string: "DUBAI • EAT • DRINK • EXPLORE",
+            string: L10n.tagline,
             attributes: [
                 .font: AppTypography.font(.medium, size: 9.5),
                 .foregroundColor: AppPalette.tagline,
@@ -108,7 +109,7 @@ private extension ExploreViewController {
 
         notificationButton.setImage(UIImage(named: "ExploreBell"), for: .normal)
         notificationButton.tintColor = nil
-        notificationButton.accessibilityLabel = "Notifications"
+        notificationButton.accessibilityLabel = L10n.notifications
         notificationButton.addTarget(self, action: #selector(handleNotifications), for: .touchUpInside)
 
         bellDotView.backgroundColor = AppPalette.badgeRed
@@ -128,7 +129,7 @@ private extension ExploreViewController {
         locationChevronImageView.tintColor = AppPalette.primaryText
 
         locationTitleLabel.attributedText = NSAttributedString(
-            string: "Dubai",
+            string: L10n.cityDubai,
             attributes: [
                 .font: AppTypography.font(.semibold, size: 14),
                 .foregroundColor: AppPalette.primaryText,
@@ -142,11 +143,11 @@ private extension ExploreViewController {
         locationPillView.layer.borderWidth = 1
         locationPillView.layer.borderColor = AppPalette.locationBorder.cgColor
 
-        locationButton.accessibilityLabel = "City: Dubai"
+        locationButton.accessibilityLabel = L10n.cityDubaiAccessibility
         locationButton.menu = UIMenu(children: [
-            UIAction(title: "Dubai", state: .on) { _ in },
-            UIAction(title: "Abu Dhabi") { [weak self] _ in
-                self?.presentSoon(title: "Abu Dhabi")
+            UIAction(title: L10n.cityDubai, state: .on) { _ in },
+            UIAction(title: L10n.cityAbuDhabi) { [weak self] _ in
+                self?.presentSoon(title: L10n.cityAbuDhabi)
             }
         ])
         locationButton.showsMenuAsPrimaryAction = true
@@ -180,7 +181,7 @@ private extension ExploreViewController {
         searchTextField.textColor = AppPalette.primaryText
         searchTextField.tintColor = AppPalette.gold
         searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "Search restaurants, bars, nightlife, beaches...",
+            string: L10n.searchPlaceholder,
             attributes: [
                 .font: AppTypography.font(.regular, size: 12),
                 .foregroundColor: AppPalette.searchPlaceholder
@@ -205,8 +206,8 @@ private extension ExploreViewController {
         toolbar.barTintColor = AppPalette.surface
         toolbar.tintColor = AppPalette.gold
 
-        let clear = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearSearch))
-        let done = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboard))
+        let clear = UIBarButtonItem(title: L10n.clear, style: .plain, target: self, action: #selector(clearSearch))
+        let done = UIBarButtonItem(title: L10n.done, style: .plain, target: self, action: #selector(dismissKeyboard))
         done.setTitleTextAttributes([.font: AppTypography.font(.semibold, size: 16)], for: .normal)
 
         toolbar.items = [clear, UIBarButtonItem(systemItem: .flexibleSpace), done]
@@ -354,13 +355,13 @@ private extension ExploreViewController {
 
     @objc func handleNotifications() {
         bellDotView.isHidden = true
-        presentSoon(title: "Notifications")
+        presentSoon(title: L10n.notifications)
     }
 
     func presentSoon(title: String) {
-        let alert = UIAlertController(title: title, message: "Coming soon", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        let alert = UIAlertController(title: title, message: L10n.comingSoon, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: L10n.ok, style: .default))
+        presentStyledAlert(alert)
     }
 }
 

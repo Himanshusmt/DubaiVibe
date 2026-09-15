@@ -15,7 +15,7 @@ enum AppRouter {
 
     static func makeAuthRoot() -> UIViewController {
         let welcome = UIStoryboard.authentication
-            .instantiateViewController(withIdentifier: "WelcomeVC")
+            .instantiateViewController(withIdentifier: "SignupOptionsVC")
         let nav = UINavigationController(rootViewController: welcome)
         nav.setNavigationBarHidden(true, animated: false)
         nav.navigationBar.isHidden = true
@@ -27,10 +27,25 @@ enum AppRouter {
         setRoot(makeAuthRoot(), on: window, animated: animated)
     }
 
-    static func setRootMain(animated: Bool = true) {
+    static func setRootMain(animated: Bool = true, selectingProfile: Bool = false) {
         guard let window = keyWindow() else { return }
         let root = UIStoryboard.main.instantiateViewController(withIdentifier: "MainTabBarController")
+        if selectingProfile, let tabs = root as? UITabBarController {
+            tabs.selectedIndex = min(1, (tabs.viewControllers?.count ?? 1) - 1)
+        }
         setRoot(root, on: window, animated: animated)
+    }
+
+    /// Rebuilds the current root so every screen picks up a newly selected language.
+    static func reloadInterface(selectingProfile: Bool = false) {
+        guard let window = keyWindow() else { return }
+        let showingMain = window.rootViewController is MainTabBarController
+            || (window.rootViewController as? UITabBarController) != nil
+        if showingMain {
+            setRootMain(animated: true, selectingProfile: selectingProfile)
+        } else {
+            setRootAuth(animated: true)
+        }
     }
 
     static func configureRoot(for window: UIWindow) {

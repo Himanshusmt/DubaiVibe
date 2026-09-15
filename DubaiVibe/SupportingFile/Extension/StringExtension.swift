@@ -53,6 +53,42 @@ extension String {
         return formatted
     }
 
+    var uaeStrippedMobileDigits: String {
+        var digits = digitsOnly
+
+        if digits.hasPrefix("971") {
+            digits = String(digits.dropFirst(3))
+        }
+        if digits.hasPrefix("0") {
+            digits = String(digits.dropFirst())
+        }
+
+        return digits
+    }
+
+    var uaeLocalMobileDigits: String {
+        String(uaeStrippedMobileDigits.prefix(9))
+    }
+
+    var uaeFormattedPhoneNumber: String {
+        let digits = uaeLocalMobileDigits
+        var formatted = ""
+
+        for (index, digit) in digits.enumerated() {
+            if index == 2 || index == 5 {
+                formatted.append(" ")
+            }
+            formatted.append(digit)
+        }
+
+        return formatted
+    }
+
+    var isValidUAEMobileNumber: Bool {
+        let digits = uaeLocalMobileDigits
+        return digits.count == 9 && digits.hasPrefix("5")
+    }
+
     func localPhoneDigits(strippingDialCode dialCode: String) -> String {
         var digits = digitsOnly
         let dialDigits = dialCode.digitsOnly
@@ -66,9 +102,15 @@ extension String {
 
     func phoneDisplay(dialCode: String, countryISO: String) -> String {
         let localDigits = localPhoneDigits(strippingDialCode: dialCode)
-        let localNumber = countryISO.uppercased() == "US"
-            ? localDigits.usFormattedPhoneNumber
-            : localDigits
+        let localNumber: String
+        switch countryISO.uppercased() {
+        case "US":
+            localNumber = localDigits.usFormattedPhoneNumber
+        case "AE":
+            localNumber = localDigits.uaeFormattedPhoneNumber
+        default:
+            localNumber = localDigits
+        }
 
         guard !dialCode.isEmpty else { return localNumber }
         return "\(dialCode) \(localNumber)"

@@ -78,7 +78,7 @@ private extension VenuePhotoPreviewViewController {
         closeButton.clipsToBounds = true
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.addTarget(self, action: #selector(handleClose), for: .touchUpInside)
-        closeButton.accessibilityLabel = "Close"
+        closeButton.accessibilityLabel = L10n.close
         view.addSubview(closeButton)
 
         pageLabel.font = AppTypography.font(.semibold, size: 14)

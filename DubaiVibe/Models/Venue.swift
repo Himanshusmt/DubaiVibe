@@ -15,17 +15,17 @@ enum VenueCategory: String, CaseIterable, Hashable {
 
     var title: String {
         switch self {
-        case .all: return "All"
-        case .restaurants: return "Restaurants"
-        case .bars: return "Bars & Lounges"
-        case .nightlife: return "Nightlife"
-        case .cafes: return "Cafés"
-        case .brunches: return "Brunches"
-        case .beachClubs: return "Beach Clubs"
-        case .ladiesNights: return "Ladies Nights"
-        case .gymsFitness: return "Gyms & Fitness"
-        case .padelTennis: return "Padel & Tennis"
-        case .beautySalons: return "Beauty & Salons"
+        case .all: return L10n.categoryAll
+        case .restaurants: return L10n.categoryRestaurants
+        case .bars: return L10n.categoryBars
+        case .nightlife: return L10n.categoryNightlife
+        case .cafes: return L10n.categoryCafes
+        case .brunches: return L10n.categoryBrunches
+        case .beachClubs: return L10n.categoryBeachClubs
+        case .ladiesNights: return L10n.categoryLadiesNights
+        case .gymsFitness: return L10n.categoryGyms
+        case .padelTennis: return L10n.categoryPadel
+        case .beautySalons: return L10n.categoryBeauty
         }
     }
 
@@ -73,14 +73,16 @@ enum ArtworkStyle: String, Hashable {
 }
 
 struct Deal: Hashable {
-    static let exclusiveBadge = "DUBAI VIBE EXCLUSIVE"
+    static var exclusiveBadge: String { L10n.exclusiveBadge }
 
     /// Used when a venue has no API/mock deal so every Explore card still shows the banner.
-    static let fallback = Deal(
-        discount: "15% OFF",
-        detail: "Your total bill",
-        validity: "Sunday – Thursday"
-    )
+    static var fallback: Deal {
+        Deal(
+            discount: "15% OFF",
+            detail: "Your total bill",
+            validity: "Sunday – Thursday"
+        )
+    }
 
     var badge: String = Deal.exclusiveBadge
     let discount: String

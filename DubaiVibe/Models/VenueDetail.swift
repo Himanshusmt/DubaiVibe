@@ -9,11 +9,11 @@ enum VenueDetailTab: String, CaseIterable, Hashable {
 
     var title: String {
         switch self {
-        case .about: return "About"
-        case .menu: return "Menu"
-        case .vibes: return "Vibes"
-        case .deals: return "Deals"
-        case .reviews: return "Reviews"
+        case .about: return L10n.about
+        case .menu: return L10n.menu
+        case .vibes: return L10n.vibes
+        case .deals: return L10n.deals
+        case .reviews: return L10n.reviews
         }
     }
 }
@@ -63,5 +63,5 @@ struct VenueDetail: Hashable {
         return "(\(reviewCount))"
     }
 
-    var photoCountText: String { "\(photoCount) Photos" }
+    var photoCountText: String { L10n.photosCount(photoCount) }
 }
