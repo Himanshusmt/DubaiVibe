@@ -1,7 +1,7 @@
 import Combine
 import Foundation
 
-/// Response shape for DubaiVibe Apple login — wire when backend is ready.
+/// Response shape for DubaiVibe Apple login.
 struct AppleLoginResponse: Codable {
     let success: Bool?
     let message: String?
@@ -39,9 +39,7 @@ struct AppleLoginResponse: Codable {
     }
 }
 
-/// Apple backend login. Intentionally not calling MyGuardianLink — DubaiVibe API TBD.
 enum AppleAuthAPI {
-    /// Builds the request body we will send once `APIEndpoint.baseURL` points at DubaiVibe.
     static func requestBody(for credential: AppleSignInService.Credential) -> [String: Any] {
         var parameters: [String: Any] = [
             "device": FCMNotificationManager.devicePayload(),
@@ -52,6 +50,9 @@ enum AppleAuthAPI {
 
         if let code = credential.authorizationCode, !code.isEmpty {
             parameters["authorizationCode"] = code
+        }
+        if let nonce = credential.nonce, !nonce.isEmpty {
+            parameters["nonce"] = nonce
         }
         if let email = credential.email, !email.isEmpty {
             parameters["email"] = email
@@ -68,18 +69,17 @@ enum AppleAuthAPI {
         return parameters
     }
 
-    /// Call only after DubaiVibe `/apple` exists. Do not hit MyGuardianLink.
     static func login(
         credential: AppleSignInService.Credential,
         showLoader: Bool = true
     ) -> AnyPublisher<AppleLoginResponse, APIError> {
-        // Backend not ready — keep helper ready without network call.
-        Fail(error: APIError.custom(
-            message: "DubaiVibe Apple login API is not configured yet.",
-            code: "APPLE_API_PENDING",
-            currentGroupName: nil,
-            newGroupName: nil
-        ))
-        .eraseToAnyPublisher()
+        NetworkManager.shared.request(
+            endpoint: .appleLogin,
+            method: .POST,
+            parameters: requestBody(for: credential),
+            showLoader: showLoader,
+            showErrorAlert: false,
+            retryCount: 0
+        )
     }
 }

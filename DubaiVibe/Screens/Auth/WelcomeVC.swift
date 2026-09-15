@@ -1,3 +1,4 @@
+import Combine
 import UIKit
 
 /// Welcome / auth entry screen. Layout and button chrome live in Authentication.storyboard.
@@ -7,6 +8,8 @@ final class WelcomeVC: UIViewController {
 
     private let appleSignIn = AppleSignInService()
     private let googleSignIn = GoogleSignInService()
+    private var cancellables = Set<AnyCancellable>()
+    private var isSocialSignInInFlight = false
 
     private enum Link {
         static let terms = URL(string: "dubaivibe://terms")!
@@ -89,46 +92,41 @@ final class WelcomeVC: UIViewController {
     }
 
     @IBAction private func continueWithApple(_ sender: Any) {
+        guard !isSocialSignInInFlight else { return }
+        isSocialSignInInFlight = true
+
         appleSignIn.signIn(from: self) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let credential):
                 self.handleAppleCredential(credential)
             case .failure(.canceled):
-                break
+                self.isSocialSignInInFlight = false
             case .failure(let error):
-                if let message = error.errorDescription, !message.isEmpty {
-                    self.showAnimatedAlert(
-                        title: "Something went wrong",
-                        message: message,
-                        style: .warning
-                    )
-                }
+                self.isSocialSignInInFlight = false
+                self.showSocialSignInError(error.errorDescription)
             }
         }
     }
 
     @IBAction private func continueWithGoogle(_ sender: Any) {
+        guard !isSocialSignInInFlight else { return }
+        isSocialSignInInFlight = true
+
         googleSignIn.signIn(from: self) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let credential):
                 self.handleGoogleCredential(credential)
             case .failure(.canceled):
-                break
+                self.isSocialSignInInFlight = false
             case .failure(let error):
-                if let message = error.errorDescription, !message.isEmpty {
-                    self.showAnimatedAlert(
-                        title: "Something went wrong",
-                        message: message,
-                        style: .warning
-                    )
-                }
+                self.isSocialSignInInFlight = false
+                self.showSocialSignInError(error.errorDescription)
             }
         }
     }
 
-    /// Backend not ready yet — complete Apple auth locally, skip MyGuardianLink `/apple`.
     private func handleAppleCredential(_ credential: AppleSignInService.Credential) {
         persistAppleProfile(from: credential)
         let cached = TokenManager.shared.appleUserName(for: credential.userId)
@@ -137,26 +135,80 @@ final class WelcomeVC: UIViewController {
             familyName: credential.familyName,
             fullName: credential.fullName ?? cached
         )
-        routeToNameEntry(firstName: first, lastName: last)
+
+        AppleAuthAPI.login(credential: credential, showLoader: true)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                self.isSocialSignInInFlight = false
+                if case .failure = completion {
+                    // Native Apple auth succeeded — continue onboarding if /apple is not ready yet.
+                    self.routeToNameEntry(firstName: first, lastName: last)
+                }
+            } receiveValue: { [weak self] response in
+                guard let self else { return }
+                self.applySocialSession(
+                    accessToken: response.resolvedAccessToken,
+                    onboardingCompleted: response.resolvedOnboardingCompleted
+                )
+                self.routeAfterSocialLogin(firstName: first, lastName: last)
+            }
+            .store(in: &cancellables)
     }
 
-    /// Backend not ready yet — complete Google auth locally, skip MyGuardianLink `/google`.
     private func handleGoogleCredential(_ credential: GoogleSignInService.Credential) {
-        if let email = credential.email, !email.isEmpty {
-            UserDefaults.standard.set(email, forKey: "GoogleSignInEmail")
-        }
-        if let fullName = credential.fullName, !fullName.isEmpty {
-            TokenManager.shared.saveSocialFullName(fullName)
-        }
+        persistGoogleProfile(from: credential)
         let (first, last) = Self.splitPersonName(
             givenName: credential.givenName,
             familyName: credential.familyName,
             fullName: credential.fullName
         )
-        routeToNameEntry(firstName: first, lastName: last)
+
+        GoogleAuthAPI.login(credential: credential, showLoader: true)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                self.isSocialSignInInFlight = false
+                if case .failure = completion {
+                    // Native Google auth succeeded — continue onboarding if /google is not ready yet.
+                    self.routeToNameEntry(firstName: first, lastName: last)
+                }
+            } receiveValue: { [weak self] response in
+                guard let self else { return }
+                self.applySocialSession(
+                    accessToken: response.resolvedAccessToken,
+                    onboardingCompleted: response.resolvedOnboardingCompleted
+                )
+                self.routeAfterSocialLogin(firstName: first, lastName: last)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func applySocialSession(accessToken: String?, onboardingCompleted: Bool) {
+        if let token = accessToken, !token.isEmpty {
+            TokenManager.shared.saveAccessToken(token)
+            UserDefaults.standard.setLoggedIn(value: true)
+        }
+        TokenManager.shared.isOnboardingCompleted = onboardingCompleted
+    }
+
+    private func routeAfterSocialLogin(firstName: String?, lastName: String?) {
+        if TokenManager.shared.isLoggedIn, TokenManager.shared.isOnboardingCompleted {
+            AppRouter.setRootMain(animated: true)
+        } else {
+            routeToNameEntry(firstName: firstName, lastName: lastName)
+        }
+    }
+
+    private func showSocialSignInError(_ message: String?) {
+        guard let message, !message.isEmpty else { return }
+        showAnimatedAlert(
+            title: "Something went wrong",
+            message: message,
+            style: .warning
+        )
     }
 
     private func persistAppleProfile(from credential: AppleSignInService.Credential) {
+        UserDefaults.standard.set(credential.userId, forKey: "AppleSignInUserId")
         if let email = credential.email, !email.isEmpty {
             UserDefaults.standard.set(email, forKey: "AppleSignInEmail")
         }
@@ -170,6 +222,20 @@ final class WelcomeVC: UIViewController {
         let cached = TokenManager.shared.appleUserName(for: credential.userId)
         let resolvedName = credential.fullName ?? cached
         TokenManager.shared.saveAppleUserName(appleUserId: credential.userId, fullName: resolvedName)
+    }
+
+    private func persistGoogleProfile(from credential: GoogleSignInService.Credential) {
+        UserDefaults.standard.set(credential.userId, forKey: "GoogleSignInUserId")
+        if let email = credential.email, !email.isEmpty {
+            UserDefaults.standard.set(email, forKey: "GoogleSignInEmail")
+        }
+        if let given = credential.givenName, !given.isEmpty {
+            UserDefaults.standard.set(given, forKey: "GoogleSignInGivenName")
+        }
+        if let family = credential.familyName, !family.isEmpty {
+            UserDefaults.standard.set(family, forKey: "GoogleSignInFamilyName")
+        }
+        TokenManager.shared.saveSocialFullName(credential.fullName)
     }
 
     private func routeToNameEntry(firstName: String?, lastName: String?) {

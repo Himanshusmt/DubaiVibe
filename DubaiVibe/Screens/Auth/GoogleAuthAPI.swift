@@ -1,7 +1,7 @@
 import Combine
 import Foundation
 
-/// Response shape for DubaiVibe Google login — wire when backend is ready.
+/// Response shape for DubaiVibe Google login.
 struct GoogleLoginResponse: Codable {
     let success: Bool?
     let message: String?
@@ -24,9 +24,16 @@ struct GoogleLoginResponse: Codable {
             .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
             .first { !$0.isEmpty }
     }
+
+    var resolvedOnboardingCompleted: Bool {
+        isOnboardingCompleted
+            ?? data?.isOnboardingCompleted
+            ?? isProfileCompleted
+            ?? data?.isProfileCompleted
+            ?? false
+    }
 }
 
-/// Google backend login. Do not call MyGuardianLink — DubaiVibe API TBD.
 enum GoogleAuthAPI {
     static func requestBody(for credential: GoogleSignInService.Credential) -> [String: Any] {
         var parameters: [String: Any] = [
@@ -57,12 +64,13 @@ enum GoogleAuthAPI {
         credential: GoogleSignInService.Credential,
         showLoader: Bool = true
     ) -> AnyPublisher<GoogleLoginResponse, APIError> {
-        Fail(error: APIError.custom(
-            message: "DubaiVibe Google login API is not configured yet.",
-            code: "GOOGLE_API_PENDING",
-            currentGroupName: nil,
-            newGroupName: nil
-        ))
-        .eraseToAnyPublisher()
+        NetworkManager.shared.request(
+            endpoint: .googleLogin,
+            method: .POST,
+            parameters: requestBody(for: credential),
+            showLoader: showLoader,
+            showErrorAlert: false,
+            retryCount: 0
+        )
     }
 }
