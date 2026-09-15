@@ -358,9 +358,7 @@ private extension ExploreViewController {
     }
 
     func presentSoon(title: String) {
-        let alert = UIAlertController(title: title, message: "Coming soon", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        showAnimatedAlert(title: title, message: "Coming soon", style: .info)
     }
 }
 

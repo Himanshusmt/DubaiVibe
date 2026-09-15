@@ -515,9 +515,7 @@ private extension VenueDetailViewController {
     }
 
     func presentAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        showAnimatedAlert(title: title, message: message, style: .info)
     }
 
     /// Brand tile: first word only; long words truncate to 4 characters + ellipsis.

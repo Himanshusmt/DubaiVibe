@@ -1150,16 +1150,14 @@ final class NetworkManager {
             return
         }
 
-        let alert = UIAlertController(
+        presenter.showAnimatedAlert(
             title: "Session Expired",
             message: "Your session has expired. Please sign in again.",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            style: .warning
+        ) { [weak self] in
             self?.navigateToSignUpAfterUnauthorized()
             self?.isHandlingUnauthorizedSession = false
-        })
-        presenter.present(alert, animated: true)
+        }
     }
 
     private func navigateToSignUpAfterUnauthorized() {
@@ -1419,25 +1417,19 @@ extension UIViewController {
         title: String = "Error",
         message: String
     ) {
-        
-        let alert =
-        UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(
-            UIAlertAction(
-                title: "OK",
-                style: .default
-            )
-        )
-        
-        present(
-            alert,
-            animated: true
-        )
+        let style = AuthAlertStyle.inferred(fromTitle: title, message: message)
+        let lowered = message.lowercased()
+        let isValidation = lowered.contains("please enter")
+            || lowered.contains("valid")
+            || lowered.contains("must be")
+            || lowered.contains("needed")
+        let resolvedTitle: String
+        if title == "Error" {
+            resolvedTitle = isValidation ? "Check your details" : "Something went wrong"
+        } else {
+            resolvedTitle = title
+        }
+        showAnimatedAlert(title: resolvedTitle, message: message, style: style)
     }
 }
 

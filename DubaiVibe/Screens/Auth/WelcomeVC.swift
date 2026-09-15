@@ -98,7 +98,11 @@ final class WelcomeVC: UIViewController {
                 break
             case .failure(let error):
                 if let message = error.errorDescription, !message.isEmpty {
-                    self.showAlert(message: message)
+                    self.showAnimatedAlert(
+                        title: "Something went wrong",
+                        message: message,
+                        style: .warning
+                    )
                 }
             }
         }
@@ -114,7 +118,11 @@ final class WelcomeVC: UIViewController {
                 break
             case .failure(let error):
                 if let message = error.errorDescription, !message.isEmpty {
-                    self.showAlert(message: message)
+                    self.showAnimatedAlert(
+                        title: "Something went wrong",
+                        message: message,
+                        style: .warning
+                    )
                 }
             }
         }
@@ -213,9 +221,17 @@ extension WelcomeVC: UITextViewDelegate {
     ) -> Bool {
         switch URL {
         case Link.terms:
-            showAlert(title: "Terms of Service", message: "Terms of Service will be available soon.")
+            showAnimatedAlert(
+                title: "Terms of Service",
+                message: "Terms of Service will be available soon.",
+                style: .info
+            )
         case Link.privacy:
-            showAlert(title: "Privacy Policy", message: "Privacy Policy will be available soon.")
+            showAnimatedAlert(
+                title: "Privacy Policy",
+                message: "Privacy Policy will be available soon.",
+                style: .info
+            )
         default:
             break
         }

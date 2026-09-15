@@ -46,14 +46,23 @@ final class SignUpViewController: UIViewController {
     }
 
     @IBAction private func helpTapped(_ sender: Any) {
-        showAlert(title: "Help", message: "Enter your mobile number to receive a one-time verification code.")
+        showAnimatedAlert(
+            title: "Need a hand?",
+            message: "Enter your mobile number to receive a one-time verification code.",
+            style: .info
+        )
     }
 
     @IBAction private func sendOTPTapped(_ sender: Any) {
         let phone = (phoneTextField?.text ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !phone.isEmpty else {
-            showAlert(message: "Please enter your phone number.")
+            phoneContainer?.shakeForValidation()
+            showAnimatedAlert(
+                title: "Phone number needed",
+                message: "Please enter your mobile number to continue.",
+                style: .warning
+            )
             return
         }
         let otp = UIStoryboard.authentication

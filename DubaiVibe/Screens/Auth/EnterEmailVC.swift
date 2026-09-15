@@ -58,7 +58,7 @@ final class EnterEmailVC: UIViewController {
         let last = (lastNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
 
         if let error = validationMessage(forFirstName: first, lastName: last) {
-            showAlert(message: error)
+            showNameValidationAlert(error, firstNameField: firstNameField, lastNameField: lastNameField)
             return
         }
 

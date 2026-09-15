@@ -81,7 +81,7 @@ final class ProfileViewController: UIViewController {
 
     @objc private func handleNotifications() {
         bellDotView?.isHidden = true
-        showAlert(title: "Notifications", message: "Coming soon")
+        showAnimatedAlert(title: "Notifications", message: "Coming soon", style: .info)
     }
 
     private func configureFields() {
@@ -229,7 +229,7 @@ final class ProfileViewController: UIViewController {
         let last = (lastNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
 
         if let error = validationMessage(forFirstName: first, lastName: last) {
-            showAlert(message: error)
+            showNameValidationAlert(error, firstNameField: firstNameField, lastNameField: lastNameField)
             return
         }
 
@@ -245,7 +245,11 @@ final class ProfileViewController: UIViewController {
         avatarChanged = false
         updateSaveButtonState()
 
-        showAlert(title: "Saved", message: "Your profile has been updated.")
+        showAnimatedAlert(
+            title: "Saved",
+            message: "Your profile has been updated.",
+            style: .success
+        )
     }
 
     private func validationMessage(forFirstName first: String, lastName last: String) -> String? {

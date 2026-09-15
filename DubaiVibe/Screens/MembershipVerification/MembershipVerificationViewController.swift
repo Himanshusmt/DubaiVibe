@@ -254,13 +254,11 @@ private extension MembershipVerificationViewController {
     }
 
     @IBAction func handleHelp() {
-        let alert = UIAlertController(
-            title: "Help",
+        showAnimatedAlert(
+            title: "Need a hand?",
             message: "Show this verified code to venue staff to redeem your OneVibe exclusive. The code expires in 15 minutes and can only be used once.",
-            preferredStyle: .alert
+            style: .info
         )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 
     @IBAction func handleCopyCode() {
