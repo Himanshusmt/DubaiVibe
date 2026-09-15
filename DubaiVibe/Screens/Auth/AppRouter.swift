@@ -1,16 +1,25 @@
 import UIKit
 
 enum AppRouter {
-    private static let mockAccessToken = "mock-token"
+    /// Token present and `is_onboarding_complete == true` → Explore.
+    /// Otherwise (no token, or onboarding still false) → Welcome.
+    static func hasCompletedOnboarding() -> Bool {
+        let token = TokenManager.shared.accessToken?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return !token.isEmpty && TokenManager.shared.isOnboardingCompleted
+    }
 
     static func isLoggedIn() -> Bool {
-        guard let token = TokenManager.shared.accessToken,
-              !token.isEmpty,
-              token != mockAccessToken
-        else {
-            return false
-        }
-        return true
+        hasCompletedOnboarding()
+    }
+
+    static func completeOnboarding() {
+        TokenManager.shared.isOnboardingCompleted = true
+        UserDefaults.standard.setLoggedIn(value: true)
+    }
+
+    static func markMockSessionComplete() {
+        completeOnboarding()
     }
 
     static func makeAuthRoot() -> UIViewController {
@@ -49,9 +58,9 @@ enum AppRouter {
     }
 
     static func configureRoot(for window: UIWindow) {
-        clearStaleMockSessionIfNeeded()
-
-        if isLoggedIn() {
+        
+        if hasCompletedOnboarding() {
+            
             window.rootViewController = UIStoryboard.main.instantiateViewController(
                 withIdentifier: "MainTabBarController"
             )
@@ -61,16 +70,26 @@ enum AppRouter {
         window.makeKeyAndVisible()
     }
 
-    /// Clears signup mock login left from older builds so cold start shows Welcome.
-    private static func clearStaleMockSessionIfNeeded() {
-        let defaults = UserDefaults.standard
-        let hasMockToken = TokenManager.shared.accessToken == mockAccessToken
-        let hasLegacyLoginFlag = defaults.isLoggedIn() && !TokenManager.shared.isLoggedIn
+    /// After login: Explore if onboarding is complete, otherwise continue the welcome/profile flow.
+    static func continueAfterLogin(
+        from viewController: UIViewController,
+        user: AuthUser?,
+        firstName: String? = nil,
+        lastName: String? = nil
+    ) {
+        if hasCompletedOnboarding() {
+            setRootMain(animated: true)
+            return
+        }
 
-        guard hasMockToken || hasLegacyLoginFlag else { return }
+        guard let nameVC = UIStoryboard.authentication
+            .instantiateViewController(withIdentifier: "OnboardingNameVC") as? OnboardingNameVC
+        else { return }
 
-        TokenManager.shared.clearUnauthorizedSession()
-        defaults.removeObject(forKey: UserDefaultsKeys.isLoggedIn.rawValue)
+        nameVC.prefillFirstName = firstName
+        nameVC.prefillLastName = lastName
+        viewController.navigationController?.pushViewController(nameVC, animated: true)
+
     }
 
     private static func setRoot(_ root: UIViewController?, on window: UIWindow, animated: Bool) {

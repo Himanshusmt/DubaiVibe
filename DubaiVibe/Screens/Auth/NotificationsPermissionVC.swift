@@ -5,6 +5,8 @@ final class NotificationsPermissionVC: UIViewController {
     @IBOutlet private weak var subtitleLabel: UILabel!
     @IBOutlet private weak var enableButton: GoldGradientButton!
 
+    private let viewModel = AuthViewModel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -20,14 +22,26 @@ final class NotificationsPermissionVC: UIViewController {
     }
 
     @IBAction private func enableTapped(_ sender: Any) {
+        enableButton?.isEnabled = false
         FCMNotificationManager.requestAuthorizationIfNeeded { [weak self] _ in
-            self?.finishOnboarding()
+            self?.updateProfileAndFinishOnboarding()
         }
     }
 
-    private func finishOnboarding() {
-        // Stay on Explore only for this session — do not persist login,
-        // so a cold start after kill returns to Welcome.
-        AppRouter.setRootMain(animated: true)
+    private func updateProfileAndFinishOnboarding() {
+        viewModel.updateProfile(notificationsEnabled: true) { [weak self] result in
+            guard let self else { return }
+            self.enableButton?.isEnabled = true
+            switch result {
+            case .success(let response):
+                TokenManager.shared.isOnboardingCompleted = response.data?.isOnboardingComplete ?? true
+                UserDefaults.standard.setLoggedIn(value: true)
+                self.showSuccessToast(response.message, fallback: "Profile updated")
+                AppRouter.setRootMain(animated: true)
+            case .failure(let error):
+                TokenManager.shared.isOnboardingCompleted = false
+                self.showErrorPopup(error)
+            }
+        }
     }
 }

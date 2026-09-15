@@ -50,6 +50,7 @@ struct VenueDetail: Hashable {
     let deal: VenueDetailDeal?
     let aboutText: String
     let defaultTab: VenueDetailTab
+    var imageURL: String? = nil
 
     var subtitle: String { "\(cuisine)  •  \(neighborhood)" }
 

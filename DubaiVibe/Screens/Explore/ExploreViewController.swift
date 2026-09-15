@@ -17,14 +17,13 @@ final class ExploreViewController: UIViewController {
     @IBOutlet private weak var venueTableView: UITableView!
     @IBOutlet private weak var headerTopConstraint: NSLayoutConstraint!
 
-    private let repository: ExploreRepositorying
+    private let viewModel: ExploreViewModel
     private let categories = VenueCategory.allCases
 
-    private var venues: [Venue] = []
-    private var venueIndex: [UUID: Int] = [:]
     private var selectedCategory: VenueCategory = .all
     private var searchQuery = ""
     private var chipSizeCache: [VenueCategory: CGSize] = [:]
+    private var searchWorkItem: DispatchWorkItem?
 
     private var dataSource: UITableViewDiffableDataSource<Int, UUID>!
 
@@ -33,13 +32,8 @@ final class ExploreViewController: UIViewController {
     private var headerCollapseDistance: CGFloat = 0
     private var isAdjustingHeader = false
 
-    init?(coder: NSCoder, repository: ExploreRepositorying) {
-        self.repository = repository
-        super.init(coder: coder)
-    }
-
     required init?(coder: NSCoder) {
-        self.repository = ExploreRepository()
+        self.viewModel = ExploreViewModel()
         super.init(coder: coder)
     }
 
@@ -242,6 +236,10 @@ private extension ExploreViewController {
         venueTableView.estimatedRowHeight = 400
         venueTableView.rowHeight = UITableView.automaticDimension
         venueTableView.prefetchDataSource = self
+        let refresh = UIRefreshControl()
+        refresh.tintColor = AppPalette.gold
+        refresh.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        venueTableView.refreshControl = refresh
         venueTableView.contentInset.bottom = AppMetrics.floatingTabPillSize.height
             + AppMetrics.floatingTabBottomInset(for: view)
             + 8
@@ -267,15 +265,15 @@ private extension ExploreViewController {
     }
 
     func loadFeed() {
-        venues = repository.venues()
-        rebuildIndex()
-        applySnapshot(animated: false)
-        categoryCollectionView.reloadData()
+        viewModel.loadFeed { [weak self] result in
+            self?.handleBusinessesResult(result, animated: false)
+        }
     }
 
     func prefetchArtwork() {
         let size = CGSize(width: view.bounds.width - AppMetrics.cardGutter * 2, height: AppMetrics.heroHeight)
-        ArtworkCache.prefetch(venues, size: size)
+        ArtworkCache.prefetch(viewModel.venues, size: size)
+        BusinessImageLoader.prefetch(viewModel.venues.compactMap(\.imageURL))
     }
 }
 
@@ -283,22 +281,12 @@ private extension ExploreViewController {
 
 private extension ExploreViewController {
     func venue(with id: UUID) -> Venue? {
-        guard let index = venueIndex[id] else { return nil }
-        return venues[index]
-    }
-
-    func rebuildIndex() {
-        var map: [UUID: Int] = [:]
-        map.reserveCapacity(venues.count)
-        for (index, venue) in venues.enumerated() {
-            map[venue.id] = index
-        }
-        venueIndex = map
+        viewModel.venue(with: id)
     }
 
     var filteredIDs: [UUID] {
         let query = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
-        return venues.compactMap { venue in
+        return viewModel.venues.compactMap { venue in
             if selectedCategory != .all, venue.category != selectedCategory {
                 return nil
             }
@@ -310,11 +298,41 @@ private extension ExploreViewController {
         }
     }
 
+    func handleBusinessesResult(_ result: Result<BusinessListResponse, APIError>, animated: Bool) {
+        venueTableView.refreshControl?.endRefreshing()
+        switch result {
+        case .success:
+            applySnapshot(animated: animated)
+            updateEmptyState()
+            prefetchArtwork()
+        case .failure(let error):
+            applySnapshot(animated: false)
+            updateEmptyState()
+            showErrorPopup(error)
+        }
+    }
+
+    func updateEmptyState() {
+        if filteredIDs.isEmpty {
+            let label = UILabel()
+            label.text = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                ? "No businesses yet"
+                : "No matching businesses"
+            label.font = AppTypography.font(.medium, size: 14)
+            label.textColor = AppPalette.secondaryText
+            label.textAlignment = .center
+            venueTableView.backgroundView = label
+        } else {
+            venueTableView.backgroundView = nil
+        }
+    }
+
     func applySnapshot(animated: Bool) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, UUID>()
         snapshot.appendSections([0])
         snapshot.appendItems(filteredIDs, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: animated)
+        updateEmptyState()
     }
 
     func reloadVenue(_ id: UUID) {
@@ -325,15 +343,13 @@ private extension ExploreViewController {
     }
 
     func toggleFavorite(id: UUID) {
-        guard let index = venueIndex[id] else { return }
-        venues[index].isFavorite.toggle()
+        viewModel.toggleFavorite(id: id)
         reloadVenue(id)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 
     func toggleBookmark(id: UUID) {
-        guard let index = venueIndex[id] else { return }
-        venues[index].isBookmarked.toggle()
+        viewModel.toggleBookmark(id: id)
         reloadVenue(id)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
@@ -341,6 +357,42 @@ private extension ExploreViewController {
     @objc func handleSearchChanged() {
         searchQuery = searchTextField.text ?? ""
         applySnapshot(animated: true)
+        let trimmed = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            searchWorkItem?.cancel()
+            viewModel.loadFeed { [weak self] result in
+                self?.handleBusinessesResult(result, animated: true)
+            }
+            return
+        }
+        scheduleSearch()
+    }
+
+    @objc func handleRefresh() {
+        searchWorkItem?.cancel()
+        let trimmed = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            viewModel.loadFeed(showLoader: false) { [weak self] result in
+                self?.handleBusinessesResult(result, animated: true)
+            }
+        } else {
+            viewModel.search(trimmed, showLoader: false) { [weak self] result in
+                self?.handleBusinessesResult(result, animated: true)
+            }
+        }
+    }
+
+    func scheduleSearch() {
+        searchWorkItem?.cancel()
+        let query = searchQuery
+        let work = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.viewModel.search(query) { [weak self] result in
+                self?.handleBusinessesResult(result, animated: true)
+            }
+        }
+        searchWorkItem = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: work)
     }
 
     @objc func dismissKeyboard() {
@@ -368,6 +420,10 @@ private extension ExploreViewController {
 extension ExploreViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        searchWorkItem?.cancel()
+        viewModel.search(searchQuery) { [weak self] result in
+            self?.handleBusinessesResult(result, animated: true)
+        }
         return true
     }
 }
@@ -409,11 +465,20 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
 }
 
 extension ExploreViewController: UITableViewDelegate, UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let count = dataSource.snapshot().numberOfItems
+        guard count > 0, indexPath.row >= count - 3 else { return }
+        viewModel.loadMoreIfNeeded { [weak self] result in
+            self?.handleBusinessesResult(result, animated: false)
+        }
+    }
+
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         let size = CGSize(width: view.bounds.width - AppMetrics.cardGutter * 2, height: AppMetrics.heroHeight)
         let ids = indexPaths.compactMap { dataSource.itemIdentifier(for: $0) }
         let upcoming = ids.compactMap(venue(with:))
         ArtworkCache.prefetch(upcoming, size: size)
+        BusinessImageLoader.prefetch(upcoming.compactMap(\.imageURL))
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -513,11 +578,12 @@ private extension ExploreViewController {
     }
 
     func openVenueDetail(id: UUID) {
+        guard let venue = venue(with: id) else { return }
         let storyboard = UIStoryboard(name: "VenueDetail", bundle: nil)
         guard let controller = storyboard.instantiateInitialViewController() as? VenueDetailViewController else {
             return
         }
-        controller.configure(venueID: id)
+        controller.configure(businessID: venue.resolvedBusinessID)
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

@@ -9,6 +9,7 @@ final class SignupWithPhoneNumberVC: UIViewController {
     @IBOutlet private weak var sendButton: GoldGradientButton!
     @IBOutlet private weak var contentScrollView: UIScrollView?
 
+    private let viewModel = AuthViewModel()
     private let dialCode = "+971"
 
     override func viewDidLoad() {
@@ -60,21 +61,42 @@ final class SignupWithPhoneNumberVC: UIViewController {
     }
 
     @IBAction private func sendOTPTapped(_ sender: Any) {
+        view.endEditing(true)
         let phone = (phoneTextField?.text ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !phone.isEmpty else {
             showAlert(message: L10n.enterPhoneNumber)
             return
         }
+        
         guard phone.isValidUAEMobileNumber else {
             showAlert(message: L10n.invalidUAEPhoneNumber)
             return
         }
         let formattedLocal = phone.uaeFormattedPhoneNumber
         phoneTextField?.text = formattedLocal
+
+        viewModel.requestPhoneOTP(phoneCode: dialCode, phone: formattedLocal) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let response):
+                self.showSuccessToast(response.message, fallback: "OTP sent")
+                self.pushOTPScreen(phone: formattedLocal, debugCode: response.data?.debugCode)
+            case .failure(let error):
+                self.showErrorPopup(error)
+            }
+        }
+    }
+
+    private func pushOTPScreen(phone: String, debugCode: String?) {
         let otp = UIStoryboard.authentication
             .instantiateViewController(withIdentifier: "EnterOTPVC") as! EnterOTPVC
-        otp.phoneNumberDisplay = "\(dialCode) \(formattedLocal)"
+        otp.phoneCode = dialCode
+        otp.phoneNumber = AuthViewModel.sanitizedNationalNumber(phone)
+        otp.phoneNumberDisplay = "\(dialCode) \(phone)"
+        #if DEBUG
+        otp.debugOTPCode = debugCode
+        #endif
         navigationController?.pushViewController(otp, animated: true)
     }
 }

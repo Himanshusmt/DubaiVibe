@@ -63,6 +63,19 @@ enum FCMNotificationManager {
         ]
     }
 
+    /// Headers required by DubaiVibe Mobile Auth (`x-device-id`, `x-platform`, …).
+    static func authDeviceHeaders() -> [String: String] {
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+        return [
+            "x-device-id": deviceId,
+            "x-platform": "ios",
+            "x-app-version": appVersion,
+            "x-os-version": UIDevice.current.systemVersion,
+            "x-device-model": UIDevice.current.model,
+            "x-device-name": UIDevice.current.name
+        ]
+    }
+
     static func requestAuthorizationIfNeeded(completion: ((Bool) -> Void)? = nil) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
             if let error = error {

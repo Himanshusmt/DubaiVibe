@@ -7,6 +7,7 @@ final class SignupOptionsVC: UIViewController {
 
     private let appleSignIn = AppleSignInService()
     private let googleSignIn = GoogleSignInService()
+    private let viewModel = AuthViewModel()
 
     private enum Link {
         static let terms = URL(string: "dubaivibe://terms")!
@@ -84,7 +85,6 @@ final class SignupOptionsVC: UIViewController {
     }
 
     @IBAction private func continueWithPhone(_ sender: Any) {
-        // TODO: Phone authentication — UI navigation stub only.
         guard let phone = UIStoryboard.authentication
             .instantiateViewController(withIdentifier: "SignupWithPhoneNumberVC") as? SignupWithPhoneNumberVC
         else { return }
@@ -123,19 +123,33 @@ final class SignupOptionsVC: UIViewController {
         }
     }
 
-    /// Backend not ready yet — complete Apple auth locally, skip MyGuardianLink `/apple`.
+    /// Sign in with Apple, then exchange the identity token with DubaiVibe auth.
     private func handleAppleCredential(_ credential: AppleSignInService.Credential) {
         persistAppleProfile(from: credential)
-        let cached = TokenManager.shared.appleUserName(for: credential.userId)
-        let (first, last) = Self.splitPersonName(
-            givenName: credential.givenName,
-            familyName: credential.familyName,
-            fullName: credential.fullName ?? cached
-        )
-        routeToNameEntry(firstName: first, lastName: last)
+        viewModel.loginWithApple(credential: credential) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let response):
+                self.showSuccessToast(response.message, fallback: "Signed in")
+                let cached = TokenManager.shared.appleUserName(for: credential.userId)
+                let (first, last) = Self.splitPersonName(
+                    givenName: credential.givenName,
+                    familyName: credential.familyName,
+                    fullName: credential.fullName ?? cached
+                )
+                AppRouter.continueAfterLogin(
+                    from: self,
+                    user: response.resolvedUser,
+                    firstName: first,
+                    lastName: last
+                )
+            case .failure(let error):
+                self.showErrorPopup(error)
+            }
+        }
     }
 
-    /// Backend not ready yet — complete Google auth locally, skip MyGuardianLink `/google`.
+    /// Native Google Sign-In, then exchange the ID token with DubaiVibe auth.
     private func handleGoogleCredential(_ credential: GoogleSignInService.Credential) {
         if let email = credential.email, !email.isEmpty {
             UserDefaults.standard.set(email, forKey: "GoogleSignInEmail")
@@ -143,12 +157,26 @@ final class SignupOptionsVC: UIViewController {
         if let fullName = credential.fullName, !fullName.isEmpty {
             TokenManager.shared.saveSocialFullName(fullName)
         }
-        let (first, last) = Self.splitPersonName(
-            givenName: credential.givenName,
-            familyName: credential.familyName,
-            fullName: credential.fullName
-        )
-        routeToNameEntry(firstName: first, lastName: last)
+        viewModel.loginWithGoogle(credential: credential) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let response):
+                self.showSuccessToast(response.message, fallback: "Signed in")
+                let (first, last) = Self.splitPersonName(
+                    givenName: credential.givenName,
+                    familyName: credential.familyName,
+                    fullName: credential.fullName
+                )
+                AppRouter.continueAfterLogin(
+                    from: self,
+                    user: response.resolvedUser,
+                    firstName: first,
+                    lastName: last
+                )
+            case .failure(let error):
+                self.showErrorPopup(error)
+            }
+        }
     }
 
     private func persistAppleProfile(from credential: AppleSignInService.Credential) {
@@ -165,16 +193,6 @@ final class SignupOptionsVC: UIViewController {
         let cached = TokenManager.shared.appleUserName(for: credential.userId)
         let resolvedName = credential.fullName ?? cached
         TokenManager.shared.saveAppleUserName(appleUserId: credential.userId, fullName: resolvedName)
-    }
-
-    private func routeToNameEntry(firstName: String?, lastName: String?) {
-        guard let enterEmail = UIStoryboard.authentication
-            .instantiateViewController(withIdentifier: "OnboardingNameVC") as? OnboardingNameVC
-        else { return }
-
-        enterEmail.prefillFirstName = firstName
-        enterEmail.prefillLastName = lastName
-        navigationController?.pushViewController(enterEmail, animated: true)
     }
 
     static func splitPersonName(

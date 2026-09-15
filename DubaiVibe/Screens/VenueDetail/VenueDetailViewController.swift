@@ -35,27 +35,20 @@ final class VenueDetailViewController: UIViewController {
     @IBOutlet private weak var shareActionButton: UIButton!
     @IBOutlet private weak var oneVibeButton: UIButton!
 
-    private let repository: VenueDetailRepositorying
-    private var detail: VenueDetail!
+    private let viewModel = VenueDetailViewModel()
+    private var businessID = ""
+    private var detail: VenueDetail?
     private var selectedTab: VenueDetailTab = .deals
     private var isFavorite = false
 
-    init?(coder: NSCoder, repository: VenueDetailRepositorying) {
-        self.repository = repository
-        super.init(coder: coder)
-    }
-
     required init?(coder: NSCoder) {
-        self.repository = VenueDetailRepository()
         super.init(coder: coder)
     }
 
-    func configure(venueID: UUID) {
-        guard let detail = repository.detail(for: venueID) else { return }
-        self.detail = detail
-        selectedTab = detail.defaultTab
+    func configure(businessID: String) {
+        self.businessID = businessID
         if isViewLoaded {
-            bind()
+            fetchDetail()
         }
     }
 
@@ -64,9 +57,7 @@ final class VenueDetailViewController: UIViewController {
         view.backgroundColor = AppPalette.background
         navigationController?.setNavigationBarHidden(true, animated: false)
         configureChrome()
-        if detail != nil {
-            bind()
-        }
+        fetchDetail()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -203,10 +194,24 @@ private extension VenueDetailViewController {
 // MARK: - Binding
 
 private extension VenueDetailViewController {
+    func fetchDetail() {
+        viewModel.load(businessID: businessID) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let detail):
+                self.detail = detail
+                self.selectedTab = detail.defaultTab
+                self.bind()
+            case .failure(let error):
+                self.showErrorPopup(error)
+            }
+        }
+    }
+
     func bind() {
         guard let detail else { return }
 
-        heroImageView.configure(urls: VenueDemoPhotos.heroURLs)
+        heroImageView.configure(urls: heroURLs(for: detail))
 
         nameLabel.text = detail.name
         verifiedImageView.isHidden = !detail.isVerified
@@ -216,13 +221,22 @@ private extension VenueDetailViewController {
             count: detail.reviewCountText
         )
         brandTileLabel.text = Self.brandTileTitle(from: detail.name)
-        photosButton.configuration?.title = "\(VenueDemoPhotos.count) Photos"
+        photosButton.configuration?.title = detail.photoCountText
         addressLabel.text = detail.address
         hoursLabel.text = detail.hoursText
 
-        selectedTab = .deals
+        selectedTab = detail.defaultTab
         renderTabContent()
         updateFavoriteIcon()
+    }
+
+    func heroURLs(for detail: VenueDetail) -> [URL] {
+        if let imageURL = detail.imageURL?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !imageURL.isEmpty,
+           let url = URL(string: imageURL) {
+            return [url]
+        }
+        return VenueDemoPhotos.heroURLs
     }
 
     func ratingAttributedText(value: String, count: String) -> NSAttributedString {
@@ -245,6 +259,7 @@ private extension VenueDetailViewController {
     }
 
     func renderTabContent() {
+        guard let detail else { return }
         tabContentContainer.subviews.forEach { $0.removeFromSuperview() }
 
         let content: UIView
@@ -307,7 +322,7 @@ private extension VenueDetailViewController {
     }
 
     func makeDealsContent() -> UIView {
-        guard let deal = detail.deal else {
+        guard let deal = detail?.deal else {
             return makePlainContent(title: L10n.deals, body: L10n.noDeals)
         }
 

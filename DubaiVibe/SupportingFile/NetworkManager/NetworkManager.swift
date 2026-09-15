@@ -60,6 +60,7 @@ enum HTTPMethod: String {
     case GET
     case POST
     case PUT
+    case PATCH
     case DELETE
 }
 
@@ -83,6 +84,7 @@ struct AnyEncodable: Encodable {
 struct ErrorResponse: Codable {
     let message: String?
     let success: Bool?
+    let code: String?
     let error: APIErrorData?
 }
 
@@ -160,10 +162,11 @@ enum APIErrorMessageParser {
         }
 
         let message = message(from: data) ?? "Request failed"
-        let errorData = (try? JSONDecoder().decode(ErrorResponse.self, from: data))?.error
+        let decoded = try? JSONDecoder().decode(ErrorResponse.self, from: data)
+        let errorData = decoded?.error
         return .custom(
             message: message,
-            code: errorData?.errorCode,
+            code: errorData?.errorCode ?? decoded?.code,
             currentGroupName: errorData?.currentGroupName ?? errorData?.existingGroupName,
             newGroupName: errorData?.newGroupName
         )
@@ -582,36 +585,7 @@ final class NetworkManager {
         
         request.timeoutInterval = 60
         
-        // MARK: Headers
-        
-        request.setValue(
-            "application/json",
-            forHTTPHeaderField:
-                "Content-Type"
-        )
-        
-        // MARK: Token
-        
-        if let token =
-            TokenManager.shared.accessToken {
-            
-            request.setValue(
-                "Bearer \(token)",
-                forHTTPHeaderField:
-                    "Authorization"
-            )
-        }
-        
-        // MARK: Custom Headers
-        
-        headers.forEach {
-            
-            request.setValue(
-                $0.value,
-                forHTTPHeaderField:
-                    $0.key
-            )
-        }
+        applyDefaultHeaders(to: &request, extra: headers)
         
         // MARK: Body
         
@@ -765,34 +739,12 @@ final class NetworkManager {
         
         request.httpMethod = method.rawValue
         
+        applyDefaultHeaders(to: &request, extra: headers)
         request.setValue(
             "multipart/form-data; boundary=\(boundary)",
             forHTTPHeaderField:
                 "Content-Type"
         )
-        
-        // MARK: Token
-        
-        if let token =
-            TokenManager.shared.accessToken {
-            
-            request.setValue(
-                "Bearer \(token)",
-                forHTTPHeaderField:
-                    "Authorization"
-            )
-        }
-        
-        // MARK: Headers
-        
-        headers.forEach {
-            
-            request.setValue(
-                $0.value,
-                forHTTPHeaderField:
-                    $0.key
-            )
-        }
         
         // MARK: Body
         
@@ -1026,21 +978,7 @@ final class NetworkManager {
         request.httpMethod = method.rawValue
         request.timeoutInterval = 60
 
-        // Headers
-        request.setValue("application/json",
-                         forHTTPHeaderField: "Content-Type")
-
-        // Token
-        if let token = TokenManager.shared.accessToken {
-            request.setValue("Bearer \(token)",
-                             forHTTPHeaderField: "Authorization")
-        }
-
-        // Custom Headers
-        headers.forEach {
-            request.setValue($0.value,
-                             forHTTPHeaderField: $0.key)
-        }
+        applyDefaultHeaders(to: &request, extra: headers)
 
         // Body
         if let parameters = parameters {
@@ -1134,6 +1072,23 @@ final class NetworkManager {
             .eraseToAnyPublisher()
     }
 
+    private func applyDefaultHeaders(to request: inout URLRequest, extra: [String: String]) {
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        FCMNotificationManager.authDeviceHeaders().forEach { key, value in
+            request.setValue(value, forHTTPHeaderField: key)
+        }
+
+        if let token = TokenManager.shared.accessToken, !token.isEmpty {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        extra.forEach { key, value in
+            request.setValue(value, forHTTPHeaderField: key)
+        }
+    }
+
     // MARK: - 401 Unauthorized
 
     func handleUnauthorizedSession() {
@@ -1163,19 +1118,7 @@ final class NetworkManager {
     }
 
     private func navigateToSignUpAfterUnauthorized() {
-        let signupVC = SignupOptionsVC()
-        let navigationController = UINavigationController(rootViewController: signupVC)
-        navigationController.setNavigationBarHidden(true, animated: false)
-
-        guard let window = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .flatMap(\.windows)
-            .first(where: \.isKeyWindow) else {
-            return
-        }
-
-        window.rootViewController = navigationController
-        window.makeKeyAndVisible()
+        AppRouter.setRootAuth(animated: true)
     }
 
     private static func topViewControllerForSessionAlert(
@@ -1218,28 +1161,12 @@ private extension NetworkManager {
         let message = APIErrorMessageParser.message(from: data)
             ?? "Request failed (\(statusCode))"
 
-        if statusCode == 404,
-           let decoded = try? JSONDecoder().decode(ErrorResponse.self, from: data),
-           let code = decoded.error?.errorCode {
-            return .custom(message: message, code: code, currentGroupName: nil, newGroupName: nil)
-        }
-        
-        if statusCode == 400,
-           let decoded = try? JSONDecoder().decode(ErrorResponse.self, from: data),
-           let code = decoded.error?.errorCode {
-            return .custom(message: message, code: code, currentGroupName: nil, newGroupName: nil)
-        }
-        
-        if statusCode == 403,
-           let decoded = try? JSONDecoder().decode(ErrorResponse.self, from: data),
-           let code = decoded.error?.errorCode {
-            return .custom(message: message, code: code, currentGroupName: nil, newGroupName: nil)
-        }
-        
-        if statusCode == 409,
-           let decoded = try? JSONDecoder().decode(ErrorResponse.self, from: data),
-           let code = decoded.error?.errorCode {
-            return .custom(message: message, code: code, currentGroupName: nil, newGroupName: nil)
+        if [400, 403, 404, 409, 429, 503].contains(statusCode),
+           let decoded = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+            let code = decoded.error?.errorCode ?? decoded.code
+            if let code, !code.isEmpty {
+                return .custom(message: message, code: code, currentGroupName: nil, newGroupName: nil)
+            }
         }
 
         return .serverError(message)
@@ -1436,6 +1363,89 @@ extension UIViewController {
 
         presentStyledAlert(alert)
     }
+
+    func showErrorPopup(_ error: APIError) {
+        showAlert(title: "Error", message: error.userFacingMessage)
+    }
+
+    func showSuccessToast(_ message: String?, fallback: String) {
+        let trimmed = message?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        AppToast.show(trimmed.isEmpty ? fallback : trimmed)
+    }
+}
+
+// MARK: - Success toast (window-level so it survives navigation)
+
+enum AppToast {
+    private static let tag = 8_818_181
+
+    static func show(_ message: String, duration: TimeInterval = 2.2) {
+        let text = message.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty, let window = keyWindow() else { return }
+
+        window.viewWithTag(tag)?.removeFromSuperview()
+
+        let container = UIView()
+        container.tag = tag
+        container.backgroundColor = AppPalette.surfaceRaised
+        container.layer.cornerRadius = 12
+        container.layer.cornerCurve = .continuous
+        container.layer.borderWidth = 1
+        container.layer.borderColor = AppPalette.gold.withAlphaComponent(0.45).cgColor
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.alpha = 0
+        container.transform = CGAffineTransform(translationX: 0, y: 10)
+
+        let label = UILabel()
+        label.text = text
+        label.textColor = AppPalette.primaryText
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        container.addSubview(label)
+        window.addSubview(container)
+
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
+            label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -12),
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+
+            container.centerXAnchor.constraint(equalTo: window.centerXAnchor),
+            container.leadingAnchor.constraint(greaterThanOrEqualTo: window.leadingAnchor, constant: 24),
+            container.trailingAnchor.constraint(lessThanOrEqualTo: window.trailingAnchor, constant: -24),
+            container.bottomAnchor.constraint(equalTo: window.safeAreaLayoutGuide.bottomAnchor, constant: -24)
+        ])
+
+        UIView.animate(withDuration: 0.25) {
+            container.alpha = 1
+            container.transform = .identity
+        } completion: { _ in
+            UIView.animate(
+                withDuration: 0.25,
+                delay: duration,
+                options: .curveEaseIn
+            ) {
+                container.alpha = 0
+                container.transform = CGAffineTransform(translationX: 0, y: 8)
+            } completion: { _ in
+                container.removeFromSuperview()
+            }
+        }
+    }
+
+    private static func keyWindow() -> UIWindow? {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first(where: \.isKeyWindow)
+            ?? UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap(\.windows)
+                .first
+    }
 }
 
 
@@ -1549,6 +1559,39 @@ final class TokenManager {
             forKey: accessTokenKey
         )
     }
+
+    func persistAuthSession(
+        token: String?,
+        user: AuthUser?,
+        isOnboardingComplete: Bool? = nil,
+        markLoggedIn: Bool = false
+    ) {
+        if let token {
+            let trimmed = token.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty {
+                saveAccessToken(trimmed)
+            }
+        }
+        if let user {
+            if let id = user.id, !id.isEmpty {
+                saveUserId(id)
+            }
+            if let encoded = try? JSONEncoder().encode(user) {
+                UserDefaults.standard.setUserData(value: encoded)
+            }
+            if let name = user.resolvedFullName {
+                saveSocialFullName(name)
+            }
+        }
+
+        isOnboardingCompleted = isOnboardingComplete
+            ?? user?.isOnboardingComplete
+            ?? false
+
+        if markLoggedIn || isOnboardingCompleted {
+            UserDefaults.standard.setLoggedIn(value: true)
+        }
+    }
     
     var isOnboardingCompleted: Bool {
         get {
@@ -1614,6 +1657,9 @@ final class TokenManager {
         defaults.removeObject(forKey: "AppleSignInEmail")
         defaults.removeObject(forKey: "AppleSignInGivenName")
         defaults.removeObject(forKey: "AppleSignInFamilyName")
+
+        defaults.setLoggedIn(value: false)
+        defaults.removeObject(forKey: UserDefaultsKeys.loginData.rawValue)
 
         FCMNotificationManager.clearDeviceId()
 
