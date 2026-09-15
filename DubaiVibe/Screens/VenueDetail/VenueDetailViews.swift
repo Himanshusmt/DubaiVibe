@@ -239,7 +239,7 @@ final class HeroImageView: UIImageView {
         currentPage = 0
         pageControl.numberOfPages = urls.count
         pageControl.currentPage = 0
-        pageControl.isHidden = urls.count <= 1
+        pageControl.isHidden = true
         collectionView.reloadData()
         collectionView.setContentOffset(.zero, animated: false)
         if !urls.isEmpty {
@@ -294,6 +294,8 @@ final class HeroImageView: UIImageView {
         addSubview(fadeView)
 
         pageControl.hidesForSinglePage = true
+        pageControl.isHidden = true
+        pageControl.isUserInteractionEnabled = false
         pageControl.currentPageIndicatorTintColor = .white
         pageControl.pageIndicatorTintColor = UIColor.white.withAlphaComponent(0.38)
         pageControl.translatesAutoresizingMaskIntoConstraints = false

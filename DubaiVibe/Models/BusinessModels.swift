@@ -1,4 +1,181 @@
 import Foundation
+import UIKit
+
+// MARK: - Mobile Categories (`GET /api/mobile/v1/categories`)
+
+struct CategoryListResponse: Decodable {
+    let success: Bool?
+    let message: String?
+    let data: [CategoryItem]
+
+    enum CodingKeys: String, CodingKey {
+        case success, message, data, items, categories, results
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = values.decodeFlexibleIfPresent(forKey: .success)
+        message = values.decodeFlexibleIfPresent(forKey: .message)
+        if let items = try? values.decode([CategoryItem].self, forKey: .data) {
+            data = items
+        } else if let nested = try? values.decode(CategoryListData.self, forKey: .data) {
+            data = nested.items
+        } else if let items = try? values.decode([CategoryItem].self, forKey: .items) {
+            data = items
+        } else if let items = try? values.decode([CategoryItem].self, forKey: .categories) {
+            data = items
+        } else if let items = try? values.decode([CategoryItem].self, forKey: .results) {
+            data = items
+        } else {
+            data = []
+        }
+    }
+
+    var items: [CategoryItem] { data }
+}
+
+struct CategoryListData: Decodable {
+    let items: [CategoryItem]
+
+    enum CodingKeys: String, CodingKey {
+        case items, results, categories
+    }
+
+    init(from decoder: Decoder) throws {
+        if let values = try? decoder.container(keyedBy: CodingKeys.self) {
+            items = (try? values.decode([CategoryItem].self, forKey: .items))
+                ?? (try? values.decode([CategoryItem].self, forKey: .results))
+                ?? (try? values.decode([CategoryItem].self, forKey: .categories))
+                ?? []
+            return
+        }
+        items = (try? decoder.singleValueContainer().decode([CategoryItem].self)) ?? []
+    }
+}
+
+struct CategoryItem: Decodable {
+    let id: String?
+    let name: String?
+    let slug: String?
+    let description: String?
+    let icon: String?
+    let image: String?
+    let sortOrder: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case id, uuid
+        case name, title
+        case slug
+        case description
+        case icon, iconURL, iconUrl, icon_url
+        case image, imageURL, imageUrl, image_url
+        case sortOrder, sort_order, order
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = values.decodeFlexibleIfPresent(forKey: .id)
+            ?? values.decodeFlexibleIfPresent(forKey: .uuid)
+        name = values.decodeFlexibleIfPresent(forKey: .name)
+            ?? values.decodeFlexibleIfPresent(forKey: .title)
+        slug = values.decodeFlexibleIfPresent(forKey: .slug)
+        description = values.decodeFlexibleIfPresent(forKey: .description)
+        icon = values.decodeFlexibleIfPresent(forKey: .icon)
+            ?? values.decodeFlexibleIfPresent(forKey: .iconURL)
+            ?? values.decodeFlexibleIfPresent(forKey: .iconUrl)
+            ?? values.decodeFlexibleIfPresent(forKey: .icon_url)
+        image = values.decodeFlexibleIfPresent(forKey: .image)
+            ?? values.decodeFlexibleIfPresent(forKey: .imageURL)
+            ?? values.decodeFlexibleIfPresent(forKey: .imageUrl)
+            ?? values.decodeFlexibleIfPresent(forKey: .image_url)
+        sortOrder = values.decodeFlexibleIfPresent(forKey: .sortOrder)
+            ?? values.decodeFlexibleIfPresent(forKey: .sort_order)
+            ?? values.decodeFlexibleIfPresent(forKey: .order)
+    }
+
+    func asExploreCategory() -> ExploreCategory? {
+        let resolvedName = name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !resolvedName.isEmpty else { return nil }
+        let resolvedID = id?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return ExploreCategory(
+            id: resolvedID.isEmpty ? nil : resolvedID,
+            name: resolvedName,
+            slug: slug?.trimmingCharacters(in: .whitespacesAndNewlines),
+            iconURL: Self.resolvedMediaURL(icon) ?? Self.resolvedMediaURL(image),
+            sortOrder: sortOrder ?? 0
+        )
+    }
+
+    private static func resolvedMediaURL(_ raw: String?) -> String? {
+        let trimmed = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !trimmed.isEmpty else { return nil }
+        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
+            return trimmed
+        }
+        if trimmed.hasPrefix("/"), let origin = APIEndpoint.origin {
+            return origin + trimmed
+        }
+        if UUID(uuidString: trimmed) != nil {
+            return APIEndpoint.baseURL + "media/\(trimmed)/download"
+        }
+        return trimmed
+    }
+}
+
+struct ExploreCategory: Hashable {
+    let id: String?
+    let name: String
+    let slug: String?
+    let iconURL: String?
+    let sortOrder: Int
+
+    var isAll: Bool {
+        let slugValue = (slug ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let nameValue = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        return slugValue == "all" || nameValue == "all"
+    }
+
+    var title: String {
+        isAll ? L10n.categoryAll : name
+    }
+
+    var hasIcon: Bool { iconURL != nil || localIcon != nil }
+
+    var localIcon: UIImage? {
+        guard !isAll else { return nil }
+        return VenueCategory.matching(apiName: name)?.icon
+            ?? VenueCategory.matching(apiName: slug)?.icon
+    }
+
+    static var all: ExploreCategory {
+        ExploreCategory(id: nil, name: "All", slug: "all", iconURL: nil, sortOrder: -1)
+    }
+
+    static func == (lhs: ExploreCategory, rhs: ExploreCategory) -> Bool {
+        if lhs.isAll && rhs.isAll { return true }
+        guard let leftID = lhs.id, let rightID = rhs.id else { return false }
+        return leftID == rightID
+    }
+
+    func hash(into hasher: inout Hasher) {
+        if isAll {
+            hasher.combine("all")
+        } else {
+            hasher.combine(id)
+        }
+    }
+}
+
+private extension APIEndpoint {
+    static var origin: String? {
+        guard let url = URL(string: baseURL), let host = url.host else { return nil }
+        let scheme = url.scheme ?? "http"
+        if let port = url.port {
+            return "\(scheme)://\(host):\(port)"
+        }
+        return "\(scheme)://\(host)"
+    }
+}
 
 // MARK: - Mobile Businesses (`GET /api/mobile/v1/businesses`) 
 
@@ -144,15 +321,18 @@ struct BusinessCategoryRef: Decodable {
     let id: String?
     let name: String?
     let slug: String?
+    let icon: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, uuid, name, title, slug
+        case id, uuid, name, title, slug, icon
+        case iconURL, iconUrl, icon_url
     }
 
-    init(id: String?, name: String?, slug: String?) {
+    init(id: String?, name: String?, slug: String?, icon: String? = nil) {
         self.id = id
         self.name = name
         self.slug = slug
+        self.icon = icon
     }
 
     init(from decoder: Decoder) throws {
@@ -162,47 +342,321 @@ struct BusinessCategoryRef: Decodable {
             name = values.decodeFlexibleIfPresent(forKey: .name)
                 ?? values.decodeFlexibleIfPresent(forKey: .title)
             slug = values.decodeFlexibleIfPresent(forKey: .slug)
+            icon = values.decodeFlexibleIfPresent(forKey: .icon)
+                ?? values.decodeFlexibleIfPresent(forKey: .iconURL)
+                ?? values.decodeFlexibleIfPresent(forKey: .iconUrl)
+                ?? values.decodeFlexibleIfPresent(forKey: .icon_url)
             return
         }
 
         id = nil
         name = try? decoder.singleValueContainer().decode(String.self)
         slug = nil
+        icon = nil
+    }
+}
+
+struct BusinessLinks: Decodable {
+    let website: String?
+    let onevibe: String?
+    let instagram: String?
+
+    enum CodingKeys: String, CodingKey {
+        case website, onevibe, instagram
+        case websiteUrl, website_url, url
+        case instagramHandle, instagram_handle, instagramUrl, instagram_url
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        website = values.decodeFlexibleIfPresent(forKey: .website)
+            ?? values.decodeFlexibleIfPresent(forKey: .websiteUrl)
+            ?? values.decodeFlexibleIfPresent(forKey: .website_url)
+            ?? values.decodeFlexibleIfPresent(forKey: .url)
+        onevibe = values.decodeFlexibleIfPresent(forKey: .onevibe)
+        instagram = values.decodeFlexibleIfPresent(forKey: .instagram)
+            ?? values.decodeFlexibleIfPresent(forKey: .instagramHandle)
+            ?? values.decodeFlexibleIfPresent(forKey: .instagram_handle)
+            ?? values.decodeFlexibleIfPresent(forKey: .instagramUrl)
+            ?? values.decodeFlexibleIfPresent(forKey: .instagram_url)
+    }
+}
+
+struct BusinessRating: Decodable {
+    let average: Double?
+    let count: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case average, avg, value, rating, score
+        case count, reviews, reviewCount, reviewsCount, review_count, reviews_count
+    }
+
+    init(from decoder: Decoder) throws {
+        if let values = try? decoder.container(keyedBy: CodingKeys.self) {
+            average = values.decodeFlexibleIfPresent(forKey: .average)
+                ?? values.decodeFlexibleIfPresent(forKey: .avg)
+                ?? values.decodeFlexibleIfPresent(forKey: .value)
+                ?? values.decodeFlexibleIfPresent(forKey: .rating)
+                ?? values.decodeFlexibleIfPresent(forKey: .score)
+            count = values.decodeFlexibleIfPresent(forKey: .count)
+                ?? values.decodeFlexibleIfPresent(forKey: .reviews)
+                ?? values.decodeFlexibleIfPresent(forKey: .reviewCount)
+                ?? values.decodeFlexibleIfPresent(forKey: .reviewsCount)
+                ?? values.decodeFlexibleIfPresent(forKey: .review_count)
+                ?? values.decodeFlexibleIfPresent(forKey: .reviews_count)
+            return
+        }
+
+        average = try? decoder.singleValueContainer().decode(Double.self)
+        count = nil
+    }
+}
+
+struct BusinessWorkingHoursPeriod: Decodable {
+    let is24Hours: Bool?
+    let openDay: String?
+    let closeDay: String?
+    let openTime: String?
+    let closeTime: String?
+
+    enum CodingKeys: String, CodingKey {
+        case is24Hours, is_24_hours, is24Hour
+        case openDay, open_day, day, dayOfWeek, day_of_week, weekday
+        case closeDay, close_day
+        case openTime, open_time, open, from, start
+        case closeTime, close_time, close, to, end
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        is24Hours = values.decodeFlexibleIfPresent(forKey: .is24Hours)
+            ?? values.decodeFlexibleIfPresent(forKey: .is_24_hours)
+            ?? values.decodeFlexibleIfPresent(forKey: .is24Hour)
+        openDay = values.decodeFlexibleIfPresent(forKey: .openDay)
+            ?? values.decodeFlexibleIfPresent(forKey: .open_day)
+            ?? values.decodeFlexibleIfPresent(forKey: .day)
+            ?? values.decodeFlexibleIfPresent(forKey: .dayOfWeek)
+            ?? values.decodeFlexibleIfPresent(forKey: .day_of_week)
+            ?? values.decodeFlexibleIfPresent(forKey: .weekday)
+        closeDay = values.decodeFlexibleIfPresent(forKey: .closeDay)
+            ?? values.decodeFlexibleIfPresent(forKey: .close_day)
+        openTime = values.decodeFlexibleIfPresent(forKey: .openTime)
+            ?? values.decodeFlexibleIfPresent(forKey: .open_time)
+            ?? values.decodeFlexibleIfPresent(forKey: .open)
+            ?? values.decodeFlexibleIfPresent(forKey: .from)
+            ?? values.decodeFlexibleIfPresent(forKey: .start)
+        closeTime = values.decodeFlexibleIfPresent(forKey: .closeTime)
+            ?? values.decodeFlexibleIfPresent(forKey: .close_time)
+            ?? values.decodeFlexibleIfPresent(forKey: .close)
+            ?? values.decodeFlexibleIfPresent(forKey: .to)
+            ?? values.decodeFlexibleIfPresent(forKey: .end)
+    }
+}
+
+struct BusinessWorkingHours: Decodable {
+    let timezone: String?
+    let specialHours: [BusinessWorkingHoursPeriod]
+    let periods: [BusinessWorkingHoursPeriod]
+    let openNow: Bool?
+    let weekdayText: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case timezone, timeZone, time_zone
+        case specialHours, special_hours
+        case periods
+        case openNow, open_now, isOpen, is_open
+        case weekdayText, weekday_text
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        timezone = values.decodeFlexibleIfPresent(forKey: .timezone)
+            ?? values.decodeFlexibleIfPresent(forKey: .timeZone)
+            ?? values.decodeFlexibleIfPresent(forKey: .time_zone)
+        specialHours = (try? values.decode([BusinessWorkingHoursPeriod].self, forKey: .specialHours))
+            ?? (try? values.decode([BusinessWorkingHoursPeriod].self, forKey: .special_hours))
+            ?? []
+        periods = (try? values.decode([BusinessWorkingHoursPeriod].self, forKey: .periods)) ?? []
+        openNow = values.decodeFlexibleIfPresent(forKey: .openNow)
+            ?? values.decodeFlexibleIfPresent(forKey: .open_now)
+            ?? values.decodeFlexibleIfPresent(forKey: .isOpen)
+            ?? values.decodeFlexibleIfPresent(forKey: .is_open)
+        weekdayText = ((try? values.decode([String].self, forKey: .weekdayText))
+            ?? (try? values.decode([String].self, forKey: .weekday_text))
+            ?? [])
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+    }
+
+    var displayText: String? {
+        if let first = weekdayText.first, !first.isEmpty {
+            return weekdayText.joined(separator: "\n")
+        }
+        let formatted = periods.compactMap { period -> String? in
+            let open = period.openTime?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            let close = period.closeTime?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            guard !open.isEmpty, !close.isEmpty else { return nil }
+            if let day = period.openDay, !day.isEmpty {
+                return "\(day.capitalized) \(open) – \(close)"
+            }
+            return "Open \(open) – \(close)"
+        }
+        return formatted.isEmpty ? nil : formatted.joined(separator: "\n")
+    }
+
+    /// Compact one-line status for the detail meta card (e.g. "Open now · 9:00 AM – 11:00 PM").
+    var summaryText: String? {
+        let today = Self.currentWeekdayName(timezone: timezone)
+        let period = periods.first {
+            ($0.openDay ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == today
+        }
+        let openDisplay = Self.formatClock(period?.openTime)
+        let closeDisplay = Self.formatClock(period?.closeTime)
+
+        if openNow == true {
+            if let openDisplay, let closeDisplay {
+                return "Open now · \(openDisplay) – \(closeDisplay)"
+            }
+            if let closeDisplay { return "Open now · Closes \(closeDisplay)" }
+            return "Open now"
+        }
+        if openNow == false {
+            if let openDisplay { return "Closed · Opens \(openDisplay)" }
+            return "Closed"
+        }
+        if let openDisplay, let closeDisplay {
+            return "\(openDisplay) – \(closeDisplay)"
+        }
+        if let line = weekdayText.first(where: {
+            $0.lowercased().hasPrefix(today)
+        }) ?? weekdayText.first {
+            return line
+        }
+        return displayText?.components(separatedBy: "\n").first
+    }
+
+    private static func currentWeekdayName(timezone: String?) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        if let timezone, let tz = TimeZone(identifier: timezone) {
+            calendar.timeZone = tz
+        }
+        let names = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+        let weekday = calendar.component(.weekday, from: Date()) // 1 = Sunday
+        return names[(weekday - 1 + names.count) % names.count]
+    }
+
+    private static func formatClock(_ raw: String?) -> String? {
+        let trimmed = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !trimmed.isEmpty else { return nil }
+        let parts = trimmed.split(separator: ":")
+        guard let hourPart = parts.first, let hour24 = Int(hourPart) else { return trimmed }
+        let minute = parts.count > 1 ? String(parts[1].prefix(2)) : "00"
+        let period = hour24 >= 12 ? "PM" : "AM"
+        let hour12: Int
+        switch hour24 % 12 {
+        case 0: hour12 = 12
+        default: hour12 = hour24 % 12
+        }
+        return "\(hour12):\(minute) \(period)"
+    }
+}
+
+struct BusinessCouponValidity: Decodable {
+    let label: String?
+    let expiresAt: String?
+    let type: String?
+    let days: [String]
+    let startsAt: String?
+
+    enum CodingKeys: String, CodingKey {
+        case label, text
+        case expiresAt, expires_at, validUntil, valid_until
+        case type
+        case days, daysOfWeek, days_of_week
+        case startsAt, starts_at, validFrom, valid_from
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        label = values.decodeFlexibleIfPresent(forKey: .label)
+            ?? values.decodeFlexibleIfPresent(forKey: .text)
+        expiresAt = values.decodeFlexibleIfPresent(forKey: .expiresAt)
+            ?? values.decodeFlexibleIfPresent(forKey: .expires_at)
+            ?? values.decodeFlexibleIfPresent(forKey: .validUntil)
+            ?? values.decodeFlexibleIfPresent(forKey: .valid_until)
+        type = values.decodeFlexibleIfPresent(forKey: .type)
+        days = ((try? values.decode([String].self, forKey: .days))
+            ?? (try? values.decode([String].self, forKey: .daysOfWeek))
+            ?? (try? values.decode([String].self, forKey: .days_of_week))
+            ?? [])
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+        startsAt = values.decodeFlexibleIfPresent(forKey: .startsAt)
+            ?? values.decodeFlexibleIfPresent(forKey: .starts_at)
+            ?? values.decodeFlexibleIfPresent(forKey: .validFrom)
+            ?? values.decodeFlexibleIfPresent(forKey: .valid_from)
     }
 }
 
 struct BusinessCoupon: Decodable {
+    let id: String?
     let title: String?
     let discount: String?
+    let offer: String?
     let detail: String?
+    let discountType: String?
+    let discountValue: String?
     let validity: String?
+    let validityInfo: BusinessCouponValidity?
     let terms: [String]
 
     enum CodingKeys: String, CodingKey {
+        case id, uuid
         case title, name, badge
         case discount, discountText, discount_text, value
+        case offer
         case detail, description, subtitle
+        case discountType, discount_type
+        case discountValue, discount_value
         case validity, validUntil, valid_until, expiresAt, expires_at
         case terms, conditions
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = values.decodeFlexibleIfPresent(forKey: .id)
+            ?? values.decodeFlexibleIfPresent(forKey: .uuid)
         title = values.decodeFlexibleIfPresent(forKey: .title)
             ?? values.decodeFlexibleIfPresent(forKey: .name)
             ?? values.decodeFlexibleIfPresent(forKey: .badge)
+        offer = values.decodeFlexibleIfPresent(forKey: .offer)
         discount = values.decodeFlexibleIfPresent(forKey: .discount)
             ?? values.decodeFlexibleIfPresent(forKey: .discountText)
             ?? values.decodeFlexibleIfPresent(forKey: .discount_text)
             ?? values.decodeFlexibleIfPresent(forKey: .value)
+            ?? offer
         detail = values.decodeFlexibleIfPresent(forKey: .detail)
             ?? values.decodeFlexibleIfPresent(forKey: .description)
             ?? values.decodeFlexibleIfPresent(forKey: .subtitle)
-        validity = values.decodeFlexibleIfPresent(forKey: .validity)
-            ?? values.decodeFlexibleIfPresent(forKey: .validUntil)
-            ?? values.decodeFlexibleIfPresent(forKey: .valid_until)
-            ?? values.decodeFlexibleIfPresent(forKey: .expiresAt)
-            ?? values.decodeFlexibleIfPresent(forKey: .expires_at)
+        discountType = values.decodeFlexibleIfPresent(forKey: .discountType)
+            ?? values.decodeFlexibleIfPresent(forKey: .discount_type)
+        discountValue = values.decodeFlexibleIfPresent(forKey: .discountValue)
+            ?? values.decodeFlexibleIfPresent(forKey: .discount_value)
+        if let nested = try? values.decode(BusinessCouponValidity.self, forKey: .validity) {
+            validityInfo = nested
+            validity = nested.label
+                ?? values.decodeFlexibleIfPresent(forKey: .validUntil)
+                ?? values.decodeFlexibleIfPresent(forKey: .valid_until)
+                ?? values.decodeFlexibleIfPresent(forKey: .expiresAt)
+                ?? values.decodeFlexibleIfPresent(forKey: .expires_at)
+        } else {
+            validityInfo = nil
+            validity = values.decodeFlexibleIfPresent(forKey: .validity)
+                ?? values.decodeFlexibleIfPresent(forKey: .validUntil)
+                ?? values.decodeFlexibleIfPresent(forKey: .valid_until)
+                ?? values.decodeFlexibleIfPresent(forKey: .expiresAt)
+                ?? values.decodeFlexibleIfPresent(forKey: .expires_at)
+        }
         if let strings = (try? values.decode([String].self, forKey: .terms))
             ?? (try? values.decode([String].self, forKey: .conditions)) {
             terms = strings.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
@@ -243,7 +697,7 @@ struct BusinessHoursSlot: Decodable {
     let label: String?
 
     enum CodingKeys: String, CodingKey {
-        case day, dayOfWeek, day_of_week, weekday
+        case day, dayOfWeek, day_of_week, weekday, openDay, open_day
         case open, openTime, open_time, from, start
         case close, closeTime, close_time, to, end
         case label, text, hours
@@ -255,6 +709,8 @@ struct BusinessHoursSlot: Decodable {
             ?? values.decodeFlexibleIfPresent(forKey: .dayOfWeek)
             ?? values.decodeFlexibleIfPresent(forKey: .day_of_week)
             ?? values.decodeFlexibleIfPresent(forKey: .weekday)
+            ?? values.decodeFlexibleIfPresent(forKey: .openDay)
+            ?? values.decodeFlexibleIfPresent(forKey: .open_day)
         open = values.decodeFlexibleIfPresent(forKey: .open)
             ?? values.decodeFlexibleIfPresent(forKey: .openTime)
             ?? values.decodeFlexibleIfPresent(forKey: .open_time)
@@ -313,21 +769,36 @@ struct BusinessLocation: Decodable {
 struct BusinessItem: Decodable {
     let id: String?
     let name: String?
+    let type: String?
     let cuisine: String?
     let category: BusinessCategoryRef?
     let city: String?
     let neighborhood: String?
     let address: String?
+    let pincode: String?
+    let countryId: Int?
+    let stateId: Int?
+    let status: Int?
+    let distanceMeters: Double?
+    let latitude: Double?
+    let longitude: Double?
     let rating: Double?
     let reviewCount: Int?
     let isVerified: Bool?
+    let isFavorite: Bool?
     let imageURL: String?
+    let coverImage: String?
+    let banner: String?
+    let logo: String?
     let photoCount: Int
     let phone: String?
     let website: String?
     let instagram: String?
+    let links: BusinessLinks?
     let about: String?
+    let workingHours: BusinessWorkingHours?
     let hoursText: String?
+    let mediaURLs: [String]
     let coupons: [BusinessCoupon]
 
     enum CodingKeys: String, CodingKey {
@@ -336,127 +807,204 @@ struct BusinessItem: Decodable {
         case cuisine, type, cuisineType, cuisine_type
         case category, categoryName, category_name
         case city, neighborhood, area, address, fullAddress, full_address
+        case pincode, pinCode, pin_code, zip, zipcode, postalCode, postal_code
+        case countryId, country_id
+        case stateId, state_id
+        case status
+        case distanceMeters, distance_meters, distance
         case rating, avgRating, averageRating, avg_rating, average_rating
         case reviewCount, reviewsCount, reviews_count, review_count, reviews
         case isVerified, is_verified, verified
+        case isFavorite, is_favorite, favorite
         case coverImage, cover_image, coverImageUrl, cover_image_url, cover, coverUrl, cover_url
         case image, imageUrl, image_url, thumbnail, photo, photoUrl, photo_url
+        case banner, logo
         case media, images
-        case coupons, offers, deals
+        case coupon, coupons, offers, deals
         case location
+        case links
         case phone, phoneNumber, phone_number, contactPhone, contact_phone, tel
         case website, websiteUrl, website_url, url
         case instagram, instagramHandle, instagram_handle, instagramUrl, instagram_url
         case about, aboutText, about_text, description, bio
+        case workingHours, working_hours
         case hours, hoursText, hours_text, openingHours, opening_hours, businessHours, business_hours
         case photoCount, photosCount, photo_count, photos_count
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        id = values.decodeFlexibleIfPresent(forKey: .id)
-            ?? values.decodeFlexibleIfPresent(forKey: .uuid)
-            ?? values.decodeFlexibleIfPresent(forKey: .publicId)
-            ?? values.decodeFlexibleIfPresent(forKey: .public_id)
-        name = values.decodeFlexibleIfPresent(forKey: .name)
-            ?? values.decodeFlexibleIfPresent(forKey: .title)
-            ?? values.decodeFlexibleIfPresent(forKey: .businessName)
-            ?? values.decodeFlexibleIfPresent(forKey: .business_name)
 
-        cuisine = values.decodeFlexibleIfPresent(forKey: .cuisine)
-            ?? values.decodeFlexibleIfPresent(forKey: .type)
-            ?? values.decodeFlexibleIfPresent(forKey: .cuisineType)
-            ?? values.decodeFlexibleIfPresent(forKey: .cuisine_type)
+        id = Self.firstFlexible(from: values, keys: [.id, .uuid, .publicId, .public_id])
+        name = Self.firstFlexible(from: values, keys: [.name, .title, .businessName, .business_name])
+        type = Self.firstFlexible(from: values, keys: [.type])
+
+        let rawCuisine: String? = Self.firstFlexible(
+            from: values,
+            keys: [.cuisine, .cuisineType, .cuisine_type]
+        )
+        cuisine = Self.resolvedCuisine(rawCuisine, type: type)
 
         if let nested = try? values.decode(BusinessCategoryRef.self, forKey: .category) {
             category = nested
-        } else if let categoryName: String = values.decodeFlexibleIfPresent(forKey: .category)
-            ?? values.decodeFlexibleIfPresent(forKey: .categoryName)
-            ?? values.decodeFlexibleIfPresent(forKey: .category_name) {
+        } else if let categoryName: String = Self.firstFlexible(
+            from: values,
+            keys: [.category, .categoryName, .category_name]
+        ) {
             category = BusinessCategoryRef(id: nil, name: categoryName, slug: nil)
         } else {
             category = nil
         }
 
         let location = try? values.decode(BusinessLocation.self, forKey: .location)
-        city = values.decodeFlexibleIfPresent(forKey: .city) ?? location?.city
-        neighborhood = values.decodeFlexibleIfPresent(forKey: .neighborhood)
-            ?? values.decodeFlexibleIfPresent(forKey: .area)
-            ?? location?.neighborhood
-        address = values.decodeFlexibleIfPresent(forKey: .address)
-            ?? values.decodeFlexibleIfPresent(forKey: .fullAddress)
-            ?? values.decodeFlexibleIfPresent(forKey: .full_address)
-            ?? location?.address
+        let decodedCity: String? = Self.firstFlexible(from: values, keys: [.city])
+        city = decodedCity ?? location?.city
 
-        rating = values.decodeFlexibleIfPresent(forKey: .rating)
-            ?? values.decodeFlexibleIfPresent(forKey: .avgRating)
-            ?? values.decodeFlexibleIfPresent(forKey: .averageRating)
-            ?? values.decodeFlexibleIfPresent(forKey: .avg_rating)
-            ?? values.decodeFlexibleIfPresent(forKey: .average_rating)
+        let decodedNeighborhood: String? = Self.firstFlexible(from: values, keys: [.neighborhood, .area])
+        neighborhood = decodedNeighborhood ?? location?.neighborhood
 
-        if let count: Int = values.decodeFlexibleIfPresent(forKey: .reviewCount)
-            ?? values.decodeFlexibleIfPresent(forKey: .reviewsCount)
-            ?? values.decodeFlexibleIfPresent(forKey: .reviews_count)
-            ?? values.decodeFlexibleIfPresent(forKey: .review_count)
-            ?? values.decodeFlexibleIfPresent(forKey: .reviews) {
-            reviewCount = count
-        } else {
-            reviewCount = nil
-        }
+        let decodedAddress: String? = Self.firstFlexible(
+            from: values,
+            keys: [.address, .fullAddress, .full_address]
+        )
+        address = decodedAddress ?? location?.address
 
-        isVerified = values.decodeFlexibleIfPresent(forKey: .isVerified)
-            ?? values.decodeFlexibleIfPresent(forKey: .is_verified)
-            ?? values.decodeFlexibleIfPresent(forKey: .verified)
+        pincode = Self.firstFlexible(
+            from: values,
+            keys: [.pincode, .pinCode, .pin_code, .zip, .zipcode, .postalCode, .postal_code]
+        )
+        countryId = Self.firstFlexible(from: values, keys: [.countryId, .country_id])
+        stateId = Self.firstFlexible(from: values, keys: [.stateId, .state_id])
+        status = Self.firstFlexible(from: values, keys: [.status])
+        distanceMeters = Self.firstFlexible(
+            from: values,
+            keys: [.distanceMeters, .distance_meters, .distance]
+        )
+        latitude = location?.latitude
+        longitude = location?.longitude
 
-        let mediaItems = (try? values.decode([BusinessMedia].self, forKey: .media))
-            ?? (try? values.decode([BusinessMedia].self, forKey: .images))
-            ?? []
+        let nestedRating = try? values.decode(BusinessRating.self, forKey: .rating)
+        let decodedRating: Double? = Self.firstFlexible(
+            from: values,
+            keys: [.rating, .avgRating, .averageRating, .avg_rating, .average_rating]
+        )
+        rating = nestedRating?.average ?? decodedRating
+
+        let decodedReviewCount: Int? = Self.firstFlexible(
+            from: values,
+            keys: [.reviewCount, .reviewsCount, .reviews_count, .review_count, .reviews]
+        )
+        reviewCount = decodedReviewCount ?? nestedRating?.count
+
+        isVerified = Self.firstFlexible(from: values, keys: [.isVerified, .is_verified, .verified])
+        isFavorite = Self.firstFlexible(from: values, keys: [.isFavorite, .is_favorite, .favorite])
+
+        let mediaFromMedia = (try? values.decode([BusinessMedia].self, forKey: .media)) ?? []
+        let mediaFromImages = (try? values.decode([BusinessMedia].self, forKey: .images)) ?? []
+        let mediaItems = mediaFromMedia.isEmpty ? mediaFromImages : mediaFromMedia
+
         let coverKeys: [CodingKeys] = [
             .coverImage, .cover_image, .coverImageUrl, .cover_image_url,
-            .cover, .coverUrl, .cover_url,
-            .image, .imageUrl, .image_url, .thumbnail, .photo, .photoUrl, .photo_url
+            .cover, .coverUrl, .cover_url
         ]
-        var resolvedImage: String?
+        var decodedCover: String?
         for key in coverKeys {
             if let url = Self.mediaURL(from: values, key: key) {
-                resolvedImage = url
+                decodedCover = url
                 break
             }
         }
-        imageURL = resolvedImage ?? mediaItems.compactMap(\.resolvedURL).first
-        photoCount = values.decodeFlexibleIfPresent(forKey: .photoCount)
-            ?? values.decodeFlexibleIfPresent(forKey: .photosCount)
-            ?? values.decodeFlexibleIfPresent(forKey: .photo_count)
-            ?? values.decodeFlexibleIfPresent(forKey: .photos_count)
-            ?? mediaItems.count
+        coverImage = decodedCover
+        banner = Self.mediaURL(from: values, key: .banner)
+        logo = Self.mediaURL(from: values, key: .logo)
 
-        coupons = (try? values.decode([BusinessCoupon].self, forKey: .coupons))
-            ?? (try? values.decode([BusinessCoupon].self, forKey: .offers))
-            ?? (try? values.decode([BusinessCoupon].self, forKey: .deals))
-            ?? []
+        let resolvedMedia = mediaItems.compactMap(\.resolvedURL)
+        mediaURLs = Self.uniqueURLs([coverImage, banner].compactMap { $0 } + resolvedMedia)
+        // Explore hero uses cover image only — never the brand logo.
+        imageURL = coverImage
 
-        phone = values.decodeFlexibleIfPresent(forKey: .phone)
-            ?? values.decodeFlexibleIfPresent(forKey: .phoneNumber)
-            ?? values.decodeFlexibleIfPresent(forKey: .phone_number)
-            ?? values.decodeFlexibleIfPresent(forKey: .contactPhone)
-            ?? values.decodeFlexibleIfPresent(forKey: .contact_phone)
-            ?? values.decodeFlexibleIfPresent(forKey: .tel)
-        website = values.decodeFlexibleIfPresent(forKey: .website)
-            ?? values.decodeFlexibleIfPresent(forKey: .websiteUrl)
-            ?? values.decodeFlexibleIfPresent(forKey: .website_url)
-        instagram = Self.normalizedInstagram(
-            values.decodeFlexibleIfPresent(forKey: .instagram)
-                ?? values.decodeFlexibleIfPresent(forKey: .instagramHandle)
-                ?? values.decodeFlexibleIfPresent(forKey: .instagram_handle)
-                ?? values.decodeFlexibleIfPresent(forKey: .instagramUrl)
-                ?? values.decodeFlexibleIfPresent(forKey: .instagram_url)
+        let decodedPhotoCount: Int? = Self.firstFlexible(
+            from: values,
+            keys: [.photoCount, .photosCount, .photo_count, .photos_count]
         )
-        about = values.decodeFlexibleIfPresent(forKey: .about)
-            ?? values.decodeFlexibleIfPresent(forKey: .aboutText)
-            ?? values.decodeFlexibleIfPresent(forKey: .about_text)
-            ?? values.decodeFlexibleIfPresent(forKey: .description)
-            ?? values.decodeFlexibleIfPresent(forKey: .bio)
-        hoursText = Self.decodeHours(from: values)
+        photoCount = decodedPhotoCount ?? max(mediaURLs.count, mediaItems.count)
+
+        if let single = try? values.decode(BusinessCoupon.self, forKey: .coupon) {
+            coupons = [single]
+        } else {
+            let fromCoupons = try? values.decode([BusinessCoupon].self, forKey: .coupons)
+            let fromCoupon = try? values.decode([BusinessCoupon].self, forKey: .coupon)
+            let fromOffers = try? values.decode([BusinessCoupon].self, forKey: .offers)
+            let fromDeals = try? values.decode([BusinessCoupon].self, forKey: .deals)
+            coupons = fromCoupons ?? fromCoupon ?? fromOffers ?? fromDeals ?? []
+        }
+
+        links = try? values.decode(BusinessLinks.self, forKey: .links)
+
+        phone = Self.firstFlexible(
+            from: values,
+            keys: [.phone, .phoneNumber, .phone_number, .contactPhone, .contact_phone, .tel]
+        )
+
+        let decodedWebsite: String? = Self.firstFlexible(
+            from: values,
+            keys: [.website, .websiteUrl, .website_url]
+        )
+        website = decodedWebsite ?? links?.website
+
+        let decodedInstagram: String? = Self.firstFlexible(
+            from: values,
+            keys: [.instagram, .instagramHandle, .instagram_handle, .instagramUrl, .instagram_url]
+        )
+        instagram = Self.normalizedInstagram(decodedInstagram ?? links?.instagram)
+
+        about = Self.firstFlexible(
+            from: values,
+            keys: [.about, .aboutText, .about_text, .description, .bio]
+        )
+
+        workingHours = Self.decodeWorkingHours(from: values)
+        hoursText = workingHours?.displayText ?? Self.decodeHours(from: values)
+    }
+
+    private static func firstFlexible<T: FlexibleDecodable>(
+        from values: KeyedDecodingContainer<CodingKeys>,
+        keys: [CodingKeys]
+    ) -> T? {
+        for key in keys {
+            if let value: T = values.decodeFlexibleIfPresent(forKey: key) {
+                return value
+            }
+        }
+        return nil
+    }
+
+    private static func uniqueURLs(_ candidates: [String]) -> [String] {
+        var urls: [String] = []
+        var seen = Set<String>()
+        for candidate in candidates {
+            guard let trimmed = sanitizedURLString(candidate), !seen.contains(trimmed) else { continue }
+            seen.insert(trimmed)
+            urls.append(trimmed)
+        }
+        return urls
+    }
+
+    private static func decodeWorkingHours(
+        from values: KeyedDecodingContainer<CodingKeys>
+    ) -> BusinessWorkingHours? {
+        let keys: [CodingKeys] = [
+            .workingHours, .working_hours,
+            .openingHours, .opening_hours,
+            .businessHours, .business_hours,
+            .hours
+        ]
+        for key in keys {
+            if let hours = try? values.decode(BusinessWorkingHours.self, forKey: key) {
+                return hours
+            }
+        }
+        return nil
     }
 
     func asVenue() -> Venue? {
@@ -481,7 +1029,7 @@ struct BusinessItem: Decodable {
             rating: rating ?? 0,
             reviewCount: reviewCount ?? 0,
             deal: Self.deal(from: coupons.first),
-            isFavorite: false,
+            isFavorite: isFavorite ?? false,
             isBookmarked: false,
             isVerified: isVerified ?? false,
             artworkStyle: mappedCategory.artworkStyle,
@@ -493,8 +1041,10 @@ struct BusinessItem: Decodable {
     func asVenueDetail() -> VenueDetail? {
         guard let venue = asVenue() else { return nil }
         let area = venue.neighborhood
-        let resolvedAddress = firstNonEmpty(address, "\(area), Dubai") ?? "Dubai"
+        let resolvedAddress = Self.formattedAddress(street: address, city: city) ?? "Dubai"
         let resolvedAbout = firstNonEmpty(about) ?? "Discover \(venue.name) in \(area)."
+        let fullHours = firstNonEmpty(hoursText) ?? "Hours unavailable"
+        let summaryHours = firstNonEmpty(workingHours?.summaryText) ?? fullHours.components(separatedBy: "\n").first ?? fullHours
         return VenueDetail(
             venueID: venue.id,
             name: venue.name,
@@ -504,32 +1054,76 @@ struct BusinessItem: Decodable {
             rating: venue.rating,
             reviewCount: venue.reviewCount,
             isVerified: venue.isVerified,
+            isFavorite: venue.isFavorite,
             artworkStyle: venue.artworkStyle,
-            photoCount: max(photoCount, imageURL == nil ? 0 : 1),
+            photoCount: {
+                if !mediaURLs.isEmpty { return mediaURLs.count }
+                return imageURL == nil ? 0 : 1
+            }(),
             address: resolvedAddress,
-            hoursText: firstNonEmpty(hoursText) ?? "Hours unavailable",
+            hoursText: summaryHours,
+            hoursFullText: fullHours,
+            weekdayHours: {
+                let days = workingHours?.weekdayText ?? []
+                if !days.isEmpty { return days }
+                return fullHours
+                    .components(separatedBy: .newlines)
+                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                    .filter { !$0.isEmpty }
+            }(),
             phone: firstNonEmpty(phone) ?? "",
             website: firstNonEmpty(website) ?? "",
             instagram: firstNonEmpty(instagram) ?? "",
             deal: Self.detailDeal(from: coupons.first),
             aboutText: resolvedAbout,
             defaultTab: coupons.isEmpty ? .about : .deals,
-            imageURL: imageURL
+            imageURL: imageURL,
+            logoURL: logo,
+            mediaURLs: mediaURLs,
+            latitude: latitude,
+            longitude: longitude
         )
+    }
+
+    private static func formattedAddress(street: String?, city: String?) -> String? {
+        let streetText = street?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let cityText = city?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if streetText.isEmpty {
+            return cityText.isEmpty ? nil : cityText
+        }
+        if cityText.isEmpty || streetText.localizedCaseInsensitiveContains(cityText) {
+            return streetText
+        }
+        return "\(streetText), \(cityText)"
     }
 
     private static func mediaURL(from values: KeyedDecodingContainer<CodingKeys>, key: CodingKeys) -> String? {
         if let url: String = values.decodeFlexibleIfPresent(forKey: key) {
-            let trimmed = url.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !trimmed.isEmpty { return trimmed }
+            if let sanitized = sanitizedURLString(url) { return sanitized }
         }
         if let media = try? values.decode(BusinessMedia.self, forKey: key) {
-            return media.resolvedURL
+            return sanitizedURLString(media.resolvedURL)
         }
         if let media = try? values.decode([BusinessMedia].self, forKey: key) {
-            return media.compactMap(\.resolvedURL).first
+            return media.compactMap { sanitizedURLString($0.resolvedURL) }.first
         }
         return nil
+    }
+
+    private static func sanitizedURLString(_ raw: String?) -> String? {
+        var value = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !value.isEmpty else { return nil }
+        value = value.replacingOccurrences(of: "\\/", with: "/")
+        if value.hasPrefix("http://") || value.hasPrefix("https://") {
+            return value
+        }
+        if value.hasPrefix("/"), let origin = APIEndpoint.origin {
+            return origin + value
+        }
+        if UUID(uuidString: value) != nil {
+            return APIEndpoint.baseURL + "media/\(value)/download"
+        }
+        return value
     }
 
     private static func stableID(from raw: String?, name: String) -> UUID {
@@ -555,15 +1149,92 @@ struct BusinessItem: Decodable {
 
     private static func deal(from coupon: BusinessCoupon?) -> Deal? {
         guard let coupon else { return nil }
-        let discount = formattedDiscount(coupon.discount) ?? coupon.title
+        let discount = cleanDiscount(coupon.offer)
+            ?? cleanDiscount(coupon.discount)
+            ?? formattedDiscount(coupon.discountValue)
+            ?? cleanDiscount(coupon.title)
         guard let discount, !discount.isEmpty else { return nil }
-        let detail = coupon.detail?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let validity = coupon.validity?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let detail = dealDetailText(from: coupon)
+        let validity = formattedValidityDays(coupon.validityInfo?.days)
+            ?? coupon.validityInfo?.label?.trimmingCharacters(in: .whitespacesAndNewlines)
+            ?? coupon.validity?.trimmingCharacters(in: .whitespacesAndNewlines)
+            ?? ""
         return Deal(
             discount: discount,
-            detail: (detail?.isEmpty == false ? detail : nil) ?? "Your total bill",
-            validity: (validity?.isEmpty == false ? validity : nil) ?? ""
+            detail: detail,
+            validity: validity
         )
+    }
+
+    private static func dealDetailText(from coupon: BusinessCoupon) -> String {
+        // Prefer full API title under the discount (e.g. "15% OFF ON TOTAL BILL").
+        let title = coupon.title?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if !title.isEmpty { return title }
+
+        let description = coupon.detail?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if !description.isEmpty,
+           !description.localizedCaseInsensitiveContains("configure the headline") {
+            return description
+        }
+        return "on total bill"
+    }
+
+    /// Formats API `days` into compact ranges: "Monday – Saturday", "Sunday – Monday".
+    private static func formattedValidityDays(_ days: [String]?) -> String? {
+        guard let days, !days.isEmpty else { return nil }
+
+        let order = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+        let nameByIndex = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+        var indices = Set<Int>()
+        for raw in days {
+            let key = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            guard let index = order.firstIndex(of: key) else { continue }
+            indices.insert(index)
+        }
+        guard !indices.isEmpty else { return nil }
+
+        let sorted = indices.sorted()
+        var ranges: [(Int, Int)] = []
+        var start = sorted[0]
+        var previous = sorted[0]
+        for index in sorted.dropFirst() {
+            if index == previous + 1 {
+                previous = index
+                continue
+            }
+            ranges.append((start, previous))
+            start = index
+            previous = index
+        }
+        ranges.append((start, previous))
+
+        let parts = ranges.map { startIndex, endIndex -> String in
+            let startName = nameByIndex[startIndex]
+            if startIndex == endIndex { return startName }
+            return "\(startName) – \(nameByIndex[endIndex])"
+        }
+        return parts.joined(separator: ", ")
+    }
+
+    private static func cleanDiscount(_ raw: String?) -> String? {
+        guard let formatted = formattedDiscount(raw) else { return nil }
+        var value = formatted
+        while value.hasPrefix("-") {
+            value = String(value.dropFirst()).trimmingCharacters(in: .whitespaces)
+        }
+        return value.isEmpty ? nil : value
+    }
+
+    private static func resolvedCuisine(_ raw: String?, type: String?) -> String? {
+        let trimmed = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if !trimmed.isEmpty { return trimmed }
+        let typeValue = type?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let ignoredTypes: Set<String> = ["business", "venue", "place", "listing"]
+        if !typeValue.isEmpty, !ignoredTypes.contains(typeValue.lowercased()) {
+            return typeValue
+        }
+        return nil
     }
 
     private static func formattedDiscount(_ raw: String?) -> String? {
@@ -584,9 +1255,14 @@ struct BusinessItem: Decodable {
 
     private static func decodeHours(from values: KeyedDecodingContainer<CodingKeys>) -> String? {
         let keys: [CodingKeys] = [
+            .workingHours, .working_hours,
             .hoursText, .hours_text, .openingHours, .opening_hours, .businessHours, .business_hours, .hours
         ]
         for key in keys {
+            if let hours = try? values.decode(BusinessWorkingHours.self, forKey: key),
+               let text = hours.displayText {
+                return text
+            }
             if let text: String = values.decodeFlexibleIfPresent(forKey: key) {
                 let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !trimmed.isEmpty { return trimmed }
@@ -595,7 +1271,19 @@ struct BusinessItem: Decodable {
         for key in keys {
             if let slots = try? values.decode([BusinessHoursSlot].self, forKey: key) {
                 let formatted = slots.compactMap(\.displayText)
-                if let first = formatted.first { return first }
+                if !formatted.isEmpty { return formatted.joined(separator: "\n") }
+            }
+            if let periods = try? values.decode([BusinessWorkingHoursPeriod].self, forKey: key) {
+                let formatted = periods.compactMap { period -> String? in
+                    let open = period.openTime?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    let close = period.closeTime?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    guard !open.isEmpty, !close.isEmpty else { return nil }
+                    if let day = period.openDay, !day.isEmpty {
+                        return "\(day.capitalized) \(open) – \(close)"
+                    }
+                    return "Open \(open) – \(close)"
+                }
+                if !formatted.isEmpty { return formatted.joined(separator: "\n") }
             }
         }
         return nil
@@ -616,13 +1304,15 @@ struct BusinessItem: Decodable {
         let termTexts = coupon.terms
         let terms: [DealTerm]
         if termTexts.isEmpty {
-            let validity = coupon.validity?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            terms = [
-                DealTerm(symbolName: "calendar", text: validity.isEmpty ? "Limited time offer" : "Valid \(validity)"),
-                DealTerm(symbolName: "person", text: "Dubai Vibe members only."),
-                DealTerm(symbolName: "fork.knife", text: "Dine-in only"),
-                DealTerm(symbolName: "nosign", text: "Cannot be combined with other offers")
-            ]
+            var built: [DealTerm] = []
+            let validity = listDeal.validity.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !validity.isEmpty {
+                built.append(DealTerm(symbolName: "calendar", text: "Valid \(validity)"))
+            }
+            built.append(DealTerm(symbolName: "person", text: "OneVibe members only."))
+            built.append(DealTerm(symbolName: "fork.knife", text: "Dine-in only"))
+            built.append(DealTerm(symbolName: "nosign", text: "Cannot be combined with other offers"))
+            terms = built
         } else {
             let icons = ["calendar", "person", "fork.knife", "nosign"]
             terms = termTexts.enumerated().map { index, text in
@@ -630,31 +1320,25 @@ struct BusinessItem: Decodable {
             }
         }
         return VenueDetailDeal(
-            badge: firstNonEmptyStatic(coupon.title) ?? Deal.exclusiveBadge,
+            badge: Deal.exclusiveBadge,
             discount: listDeal.discount,
             detail: listDeal.detail,
             terms: terms,
             ctaTitle: "Unlock Deal"
         )
     }
-
-    private static func firstNonEmptyStatic(_ value: String?) -> String? {
-        let trimmed = value?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        return trimmed.isEmpty ? nil : trimmed
-    }
 }
 
 extension VenueCategory {
-    static func from(apiName: String?) -> VenueCategory {
-        let value = (apiName ?? "").lowercased()
+    static func matching(apiName: String?) -> VenueCategory? {
+        let value = (apiName ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !value.isEmpty else { return nil }
+        if value == "all" { return .all }
         if value.contains("restaurant") || value.contains("food") || value.contains("dining") {
             return .restaurants
         }
         if value.contains("bar") || value.contains("lounge") {
             return .bars
-        }
-        if value.contains("night") || value.contains("club") {
-            return .nightlife
         }
         if value.contains("cafe") || value.contains("café") || value.contains("coffee") {
             return .cafes
@@ -664,6 +1348,9 @@ extension VenueCategory {
         }
         if value.contains("beach") {
             return .beachClubs
+        }
+        if value.contains("night") || value.contains("club") {
+            return .nightlife
         }
         if value.contains("ladies") {
             return .ladiesNights
@@ -677,7 +1364,11 @@ extension VenueCategory {
         if value.contains("beauty") || value.contains("salon") {
             return .beautySalons
         }
-        return .restaurants
+        return nil
+    }
+
+    static func from(apiName: String?) -> VenueCategory {
+        matching(apiName: apiName) ?? .restaurants
     }
 
     var artworkStyle: ArtworkStyle {

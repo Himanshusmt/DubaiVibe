@@ -18,11 +18,9 @@ final class ExploreViewController: UIViewController {
     @IBOutlet private weak var headerTopConstraint: NSLayoutConstraint!
 
     private let viewModel: ExploreViewModel
-    private let categories = VenueCategory.allCases
 
-    private var selectedCategory: VenueCategory = .all
     private var searchQuery = ""
-    private var chipSizeCache: [VenueCategory: CGSize] = [:]
+    private var chipSizeCache: [ExploreCategory: CGSize] = [:]
     private var searchWorkItem: DispatchWorkItem?
 
     private var dataSource: UITableViewDiffableDataSource<Int, UUID>!
@@ -265,6 +263,9 @@ private extension ExploreViewController {
     }
 
     func loadFeed() {
+        viewModel.loadCategories { [weak self] result in
+            self?.handleCategoriesResult(result)
+        }
         viewModel.loadFeed { [weak self] result in
             self?.handleBusinessesResult(result, animated: false)
         }
@@ -285,16 +286,15 @@ private extension ExploreViewController {
     }
 
     var filteredIDs: [UUID] {
-        let query = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
-        return viewModel.venues.compactMap { venue in
-            if selectedCategory != .all, venue.category != selectedCategory {
-                return nil
-            }
-            if query.isEmpty {
-                return venue.id
-            }
-            let haystack = "\(venue.name) \(venue.cuisine) \(venue.neighborhood)"
-            return haystack.localizedCaseInsensitiveContains(query) ? venue.id : nil
+        viewModel.venues.map(\.id)
+    }
+
+    func handleCategoriesResult(_ result: Result<CategoryListResponse, APIError>) {
+        chipSizeCache.removeAll()
+        categoryCollectionView.reloadData()
+        BusinessImageLoader.prefetch(viewModel.categories.compactMap(\.iconURL))
+        if case .failure(let error) = result {
+            showErrorPopup(error)
         }
     }
 
@@ -370,6 +370,9 @@ private extension ExploreViewController {
 
     @objc func handleRefresh() {
         searchWorkItem?.cancel()
+        viewModel.loadCategories(showLoader: false) { [weak self] result in
+            self?.handleCategoriesResult(result)
+        }
         let trimmed = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty {
             viewModel.loadFeed(showLoader: false) { [weak self] result in
@@ -428,7 +431,7 @@ extension ExploreViewController: UITextFieldDelegate {
 
 extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        categories.count
+        viewModel.categories.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -438,13 +441,13 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
         ) as? CategoryChipCell else {
             return UICollectionViewCell()
         }
-        let category = categories[indexPath.item]
-        cell.configure(with: category, selected: category == selectedCategory)
+        let category = viewModel.categories[indexPath.item]
+        cell.configure(with: category, selected: category == viewModel.selectedCategory)
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let category = categories[indexPath.item]
+        let category = viewModel.categories[indexPath.item]
         if let cached = chipSizeCache[category] {
             return cached
         }
@@ -454,10 +457,13 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedCategory = categories[indexPath.item]
+        let category = viewModel.categories[indexPath.item]
+        guard category != viewModel.selectedCategory else { return }
+        viewModel.selectCategory(category) { [weak self] result in
+            self?.handleBusinessesResult(result, animated: true)
+        }
         collectionView.reloadData()
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        applySnapshot(animated: true)
         UISelectionFeedbackGenerator().selectionChanged()
     }
 }

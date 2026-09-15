@@ -28,15 +28,18 @@ struct VenueDetailRepository: VenueDetailRepositorying {
             rating: 4.8,
             reviewCount: 2400,
             isVerified: true,
+            isFavorite: false,
             artworkStyle: .zuma,
             photoCount: 120,
             address: "Gate Village 6, DIFC, Dubai",
             hoursText: "Open 12:00 – 00:00",
+            hoursFullText: "Open 12:00 – 00:00",
+            weekdayHours: ["Open 12:00 – 00:00"],
             phone: "+971 4 425 5660",
             website: "https://www.zumarestaurant.com",
             instagram: "zumadubai",
             deal: VenueDetailDeal(
-                badge: "ONEVIBE EXCLUSIVE",
+                badge: Deal.exclusiveBadge,
                 discount: "15% OFF",
                 detail: "Your total bill",
                 terms: [
@@ -59,10 +62,13 @@ struct VenueDetailRepository: VenueDetailRepositorying {
             rating: 4.7,
             reviewCount: 1800,
             isVerified: true,
+            isFavorite: false,
             artworkStyle: .rooftop,
             photoCount: 86,
             address: "Address Downtown, Dubai",
             hoursText: "Open 18:00 – 03:00",
+            hoursFullText: "Open 18:00 – 03:00",
+            weekdayHours: ["Open 18:00 – 03:00"],
             phone: "+971 4 888 3444",
             website: "https://www.celavi.com",
             instagram: "celavidubai",
@@ -79,14 +85,11 @@ struct VenueDetailRepository: VenueDetailRepositorying {
         }
         let detailDeal: VenueDetailDeal? = venue.deal.map { deal in
             VenueDetailDeal(
-                badge: "ONEVIBE EXCLUSIVE",
+                badge: Deal.exclusiveBadge,
                 discount: deal.discount,
                 detail: deal.detail,
                 terms: [
-                    DealTerm(symbolName: "calendar", text: "Valid \(deal.validity)"),
-                    DealTerm(symbolName: "person", text: "OneVibe members only."),
-                    DealTerm(symbolName: "fork.knife", text: "Dine-in only"),
-                    DealTerm(symbolName: "nosign", text: "Cannot be combined with other offers")
+                    DealTerm(symbolName: "calendar", text: "Valid \(deal.validity)")
                 ],
                 ctaTitle: "Unlock Deal"
             )
@@ -100,16 +103,20 @@ struct VenueDetailRepository: VenueDetailRepositorying {
             rating: venue.rating,
             reviewCount: venue.reviewCount,
             isVerified: venue.isVerified,
+            isFavorite: venue.isFavorite,
             artworkStyle: venue.artworkStyle,
             photoCount: 48,
             address: "\(venue.neighborhood), Dubai",
             hoursText: "Open 12:00 – 00:00",
+            hoursFullText: "Open 12:00 – 00:00",
+            weekdayHours: ["Open 12:00 – 00:00"],
             phone: "+971 4 000 0000",
             website: "https://onevibe.ae",
             instagram: "onevibedubai",
             deal: detailDeal,
             aboutText: "Discover \(venue.name) in \(venue.neighborhood).",
-            defaultTab: detailDeal == nil ? .about : .deals
+            defaultTab: detailDeal == nil ? .about : .deals,
+            imageURL: venue.imageURL
         )
     }
 }

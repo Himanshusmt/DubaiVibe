@@ -1,3 +1,4 @@
+import SDWebImage
 import UIKit
 
 final class CategoryChipCell: UICollectionViewCell {
@@ -20,6 +21,7 @@ final class CategoryChipCell: UICollectionViewCell {
     @IBOutlet private weak var titleTrailingConstraint: NSLayoutConstraint!
 
     private let selectedFill = GoldGradientView()
+    private var isChipSelected = false
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -59,27 +61,29 @@ final class CategoryChipCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        iconImageView.sd_cancelCurrentImageLoad()
         titleLabel.text = nil
         iconImageView.image = nil
+        isChipSelected = false
     }
 
-    func configure(with category: VenueCategory, selected: Bool) {
+    func configure(with category: ExploreCategory, selected: Bool) {
+        isChipSelected = selected
         titleLabel.text = category.title
         titleLabel.font = selected ? Self.selectedFont : Self.idleFont
 
-        let hasIcon = category.icon != nil
+        let hasIcon = category.hasIcon
         let padding = hasIcon ? Self.iconChipPadding : Self.textOnlyPadding
         iconLeadingConstraint.constant = padding
         titleTrailingConstraint.constant = padding
 
-        if let icon = category.icon {
+        if hasIcon {
             iconImageView.isHidden = false
             iconWidthConstraint.constant = Self.iconWidth
             titleLeadingConstraint.constant = Self.iconSpacing
-            // Screenshot / Figma icons are solid gold assets.
-            iconImageView.image = icon.withRenderingMode(.alwaysOriginal)
-            iconImageView.tintColor = AppPalette.gold
+            applyIcon(category: category, selected: selected)
         } else {
+            iconImageView.sd_cancelCurrentImageLoad()
             iconImageView.image = nil
             iconImageView.isHidden = true
             iconWidthConstraint.constant = 0
@@ -91,10 +95,6 @@ final class CategoryChipCell: UICollectionViewCell {
             chipBackgroundView.backgroundColor = .clear
             chipBackgroundView.layer.borderColor = UIColor.clear.cgColor
             titleLabel.textColor = AppPalette.onGold
-            if hasIcon {
-                iconImageView.image = category.icon?.withRenderingMode(.alwaysTemplate)
-                iconImageView.tintColor = AppPalette.onGold
-            }
         } else {
             chipBackgroundView.backgroundColor = AppPalette.chipFill
             chipBackgroundView.layer.borderColor = AppPalette.chipBorder.cgColor
@@ -102,6 +102,36 @@ final class CategoryChipCell: UICollectionViewCell {
         }
 
         applyCapsuleRadius()
+    }
+
+    private func applyIcon(category: ExploreCategory, selected: Bool) {
+        let placeholder = category.localIcon
+        if category.iconURL != nil {
+            BusinessImageLoader.setImage(
+                on: iconImageView,
+                urlString: category.iconURL,
+                placeholder: placeholder
+            ) { [weak self] image in
+                guard let self, self.isChipSelected == selected else { return }
+                self.styleIcon(image ?? placeholder, selected: selected)
+            }
+        } else {
+            styleIcon(placeholder, selected: selected)
+        }
+    }
+
+    private func styleIcon(_ image: UIImage?, selected: Bool) {
+        guard let image else {
+            iconImageView.image = nil
+            return
+        }
+        if selected {
+            iconImageView.image = image.withRenderingMode(.alwaysTemplate)
+            iconImageView.tintColor = AppPalette.onGold
+        } else {
+            iconImageView.image = image.withRenderingMode(.alwaysOriginal)
+            iconImageView.tintColor = AppPalette.gold
+        }
     }
 
     private func applyCapsuleRadius() {
@@ -114,12 +144,12 @@ final class CategoryChipCell: UICollectionViewCell {
         selectedFill.layer.masksToBounds = true
     }
 
-    static func size(for category: VenueCategory) -> CGSize {
-        let font = category.icon == nil ? selectedFont : idleFont
+    static func size(for category: ExploreCategory) -> CGSize {
+        let font = category.hasIcon ? idleFont : selectedFont
         let textWidth = (category.title as NSString).size(withAttributes: [.font: font]).width
-        let padding = category.icon == nil ? textOnlyPadding : iconChipPadding
+        let padding = category.hasIcon ? iconChipPadding : textOnlyPadding
         var width = ceil(textWidth) + padding * 2
-        if category.icon != nil {
+        if category.hasIcon {
             width += iconWidth + iconSpacing
         }
         return CGSize(width: width, height: AppMetrics.chipHeight)

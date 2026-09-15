@@ -24,6 +24,7 @@ enum APIEndpoint {
     case logout
     case logoutAll
     case updateProfile
+    case listCategories
     case listBusinesses(
         cursor: String? = nil,
         limit: Int? = nil,
@@ -62,6 +63,9 @@ enum APIEndpoint {
 
         case .updateProfile:
             return "profile"
+
+        case .listCategories:
+            return "categories"
 
         case .listBusinesses(let cursor, let limit, let name, let categoryId, let lat, let lng, let radiusMeters):
             return "businesses" + Self.query([

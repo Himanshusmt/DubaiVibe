@@ -1,4 +1,6 @@
 import UIKit
+import MapKit
+import CoreLocation
 
 final class VenueDetailViewController: UIViewController {
     private enum Metric {
@@ -21,6 +23,8 @@ final class VenueDetailViewController: UIViewController {
     @IBOutlet private weak var subtitleLabel: UILabel!
     @IBOutlet private weak var ratingLabel: UILabel!
     @IBOutlet private weak var brandTileLabel: UILabel!
+    private let brandLogoImageView = UIImageView()
+
     @IBOutlet private weak var segmentCollection: UICollectionView!
     @IBOutlet private weak var segmentCollectionHeight: NSLayoutConstraint!
     @IBOutlet private weak var tabContentTopSpacing: NSLayoutConstraint!
@@ -40,6 +44,12 @@ final class VenueDetailViewController: UIViewController {
     private var detail: VenueDetail?
     private var selectedTab: VenueDetailTab = .deals
     private var isFavorite = false
+    private var isHoursExpanded = false
+    private weak var hoursChevronImageView: UIImageView?
+    private let hoursWeekdayLabel = UILabel()
+    private var hoursCollapsedBottomConstraint: NSLayoutConstraint?
+    private var hoursExpandedBottomConstraint: NSLayoutConstraint?
+    private var didSetupHoursDropdown = false
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -103,11 +113,11 @@ private extension VenueDetailViewController {
         brandTileLabel.layer.borderWidth = 1
         brandTileLabel.layer.borderColor = AppPalette.gold.withAlphaComponent(0.7).cgColor
         brandTileLabel.clipsToBounds = true
+        brandTileLabel.text = nil
         brandTileLabel.textAlignment = .center
-        brandTileLabel.numberOfLines = 1
-        brandTileLabel.lineBreakMode = .byClipping
-        brandTileLabel.adjustsFontSizeToFitWidth = true
-        brandTileLabel.minimumScaleFactor = 0.7
+        configureBrandLogoImageView()
+
+        configureWrappingLabels()
 
         metaCardView.backgroundColor = AppPalette.detailCardFill
         metaCardView.layer.cornerRadius = Metric.cardRadius
@@ -127,6 +137,265 @@ private extension VenueDetailViewController {
         oneVibeButton.imageView?.contentMode = .scaleAspectFit
         oneVibeButton.imageEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
         oneVibeButton.clipsToBounds = true
+    }
+
+    func configureWrappingLabels() {
+        [nameLabel, subtitleLabel].forEach { label in
+            label?.numberOfLines = 2
+            label?.lineBreakMode = .byWordWrapping
+            label?.setContentCompressionResistancePriority(.required, for: .vertical)
+        }
+        nameLabel.adjustsFontSizeToFitWidth = false
+
+        // Address wraps beside a fixed Directions button (matches design screenshot).
+        addressLabel.numberOfLines = 0
+        addressLabel.lineBreakMode = .byWordWrapping
+        addressLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        addressLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        addressLabel.setContentHuggingPriority(.required, for: .vertical)
+        addressLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+
+        hoursLabel.numberOfLines = 2
+        hoursLabel.lineBreakMode = .byWordWrapping
+        hoursLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        hoursLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+        directionsButton.setContentHuggingPriority(.required, for: .horizontal)
+        directionsButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        directionsButton.setContentHuggingPriority(.required, for: .vertical)
+        directionsButton.setContentCompressionResistancePriority(.required, for: .vertical)
+
+        configureMetaCardLayout()
+    }
+
+    func configureBrandLogoImageView() {
+        brandLogoImageView.translatesAutoresizingMaskIntoConstraints = false
+        brandLogoImageView.contentMode = .scaleToFill
+        brandLogoImageView.clipsToBounds = true
+        brandLogoImageView.backgroundColor = .clear
+        brandLogoImageView.layer.cornerRadius = 14
+        brandLogoImageView.layer.cornerCurve = .continuous
+        if brandLogoImageView.superview !== brandTileLabel {
+            brandTileLabel.addSubview(brandLogoImageView)
+            NSLayoutConstraint.activate([
+                brandLogoImageView.topAnchor.constraint(equalTo: brandTileLabel.topAnchor, constant: 5),
+                brandLogoImageView.leadingAnchor.constraint(equalTo: brandTileLabel.leadingAnchor, constant: 5),
+                brandLogoImageView.trailingAnchor.constraint(equalTo: brandTileLabel.trailingAnchor, constant: -5),
+                brandLogoImageView.bottomAnchor.constraint(equalTo: brandTileLabel.bottomAnchor, constant: -5)
+            ])
+        }
+    }
+
+    /// Single meta card: address + hours separated by one divider line (no gap / nested boxes).
+    func configureMetaCardLayout() {
+        guard let locationRow = addressLabel.superview,
+              let hoursRow = hoursLabel.superview,
+              let meta = metaCardView else { return }
+
+        meta.backgroundColor = AppPalette.detailCardFill
+        meta.layer.cornerRadius = Metric.cardRadius
+        meta.layer.cornerCurve = .continuous
+        meta.layer.borderWidth = 1
+        meta.layer.borderColor = AppPalette.detailCardBorder.cgColor
+        meta.clipsToBounds = true
+
+        for row in [locationRow, hoursRow] {
+            row.backgroundColor = .clear
+            row.layer.borderWidth = 0
+            row.layer.cornerRadius = 0
+            row.clipsToBounds = false
+        }
+
+        // Thin divider only — no extra spacing between address and hours.
+        if let divider = meta.subviews.first(where: { $0 !== locationRow && $0 !== hoursRow }) {
+            divider.backgroundColor = AppPalette.detailCardBorder
+            divider.constraints.filter { $0.firstAttribute == .height }.forEach { $0.constant = 1 }
+        }
+
+        // Keep Directions pinned; address fills remaining width and grows vertically.
+        if let trailing = locationRow.constraints.first(where: {
+            ($0.firstItem as? UIView) === addressLabel
+                && $0.firstAttribute == .trailing
+                && ($0.secondItem as? UIView) === directionsButton
+        }) {
+            trailing.isActive = false
+            addressLabel.trailingAnchor.constraint(
+                equalTo: directionsButton.leadingAnchor,
+                constant: -10
+            ).isActive = true
+        }
+
+        locationRow.constraints.filter {
+            $0.firstAttribute == .height && $0.relation == .greaterThanOrEqual
+        }.forEach { $0.constant = 56 }
+
+        // Top/bottom padding so multi-line address doesn't clip.
+        NSLayoutConstraint.activate([
+            addressLabel.topAnchor.constraint(greaterThanOrEqualTo: locationRow.topAnchor, constant: 12),
+            locationRow.bottomAnchor.constraint(greaterThanOrEqualTo: addressLabel.bottomAnchor, constant: 12)
+        ])
+
+        configureHoursDropdown(in: hoursRow)
+    }
+
+    func configureHoursDropdown(in hoursRow: UIView) {
+        guard !didSetupHoursDropdown else { return }
+        didSetupHoursDropdown = true
+
+        let imageViews = hoursRow.subviews.compactMap { $0 as? UIImageView }
+        let clockView = imageViews.first
+        hoursChevronImageView = imageViews.count > 1 ? imageViews[1] : imageViews.last
+
+        // Larger, bolder dropdown chevron.
+        let chevronConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .bold)
+        hoursChevronImageView?.image = UIImage(systemName: "chevron.down", withConfiguration: chevronConfig)
+        hoursChevronImageView?.tintColor = AppPalette.gold
+        hoursChevronImageView?.contentMode = .scaleAspectFit
+        hoursChevronImageView?.constraints.forEach { constraint in
+            if constraint.firstAttribute == .width || constraint.firstAttribute == .height {
+                constraint.constant = 18
+            }
+        }
+
+        // Header stays at the top; clock + chevron track the summary label.
+        hoursRow.constraints.forEach { constraint in
+            let involvesHoursLabel = (constraint.firstItem as? UIView) === hoursLabel
+                || (constraint.secondItem as? UIView) === hoursLabel
+            let involvesClock = (constraint.firstItem as? UIView) === clockView
+                || (constraint.secondItem as? UIView) === clockView
+            let involvesChevron = (constraint.firstItem as? UIView) === hoursChevronImageView
+                || (constraint.secondItem as? UIView) === hoursChevronImageView
+
+            if involvesHoursLabel && (constraint.firstAttribute == .centerY || constraint.secondAttribute == .centerY) {
+                constraint.isActive = false
+            }
+            if involvesHoursLabel && (constraint.firstAttribute == .bottom || constraint.secondAttribute == .bottom) {
+                constraint.isActive = false
+            }
+            if involvesClock && (constraint.firstAttribute == .centerY || constraint.secondAttribute == .centerY) {
+                constraint.isActive = false
+            }
+            if involvesChevron && (constraint.firstAttribute == .centerY || constraint.secondAttribute == .centerY) {
+                constraint.isActive = false
+            }
+            if constraint.firstAttribute == .height && constraint.relation == .greaterThanOrEqual {
+                constraint.isActive = false
+            }
+        }
+
+        hoursWeekdayLabel.translatesAutoresizingMaskIntoConstraints = false
+        hoursWeekdayLabel.numberOfLines = 0
+        hoursWeekdayLabel.lineBreakMode = .byWordWrapping
+        hoursWeekdayLabel.font = UIFont.systemFont(ofSize: 13.5, weight: .regular)
+        hoursWeekdayLabel.textColor = AppPalette.secondaryText
+        hoursWeekdayLabel.isHidden = true
+        hoursWeekdayLabel.alpha = 0
+        hoursRow.insertSubview(hoursWeekdayLabel, at: 0)
+
+        // Keep the hit target above the text for taps.
+        if let hitButton = hoursRow.subviews.compactMap({ $0 as? UIButton }).first {
+            hoursRow.bringSubviewToFront(hitButton)
+        }
+
+        let collapsedBottom = hoursLabel.bottomAnchor.constraint(equalTo: hoursRow.bottomAnchor, constant: -14)
+        let expandedBottom = hoursWeekdayLabel.bottomAnchor.constraint(equalTo: hoursRow.bottomAnchor, constant: -14)
+        hoursCollapsedBottomConstraint = collapsedBottom
+        hoursExpandedBottomConstraint = expandedBottom
+        expandedBottom.isActive = false
+
+        var constraints: [NSLayoutConstraint] = [
+            hoursLabel.topAnchor.constraint(equalTo: hoursRow.topAnchor, constant: 14),
+            hoursWeekdayLabel.topAnchor.constraint(equalTo: hoursLabel.bottomAnchor, constant: 10),
+            hoursWeekdayLabel.leadingAnchor.constraint(equalTo: hoursLabel.leadingAnchor),
+            collapsedBottom
+        ]
+
+        if let chevron = hoursChevronImageView {
+            constraints.append(contentsOf: [
+                hoursWeekdayLabel.trailingAnchor.constraint(equalTo: chevron.leadingAnchor, constant: -8),
+                chevron.centerYAnchor.constraint(equalTo: hoursLabel.centerYAnchor)
+            ])
+        } else {
+            constraints.append(
+                hoursWeekdayLabel.trailingAnchor.constraint(equalTo: hoursRow.trailingAnchor, constant: -16)
+            )
+        }
+
+        if let clockView {
+            constraints.append(clockView.centerYAnchor.constraint(equalTo: hoursLabel.centerYAnchor))
+        }
+
+        NSLayoutConstraint.activate(constraints)
+        updateHoursChevron(animated: false)
+    }
+
+    func weekdayHoursAttributedText(_ lines: [String]) -> NSAttributedString {
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.lineSpacing = 5
+        paragraph.paragraphSpacing = 2
+        return NSAttributedString(string: lines.joined(separator: "\n"), attributes: [
+            .font: UIFont.systemFont(ofSize: 13.5, weight: .regular),
+            .foregroundColor: AppPalette.secondaryText,
+            .paragraphStyle: paragraph
+        ])
+    }
+
+    func updateHoursChevron(animated: Bool) {
+        let transform = isHoursExpanded
+            ? CGAffineTransform(rotationAngle: .pi)
+            : .identity
+        let changes: () -> Void = {
+            self.hoursChevronImageView?.transform = transform
+        }
+        if animated {
+            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut], animations: changes)
+        } else {
+            changes()
+        }
+    }
+
+    func setHoursExpanded(_ expanded: Bool, animated: Bool) {
+        let lines = detail?.resolvedWeekdayHours ?? []
+        guard !lines.isEmpty else {
+            isHoursExpanded = false
+            hoursWeekdayLabel.isHidden = true
+            hoursWeekdayLabel.alpha = 0
+            hoursExpandedBottomConstraint?.isActive = false
+            hoursCollapsedBottomConstraint?.isActive = true
+            updateHoursChevron(animated: false)
+            return
+        }
+
+        isHoursExpanded = expanded
+        hoursWeekdayLabel.attributedText = weekdayHoursAttributedText(lines)
+        hoursWeekdayLabel.isHidden = false
+
+        let animations = {
+            if expanded {
+                self.hoursCollapsedBottomConstraint?.isActive = false
+                self.hoursExpandedBottomConstraint?.isActive = true
+                self.hoursWeekdayLabel.alpha = 1
+            } else {
+                self.hoursExpandedBottomConstraint?.isActive = false
+                self.hoursCollapsedBottomConstraint?.isActive = true
+                self.hoursWeekdayLabel.alpha = 0
+            }
+            self.updateHoursChevron(animated: false)
+            self.view.layoutIfNeeded()
+        }
+
+        if animated {
+            UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut], animations: animations) { _ in
+                if !expanded {
+                    self.hoursWeekdayLabel.isHidden = true
+                }
+            }
+        } else {
+            animations()
+            if !expanded {
+                hoursWeekdayLabel.isHidden = true
+            }
+        }
     }
 
     func styleCircleButton(_ button: UIButton, symbol: String) {
@@ -220,23 +489,30 @@ private extension VenueDetailViewController {
             value: detail.ratingValueText,
             count: detail.reviewCountText
         )
-        brandTileLabel.text = Self.brandTileTitle(from: detail.name)
-        photosButton.configuration?.title = detail.photoCountText
+        brandTileLabel.text = nil
+        brandLogoImageView.setBusinessImage(urlString: detail.logoURL)
+        updatePhotosButtonTitle(detail.photoCountText)
         addressLabel.text = detail.address
         hoursLabel.text = detail.hoursText
+        hoursWeekdayLabel.attributedText = weekdayHoursAttributedText(detail.resolvedWeekdayHours)
+        isFavorite = detail.isFavorite
+        setHoursExpanded(isHoursExpanded, animated: false)
 
         selectedTab = detail.defaultTab
         renderTabContent()
         updateFavoriteIcon()
     }
 
+    func updatePhotosButtonTitle(_ title: String) {
+        var config = photosButton.configuration
+        config?.title = title
+        photosButton.configuration = config
+        photosButton.accessibilityLabel = title
+    }
+
     func heroURLs(for detail: VenueDetail) -> [URL] {
-        if let imageURL = detail.imageURL?.trimmingCharacters(in: .whitespacesAndNewlines),
-           !imageURL.isEmpty,
-           let url = URL(string: imageURL) {
-            return [url]
-        }
-        return VenueDemoPhotos.heroURLs
+        let urls = detail.resolvedMediaURLs
+        return urls.isEmpty ? VenueDemoPhotos.heroURLs : urls
     }
 
     func ratingAttributedText(value: String, count: String) -> NSAttributedString {
@@ -353,20 +629,27 @@ private extension VenueDetailViewController {
             .foregroundColor: AppPalette.gold,
             .kern: 1.3
         ])
+        badge.numberOfLines = 2
+        badge.lineBreakMode = .byWordWrapping
         badge.translatesAutoresizingMaskIntoConstraints = false
 
         let discount = UILabel()
         discount.text = deal.discount
         discount.font = UIFont.systemFont(ofSize: 31, weight: .bold)
         discount.textColor = AppPalette.gold
+        discount.numberOfLines = 2
+        discount.lineBreakMode = .byWordWrapping
         discount.adjustsFontSizeToFitWidth = true
         discount.minimumScaleFactor = 0.6
         discount.translatesAutoresizingMaskIntoConstraints = false
 
         let detailLabel = UILabel()
         detailLabel.text = deal.detail
-        detailLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        print("DEAL DETAIL ::", deal.detail)
+        detailLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         detailLabel.textColor = AppPalette.primaryText
+        detailLabel.numberOfLines = 0
+        detailLabel.lineBreakMode = .byWordWrapping
         detailLabel.translatesAutoresizingMaskIntoConstraints = false
 
         let termsStack = UIStackView()
@@ -499,11 +782,45 @@ private extension VenueDetailViewController {
     }
 
     @IBAction func handleDirections() {
-        presentAlert(title: L10n.directions, message: detail?.address ?? "")
+        guard let detail else { return }
+
+        if detail.hasCoordinates,
+           let latitude = detail.latitude,
+           let longitude = detail.longitude {
+            openMaps(
+                latitude: latitude,
+                longitude: longitude,
+                name: detail.name,
+                address: detail.address
+            )
+            return
+        }
+
+        // Fallback: search by address when lat/lng are missing.
+        let query = detail.address.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty,
+              let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "http://maps.apple.com/?q=\(encoded)") else {
+            presentAlert(title: L10n.directions, message: detail.address)
+            return
+        }
+        UIApplication.shared.open(url)
+    }
+
+    func openMaps(latitude: Double, longitude: Double, name: String, address: String) {
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let placemark = MKPlacemark(coordinate: coordinate)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = name.isEmpty ? address : name
+        let options = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+        mapItem.openInMaps(launchOptions: options)
     }
 
     @IBAction func handleHours() {
-        presentAlert(title: L10n.openingHours, message: detail?.hoursText ?? "")
+        let lines = detail?.resolvedWeekdayHours ?? []
+        guard !lines.isEmpty else { return }
+        setHoursExpanded(!isHoursExpanded, animated: true)
+        UISelectionFeedbackGenerator().selectionChanged()
     }
 
     @IBAction func handleCall() {
@@ -520,7 +837,11 @@ private extension VenueDetailViewController {
 
     @objc func handlePhotos() {
         let name = detail?.name ?? "Venue"
-        let controller = VenuePhotosViewController(venueName: name)
+        let urls = detail?.resolvedMediaURLs ?? []
+        let controller = VenuePhotosViewController(
+            venueName: name,
+            imageURLs: urls.isEmpty ? VenueDemoPhotos.demoURLs : urls
+        )
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

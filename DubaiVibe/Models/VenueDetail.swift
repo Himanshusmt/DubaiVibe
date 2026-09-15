@@ -40,10 +40,13 @@ struct VenueDetail: Hashable {
     let rating: Double
     let reviewCount: Int
     let isVerified: Bool
+    let isFavorite: Bool
     let artworkStyle: ArtworkStyle
     let photoCount: Int
     let address: String
     let hoursText: String
+    let hoursFullText: String
+    let weekdayHours: [String]
     let phone: String
     let website: String
     let instagram: String
@@ -51,8 +54,17 @@ struct VenueDetail: Hashable {
     let aboutText: String
     let defaultTab: VenueDetailTab
     var imageURL: String? = nil
+    var logoURL: String? = nil
+    var mediaURLs: [String] = []
+    var latitude: Double? = nil
+    var longitude: Double? = nil
 
     var subtitle: String { "\(cuisine)  •  \(neighborhood)" }
+
+    var hasCoordinates: Bool {
+        guard let latitude, let longitude else { return false }
+        return abs(latitude) <= 90 && abs(longitude) <= 180
+    }
 
     var ratingValueText: String { String(format: "%.1f", rating) }
 
@@ -65,4 +77,21 @@ struct VenueDetail: Hashable {
     }
 
     var photoCountText: String { L10n.photosCount(photoCount) }
+
+    var resolvedWeekdayHours: [String] {
+        if !weekdayHours.isEmpty { return weekdayHours }
+        return hoursFullText
+            .components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+    }
+
+    var resolvedMediaURLs: [URL] {
+        let sources = mediaURLs.isEmpty ? [imageURL].compactMap { $0 } : mediaURLs
+        return sources.compactMap { raw in
+            let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { return nil }
+            return URL(string: trimmed)
+        }
+    }
 }

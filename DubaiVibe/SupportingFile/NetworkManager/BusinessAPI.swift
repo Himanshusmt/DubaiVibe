@@ -3,10 +3,17 @@ import Foundation
 
 /// Typed mobile business APIs. ViewModels call this instead of NetworkManager directly.
 enum BusinessAPI {
+    static func listCategories(
+        showLoader: Bool = false
+    ) -> AnyPublisher<CategoryListResponse, APIError> {
+        get(.listCategories, showLoader: showLoader)
+    }
+
     static func listBusinesses(
         cursor: String? = nil,
         limit: Int = 20,
         query: String? = nil,
+        categoryId: String? = nil,
         latitude: Double? = nil,
         longitude: Double? = nil,
         showLoader: Bool = true
@@ -16,6 +23,7 @@ enum BusinessAPI {
                 cursor: cursor,
                 limit: limit,
                 name: query,
+                categoryId: categoryId,
                 lat: latitude,
                 lng: longitude
             ),

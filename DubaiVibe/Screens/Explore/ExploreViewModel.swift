@@ -4,10 +4,13 @@ import Foundation
 
 final class ExploreViewModel {
     @Published private(set) var venues: [Venue] = []
+    @Published private(set) var categories: [ExploreCategory] = [.all]
+    @Published private(set) var selectedCategory: ExploreCategory = .all
     @Published private(set) var isLoading = false
     @Published var errorMessage = ""
 
-    private var cancellables = Set<AnyCancellable>()
+    private var feedCancellables = Set<AnyCancellable>()
+    private var categoryCancellables = Set<AnyCancellable>()
     private var nextCursor: String?
     private var isPaging = false
     private var pagingFailed = false
@@ -30,6 +33,25 @@ final class ExploreViewModel {
         venues[index].isBookmarked.toggle()
     }
 
+    func loadCategories(
+        showLoader: Bool = false,
+        completion: @escaping (Result<CategoryListResponse, APIError>) -> Void
+    ) {
+        categoryCancellables.removeAll()
+        BusinessAPI.listCategories(showLoader: showLoader)
+            .sink { [weak self] completionResult in
+                if case .failure(let error) = completionResult {
+                    self?.errorMessage = error.localizedDescription
+                    completion(.failure(error))
+                }
+            } receiveValue: { [weak self] (response: CategoryListResponse) in
+                guard let self else { return }
+                self.applyCategories(response.items)
+                completion(.success(response))
+            }
+            .store(in: &categoryCancellables)
+    }
+
     func loadFeed(
         showLoader: Bool = true,
         completion: @escaping (Result<BusinessListResponse, APIError>) -> Void
@@ -47,7 +69,16 @@ final class ExploreViewModel {
         fetch(reset: true, showLoader: showLoader, completion: completion)
     }
 
-    func loadMoreIfNeeded( 
+    func selectCategory(
+        _ category: ExploreCategory,
+        showLoader: Bool = false,
+        completion: @escaping (Result<BusinessListResponse, APIError>) -> Void
+    ) {
+        selectedCategory = category
+        fetch(reset: true, showLoader: showLoader, completion: completion)
+    }
+
+    func loadMoreIfNeeded(
         completion: @escaping (Result<BusinessListResponse, APIError>) -> Void
     ) {
         guard hasMore, !isLoading, !isPaging, !pagingFailed else { return }
@@ -63,7 +94,7 @@ final class ExploreViewModel {
             nextCursor = nil
             isPaging = false
             pagingFailed = false
-            cancellables.removeAll()
+            feedCancellables.removeAll()
         } else {
             guard let cursor = nextCursor, !cursor.isEmpty else { return }
             isPaging = true
@@ -74,11 +105,13 @@ final class ExploreViewModel {
 
         let location = LocationManager.shared.lastKnownLocation?.coordinate
         let hasLocation = location != nil
+        let categoryId = selectedCategory.isAll ? nil : selectedCategory.id
 
         BusinessAPI.listBusinesses(
             cursor: reset ? nil : nextCursor,
             limit: pageSize,
             query: activeQuery.isEmpty ? nil : activeQuery,
+            categoryId: categoryId,
             latitude: hasLocation ? location?.latitude : nil,
             longitude: hasLocation ? location?.longitude : nil,
             showLoader: showLoader
@@ -102,7 +135,33 @@ final class ExploreViewModel {
             self.pagingFailed = false
             completion(.success(response))
         }
-        .store(in: &cancellables)
+        .store(in: &feedCancellables)
+    }
+
+    private func applyCategories(_ items: [CategoryItem]) {
+        let mapped = items
+            .compactMap { $0.asExploreCategory() }
+            .sorted { lhs, rhs in
+                if lhs.sortOrder == rhs.sortOrder {
+                    return lhs.title.localizedCaseInsensitiveCompare(rhs.title) == .orderedAscending
+                }
+                return lhs.sortOrder < rhs.sortOrder
+            }
+
+        let hasAll = mapped.contains(where: \.isAll)
+        categories = hasAll ? mapped : [.all] + mapped
+
+        if let currentID = selectedCategory.id {
+            if let match = categories.first(where: { $0.id == currentID }) {
+                selectedCategory = match
+            } else {
+                selectedCategory = categories.first(where: \.isAll) ?? .all
+            }
+        } else if let match = categories.first(where: \.isAll) {
+            selectedCategory = match
+        } else {
+            selectedCategory = categories.first ?? .all
+        }
     }
 
     private func merge(_ incoming: [Venue], reset: Bool) {

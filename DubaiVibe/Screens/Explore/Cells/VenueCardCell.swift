@@ -1,3 +1,4 @@
+import SDWebImage
 import UIKit
 
 final class VenueCardCell: UITableViewCell {
@@ -72,8 +73,12 @@ final class VenueCardCell: UITableViewCell {
 
         nameLabel.font = AppTypography.font(.bold, size: 15)
         nameLabel.textColor = AppPalette.primaryText
+        nameLabel.numberOfLines = 2
+        nameLabel.lineBreakMode = .byWordWrapping
         subtitleLabel.font = AppTypography.font(.medium, size: 11.5)
         subtitleLabel.textColor = AppPalette.secondaryText
+        subtitleLabel.numberOfLines = 2
+        subtitleLabel.lineBreakMode = .byWordWrapping
 
         let verifiedConfig = UIImage.SymbolConfiguration(pointSize: 13, weight: .regular)
         verifiedImageView.image = UIImage(systemName: "checkmark.seal.fill", withConfiguration: verifiedConfig)
@@ -121,12 +126,21 @@ final class VenueCardCell: UITableViewCell {
         crownImageView.contentMode = .scaleAspectFit
 
         dealTitleLabel.font = AppTypography.font(.semibold, size: 8.5)
+        dealTitleLabel.numberOfLines = 2
+        dealTitleLabel.lineBreakMode = .byWordWrapping
         dealDiscountLabel.font = AppTypography.font(.bold, size: 17)
         dealDiscountLabel.textColor = AppPalette.primaryText
+        dealDiscountLabel.numberOfLines = 2
+        dealDiscountLabel.lineBreakMode = .byWordWrapping
         dealDetailLabel.font = AppTypography.font(.regular, size: 10)
         dealDetailLabel.textColor = AppPalette.dealDetailText
+        dealDetailLabel.numberOfLines = 2
+        dealDetailLabel.lineBreakMode = .byWordWrapping
         dealValidityLabel.font = AppTypography.font(.regular, size: 9.5)
         dealValidityLabel.textColor = AppPalette.secondaryText
+        dealValidityLabel.numberOfLines = 2
+        dealValidityLabel.lineBreakMode = .byWordWrapping
+        dealValidityLabel.isHidden = true
 
         // Figma View Deal button: #F3CE85 → #D8A04D (diagonal)
         viewDealButton.backgroundColor = .clear
@@ -185,19 +199,25 @@ final class VenueCardCell: UITableViewCell {
         updateFavorite(venue.isFavorite)
         updateBookmark(venue.isBookmarked)
 
-        let deal = venue.deal ?? .fallback
-        dealBannerView.isHidden = false
-        dealHeightConstraint.constant = AppMetrics.dealHeight
-        dealTopConstraint.constant = 12
+        if let deal = venue.deal {
+            dealBannerView.isHidden = false
+            dealHeightConstraint.constant = AppMetrics.dealHeight
+            dealTopConstraint.constant = 12
 
-        dealTitleLabel.attributedText = NSAttributedString(string: deal.badge, attributes: [
-            .font: AppTypography.font(.semibold, size: 8.5),
-            .foregroundColor: AppPalette.exclusiveGold,
-            .kern: 0.425
-        ])
-        dealDiscountLabel.text = deal.discount
-        dealDetailLabel.text = deal.detail
-        dealValidityLabel.text = deal.validity
+            dealTitleLabel.attributedText = NSAttributedString(string: deal.badge, attributes: [
+                .font: AppTypography.font(.semibold, size: 8.5),
+                .foregroundColor: AppPalette.exclusiveGold,
+                .kern: 0.425
+            ])
+            dealDiscountLabel.text = deal.discount
+            dealDetailLabel.text = deal.detail
+            dealValidityLabel.text = nil
+            dealValidityLabel.isHidden = true
+        } else {
+            dealBannerView.isHidden = true
+            dealHeightConstraint.constant = 0
+            dealTopConstraint.constant = 0
+        }
     }
 
     private func applyWordmark(_ venue: Venue) {
