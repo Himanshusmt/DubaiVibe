@@ -79,6 +79,8 @@ enum L10n {
     static var enterVenueCodePlaceholder: String { "deal.enterVenueCodePlaceholder".localized }
     static var enterVenueCodeHint: String { "deal.enterVenueCodeHint".localized }
     static var enterCodeDone: String { "deal.done".localized }
+    static var unlockOfferMissing: String { "deal.unlockMissing".localized }
+    static var unlockOfferFailed: String { "deal.unlockFailed".localized }
     static var favorite: String { "deal.favorite".localized }
     static var bookmark: String { "deal.bookmark".localized }
 
@@ -109,6 +111,8 @@ enum L10n {
     static func otpResendIn(minutes: Int, seconds: Int) -> String {
         LocalizationManager.shared.format("auth.otpResendIn", minutes, seconds)
     }
+    static var verifyOTP: String { "auth.verifyOTP".localized }
+    static var enterOTPCode: String { "auth.enterOTP".localized }
     static var nameTitle: String { "auth.nameTitle".localized }
     static var nameSubtitle: String { "auth.nameSubtitle".localized }
     static var createAccount: String { "auth.createAccount".localized }
@@ -282,6 +286,7 @@ extension UIView {
             "We'll send you a verification code to get you started.": L10n.phoneSubtitle,
             "Enter mobile number": L10n.enterMobileNumber,
             "Send OTP": L10n.sendOTP,
+            "Verify OTP": L10n.verifyOTP,
             "Your number is secure and will never be shared with anyone.": L10n.phoneSecure,
             "Enter the 6-digit code": L10n.otpTitle,
             "We sent a verification code to": L10n.otpSentPrefix.trimmingCharacters(in: .newlines),

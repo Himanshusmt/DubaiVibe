@@ -524,8 +524,21 @@ Terms of Service and Privacy Policy.</string>
                                                     <constraint firstAttribute="height" constant="56" id="jUA-ll-93a"/>
                                                 </constraints>
                                             </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="otp-verify" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
+                                                <rect key="frame" x="24" y="369.66666666666669" width="345" height="54"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="54" id="otp-verify-h"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                <state key="normal" title="Verify OTP">
+                                                    <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="verifyTapped:" destination="otp-vc" eventType="touchUpInside" id="otp-verify-act"/>
+                                                </connections>
+                                            </button>
                                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Didn't receive the code? Resend in 01:00" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="otp-resend">
-                                                <rect key="frame" x="24" y="369.66666666666669" width="345" height="17"/>
+                                                <rect key="frame" x="24" y="447.66666666666669" width="345" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -539,7 +552,10 @@ Terms of Service and Privacy Policy.</string>
                                             <constraint firstItem="otp-subtitle" firstAttribute="trailing" secondItem="otp-title" secondAttribute="trailing" id="otp-c10"/>
                                             <constraint firstItem="otp-boxes" firstAttribute="leading" secondItem="otp-title" secondAttribute="leading" id="otp-c12"/>
                                             <constraint firstItem="otp-boxes" firstAttribute="trailing" secondItem="otp-title" secondAttribute="trailing" id="otp-c13"/>
-                                            <constraint firstItem="otp-resend" firstAttribute="top" secondItem="otp-boxes" secondAttribute="bottom" constant="24" id="otp-c14"/>
+                                            <constraint firstItem="otp-verify" firstAttribute="top" secondItem="otp-boxes" secondAttribute="bottom" constant="24" id="otp-c14a"/>
+                                            <constraint firstItem="otp-verify" firstAttribute="leading" secondItem="otp-title" secondAttribute="leading" id="otp-c14b"/>
+                                            <constraint firstItem="otp-verify" firstAttribute="trailing" secondItem="otp-title" secondAttribute="trailing" id="otp-c14c"/>
+                                            <constraint firstItem="otp-resend" firstAttribute="top" secondItem="otp-verify" secondAttribute="bottom" constant="24" id="otp-c14"/>
                                             <constraint firstItem="otp-resend" firstAttribute="leading" secondItem="otp-title" secondAttribute="leading" id="otp-c15"/>
                                             <constraint firstItem="otp-resend" firstAttribute="trailing" secondItem="otp-title" secondAttribute="trailing" id="otp-c16"/>
                                             <constraint firstAttribute="bottom" secondItem="otp-resend" secondAttribute="bottom" constant="24" id="otp-c17"/>
@@ -591,6 +607,7 @@ Terms of Service and Privacy Policy.</string>
                     </view>
                     <connections>
                         <outlet property="otpView" destination="otp-boxes" id="otp-out-boxes"/>
+                        <outlet property="verifyButton" destination="otp-verify" id="otp-out-verify"/>
                         <outlet property="resendLabel" destination="otp-resend" id="otp-out-resend"/>
                         <outlet property="subtitleLabel" destination="otp-subtitle" id="otp-out-sub"/>
                         <outlet property="titleLabel" destination="otp-title" id="otp-out-title"/>

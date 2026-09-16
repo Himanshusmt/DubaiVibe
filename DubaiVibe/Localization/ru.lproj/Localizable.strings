@@ -54,7 +54,7 @@
 "profile.deleteTitle" = "Удалить аккаунт";
 "profile.deleteSubtitle" = "Безвозвратно удалить профиль OneVibe";
 "profile.deleteConfirm" = "Это навсегда удалит ваш профиль OneVibe. Действие нельзя отменить.";
-"profile.contactPlaceholder" = "Добавьте телефон или email в профиле";
+"profile.contactPlaceholder" = "Добавьте телефон в профиле";
 "profile.versionPrefix" = "Dubai Vibe iOS";
 "profile.downloaders" = "10 тыс. загрузок";
 
@@ -82,6 +82,8 @@
 "deal.enterVenueCodePlaceholder" = "введите код заведения";
 "deal.enterVenueCodeHint" = "Введите буквенно-цифровой код от вашего официанта";
 "deal.done" = "Готово ✓";
+"deal.unlockMissing" = "У предложения нет идентификатора. Обновите экран и попробуйте снова.";
+"deal.unlockFailed" = "Не удалось открыть предложение. Проверьте код и попробуйте снова.";
 "deal.favorite" = "Избранное";
 "deal.bookmark" = "Закладка";
 
@@ -112,6 +114,8 @@
 "auth.otpDidntReceive" = "Не получили код? ";
 "auth.otpResend" = "Отправить снова";
 "auth.otpResendIn" = "Повторно через %02d:%02d";
+"auth.verifyOTP" = "Подтвердить код";
+"auth.enterOTP" = "Пожалуйста, введите 6-значный код.";
 "auth.nameTitle" = "Как вас зовут?";
 "auth.nameSubtitle" = "Это будет отображаться в вашем профиле.";
 "auth.createAccount" = "Создать аккаунт";

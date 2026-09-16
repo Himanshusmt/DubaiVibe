@@ -94,9 +94,7 @@ final class SignupWithPhoneNumberVC: UIViewController {
         otp.phoneCode = dialCode
         otp.phoneNumber = AuthViewModel.sanitizedNationalNumber(phone)
         otp.phoneNumberDisplay = "\(dialCode) \(phone)"
-        #if DEBUG
         otp.debugOTPCode = debugCode
-        #endif
         navigationController?.pushViewController(otp, animated: true)
     }
 }

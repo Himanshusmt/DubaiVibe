@@ -50,14 +50,18 @@ struct AuthUser: Codable {
             ?? values.decodeFlexibleIfPresent(forKey: .phone_code)
         notificationsEnabled = values.decodeFlexibleIfPresent(forKey: .notificationsEnabled)
             ?? values.decodeFlexibleIfPresent(forKey: .notifications_enabled)
+        let nestedAvatar = try? values.decode(AuthAvatarMedia.self, forKey: .avatar)
         avatarURL = values.decodeFlexibleIfPresent(forKey: .avatarURL)
             ?? values.decodeFlexibleIfPresent(forKey: .avatarUrl)
             ?? values.decodeFlexibleIfPresent(forKey: .avatar_url)
             ?? values.decodeFlexibleIfPresent(forKey: .avatar)
+            ?? nestedAvatar?.resolvedURL
         avatarMediaId = values.decodeFlexibleIfPresent(forKey: .avatarMediaId)
             ?? values.decodeFlexibleIfPresent(forKey: .avatar_media_id)
+            ?? nestedAvatar?.resolvedMediaId
         avatarUploadUuid = values.decodeFlexibleIfPresent(forKey: .avatarUploadUuid)
             ?? values.decodeFlexibleIfPresent(forKey: .avatar_upload_uuid)
+            ?? nestedAvatar?.resolvedUploadUuid
         isOnboardingComplete = values.decodeFlexibleIfPresent(forKey: .isOnboardingComplete)
             ?? values.decodeFlexibleIfPresent(forKey: .isOnboardingCompleteCamel)
     }
@@ -86,8 +90,39 @@ struct AuthUser: Codable {
     }
 
     var hasUploadedAvatar: Bool {
-        let remote = avatarURL?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let remote = resolvedAvatarURL ?? ""
         return !remote.isEmpty || resolvedAvatarUploadUuid != nil
+    }
+
+    /// Absolute URL suitable for `setBusinessImage` (handles relative paths + media UUIDs).
+    var resolvedAvatarURL: String? {
+        Self.sanitizedMediaURL(avatarURL)
+            ?? Self.sanitizedMediaURL(resolvedAvatarUploadUuid)
+    }
+
+    private static func sanitizedMediaURL(_ raw: String?) -> String? {
+        var value = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !value.isEmpty else { return nil }
+        value = value.replacingOccurrences(of: "\\/", with: "/")
+        if value.hasPrefix("http://") || value.hasPrefix("https://") {
+            return value
+        }
+        if value.hasPrefix("/"), let origin = Self.apiOrigin {
+            return origin + value
+        }
+        if UUID(uuidString: value) != nil {
+            return APIEndpoint.baseURL + "media/\(value)/download"
+        }
+        return value
+    }
+
+    private static var apiOrigin: String? {
+        guard let url = URL(string: APIEndpoint.baseURL), let host = url.host else { return nil }
+        let scheme = url.scheme ?? "http"
+        if let port = url.port {
+            return "\(scheme)://\(host):\(port)"
+        }
+        return "\(scheme)://\(host)"
     }
 
     var resolvedFullName: String? {
@@ -112,16 +147,26 @@ struct AuthUser: Codable {
         return splitName().last
     }
 
-    /// Prefer `phone_code` + national number when both are present.
+    /// Prefer `phone_code` + national number when both are present, formatted for display.
     var resolvedPhoneDisplay: String? {
         let national = phone?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let code = phoneCode?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        if !code.isEmpty, !national.isEmpty {
-            let normalizedCode = code.hasPrefix("+") ? code : "+\(code)"
-            return "\(normalizedCode) \(national)"
+        let rawCode = phoneCode?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !national.isEmpty || !rawCode.isEmpty else { return nil }
+
+        let normalizedCode: String
+        if rawCode.isEmpty {
+            normalizedCode = national.digitsOnly.hasPrefix("1") && !national.digitsOnly.hasPrefix("971")
+                ? "+1"
+                : "+971"
+        } else {
+            normalizedCode = rawCode.hasPrefix("+") ? rawCode : "+\(rawCode)"
         }
-        if !national.isEmpty { return national }
-        return nil
+
+        let iso = normalizedCode.digitsOnly == "1" ? "US" : "AE"
+        let source = national.isEmpty ? rawCode : national
+        let formatted = source.phoneDisplay(dialCode: normalizedCode, countryISO: iso)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return formatted.isEmpty ? nil : formatted
     }
 
     private func splitName() -> (first: String?, last: String?) {
@@ -133,6 +178,57 @@ struct AuthUser: Codable {
         guard !parts.isEmpty else { return (nil, nil) }
         if parts.count == 1 { return (parts[0], nil) }
         return (parts[0], parts.dropFirst().joined(separator: " "))
+    }
+}
+
+/// Nested `avatar` object from `/users/me` when the API returns media metadata instead of a bare URL.
+private struct AuthAvatarMedia: Decodable {
+    let id: String?
+    let uuid: String?
+    let mediaId: String?
+    let uploadUuid: String?
+    let sourceURL: String?
+    let url: String?
+    let src: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, uuid, url, src
+        case mediaId, media_id
+        case uploadUuid, upload_uuid
+        case sourceURL, sourceUrl, source_url
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = values.decodeFlexibleIfPresent(forKey: .id)
+        uuid = values.decodeFlexibleIfPresent(forKey: .uuid)
+        mediaId = values.decodeFlexibleIfPresent(forKey: .mediaId)
+            ?? values.decodeFlexibleIfPresent(forKey: .media_id)
+        uploadUuid = values.decodeFlexibleIfPresent(forKey: .uploadUuid)
+            ?? values.decodeFlexibleIfPresent(forKey: .upload_uuid)
+        sourceURL = values.decodeFlexibleIfPresent(forKey: .sourceURL)
+            ?? values.decodeFlexibleIfPresent(forKey: .sourceUrl)
+            ?? values.decodeFlexibleIfPresent(forKey: .source_url)
+        url = values.decodeFlexibleIfPresent(forKey: .url)
+        src = values.decodeFlexibleIfPresent(forKey: .src)
+    }
+
+    var resolvedURL: String? {
+        [sourceURL, url, src]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+
+    var resolvedMediaId: String? {
+        [mediaId, id, uuid]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+
+    var resolvedUploadUuid: String? {
+        [uploadUuid, uuid, id]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
     }
 }
 
@@ -361,10 +457,12 @@ struct ProfileData: Decodable {
         id = values.decodeFlexibleIfPresent(forKey: .id)
         name = values.decodeFlexibleIfPresent(forKey: .name)
         notificationsEnabled = values.decodeFlexibleIfPresent(forKey: .notificationsEnabled)
+        let nestedAvatar = try? values.decode(AuthAvatarMedia.self, forKey: .avatar)
         avatarURL = values.decodeFlexibleIfPresent(forKey: .avatarURL)
             ?? values.decodeFlexibleIfPresent(forKey: .avatarUrl)
             ?? values.decodeFlexibleIfPresent(forKey: .avatar_url)
             ?? values.decodeFlexibleIfPresent(forKey: .avatar)
+            ?? nestedAvatar?.resolvedURL
         isOnboardingComplete = values.decodeFlexibleIfPresent(forKey: .isOnboardingComplete)
             ?? values.decodeFlexibleIfPresent(forKey: .isOnboardingCompleteCamel)
     }

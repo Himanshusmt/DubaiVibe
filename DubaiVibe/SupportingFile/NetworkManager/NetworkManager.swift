@@ -1455,7 +1455,7 @@ enum AppToast {
         container.layer.borderColor = AppPalette.gold.withAlphaComponent(0.45).cgColor
         container.translatesAutoresizingMaskIntoConstraints = false
         container.alpha = 0
-        container.transform = CGAffineTransform(translationX: 0, y: 10)
+        container.transform = CGAffineTransform(translationX: 0, y: -10)
 
         let label = UILabel()
         label.text = text
@@ -1477,7 +1477,7 @@ enum AppToast {
             container.centerXAnchor.constraint(equalTo: window.centerXAnchor),
             container.leadingAnchor.constraint(greaterThanOrEqualTo: window.leadingAnchor, constant: 24),
             container.trailingAnchor.constraint(lessThanOrEqualTo: window.trailingAnchor, constant: -24),
-            container.bottomAnchor.constraint(equalTo: window.safeAreaLayoutGuide.bottomAnchor, constant: -24)
+            container.topAnchor.constraint(equalTo: window.safeAreaLayoutGuide.topAnchor, constant: 12)
         ])
 
         UIView.animate(withDuration: 0.25) {
@@ -1490,7 +1490,7 @@ enum AppToast {
                 options: .curveEaseIn
             ) {
                 container.alpha = 0
-                container.transform = CGAffineTransform(translationX: 0, y: 8)
+                container.transform = CGAffineTransform(translationX: 0, y: -8)
             } completion: { _ in
                 container.removeFromSuperview()
             }

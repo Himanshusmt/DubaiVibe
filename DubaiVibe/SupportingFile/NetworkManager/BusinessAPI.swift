@@ -43,6 +43,21 @@ enum BusinessAPI {
         )
     }
 
+    /// `POST /businesses/offers/{offerId}/unlock` with `{ "unlockKey": "..." }`.
+    static func unlockOffer(
+        offerId: String,
+        unlockKey: String,
+        showLoader: Bool = true
+    ) -> AnyPublisher<UnlockOfferResponse, APIError> {
+        NetworkManager.shared.request(
+            endpoint: .unlockOffer(offerId: offerId),
+            method: .POST,
+            parameters: ["unlockKey": unlockKey],
+            showLoader: showLoader,
+            showErrorAlert: false
+        )
+    }
+
     private static func get<T: Decodable>(
         _ endpoint: APIEndpoint,
         showLoader: Bool

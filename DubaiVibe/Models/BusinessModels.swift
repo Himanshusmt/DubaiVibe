@@ -1157,6 +1157,8 @@ struct BusinessItem: Decodable {
         let detail = dealDetailText(from: coupon)
         let validity = formattedValidityDays(coupon.validityInfo?.days)
             ?? coupon.validityInfo?.label?.trimmingCharacters(in: .whitespacesAndNewlines)
+            ?? formattedValidUntil(coupon.validityInfo?.expiresAt)
+            ?? formattedValidUntil(coupon.validity)
             ?? coupon.validity?.trimmingCharacters(in: .whitespacesAndNewlines)
             ?? ""
         return Deal(
@@ -1164,6 +1166,26 @@ struct BusinessItem: Decodable {
             detail: detail,
             validity: validity
         )
+    }
+
+    /// Turns API ISO dates (`2026-12-15T00:00:00.000Z`) into `Valid until 15 Dec 2026`.
+    private static func formattedValidUntil(_ raw: String?) -> String? {
+        let value = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !value.isEmpty else { return nil }
+        guard let date = parseCouponISO8601(value) else { return nil }
+        let formatter = DateFormatter()
+        formatter.locale = LocalizationManager.shared.locale
+        formatter.dateFormat = "d MMM yyyy"
+        return "\(L10n.validUntil) \(formatter.string(from: date))"
+    }
+
+    private static func parseCouponISO8601(_ value: String) -> Date? {
+        let fractional = ISO8601DateFormatter()
+        fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = fractional.date(from: value) { return date }
+        let basic = ISO8601DateFormatter()
+        basic.formatOptions = [.withInternetDateTime]
+        return basic.date(from: value)
     }
 
     private static func dealDetailText(from coupon: BusinessCoupon) -> String {
@@ -1318,7 +1340,10 @@ struct BusinessItem: Decodable {
             var built: [DealTerm] = []
             let validity = listDeal.validity.trimmingCharacters(in: .whitespacesAndNewlines)
             if !validity.isEmpty {
-                built.append(DealTerm(symbolName: "calendar", text: "Valid \(validity)"))
+                let calendarText = validity.lowercased().hasPrefix("valid")
+                    ? validity
+                    : "Valid \(validity)"
+                built.append(DealTerm(symbolName: "calendar", text: calendarText))
             }
             built.append(DealTerm(symbolName: "person", text: "OneVibe members only."))
             built.append(DealTerm(symbolName: "fork.knife", text: "Dine-in only"))
@@ -1335,8 +1360,165 @@ struct BusinessItem: Decodable {
             discount: listDeal.discount,
             detail: listDeal.detail,
             terms: terms,
-            ctaTitle: "Unlock Deal"
+            ctaTitle: "Unlock Deal",
+            offerId: coupon.id?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         )
+    }
+}
+
+// MARK: - Unlock Offer (`POST /businesses/offers/{offerId}/unlock`)
+
+struct UnlockOfferResponse: Decodable {
+    let success: Bool?
+    let message: String?
+    let data: UnlockOfferData?
+
+    enum CodingKeys: String, CodingKey {
+        case success, message, data
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = values.decodeFlexibleIfPresent(forKey: .success)
+        message = values.decodeFlexibleIfPresent(forKey: .message)
+        data = try? values.decode(UnlockOfferData.self, forKey: .data)
+    }
+
+    var resolvedData: UnlockOfferData? {
+        guard success != false else { return nil }
+        return data
+    }
+}
+
+struct UnlockOfferData: Decodable {
+    let redemptionId: String?
+    let redemptionCode: String?
+    let status: String?
+    let redeemedAt: String?
+    /// Short-lived code expiry from unlock (often ~15 minutes).
+    let expiresAt: String?
+    /// Deal / membership validity end (`validUntil` from unlock API).
+    let validUntil: String?
+    let validityMinutes: Int?
+    let offer: UnlockOfferRef?
+    let business: UnlockOfferBusinessRef?
+
+    enum CodingKeys: String, CodingKey {
+        case redemptionId, redemption_id
+        case redemptionCode, redemption_code, code
+        case status
+        case redeemedAt, redeemed_at
+        case expiresAt, expires_at
+        case validUntil, valid_until
+        case validityMinutes, validity_minutes
+        case offer
+        case business
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        redemptionId = values.decodeFlexibleIfPresent(forKey: .redemptionId)
+            ?? values.decodeFlexibleIfPresent(forKey: .redemption_id)
+        redemptionCode = values.decodeFlexibleIfPresent(forKey: .redemptionCode)
+            ?? values.decodeFlexibleIfPresent(forKey: .redemption_code)
+            ?? values.decodeFlexibleIfPresent(forKey: .code)
+        status = values.decodeFlexibleIfPresent(forKey: .status)
+        redeemedAt = values.decodeFlexibleIfPresent(forKey: .redeemedAt)
+            ?? values.decodeFlexibleIfPresent(forKey: .redeemed_at)
+        expiresAt = values.decodeFlexibleIfPresent(forKey: .expiresAt)
+            ?? values.decodeFlexibleIfPresent(forKey: .expires_at)
+        validUntil = values.decodeFlexibleIfPresent(forKey: .validUntil)
+            ?? values.decodeFlexibleIfPresent(forKey: .valid_until)
+        if let minutes: Int = values.decodeFlexibleIfPresent(forKey: .validityMinutes)
+            ?? values.decodeFlexibleIfPresent(forKey: .validity_minutes) {
+            validityMinutes = minutes
+        } else {
+            validityMinutes = nil
+        }
+        offer = try? values.decode(UnlockOfferRef.self, forKey: .offer)
+        business = try? values.decode(UnlockOfferBusinessRef.self, forKey: .business)
+    }
+
+    var redeemedDate: Date {
+        Self.parseISO8601(redeemedAt) ?? Date()
+    }
+
+    /// Prefer API `validUntil` for the membership "Valid Until" row.
+    var validUntilDate: Date {
+        if let parsed = Self.parseISO8601(validUntil) {
+            return parsed
+        }
+        if let parsed = Self.parseISO8601(expiresAt) {
+            return parsed
+        }
+        let minutes = max(validityMinutes ?? 15, 1)
+        return redeemedDate.addingTimeInterval(TimeInterval(minutes * 60))
+    }
+
+    var expiresDate: Date {
+        if let parsed = Self.parseISO8601(expiresAt) {
+            return parsed
+        }
+        let minutes = max(validityMinutes ?? 15, 1)
+        return redeemedDate.addingTimeInterval(TimeInterval(minutes * 60))
+    }
+
+    var resolvedCode: String {
+        let code = redemptionCode?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return code
+    }
+
+    private static func parseISO8601(_ raw: String?) -> Date? {
+        let value = raw?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !value.isEmpty else { return nil }
+        if let date = isoFractional.date(from: value) { return date }
+        return isoBasic.date(from: value)
+    }
+
+    private static let isoFractional: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter
+    }()
+
+    private static let isoBasic: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter
+    }()
+}
+
+struct UnlockOfferRef: Decodable {
+    let id: String?
+    let title: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, uuid, title, name
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = values.decodeFlexibleIfPresent(forKey: .id)
+            ?? values.decodeFlexibleIfPresent(forKey: .uuid)
+        title = values.decodeFlexibleIfPresent(forKey: .title)
+            ?? values.decodeFlexibleIfPresent(forKey: .name)
+    }
+}
+
+struct UnlockOfferBusinessRef: Decodable {
+    let id: String?
+    let name: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, uuid, name, title
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = values.decodeFlexibleIfPresent(forKey: .id)
+            ?? values.decodeFlexibleIfPresent(forKey: .uuid)
+        name = values.decodeFlexibleIfPresent(forKey: .name)
+            ?? values.decodeFlexibleIfPresent(forKey: .title)
     }
 }
 

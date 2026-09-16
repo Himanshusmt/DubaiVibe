@@ -29,6 +29,24 @@ struct VenueDetailDeal: Hashable {
     let detail: String
     let terms: [DealTerm]
     let ctaTitle: String
+    /// Coupon / offer id from `business.coupons[].id` — used for unlock API.
+    let offerId: String
+
+    init(
+        badge: String,
+        discount: String,
+        detail: String,
+        terms: [DealTerm],
+        ctaTitle: String,
+        offerId: String = ""
+    ) {
+        self.badge = badge
+        self.discount = discount
+        self.detail = detail
+        self.terms = terms
+        self.ctaTitle = ctaTitle
+        self.offerId = offerId
+    }
 }
 
 struct VenueDetail: Hashable {

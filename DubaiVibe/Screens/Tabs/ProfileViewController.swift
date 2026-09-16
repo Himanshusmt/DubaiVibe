@@ -69,6 +69,11 @@ private extension ProfileViewController {
         brandImageView?.applyBrandTileChrome()
         brandImageView?.accessibilityLabel = L10n.brandName
 
+        nameLabel?.numberOfLines = 2
+        nameLabel?.lineBreakMode = .byWordWrapping
+        nameLabel?.adjustsFontSizeToFitWidth = true
+        nameLabel?.minimumScaleFactor = 0.75
+
         pushSwitch?.onTintColor = AppPalette.gold
         pushSwitch?.isOn = UserDefaults.standard.object(forKey: Storage.pushEnabledKey) as? Bool ?? true
         languageValueLabel?.text = Self.languageValueText
@@ -77,9 +82,9 @@ private extension ProfileViewController {
     }
 
     func configureActions() {
-        let avatarTap = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
-        avatarImageView?.isUserInteractionEnabled = true
-        avatarImageView?.addGestureRecognizer(avatarTap)
+//        let avatarTap = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
+//        avatarImageView?.isUserInteractionEnabled = true
+//        avatarImageView?.addGestureRecognizer(avatarTap)
 
         let badgeTap = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
         cameraBadge?.isUserInteractionEnabled = true
@@ -142,20 +147,18 @@ private extension ProfileViewController {
         let apiName = user?.resolvedFullName
         let localName = [localFirst, localLast].filter { !$0.isEmpty }.joined(separator: " ")
         let fullName = !(apiName ?? "").isEmpty ? (apiName ?? "") : (localName.isEmpty ? "Guest" : localName)
-        nameLabel?.text = fullName.split(separator: " ").first.map(String.init) ?? fullName
+        nameLabel?.text = fullName
 
         let phone = user?.resolvedPhoneDisplay
-        let email = user?.email
-            ?? defaults.string(forKey: "AppleSignInEmail")
-            ?? defaults.string(forKey: "GoogleSignInEmail")
-        contactLabel?.text = Self.contactLine(phone: phone, email: email)
+        contactLabel?.text = phone
+        contactLabel?.isHidden = (phone ?? "").isEmpty
 
         if let notifications = user?.notificationsEnabled {
             pushSwitch?.isOn = notifications
             defaults.set(notifications, forKey: Storage.pushEnabledKey)
         }
 
-        if let remote = user?.avatarURL, !remote.isEmpty {
+        if let remote = user?.resolvedAvatarURL, !remote.isEmpty {
             avatarImageView?.setBusinessImage(urlString: remote)
             avatarImageView?.contentMode = .scaleAspectFill
             avatarImageView?.tintColor = nil
@@ -164,13 +167,6 @@ private extension ProfileViewController {
         } else {
             applyPlaceholderAvatar()
         }
-    }
-
-    static func contactLine(phone: String?, email: String?) -> String {
-        let parts = [phone, email]
-            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-        return parts.isEmpty ? L10n.profileContactPlaceholder : parts.joined(separator: "  •  ")
     }
 
     func applyPhotoAvatar(_ image: UIImage) {

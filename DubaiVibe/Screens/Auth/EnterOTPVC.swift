@@ -9,6 +9,7 @@ final class EnterOTPVC: UIViewController {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var subtitleLabel: UILabel!
     @IBOutlet private weak var otpView: AuthOTPView!
+    @IBOutlet private weak var verifyButton: GoldGradientButton!
     @IBOutlet private weak var resendLabel: UILabel!
     @IBOutlet private weak var contentScrollView: UIScrollView?
 
@@ -17,6 +18,7 @@ final class EnterOTPVC: UIViewController {
     private var timer: Timer?
     private var didAdvance = false
     private var isSubmitting = false
+    private var didScheduleDebugOTPAutofill = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,13 +33,13 @@ final class EnterOTPVC: UIViewController {
         resendLabel?.isUserInteractionEnabled = true
         resendLabel?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(resendTapped)))
 
+        verifyButton?.layer.cornerRadius = 14
+        verifyButton?.clipsToBounds = true
+        verifyButton?.setTitle(L10n.verifyOTP, for: .normal)
+        updateVerifyButtonState()
+
         startResendTimer()
         applyLocalizedStoryboardCopy()
-        #if DEBUG
-        if let debugOTPCode, !debugOTPCode.isEmpty {
-            print("OTP debugCode:", debugOTPCode)
-        }
-        #endif
     }
 
     private func configureSubtitle() {
@@ -68,14 +70,43 @@ final class EnterOTPVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         otpView?.focus()
+        scheduleDebugOTPAutofillIfNeeded()
     }
 
     deinit {
         timer?.invalidate()
     }
 
+    /// Temporary helper: toast the API OTP, then auto-fill after 1s so QA can proceed quickly.
+    private func scheduleDebugOTPAutofillIfNeeded(force: Bool = false) {
+        guard let code = debugOTPCode?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !code.isEmpty else { return }
+        if !force {
+            guard !didScheduleDebugOTPAutofill else { return }
+            didScheduleDebugOTPAutofill = true
+        }
+
+        UIPasteboard.general.string = code
+        showSuccessToast("OTP copied: \(code)", fallback: "OTP copied: \(code)")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self, !self.didAdvance else { return }
+            self.otpView?.fill(code)
+            self.updateVerifyButtonState()
+        }
+    }
+
     @IBAction private func backTapped(_ sender: Any) {
         navigationController?.popViewController(animated: true)
+    }
+
+    @IBAction private func verifyTapped(_ sender: Any) {
+        view.endEditing(true)
+        let code = otpView?.code ?? ""
+        guard code.count == 6 else {
+            showAlert(message: L10n.enterOTPCode)
+            return
+        }
+        verify(code: code)
     }
 
     @objc private func resendTapped() {
@@ -84,16 +115,16 @@ final class EnterOTPVC: UIViewController {
             guard let self else { return }
             switch result {
             case .success(let response):
-                self.showSuccessToast(response.message, fallback: "OTP sent")
                 self.otpView?.clear()
+                self.updateVerifyButtonState()
                 self.otpView?.focus()
                 self.startResendTimer()
-                #if DEBUG
                 if let code = response.data?.debugCode, !code.isEmpty {
                     self.debugOTPCode = code
-                    print("OTP debugCode:", code)
+                    self.scheduleDebugOTPAutofillIfNeeded(force: true)
+                } else {
+                    self.showSuccessToast(response.message, fallback: "OTP sent")
                 }
-                #endif
             case .failure(let error):
                 self.showErrorPopup(error)
             }
@@ -141,10 +172,17 @@ final class EnterOTPVC: UIViewController {
         ))
         resendLabel?.attributedText = text
     }
+
+    private func updateVerifyButtonState() {
+        let isReady = (otpView?.code.count ?? 0) == 6
+        verifyButton?.isEnabled = isReady
+        verifyButton?.alpha = isReady ? 1 : 0.5
+    }
     
     private func verify(code: String) {
         guard !isSubmitting, !didAdvance else { return }
         isSubmitting = true
+        verifyButton?.isEnabled = false
         viewModel.verifyPhoneOTP(
             phoneCode: phoneCode,
             phone: phoneNumber,
@@ -164,6 +202,7 @@ final class EnterOTPVC: UIViewController {
             case .failure(let error):
                 self.showErrorPopup(error)
                 self.otpView?.clear()
+                self.updateVerifyButtonState()
                 self.otpView?.focus()
             }
         }
@@ -171,7 +210,11 @@ final class EnterOTPVC: UIViewController {
 }
 
 extension EnterOTPVC: AuthOTPViewDelegate {
+    func authOTPViewDidChangeCode(_ code: String) {
+        updateVerifyButtonState()
+    }
+
     func authOTPViewDidComplete(_ code: String) {
-        verify(code: code)
+        updateVerifyButtonState()
     }
 }

@@ -213,7 +213,7 @@ final class EditProfileViewController: UIViewController {
         baselineLastName = last
         avatarChanged = false
 
-        if let remote = user?.avatarURL, !remote.isEmpty {
+        if let remote = user?.resolvedAvatarURL, !remote.isEmpty {
             avatarImageView?.setBusinessImage(urlString: remote)
             avatarImageView?.contentMode = .scaleAspectFill
             avatarImageView?.tintColor = nil
@@ -287,11 +287,10 @@ final class EditProfileViewController: UIViewController {
             self.isSaving = false
             switch result {
             case .success(let response):
-                UserDefaults.standard.set(first, forKey: Storage.firstNameKey)
-                UserDefaults.standard.set(last, forKey: Storage.lastNameKey)
+                LocalUserStore.persistName(first: first, last: last)
                 TokenManager.shared.saveSocialFullName("\(first) \(last)")
                 if let image = imageToUpload {
-                    self.saveAvatarToDisk(image)
+                    LocalUserStore.persistAvatar(image)
                 }
                 self.baselineFirstName = first
                 self.baselineLastName = last

@@ -411,13 +411,10 @@ final class ProfileViewModel {
     }
 
     private func syncLocalNameCache(from user: AuthUser) {
-        let defaults = UserDefaults.standard
-        if let first = user.resolvedFirstName, !first.isEmpty {
-            defaults.set(first, forKey: "profile.firstName")
-        }
-        if let last = user.resolvedLastName, !last.isEmpty {
-            defaults.set(last, forKey: "profile.lastName")
-        }
+        LocalUserStore.persistName(
+            first: user.resolvedFirstName ?? "",
+            last: user.resolvedLastName ?? ""
+        )
         if let full = user.resolvedFullName, !full.isEmpty {
             TokenManager.shared.saveSocialFullName(full)
         }

@@ -773,6 +773,16 @@ private extension VenueDetailViewController {
     }
 
     @IBAction func handleUnlockDeal() {
+        let offerId = detail?.deal?.offerId.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !offerId.isEmpty else {
+            showAnimatedAlert(
+                title: L10n.unlockDeal,
+                message: L10n.unlockOfferMissing,
+                style: .warning
+            )
+            return
+        }
+
         let storyboard = UIStoryboard(name: "VenueDetail", bundle: nil)
         guard let popup = storyboard.instantiateViewController(
             withIdentifier: "EnterVenueCodeViewController"
@@ -781,17 +791,19 @@ private extension VenueDetailViewController {
         }
         popup.modalPresentationStyle = .overFullScreen
         popup.modalTransitionStyle = .crossDissolve
-        popup.onDone = { [weak self] _ in
-            self?.pushMembershipVerification()
+        popup.offerId = offerId
+        popup.onUnlocked = { [weak self] redemption in
+            self?.pushMembershipVerification(with: redemption)
         }
         present(popup, animated: true)
     }
 
-    func pushMembershipVerification() {
+    func pushMembershipVerification(with redemption: UnlockOfferData) {
         let storyboard = UIStoryboard(name: "MembershipVerification", bundle: nil)
         guard let controller = storyboard.instantiateInitialViewController() as? MembershipVerificationViewController else {
             return
         }
+        controller.configure(with: redemption)
         controller.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(controller, animated: true)
     }

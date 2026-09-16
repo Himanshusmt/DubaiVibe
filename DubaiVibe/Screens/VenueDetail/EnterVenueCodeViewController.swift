@@ -1,3 +1,4 @@
+import Combine
 import UIKit
 
 final class EnterVenueCodeViewController: UIViewController {
@@ -10,10 +11,14 @@ final class EnterVenueCodeViewController: UIViewController {
     @IBOutlet private weak var vipBadgeLabel: UILabel!
     @IBOutlet private weak var doneButton: GoldGradientButton!
 
-    var onDone: ((String) -> Void)?
+    /// Coupon / offer id from `business.coupons[].id`.
+    var offerId: String = ""
+    var onUnlocked: ((UnlockOfferData) -> Void)?
+
     private var isSubmitting = false
     private let vipGradient = CAGradientLayer()
     private let keyboardGap: CGFloat = 16
+    private var unlockCancellable: AnyCancellable?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +28,7 @@ final class EnterVenueCodeViewController: UIViewController {
     }
 
     deinit {
+        unlockCancellable?.cancel()
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -84,7 +90,7 @@ final class EnterVenueCodeViewController: UIViewController {
     }
 
     private func applyDoneCapsuleRadius() {
-        let radius = doneButton.bounds.height / 2
+        let radius = 14.0
         guard radius > 0 else { return }
         doneButton.layer.cornerRadius = radius
         doneButton.layer.cornerCurve = .continuous
@@ -149,38 +155,87 @@ final class EnterVenueCodeViewController: UIViewController {
     }
 
     @IBAction private func handleClose() {
+        guard !isSubmitting else { return }
+        unlockCancellable?.cancel()
         dismiss(animated: true)
     }
 
     @IBAction private func handleDone() {
         guard !isSubmitting else { return }
-        let code = (codeTextField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !code.isEmpty else {
+        let unlockKey = (codeTextField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !unlockKey.isEmpty else {
             codeFieldContainer.shakeForValidation()
+            return
+        }
+
+        let offerId = self.offerId.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !offerId.isEmpty else {
+            showAnimatedAlert(
+                title: L10n.unlockDeal,
+                message: L10n.unlockOfferMissing,
+                style: .warning
+            )
             return
         }
 
         isSubmitting = true
         doneButton.isEnabled = false
         view.endEditing(true)
-
-        // Confirm success on the button, then navigate.
-        doneButton.setTitle(L10n.enterCodeDone, for: .normal)
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        UIView.animate(withDuration: 0.18) {
-            self.doneButton.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
-        } completion: { _ in
-            UIView.animate(withDuration: 0.18) {
-                self.doneButton.transform = .identity
-            }
-        }
 
-        let onDone = self.onDone
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) { [weak self] in
-            self?.dismiss(animated: true) {
-                onDone?(code)
+        unlockCancellable?.cancel()
+        unlockCancellable = BusinessAPI.unlockOffer(
+            offerId: offerId,
+            unlockKey: unlockKey,
+            showLoader: true
+        )
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] completion in
+            guard let self else { return }
+            if case .failure(let error) = completion {
+                self.resetSubmittingState()
+                self.codeFieldContainer.shakeForValidation()
+                self.showAnimatedAlert(
+                    title: L10n.unlockDeal,
+                    message: error.localizedDescription,
+                    style: .warning
+                )
+            }
+        } receiveValue: { [weak self] (response: UnlockOfferResponse) in
+            guard let self else { return }
+            guard let data = response.resolvedData, !data.resolvedCode.isEmpty else {
+                self.resetSubmittingState()
+                self.codeFieldContainer.shakeForValidation()
+                self.showAnimatedAlert(
+                    title: L10n.unlockDeal,
+                    message: response.message ?? L10n.unlockOfferFailed,
+                    style: .warning
+                )
+                return
+            }
+
+            self.doneButton.setTitle(L10n.enterCodeDone, for: .normal)
+            UIView.animate(withDuration: 0.18) {
+                self.doneButton.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
+            } completion: { _ in
+                UIView.animate(withDuration: 0.18) {
+                    self.doneButton.transform = .identity
+                }
+            }
+
+            let onUnlocked = self.onUnlocked
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
+                self?.dismiss(animated: true) {
+                    onUnlocked?(data)
+                }
             }
         }
+    }
+
+    private func resetSubmittingState() {
+        isSubmitting = false
+        doneButton.isEnabled = true
+        doneButton.setTitle(L10n.done, for: .normal)
     }
 }
 

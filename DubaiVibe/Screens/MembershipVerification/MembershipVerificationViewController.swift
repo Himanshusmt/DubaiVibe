@@ -1,10 +1,6 @@
 import UIKit
 
 final class MembershipVerificationViewController: UIViewController {
-    private enum Metric {
-        static let validity: TimeInterval = 15 * 60
-    }
-
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var backButton: UIButton!
     @IBOutlet private weak var helpButton: UIButton!
@@ -29,22 +25,39 @@ final class MembershipVerificationViewController: UIViewController {
     @IBOutlet private weak var validForValueLabel: UILabel!
     @IBOutlet private weak var usageValueLabel: UILabel!
 
-    private var voucherCode = "DV-7K92X4"
-    private var issuedAt = Date()
+    private var redemption: UnlockOfferData?
+    private var voucherCode = ""
     private var lastCopyAt: TimeInterval = 0
+    private var hasCopiedCode = false
+
+    /// Call before push / present with the unlock API payload.
+    func configure(with redemption: UnlockOfferData) {
+        self.redemption = redemption
+        if isViewLoaded {
+            bindRedemption(redemption)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = AppPalette.background
         navigationController?.setNavigationBarHidden(true, animated: false)
         configureChrome()
-        bindVoucher(issuedAt: Date())
         applyLocalizedStoryboardCopy()
+        if let redemption {
+            bindRedemption(redemption)
+        } else {
+            bindLocalProfileOnly()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        if hasCopiedCode {
+            hasCopiedCode = false
+            configureCopyButton()
+        }
     }
 }
 
@@ -62,18 +75,15 @@ private extension MembershipVerificationViewController {
         helpButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
 
         logoTileView.backgroundColor = .black
-//        logoTileView.layer.cornerRadius = 12
         logoTileView.layer.cornerCurve = .continuous
-//        logoTileView.layer.borderWidth = 1.4
-//        logoTileView.layer.borderColor = AppPalette.gold.cgColor
         logoTileView.clipsToBounds = true
         logoImageView.image = UIImage(named: "LaunchLogo")
         logoImageView.contentMode = .scaleAspectFit
 
-        profileImageView.image = UIImage(named: "p1") ?? Self.memberAvatar()
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.layer.borderWidth = 3
         profileImageView.layer.borderColor = AppPalette.gold.cgColor
+        applyLocalProfileImage()
 
         crownBadgeView.backgroundColor = AppPalette.gold
         (crownBadgeView.subviews.first as? UIImageView)?.tintColor = .black
@@ -93,7 +103,6 @@ private extension MembershipVerificationViewController {
         codeCardView.layer.cornerCurve = .continuous
         codeCardView.layer.borderWidth = 1
         codeCardView.layer.borderColor = AppPalette.gold.withAlphaComponent(0.55).cgColor
-        // The design keeps the area just outside the card pure black, so no outer bloom.
         codeCardView.layer.shadowOpacity = 0
         codeCardView.clipsToBounds = false
 
@@ -103,7 +112,6 @@ private extension MembershipVerificationViewController {
         detailsPanelView.layer.borderWidth = 0.5
         detailsPanelView.layer.borderColor = UIColor.white.withAlphaComponent(0.08).cgColor
 
-        // The dashes radiate away from the shield; Interface Builder can't set a rotation.
         angleSparkles(in: sparkleLeftStack, clockwiseFirst: true)
         angleSparkles(in: sparkleRightStack, clockwiseFirst: false)
 
@@ -124,7 +132,6 @@ private extension MembershipVerificationViewController {
         configureCopyButton()
     }
 
-    /// Tilts a sparkle stack's two dashes so they point away from the shield.
     func angleSparkles(in stack: UIStackView, clockwiseFirst: Bool) {
         let tilt = 25.0 * .pi / 180.0
         for (index, dash) in stack.arrangedSubviews.enumerated() {
@@ -141,26 +148,42 @@ private extension MembershipVerificationViewController {
         copyButton.accessibilityHint = L10n.copyCodeHint
         copyButton.isUserInteractionEnabled = true
         copyButton.isExclusiveTouch = true
+        copyButton.isEnabled = true
         codeBarView.bringSubviewToFront(copyButton)
+
+        copyButton.removeTarget(self, action: #selector(handleCopyCode), for: .touchUpInside)
+        copyButton.addTarget(self, action: #selector(handleCopyCode), for: .touchUpInside)
 
         if codeBarView.gestureRecognizers?.contains(where: { $0.name == "copy-code" }) != true {
             let tap = UITapGestureRecognizer(target: self, action: #selector(handleCopyCode))
             tap.name = "copy-code"
+            tap.cancelsTouchesInView = false
             codeBarView.addGestureRecognizer(tap)
         }
     }
 
-    func bindVoucher(issuedAt: Date) {
-        self.issuedAt = issuedAt
-        voucherCode = "DV-7K92X4"
-        let expires = issuedAt.addingTimeInterval(Metric.validity)
+    func bindLocalProfileOnly() {
+        nameLabel.text = LocalUserStore.membershipDisplayName
+        memberSinceLabel.text = L10n.memberSince(2024)
+        applyLocalProfileImage()
+        usageValueLabel.text = L10n.oneTimeUse
+    }
+
+    func bindRedemption(_ data: UnlockOfferData) {
+        let issuedAt = data.redeemedDate
+        let validUntil = data.validUntilDate
+        let minutes = max(data.validityMinutes ?? 15, 1)
+        voucherCode = data.resolvedCode
+
         let locale = LocalizationManager.shared.locale
         Self.dateFormatter.locale = locale
         Self.timeFormatter.locale = locale
         Self.untilFormatter.locale = locale
 
-        nameLabel.text = "Alex R."
+        nameLabel.text = LocalUserStore.membershipDisplayName
         memberSinceLabel.text = L10n.memberSince(2024)
+        applyLocalProfileImage()
+
         codeLabel.attributedText = NSAttributedString(string: voucherCode, attributes: [
             .font: AppTypography.font(.bold, size: 24),
             .foregroundColor: UIColor.white,
@@ -169,10 +192,10 @@ private extension MembershipVerificationViewController {
         codeLabel.textAlignment = .center
         dateValueLabel.text = Self.dateFormatter.string(from: issuedAt)
         timeValueLabel.text = Self.timeFormatter.string(from: issuedAt)
-        validUntilValueLabel.text = Self.untilFormatter.string(from: expires)
+        validUntilValueLabel.text = Self.untilFormatter.string(from: validUntil)
         validForValueLabel.attributedText = {
             let text = NSMutableAttributedString(
-                string: "15 ",
+                string: "\(minutes) ",
                 attributes: [
                     .font: AppTypography.font(.bold, size: 15),
                     .foregroundColor: UIColor.white
@@ -190,10 +213,18 @@ private extension MembershipVerificationViewController {
         usageValueLabel.text = L10n.oneTimeUse
     }
 
-    static func makeCode() -> String {
-        let alphabet = Array("ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
-        let body = String((0..<6).map { _ in alphabet.randomElement()! })
-        return "OV-\(body)"
+    func applyLocalProfileImage() {
+        let placeholder = UIImage(named: "avatarIcon") ?? UIImage(named: "p1") ?? Self.memberAvatar()
+        if let remote = LocalUserStore.avatarURL, !remote.isEmpty {
+            profileImageView.setBusinessImage(urlString: remote, placeholder: placeholder)
+            profileImageView.contentMode = .scaleAspectFill
+        } else if let local = LocalUserStore.localAvatarImage {
+            profileImageView.image = local
+            profileImageView.contentMode = .scaleAspectFill
+        } else {
+            profileImageView.image = placeholder
+            profileImageView.contentMode = .scaleAspectFill
+        }
     }
 
     static func memberAvatar() -> UIImage {
@@ -267,20 +298,21 @@ private extension MembershipVerificationViewController {
         )
     }
 
-    @IBAction func handleCopyCode() {
+    @IBAction @objc func handleCopyCode() {
         let now = ProcessInfo.processInfo.systemUptime
         guard now - lastCopyAt > 0.35 else { return }
         lastCopyAt = now
 
-        let code = codeLabel.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let value = (code?.isEmpty == false ? code : voucherCode) ?? voucherCode
+        let labeled = codeLabel.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let value = !voucherCode.isEmpty ? voucherCode : labeled
+        guard !value.isEmpty else { return }
+
         UIPasteboard.general.string = value
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         UIAccessibility.post(notification: .announcement, argument: L10n.codeCopied)
+        showSuccessToast(L10n.codeCopied, fallback: "Code copied")
 
+        hasCopiedCode = true
         configureCopyButton(icon: "checkmark", tint: AppPalette.gold, weight: .semibold)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak self] in
-            self?.configureCopyButton()
-        }
     }
 }

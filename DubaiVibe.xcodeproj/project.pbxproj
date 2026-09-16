@@ -102,6 +102,7 @@
 		F06C44A13060400100000012 /* VenueDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06C44A13060400100000002 /* VenueDetailViewModel.swift */; };
 		F06C44A13060400100000013 /* UIImageView+BusinessImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06C44A13060400100000003 /* UIImageView+BusinessImage.swift */; };
 		F07A55B13060600100000002 /* EnterVenueCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A55B13060600100000001 /* EnterVenueCodeViewController.swift */; };
+		F07LOCST3060900100000002 /* LocalUserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07LOCST3060900100000001 /* LocalUserStore.swift */; };
 		F08N0T1F3060700100000011 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08N0T1F3060700100000001 /* NotificationsViewController.swift */; };
 		F08N0T1F3060700100000012 /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F08N0T1F3060700100000002 /* Notifications.storyboard */; };
 		F08N0T1F3060700100000013 /* NotificationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08N0T1F3060700100000003 /* NotificationModels.swift */; };
@@ -217,6 +218,7 @@
 		F06C44A13060400100000002 /* VenueDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetailViewModel.swift; sourceTree = "<group>"; };
 		F06C44A13060400100000003 /* UIImageView+BusinessImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+BusinessImage.swift"; sourceTree = "<group>"; };
 		F07A55B13060600100000001 /* EnterVenueCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterVenueCodeViewController.swift; sourceTree = "<group>"; };
+		F07LOCST3060900100000001 /* LocalUserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalUserStore.swift; sourceTree = "<group>"; };
 		F08N0T1F3060700100000001 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		F08N0T1F3060700100000002 /* Notifications.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Notifications.storyboard; sourceTree = "<group>"; };
 		F08N0T1F3060700100000003 /* NotificationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModels.swift; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				80080164304FE3DE005FC893 /* HPOTPView.swift */,
 				80080165304FE3DE005FC893 /* ImageCache.swift */,
 				80080166304FE3DE005FC893 /* KMPlaceholderTextView.swift */,
+				F07LOCST3060900100000001 /* LocalUserStore.swift */,
 				80080167304FE3DE005FC893 /* LocationManager.swift */,
 				80080169304FE3DE005FC893 /* SOSSoundPlayer.swift */,
 				8008016A304FE3DE005FC893 /* TableViewExtension.swift */,
@@ -803,6 +806,7 @@
 				F06C44A13060400100000012 /* VenueDetailViewModel.swift in Sources */,
 				F06C44A13060400100000013 /* UIImageView+BusinessImage.swift in Sources */,
 				F07A55B13060600100000002 /* EnterVenueCodeViewController.swift in Sources */,
+				F07LOCST3060900100000002 /* LocalUserStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

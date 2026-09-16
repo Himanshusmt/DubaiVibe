@@ -363,7 +363,12 @@ final class AuthRaysView: UIView {
 // MARK: - OTP
 
 protocol AuthOTPViewDelegate: AnyObject {
+    func authOTPViewDidChangeCode(_ code: String)
     func authOTPViewDidComplete(_ code: String)
+}
+
+extension AuthOTPViewDelegate {
+    func authOTPViewDidChangeCode(_ code: String) {}
 }
 
 final class AuthOTPView: UIView, UITextFieldDelegate {
@@ -467,6 +472,23 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
         updateCaret()
     }
 
+    func fill(_ code: String) {
+        let filtered = String(code.filter(\.isNumber).prefix(count))
+        hiddenField.text = filtered
+        for (index, box) in boxes.enumerated() {
+            if index < filtered.count {
+                let i = filtered.index(filtered.startIndex, offsetBy: index)
+                box.text = String(filtered[i])
+            } else {
+                box.text = ""
+            }
+        }
+        updateBorders()
+        updateCaret()
+        delegate?.authOTPViewDidChangeCode(filtered)
+        // Intentionally does not call authOTPViewDidComplete — user confirms via button.
+    }
+
     @objc private func textChanged() {
         let filtered = String((hiddenField.text ?? "").filter(\.isNumber).prefix(count))
         hiddenField.text = filtered
@@ -480,6 +502,7 @@ final class AuthOTPView: UIView, UITextFieldDelegate {
         }
         updateBorders()
         updateCaret()
+        delegate?.authOTPViewDidChangeCode(filtered)
         if filtered.count == count {
             delegate?.authOTPViewDidComplete(filtered)
         }

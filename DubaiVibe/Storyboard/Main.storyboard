@@ -155,13 +155,13 @@
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="prf-identity">
                                                         <rect key="frame" x="0.0" y="142" width="382" height="95.5"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Dani" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-name">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Dani" textAlignment="center" lineBreakMode="wordWrapping" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-name">
                                                                 <rect key="frame" x="163.5" y="0.0" width="55" height="31.5"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="+971 50 123 4567  •  Dani.10@dubai.ae" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-contact">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="+971 50 123 4567" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" translatesAutoresizingMaskIntoConstraints="NO" id="prf-contact">
                                                                 <rect key="frame" x="72" y="39.5" width="238.5" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

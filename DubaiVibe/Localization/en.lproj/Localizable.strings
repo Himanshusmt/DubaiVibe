@@ -54,7 +54,7 @@
 "profile.deleteTitle" = "Delete Account";
 "profile.deleteSubtitle" = "Permanently erase your OneVibe profile";
 "profile.deleteConfirm" = "This permanently erases your OneVibe profile. This cannot be undone.";
-"profile.contactPlaceholder" = "Add phone or email in Edit Profile";
+"profile.contactPlaceholder" = "Add phone in Edit Profile";
 "profile.versionPrefix" = "Dubai Vibe iOS";
 "profile.downloaders" = "10k downloaders";
 
@@ -82,6 +82,8 @@
 "deal.enterVenueCodePlaceholder" = "enter venue code";
 "deal.enterVenueCodeHint" = "Enter the alphanumeric code provided by your server";
 "deal.done" = "Done ✓";
+"deal.unlockMissing" = "This deal is missing an offer id. Please refresh and try again.";
+"deal.unlockFailed" = "Unable to unlock this offer. Please check the code and try again.";
 "deal.favorite" = "Favorite";
 "deal.bookmark" = "Bookmark";
 
@@ -111,6 +113,8 @@
 "auth.otpDidntReceive" = "Didn't receive the code? ";
 "auth.otpResend" = "Resend";
 "auth.otpResendIn" = "Resend in %02d:%02d";
+"auth.verifyOTP" = "Verify OTP";
+"auth.enterOTP" = "Please enter the 6-digit code.";
 "auth.nameTitle" = "What's your full name?";
 "auth.nameSubtitle" = "This will be shown on your profile.";
 "auth.createAccount" = "Create Account";
