@@ -47,9 +47,11 @@ final class GoldGradientView: UIView {
         case .dealPanel:
             // Yellow wash only top 17%; black covers remaining 83%.
             // #FFA903 @17% opacity → #0B0B0C
+            // Use UIColor.withAlphaComponent — CGColor.copy(alpha:) can return nil,
+            // and the old `?? 0.1` fallback put Doubles into `colors` (runtime crash).
             gradient.colors = [
-                AppPalette.dealGradientWash.cgColor.copy(alpha: 0.1) ?? 0.1,
-                AppPalette.dealFill.cgColor.copy(alpha: 0.15) ?? 0.15
+                AppPalette.dealGradientWash.withAlphaComponent(0.1).cgColor,
+                AppPalette.dealFill.withAlphaComponent(0.15).cgColor
             ]
             gradient.locations = [0, 0.37]
             gradient.startPoint = CGPoint(x: 0.5, y: 0)

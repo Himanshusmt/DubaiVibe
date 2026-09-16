@@ -155,7 +155,7 @@ enum L10n {
     static var membershipSubtitle: String { "membership.subtitle".localized }
     static var verifiedMember: String { "membership.verifiedMember".localized }
     static func memberSince(_ year: Int) -> String {
-        LocalizationManager.shared.format("membership.memberSince", year)
+        LocalizationManager.shared.format("membership.memberSince", String(year))
     }
     static var yourVerifiedCode: String { "membership.yourVerifiedCode".localized }
     static var copyCode: String { "membership.copyCode".localized }
@@ -324,6 +324,8 @@ extension UIView {
             "Almost there!": L10n.almostThere,
             "Verify your membership\nto unlock this exclusive offer.": L10n.membershipSubtitle,
             "Verified Member": L10n.verifiedMember,
+            "OneVibe Member since 2024": L10n.memberSince(2024),
+            "DubaiVibe Member since 2024": L10n.memberSince(2024),
             "Real People": "membership.realPeople".localized,
             "Exclusive Deals": L10n.exclusiveDeals,
             "Better Experiences": L10n.betterExperiences,

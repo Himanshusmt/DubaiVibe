@@ -49,6 +49,12 @@ final class ProfileViewController: UIViewController {
             applyUser(viewModel.cachedUser)
         }
         fetchCurrentUser(showLoader: false)
+        refreshFloatingTabBarIfNeeded(animated: animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        refreshFloatingTabBarIfNeeded(animated: false)
     }
 }
 
@@ -88,6 +94,17 @@ private extension ProfileViewController {
         if scrollView.contentInset.bottom != bottom {
             scrollView.contentInset.bottom = bottom
             scrollView.verticalScrollIndicatorInsets.bottom = bottom
+        }
+    }
+
+    func refreshFloatingTabBarIfNeeded(animated: Bool) {
+        let refresh = { [weak self] in
+            (self?.tabBarController as? MainTabBarController)?.refreshFloatingTabBarLayout()
+        }
+        if animated, let coordinator = transitionCoordinator {
+            coordinator.animate(alongsideTransition: { _ in refresh() }, completion: { _ in refresh() })
+        } else {
+            refresh()
         }
     }
 

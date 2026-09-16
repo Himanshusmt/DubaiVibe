@@ -18,6 +18,11 @@ final class MainTabBarController: UITabBarController {
         super.viewSafeAreaInsetsDidChange()
         repositionFloatingTabBarIfNeeded()
     }
+
+    /// Call when a tab root reappears after a push that hid the tab bar.
+    func refreshFloatingTabBarLayout() {
+        (tabBar as? FloatingTabBar)?.refreshItemLayout()
+    }
 }
 
 extension MainTabBarController: UITabBarControllerDelegate {
@@ -83,17 +88,20 @@ private extension MainTabBarController {
         }
     }
 
-    /// Figma: Inter Medium 11 / #D4D4D4 for both Home and Profile.
+    /// Figma: Inter Medium 11 / #D4D4D4 for both Home and Profile (drawn by FloatingTabBar overlays).
     func styleItems(_ layout: UITabBarItemAppearance) {
+        // Keep system titles invisible — UIKit re-lays them out on push/pop and that
+        // flash (top → bottom) is what the user sees when returning to Explore.
         let title: [NSAttributedString.Key: Any] = [
-            .foregroundColor: AppPalette.tabLabel,
+            .foregroundColor: UIColor.clear,
             .font: AppTypography.font(.medium, size: AppMetrics.floatingTabTitleFontSize)
         ]
         layout.normal.titleTextAttributes = title
         layout.selected.titleTextAttributes = title
-        // Vertical placement is applied in FloatingTabBar (15pt top / 15pt bottom).
         layout.normal.titlePositionAdjustment = .zero
         layout.selected.titlePositionAdjustment = .zero
+        layout.normal.iconColor = .clear
+        layout.selected.iconColor = .clear
     }
 
     func repositionFloatingTabBarIfNeeded() {
@@ -127,6 +135,8 @@ final class FloatingTabBar: UITabBar {
     private let innerShadowLayer = CAShapeLayer()
     /// Static icon + label drawn by us; the system's own views animate on tap, so they stay hidden.
     private var itemOverlays: [TabItemOverlay] = []
+    /// Tracks off-screen state from `hidesBottomBarWhenPushed` so we can snap layout on return.
+    private var wasHiddenOffscreen = false
     private static var isInterfaceBuilder: Bool {
         ProcessInfo.processInfo.environment["IB_PRODUCT_BUILD_VERSION"] != nil
     }
@@ -154,7 +164,9 @@ final class FloatingTabBar: UITabBar {
             super.layoutSubviews()
             return
         }
-        if let host = superview, frame.minY < host.bounds.height - 1 {
+        let host = superview
+        let isOffscreen = host.map { frame.minY >= $0.bounds.height - 1 } ?? false
+        if let host, !isOffscreen {
             let target = AppMetrics.floatingTabChipFrame(in: host)
             if frame != target {
                 frame = target
@@ -164,6 +176,17 @@ final class FloatingTabBar: UITabBar {
         layoutChrome()
         layoutItemContent()
         hideSystemBackgrounds()
+
+        // Popping a `hidesBottomBarWhenPushed` screen animates the bar back on-screen.
+        // Kill any in-flight title/icon animations so labels don't slide top → bottom.
+        if wasHiddenOffscreen && !isOffscreen {
+            itemOverlays.forEach { overlay in
+                overlay.layer.removeAllAnimations()
+                overlay.iconView.layer.removeAllAnimations()
+                overlay.titleLabel.layer.removeAllAnimations()
+            }
+        }
+        wasHiddenOffscreen = isOffscreen
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -174,12 +197,20 @@ final class FloatingTabBar: UITabBar {
     }
 
     func refreshItemLayout() {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
         UIView.performWithoutAnimation {
             setNeedsLayout()
             layoutIfNeeded()
             layoutItemContent()
             hideSystemBackgrounds()
+            itemOverlays.forEach { overlay in
+                overlay.layer.removeAllAnimations()
+                overlay.iconView.layer.removeAllAnimations()
+                overlay.titleLabel.layer.removeAllAnimations()
+            }
         }
+        CATransaction.commit()
     }
 
     private func setupChrome() {
@@ -267,6 +298,8 @@ final class FloatingTabBar: UITabBar {
         let iconY = inset + (tighten / 2)
         let titleBottom = inset + (tighten / 2)
 
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
         UIView.performWithoutAnimation {
             for (index, button) in buttons.enumerated() {
                 hideSystemContent(in: button)
@@ -299,6 +332,7 @@ final class FloatingTabBar: UITabBar {
                 bringSubviewToFront(overlay)
             }
         }
+        CATransaction.commit()
     }
 
     private func syncOverlays(count: Int) {
@@ -312,10 +346,11 @@ final class FloatingTabBar: UITabBar {
         }
     }
 
-    /// Blank out the system icon/label so its selection animation is invisible.
+    /// Blank out the system icon/label so its selection / push-pop animation is invisible.
     private func hideSystemContent(in root: UIView) {
         for subview in root.subviews {
             if subview is UIImageView || subview is UILabel {
+                subview.isHidden = true
                 subview.alpha = 0
             }
             hideSystemContent(in: subview)

@@ -155,7 +155,7 @@
 "membership.almostThere" = "Почти готово!";
 "membership.subtitle" = "Подтвердите членство,\nчтобы открыть это предложение.";
 "membership.verifiedMember" = "Проверенный участник";
-"membership.memberSince" = "Участник OneVibe с %d";
+"membership.memberSince" = "Участник DubaiVibe с %@";
 "membership.yourVerifiedCode" = "ВАШ ПОДТВЕРЖДЁННЫЙ КОД";
 "membership.copyCode" = "Скопировать код";
 "membership.copyHint" = "Копирует подтверждённый код членства";

@@ -10,17 +10,21 @@ enum ArtworkCache {
     }()
 
     static func image(for venue: Venue, size: CGSize) -> UIImage {
-        let key = "\(venue.id.uuidString)-\(Int(size.width))x\(Int(size.height))" as NSString
+        let safeSize = CGSize(
+            width: max(1, size.width.isFinite ? size.width : 1),
+            height: max(1, size.height.isFinite ? size.height : 1)
+        )
+        let key = "\(venue.id.uuidString)-\(Int(safeSize.width))x\(Int(safeSize.height))" as NSString
         if let cached = cache.object(forKey: key) {
             return cached
         }
         let image: UIImage
-        if let photo = venue.photoImage, size.width > 0, size.height > 0 {
-            image = ArtworkRenderer.renderPhoto(photo, size: size)
+        if let photo = venue.photoImage {
+            image = ArtworkRenderer.renderPhoto(photo, size: safeSize)
         } else {
-            image = ArtworkRenderer.render(venue: venue, size: size)
+            image = ArtworkRenderer.render(venue: venue, size: safeSize)
         }
-        cache.setObject(image, forKey: key, cost: Int(size.width * size.height * 4))
+        cache.setObject(image, forKey: key, cost: Int(safeSize.width * safeSize.height * 4))
         return image
     }
 
@@ -35,9 +39,16 @@ enum ArtworkRenderer {
     static func renderPhoto(_ photo: UIImage, size: CGSize) -> UIImage {
         let format = UIGraphicsImageRendererFormat.preferred()
         format.opaque = true
+        let photoSize = photo.size
+        guard photoSize.width > 0, photoSize.height > 0 else {
+            return UIGraphicsImageRenderer(size: size, format: format).image { ctx in
+                UIColor.black.setFill()
+                ctx.fill(CGRect(origin: .zero, size: size))
+            }
+        }
         return UIGraphicsImageRenderer(size: size, format: format).image { _ in
-            let scale = max(size.width / photo.size.width, size.height / photo.size.height)
-            let drawSize = CGSize(width: photo.size.width * scale, height: photo.size.height * scale)
+            let scale = max(size.width / photoSize.width, size.height / photoSize.height)
+            let drawSize = CGSize(width: photoSize.width * scale, height: photoSize.height * scale)
             let origin = CGPoint(
                 x: (size.width - drawSize.width) / 2,
                 y: (size.height - drawSize.height) / 2
@@ -84,11 +95,15 @@ enum ArtworkRenderer {
             colors = [UIColor(hex: 0x241825).cgColor, UIColor(hex: 0x5E3352).cgColor, UIColor(hex: 0xE8B8C8).cgColor]
         }
 
-        let gradient = CGGradient(
+        guard let gradient = CGGradient(
             colorsSpace: CGColorSpaceCreateDeviceRGB(),
             colors: colors as CFArray,
             locations: [0, 0.45, 1]
-        )!
+        ) else {
+            context.setFillColor(colors[0])
+            context.fill(rect)
+            return
+        }
         context.drawLinearGradient(
             gradient,
             start: CGPoint(x: rect.midX, y: 0),

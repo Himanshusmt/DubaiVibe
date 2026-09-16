@@ -154,7 +154,7 @@
 "membership.almostThere" = "Almost there!";
 "membership.subtitle" = "Verify your membership\nto unlock this exclusive offer.";
 "membership.verifiedMember" = "Verified Member";
-"membership.memberSince" = "OneVibe Member since %d";
+"membership.memberSince" = "DubaiVibe Member since %@";
 "membership.yourVerifiedCode" = "YOUR VERIFIED CODE";
 "membership.copyCode" = "Copy code";
 "membership.copyHint" = "Copies the verified membership code";

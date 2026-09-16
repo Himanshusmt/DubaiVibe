@@ -198,7 +198,7 @@ to unlock this exclusive offer.</string>
                                                     </imageView>
                                                 </subviews>
                                             </stackView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="OneVibe Member since 2024" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-since">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="DubaiVibe Member since 2024" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-since">
                                                 <rect key="frame" x="24" y="261" width="345" height="15.666666666666686"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -693,7 +693,7 @@ to get your exclusive discount.</string>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="This code can only be used once." textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mv-once">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="This code can only be used once." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="mv-once">
                                                 <rect key="frame" x="24" y="805.33333333333337" width="345" height="14.333333333333371"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -711,7 +711,7 @@ to get your exclusive discount.</string>
                                             <constraint firstItem="mv-card" firstAttribute="top" secondItem="mv-benefits" secondAttribute="bottom" constant="16" id="mv-cdv-t"/>
                                             <constraint firstItem="mv-name-row" firstAttribute="top" secondItem="mv-verified" secondAttribute="bottom" constant="8" id="mv-nm-t"/>
                                             <constraint firstItem="mv-name-row" firstAttribute="centerX" secondItem="mv-content" secondAttribute="centerX" id="mv-nm-x"/>
-                                            <constraint firstAttribute="bottom" secondItem="mv-card" secondAttribute="bottom" constant="16" id="mv-on-b"/>
+                                            <constraint firstAttribute="bottom" secondItem="mv-once" secondAttribute="bottom" constant="24" id="mv-on-b"/>
                                             <constraint firstItem="mv-once" firstAttribute="leading" secondItem="mv-content" secondAttribute="leading" constant="24" id="mv-on-l"/>
                                             <constraint firstAttribute="trailing" secondItem="mv-once" secondAttribute="trailing" constant="24" id="mv-on-r"/>
                                             <constraint firstItem="mv-once" firstAttribute="top" secondItem="mv-card" secondAttribute="bottom" constant="8" id="mv-on-t"/>

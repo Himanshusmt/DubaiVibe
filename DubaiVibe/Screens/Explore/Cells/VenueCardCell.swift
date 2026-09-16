@@ -4,31 +4,31 @@ import UIKit
 final class VenueCardCell: UITableViewCell {
     static let reuseIdentifier = "VenueCardCell"
 
-    @IBOutlet private weak var cardView: UIView!
-    @IBOutlet private weak var heroImageView: UIImageView!
-    @IBOutlet private weak var favoriteButton: UIButton!
-    @IBOutlet private weak var wordmarkLabel: UILabel!
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var verifiedImageView: UIImageView!
-    @IBOutlet private weak var bookmarkButton: UIButton!
-    @IBOutlet private weak var subtitleLabel: UILabel!
-    @IBOutlet private weak var ratingLabel: UILabel!
-    @IBOutlet private weak var dealBannerView: UIView!
-    @IBOutlet private weak var crownBackgroundView: UIView!
-    @IBOutlet private weak var crownImageView: UIImageView!
-    @IBOutlet private weak var dealTitleLabel: UILabel!
-    @IBOutlet private weak var dealDiscountLabel: UILabel!
-    @IBOutlet private weak var dealDetailLabel: UILabel!
-    @IBOutlet private weak var dealValidityLabel: UILabel!
-    @IBOutlet private weak var viewDealButton: GoldGradientButton!
-    @IBOutlet private weak var dealHeightConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var dealTopConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var cardView: UIView?
+    @IBOutlet private weak var heroImageView: UIImageView?
+    @IBOutlet private weak var favoriteButton: UIButton?
+    @IBOutlet private weak var wordmarkLabel: UILabel?
+    @IBOutlet private weak var nameLabel: UILabel?
+    @IBOutlet private weak var verifiedImageView: UIImageView?
+    @IBOutlet private weak var bookmarkButton: UIButton?
+    @IBOutlet private weak var subtitleLabel: UILabel?
+    @IBOutlet private weak var ratingLabel: UILabel?
+    @IBOutlet private weak var dealBannerView: UIView?
+    @IBOutlet private weak var crownBackgroundView: UIView?
+    @IBOutlet private weak var crownImageView: UIImageView?
+    @IBOutlet private weak var dealTitleLabel: UILabel?
+    @IBOutlet private weak var dealDiscountLabel: UILabel?
+    @IBOutlet private weak var dealDetailLabel: UILabel?
+    @IBOutlet private weak var dealValidityLabel: UILabel?
+    @IBOutlet private weak var viewDealButton: GoldGradientButton?
+    @IBOutlet private weak var dealHeightConstraint: NSLayoutConstraint?
+    @IBOutlet private weak var dealTopConstraint: NSLayoutConstraint?
 
     private let dealFill = GoldGradientView()
     private let dealBorder = GradientBorderView()
     private let heroFade = GoldGradientView()
     /// Matches exclusive label top inset (`ex-t` = 12) on the opposite edge.
-    private var dealValidityBottomConstraint: NSLayoutConstraint!
+    private var dealValidityBottomConstraint: NSLayoutConstraint?
 
     var onFavorite: (() -> Void)?
     var onBookmark: (() -> Void)?
@@ -42,143 +42,151 @@ final class VenueCardCell: UITableViewCell {
         isOpaque = true
         contentView.isOpaque = true
 
-        cardView.backgroundColor = AppPalette.cardFill
-        cardView.layer.cornerRadius = AppMetrics.cardRadius
-        cardView.layer.cornerCurve = .continuous
-        cardView.layer.borderWidth = 1
-        cardView.layer.borderColor = AppPalette.cardBorder.cgColor
-        cardView.clipsToBounds = true
+        cardView?.backgroundColor = AppPalette.cardFill
+        cardView?.layer.cornerRadius = AppMetrics.cardRadius
+        cardView?.layer.cornerCurve = .continuous
+        cardView?.layer.borderWidth = 1
+        cardView?.layer.borderColor = AppPalette.cardBorder.cgColor
+        cardView?.clipsToBounds = true
 
-        heroImageView.contentMode = .scaleAspectFill
-        heroImageView.clipsToBounds = true
-        heroImageView.isOpaque = false
+        heroImageView?.contentMode = .scaleAspectFill
+        heroImageView?.clipsToBounds = true
+        heroImageView?.isOpaque = false
 
-        heroFade.kind = .heroFade
-        heroImageView.addSubview(heroFade)
-        heroFade.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            heroFade.topAnchor.constraint(equalTo: heroImageView.topAnchor),
-            heroFade.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor),
-            heroFade.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor),
-            heroFade.bottomAnchor.constraint(equalTo: heroImageView.bottomAnchor)
-        ])
+        if let heroImageView {
+            heroFade.kind = .heroFade
+            heroImageView.addSubview(heroFade)
+            heroFade.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                heroFade.topAnchor.constraint(equalTo: heroImageView.topAnchor),
+                heroFade.leadingAnchor.constraint(equalTo: heroImageView.leadingAnchor),
+                heroFade.trailingAnchor.constraint(equalTo: heroImageView.trailingAnchor),
+                heroFade.bottomAnchor.constraint(equalTo: heroImageView.bottomAnchor)
+            ])
+        }
 
-        wordmarkLabel.textColor = .white
-        wordmarkLabel.font = AppTypography.font(.bold, size: 24)
-        wordmarkLabel.adjustsFontSizeToFitWidth = true
-        wordmarkLabel.minimumScaleFactor = 0.45
-        wordmarkLabel.textAlignment = .center
-        wordmarkLabel.layer.shadowColor = UIColor.black.cgColor
-        wordmarkLabel.layer.shadowOpacity = 0.4
-        wordmarkLabel.layer.shadowRadius = 8
-        wordmarkLabel.layer.shadowOffset = .zero
+        wordmarkLabel?.textColor = .white
+        wordmarkLabel?.font = AppTypography.font(.bold, size: 24)
+        wordmarkLabel?.adjustsFontSizeToFitWidth = true
+        wordmarkLabel?.minimumScaleFactor = 0.45
+        wordmarkLabel?.textAlignment = .center
+        wordmarkLabel?.layer.shadowColor = UIColor.black.cgColor
+        wordmarkLabel?.layer.shadowOpacity = 0.4
+        wordmarkLabel?.layer.shadowRadius = 8
+        wordmarkLabel?.layer.shadowOffset = .zero
 
-        nameLabel.font = AppTypography.font(.bold, size: 15)
-        nameLabel.textColor = AppPalette.primaryText
-        nameLabel.numberOfLines = 2
-        nameLabel.lineBreakMode = .byWordWrapping
-        subtitleLabel.font = AppTypography.font(.medium, size: 11.5)
-        subtitleLabel.textColor = AppPalette.secondaryText
-        subtitleLabel.numberOfLines = 2
-        subtitleLabel.lineBreakMode = .byWordWrapping
+        nameLabel?.font = AppTypography.font(.bold, size: 15)
+        nameLabel?.textColor = AppPalette.primaryText
+        nameLabel?.numberOfLines = 2
+        nameLabel?.lineBreakMode = .byWordWrapping
+        subtitleLabel?.font = AppTypography.font(.medium, size: 11.5)
+        subtitleLabel?.textColor = AppPalette.secondaryText
+        subtitleLabel?.numberOfLines = 2
+        subtitleLabel?.lineBreakMode = .byWordWrapping
 
         let verifiedConfig = UIImage.SymbolConfiguration(pointSize: 13, weight: .regular)
-        verifiedImageView.image = UIImage(systemName: "checkmark.seal.fill", withConfiguration: verifiedConfig)
-        verifiedImageView.tintColor = AppPalette.verified
-        verifiedImageView.contentMode = .scaleAspectFit
+        verifiedImageView?.image = UIImage(systemName: "checkmark.seal.fill", withConfiguration: verifiedConfig)
+        verifiedImageView?.tintColor = AppPalette.verified
+        verifiedImageView?.contentMode = .scaleAspectFit
 
-        dealBannerView.backgroundColor = .clear
-        dealBannerView.layer.cornerRadius = 12
-        dealBannerView.layer.cornerCurve = .continuous
-        dealBannerView.layer.borderWidth = 0
-        dealBannerView.clipsToBounds = true
+        dealBannerView?.backgroundColor = .clear
+        dealBannerView?.layer.cornerRadius = 12
+        dealBannerView?.layer.cornerCurve = .continuous
+        dealBannerView?.layer.borderWidth = 0
+        dealBannerView?.clipsToBounds = true
 
-        // Fill: #FFA903 @17% → #0B0B0C
-        dealFill.kind = .dealPanel
-        dealFill.layer.cornerRadius = 12
-        dealFill.layer.cornerCurve = .continuous
-        dealFill.layer.shadowOpacity = 0.1
-        dealFill.clipsToBounds = true
-        dealBannerView.insertSubview(dealFill, at: 0)
-        dealFill.translatesAutoresizingMaskIntoConstraints = false
-        // Border: 1px inner #FCE19B → #E2A645 → #B87B22
-        dealBorder.lineWidth = 1
-        dealBorder.layer.cornerRadius = 12
-        dealBorder.layer.cornerCurve = .continuous
-        dealBannerView.addSubview(dealBorder)
-        dealBorder.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            dealFill.topAnchor.constraint(equalTo: dealBannerView.topAnchor),
-            dealFill.leadingAnchor.constraint(equalTo: dealBannerView.leadingAnchor),
-            dealFill.trailingAnchor.constraint(equalTo: dealBannerView.trailingAnchor),
-            dealFill.bottomAnchor.constraint(equalTo: dealBannerView.bottomAnchor),
-            dealBorder.topAnchor.constraint(equalTo: dealBannerView.topAnchor),
-            dealBorder.leadingAnchor.constraint(equalTo: dealBannerView.leadingAnchor),
-            dealBorder.trailingAnchor.constraint(equalTo: dealBannerView.trailingAnchor),
-            dealBorder.bottomAnchor.constraint(equalTo: dealBannerView.bottomAnchor)
-        ])
+        if let dealBannerView {
+            // Fill: #FFA903 @17% → #0B0B0C
+            dealFill.kind = .dealPanel
+            dealFill.layer.cornerRadius = 12
+            dealFill.layer.cornerCurve = .continuous
+            dealFill.layer.shadowOpacity = 0.1
+            dealFill.clipsToBounds = true
+            dealBannerView.insertSubview(dealFill, at: 0)
+            dealFill.translatesAutoresizingMaskIntoConstraints = false
+            // Border: 1px inner #FCE19B → #E2A645 → #B87B22
+            dealBorder.lineWidth = 1
+            dealBorder.layer.cornerRadius = 12
+            dealBorder.layer.cornerCurve = .continuous
+            dealBannerView.addSubview(dealBorder)
+            dealBorder.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                dealFill.topAnchor.constraint(equalTo: dealBannerView.topAnchor),
+                dealFill.leadingAnchor.constraint(equalTo: dealBannerView.leadingAnchor),
+                dealFill.trailingAnchor.constraint(equalTo: dealBannerView.trailingAnchor),
+                dealFill.bottomAnchor.constraint(equalTo: dealBannerView.bottomAnchor),
+                dealBorder.topAnchor.constraint(equalTo: dealBannerView.topAnchor),
+                dealBorder.leadingAnchor.constraint(equalTo: dealBannerView.leadingAnchor),
+                dealBorder.trailingAnchor.constraint(equalTo: dealBannerView.trailingAnchor),
+                dealBorder.bottomAnchor.constraint(equalTo: dealBannerView.bottomAnchor)
+            ])
+        }
 
-        crownBackgroundView.backgroundColor = AppPalette.crownFill
-        crownBackgroundView.layer.cornerRadius = 8
-        crownBackgroundView.layer.cornerCurve = .continuous
-        crownBackgroundView.layer.borderWidth = 1
-        crownBackgroundView.layer.borderColor = AppPalette.gold.withAlphaComponent(0.6).cgColor
-        crownImageView.image = UIImage(named: "ExploreCrown")
-        crownImageView.tintColor = nil
-        crownImageView.contentMode = .scaleAspectFit
+        crownBackgroundView?.backgroundColor = AppPalette.crownFill
+        crownBackgroundView?.layer.cornerRadius = 8
+        crownBackgroundView?.layer.cornerCurve = .continuous
+        crownBackgroundView?.layer.borderWidth = 1
+        crownBackgroundView?.layer.borderColor = AppPalette.gold.withAlphaComponent(0.6).cgColor
+        crownImageView?.image = UIImage(named: "ExploreCrown")
+        crownImageView?.tintColor = nil
+        crownImageView?.contentMode = .scaleAspectFit
 
-        dealTitleLabel.font = AppTypography.font(.semibold, size: 8.5)
-        dealTitleLabel.numberOfLines = 2
-        dealTitleLabel.lineBreakMode = .byWordWrapping
-        dealDiscountLabel.font = AppTypography.font(.bold, size: 17)
-        dealDiscountLabel.textColor = AppPalette.primaryText
-        dealDiscountLabel.numberOfLines = 1
-        dealDiscountLabel.lineBreakMode = .byTruncatingTail
-        dealDetailLabel.font = AppTypography.font(.regular, size: 10)
-        dealDetailLabel.textColor = AppPalette.dealDetailText
-        dealDetailLabel.numberOfLines = 1
-        dealDetailLabel.lineBreakMode = .byTruncatingTail
-        dealValidityLabel.font = AppTypography.font(.regular, size: 9.5)
-        dealValidityLabel.textColor = AppPalette.secondaryText
-        dealValidityLabel.numberOfLines = 1
-        dealValidityLabel.lineBreakMode = .byTruncatingTail
-        dealValidityLabel.adjustsFontSizeToFitWidth = true
-        dealValidityLabel.minimumScaleFactor = 0.85
-        dealValidityLabel.isHidden = true
-        // Same inset as exclusive label top (12) — pin days to banner bottom.
-        dealValidityBottomConstraint = dealValidityLabel.bottomAnchor.constraint(
-            equalTo: dealBannerView.bottomAnchor,
-            constant: -12
-        )
-        dealValidityBottomConstraint.isActive = false
+        dealTitleLabel?.font = AppTypography.font(.semibold, size: 8.5)
+        dealTitleLabel?.numberOfLines = 2
+        dealTitleLabel?.lineBreakMode = .byWordWrapping
+        dealDiscountLabel?.font = AppTypography.font(.bold, size: 17)
+        dealDiscountLabel?.textColor = AppPalette.primaryText
+        dealDiscountLabel?.numberOfLines = 1
+        dealDiscountLabel?.lineBreakMode = .byTruncatingTail
+        dealDetailLabel?.font = AppTypography.font(.regular, size: 10)
+        dealDetailLabel?.textColor = AppPalette.dealDetailText
+        dealDetailLabel?.numberOfLines = 1
+        dealDetailLabel?.lineBreakMode = .byTruncatingTail
+        dealValidityLabel?.font = AppTypography.font(.regular, size: 9.5)
+        dealValidityLabel?.textColor = AppPalette.secondaryText
+        dealValidityLabel?.numberOfLines = 1
+        dealValidityLabel?.lineBreakMode = .byTruncatingTail
+        dealValidityLabel?.adjustsFontSizeToFitWidth = true
+        dealValidityLabel?.minimumScaleFactor = 0.85
+        dealValidityLabel?.isHidden = true
+
+        // Keep the storyboard height constraint always active. Toggling
+        // `isActive` during dequeue/configure was crashing self-sizing rows.
+        if let dealValidityLabel, let dealBannerView {
+            let validityBottom = dealValidityLabel.bottomAnchor.constraint(
+                equalTo: dealBannerView.bottomAnchor,
+                constant: -12
+            )
+            validityBottom.priority = .defaultHigh
+            validityBottom.isActive = false
+            dealValidityBottomConstraint = validityBottom
+        }
 
         // Figma View Deal button: #F3CE85 → #D8A04D (diagonal)
-        viewDealButton.backgroundColor = .clear
-        viewDealButton.layer.cornerRadius = 12
-        viewDealButton.layer.cornerCurve = .continuous
-        viewDealButton.clipsToBounds = true
-        viewDealButton.setTitle(L10n.viewDeal, for: .normal)
-        viewDealButton.setTitleColor(AppPalette.onGold, for: .normal)
-        viewDealButton.titleLabel?.font = AppTypography.font(.bold, size: 12)
-        viewDealButton.tintColor = AppPalette.onGold
-        viewDealButton.setNeedsLayout()
-        viewDealButton.layoutIfNeeded()
+        viewDealButton?.backgroundColor = .clear
+        viewDealButton?.layer.cornerRadius = 12
+        viewDealButton?.layer.cornerCurve = .continuous
+        viewDealButton?.clipsToBounds = true
+        viewDealButton?.setTitle(L10n.viewDeal, for: .normal)
+        viewDealButton?.setTitleColor(AppPalette.onGold, for: .normal)
+        viewDealButton?.titleLabel?.font = AppTypography.font(.bold, size: 12)
+        viewDealButton?.tintColor = AppPalette.onGold
 
-        favoriteButton.setImage(UIImage(named: "ExploreHeart"), for: .normal)
-        favoriteButton.tintColor = .white
-        favoriteButton.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        favoriteButton.layer.cornerRadius = 16
-        favoriteButton.clipsToBounds = true
-        favoriteButton.accessibilityLabel = L10n.favorite
+        favoriteButton?.setImage(UIImage(named: "ExploreHeart"), for: .normal)
+        favoriteButton?.tintColor = .white
+        favoriteButton?.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        favoriteButton?.layer.cornerRadius = 16
+        favoriteButton?.clipsToBounds = true
+        favoriteButton?.accessibilityLabel = L10n.favorite
 
-        bookmarkButton.setImage(UIImage(named: "ExploreBookmark"), for: .normal)
-        bookmarkButton.tintColor = nil
-        bookmarkButton.backgroundColor = .clear
-        bookmarkButton.accessibilityLabel = L10n.bookmark
+        bookmarkButton?.setImage(UIImage(named: "ExploreBookmark"), for: .normal)
+        bookmarkButton?.tintColor = nil
+        bookmarkButton?.backgroundColor = .clear
+        bookmarkButton?.accessibilityLabel = L10n.bookmark
 
-        favoriteButton.addTarget(self, action: #selector(handleFavorite), for: .touchUpInside)
-        bookmarkButton.addTarget(self, action: #selector(handleBookmark), for: .touchUpInside)
-        viewDealButton.addTarget(self, action: #selector(handleDeal), for: .touchUpInside)
+        favoriteButton?.addTarget(self, action: #selector(handleFavorite), for: .touchUpInside)
+        bookmarkButton?.addTarget(self, action: #selector(handleBookmark), for: .touchUpInside)
+        viewDealButton?.addTarget(self, action: #selector(handleDeal), for: .touchUpInside)
     }
 
     override func prepareForReuse() {
@@ -186,67 +194,73 @@ final class VenueCardCell: UITableViewCell {
         onFavorite = nil
         onBookmark = nil
         onViewDeal = nil
-        heroImageView.setBusinessImage(urlString: nil)
-        wordmarkLabel.text = nil
-        dealValidityLabel.text = nil
-        dealValidityLabel.isHidden = true
-        dealValidityBottomConstraint.isActive = false
-        dealHeightConstraint.isActive = true
+        heroImageView?.setBusinessImage(urlString: nil)
+        wordmarkLabel?.text = nil
+        dealValidityLabel?.text = nil
+        dealValidityLabel?.isHidden = true
+        dealValidityBottomConstraint?.isActive = false
+        dealHeightConstraint?.isActive = true
+        dealHeightConstraint?.constant = AppMetrics.dealHeight
     }
 
     func configure(with venue: Venue) {
-        nameLabel.attributedText = NSAttributedString(string: venue.name, attributes: [
+        nameLabel?.attributedText = NSAttributedString(string: venue.name, attributes: [
             .font: AppTypography.font(.bold, size: 15),
             .foregroundColor: AppPalette.primaryText,
             .kern: -0.375
         ])
-        subtitleLabel.text = venue.subtitle
+        subtitleLabel?.text = venue.subtitle
         applyWordmark(venue)
-        verifiedImageView.isHidden = !venue.isVerified
-        ratingLabel.attributedText = Self.ratingAttributedText(for: venue)
+        verifiedImageView?.isHidden = !venue.isVerified
+        ratingLabel?.attributedText = Self.ratingAttributedText(for: venue)
 
-        let cardWidth = ScreenMetrics.width(for: self) - AppMetrics.cardGutter * 2
+        let cardWidth = max(1, ScreenMetrics.width(for: self) - AppMetrics.cardGutter * 2)
         let imageSize = CGSize(width: cardWidth, height: AppMetrics.heroHeight)
         let placeholder = ArtworkCache.image(for: venue, size: imageSize)
-        heroImageView.setBusinessImage(urlString: venue.imageURL, placeholder: placeholder)
+        heroImageView?.setBusinessImage(urlString: venue.imageURL, placeholder: placeholder)
 
         updateFavorite(venue.isFavorite)
         updateBookmark(venue.isBookmarked)
+        applyDeal(venue.deal)
+    }
 
-        if let deal = venue.deal {
-            dealBannerView.isHidden = false
-            dealTopConstraint.constant = 12
+    private func applyDeal(_ deal: Deal?) {
+        guard let deal else {
+            dealBannerView?.isHidden = true
+            dealValidityBottomConstraint?.isActive = false
+            dealHeightConstraint?.isActive = true
+            dealHeightConstraint?.constant = 0
+            dealTopConstraint?.constant = 0
+            dealValidityLabel?.text = nil
+            dealValidityLabel?.isHidden = true
+            return
+        }
 
-            dealTitleLabel.attributedText = NSAttributedString(string: deal.badge, attributes: [
-                .font: AppTypography.font(.semibold, size: 8.5),
-                .foregroundColor: AppPalette.exclusiveGold,
-                .kern: 0.425
-            ])
-            dealDiscountLabel.text = deal.discount
-            dealDetailLabel.text = deal.detail
+        dealBannerView?.isHidden = false
+        dealTopConstraint?.constant = 12
+        dealHeightConstraint?.isActive = true
 
-            let validity = deal.validity.trimmingCharacters(in: .whitespacesAndNewlines)
-            if validity.isEmpty {
-                dealValidityLabel.text = nil
-                dealValidityLabel.isHidden = true
-                dealValidityBottomConstraint.isActive = false
-                dealHeightConstraint.isActive = true
-                dealHeightConstraint.constant = AppMetrics.dealHeight
-            } else {
-                dealValidityLabel.text = validity
-                dealValidityLabel.isHidden = false
-                // Content + matching 12pt top/bottom insets define banner height.
-                dealHeightConstraint.isActive = false
-                dealValidityBottomConstraint.isActive = true
-            }
+        dealTitleLabel?.attributedText = NSAttributedString(string: deal.badge, attributes: [
+            .font: AppTypography.font(.semibold, size: 8.5),
+            .foregroundColor: AppPalette.exclusiveGold,
+            .kern: 0.425
+        ])
+        dealDiscountLabel?.text = deal.discount
+        dealDetailLabel?.text = deal.detail
+
+        let validity = deal.validity.trimmingCharacters(in: .whitespacesAndNewlines)
+        if validity.isEmpty {
+            dealValidityLabel?.text = nil
+            dealValidityLabel?.isHidden = true
+            dealValidityBottomConstraint?.isActive = false
+            dealHeightConstraint?.constant = AppMetrics.dealHeight
         } else {
-            dealBannerView.isHidden = true
-            dealValidityBottomConstraint.isActive = false
-            dealHeightConstraint.isActive = true
-            dealHeightConstraint.constant = 0
-            dealTopConstraint.constant = 0
-            dealValidityLabel.text = nil
-            dealValidityLabel.isHidden = true
+            dealValidityLabel?.text = validity
+            dealValidityLabel?.isHidden = false
+            // Keep height constraint active (self-sizing safe). Use a taller
+            // constant so "Monday – Saturday" fits without toggling isActive.
+            dealValidityBottomConstraint?.isActive = false
+            dealHeightConstraint?.constant = AppMetrics.dealHeightWithValidity
         }
     }
 
@@ -260,7 +274,7 @@ final class VenueCardCell: UITableViewCell {
             font = AppTypography.font(.bold, size: 24)
             kern = -0.6
         }
-        wordmarkLabel.attributedText = NSAttributedString(string: venue.wordmark, attributes: [
+        wordmarkLabel?.attributedText = NSAttributedString(string: venue.wordmark, attributes: [
             .font: font,
             .foregroundColor: UIColor.white,
             .kern: kern
@@ -269,22 +283,22 @@ final class VenueCardCell: UITableViewCell {
 
     private func updateFavorite(_ isFavorite: Bool) {
         if isFavorite {
-            favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            favoriteButton.tintColor = .systemRed
+            favoriteButton?.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            favoriteButton?.tintColor = .systemRed
         } else {
-            favoriteButton.setImage(UIImage(named: "ExploreHeart"), for: .normal)
-            favoriteButton.tintColor = .white
+            favoriteButton?.setImage(UIImage(named: "ExploreHeart"), for: .normal)
+            favoriteButton?.tintColor = .white
         }
-        favoriteButton.accessibilityValue = isFavorite ? "Saved" : "Not saved"
+        favoriteButton?.accessibilityValue = isFavorite ? "Saved" : "Not saved"
     }
 
     private func updateBookmark(_ isBookmarked: Bool) {
         if isBookmarked {
-            bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
-            bookmarkButton.tintColor = AppPalette.gold
+            bookmarkButton?.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+            bookmarkButton?.tintColor = AppPalette.gold
         } else {
-            bookmarkButton.setImage(UIImage(named: "ExploreBookmark"), for: .normal)
-            bookmarkButton.tintColor = nil
+            bookmarkButton?.setImage(UIImage(named: "ExploreBookmark"), for: .normal)
+            bookmarkButton?.tintColor = nil
         }
     }
 

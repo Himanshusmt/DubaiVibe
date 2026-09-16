@@ -23,6 +23,7 @@ enum NotificationsAPI {
         NetworkManager.shared.request(
             endpoint: .markNotificationRead(uuid: uuid),
             method: .POST,
+            includeContentType: false,
             showLoader: showLoader,
             showErrorAlert: false
         )

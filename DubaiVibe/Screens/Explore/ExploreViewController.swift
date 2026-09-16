@@ -23,7 +23,7 @@ final class ExploreViewController: UIViewController {
     private var chipSizeCache: [ExploreCategory: CGSize] = [:]
     private var searchWorkItem: DispatchWorkItem?
 
-    private var dataSource: UITableViewDiffableDataSource<Int, UUID>!
+    private var dataSource: UITableViewDiffableDataSource<Int, UUID>?
 
     private var lastContentOffset: CGFloat = 0
     private var headerShift: CGFloat = 0
@@ -50,11 +50,13 @@ final class ExploreViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        refreshFloatingTabBarIfNeeded(animated: animated)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         prefetchArtwork()
+        refreshFloatingTabBarIfNeeded(animated: false)
     }
 
     override func viewDidLayoutSubviews() {
@@ -225,25 +227,27 @@ private extension ExploreViewController {
     }
 
     func configureTable() {
-        venueTableView.separatorStyle = .none
-        venueTableView.backgroundColor = AppPalette.background
-        venueTableView.showsVerticalScrollIndicator = false
-        venueTableView.keyboardDismissMode = .onDrag
-        venueTableView.delaysContentTouches = false
-        venueTableView.contentInsetAdjustmentBehavior = .never
-        venueTableView.estimatedRowHeight = 400
-        venueTableView.rowHeight = UITableView.automaticDimension
-        venueTableView.prefetchDataSource = self
+        guard let tableView = venueTableView else { return }
+
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = AppPalette.background
+        tableView.showsVerticalScrollIndicator = false
+        tableView.keyboardDismissMode = .onDrag
+        tableView.delaysContentTouches = false
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.estimatedRowHeight = 400
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.prefetchDataSource = self
         let refresh = UIRefreshControl()
         refresh.tintColor = AppPalette.gold
         refresh.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-        venueTableView.refreshControl = refresh
-        venueTableView.contentInset.bottom = AppMetrics.floatingTabPillSize.height
+        tableView.refreshControl = refresh
+        tableView.contentInset.bottom = AppMetrics.floatingTabPillSize.height
             + AppMetrics.floatingTabBottomInset(for: view)
             + 8
-        venueTableView.verticalScrollIndicatorInsets.bottom = venueTableView.contentInset.bottom
+        tableView.verticalScrollIndicatorInsets.bottom = tableView.contentInset.bottom
 
-        dataSource = UITableViewDiffableDataSource<Int, UUID>(tableView: venueTableView) { [weak self] tableView, indexPath, id in
+        let source = UITableViewDiffableDataSource<Int, UUID>(tableView: tableView) { [weak self] tableView, indexPath, id in
             guard
                 let self,
                 let cell = tableView.dequeueReusableCell(withIdentifier: VenueCardCell.reuseIdentifier, for: indexPath) as? VenueCardCell,
@@ -257,9 +261,10 @@ private extension ExploreViewController {
             cell.onViewDeal = { [weak self] in self?.openVenueDetail(id: id) }
             return cell
         }
-        dataSource.defaultRowAnimation = .fade
-        venueTableView.dataSource = dataSource
-        venueTableView.delegate = self
+        source.defaultRowAnimation = .fade
+        dataSource = source
+        tableView.dataSource = source
+        tableView.delegate = self
     }
 
     func loadFeed() {
@@ -328,6 +333,7 @@ private extension ExploreViewController {
     }
 
     func applySnapshot(animated: Bool) {
+        guard let dataSource else { return }
         var snapshot = NSDiffableDataSourceSnapshot<Int, UUID>()
         snapshot.appendSections([0])
         snapshot.appendItems(filteredIDs, toSection: 0)
@@ -336,6 +342,7 @@ private extension ExploreViewController {
     }
 
     func reloadVenue(_ id: UUID) {
+        guard let dataSource else { return }
         var snapshot = dataSource.snapshot()
         guard snapshot.indexOfItem(id) != nil else { return }
         snapshot.reloadItems([id])
@@ -470,7 +477,7 @@ extension ExploreViewController: UICollectionViewDataSource, UICollectionViewDel
 
 extension ExploreViewController: UITableViewDelegate, UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let count = dataSource.snapshot().numberOfItems
+        let count = dataSource?.snapshot().numberOfItems ?? 0
         guard count > 0, indexPath.row >= count - 3 else { return }
         viewModel.loadMoreIfNeeded { [weak self] result in
             self?.handleBusinessesResult(result, animated: false)
@@ -478,6 +485,7 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSourcePrefe
     }
 
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard let dataSource else { return }
         let size = CGSize(width: view.bounds.width - AppMetrics.cardGutter * 2, height: AppMetrics.heroHeight)
         let ids = indexPaths.compactMap { dataSource.itemIdentifier(for: $0) }
         let upcoming = ids.compactMap(venue(with:))
@@ -535,6 +543,17 @@ extension ExploreViewController: UITableViewDelegate, UITableViewDataSourcePrefe
 }
 
 private extension ExploreViewController {
+    func refreshFloatingTabBarIfNeeded(animated: Bool) {
+        let refresh = { [weak self] in
+            (self?.tabBarController as? MainTabBarController)?.refreshFloatingTabBarLayout()
+        }
+        if animated, let coordinator = transitionCoordinator {
+            coordinator.animate(alongsideTransition: { _ in refresh() }, completion: { _ in refresh() })
+        } else {
+            refresh()
+        }
+    }
+
     func maxContentOffset(in scrollView: UIScrollView) -> CGFloat {
         scrollView.contentSize.height - scrollView.bounds.height + scrollView.adjustedContentInset.bottom
     }

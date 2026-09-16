@@ -76,6 +76,8 @@ enum AppMetrics {
     static let searchHeight: CGFloat = 38
     static let heroHeight: CGFloat = 176
     static let dealHeight: CGFloat = 78
+    /// Deal panel height when weekday validity text is visible (e.g. "Monday – Saturday").
+    static let dealHeightWithValidity: CGFloat = 94
     static let brandTileWidth: CGFloat = 74
     static let brandTileHeight: CGFloat = 48
 

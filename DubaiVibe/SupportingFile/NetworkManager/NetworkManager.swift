@@ -552,6 +552,7 @@ final class NetworkManager {
         method: HTTPMethod = .GET,
         parameters: [String: Any]? = nil,
         headers: [String: String] = [:],
+        includeContentType: Bool = true,
         showLoader: Bool = true,
         showErrorAlert: Bool = true,
         retryCount: Int = 2
@@ -587,7 +588,11 @@ final class NetworkManager {
         
         request.timeoutInterval = 60
         
-        applyDefaultHeaders(to: &request, extra: headers)
+        applyDefaultHeaders(
+            to: &request,
+            extra: headers,
+            includeContentType: includeContentType
+        )
         
         // MARK: Body
         
@@ -1080,8 +1085,14 @@ final class NetworkManager {
             .eraseToAnyPublisher()
     }
 
-    private func applyDefaultHeaders(to request: inout URLRequest, extra: [String: String]) {
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    private func applyDefaultHeaders(
+        to request: inout URLRequest,
+        extra: [String: String],
+        includeContentType: Bool = true
+    ) {
+        if includeContentType {
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
         FCMNotificationManager.authDeviceHeaders().forEach { key, value in
