@@ -60,6 +60,69 @@ final class ProfileViewModel {
         .store(in: &cancellables)
     }
 
+    /// Edit Profile save:
+    /// 1) `POST /upload?kind=profile` when a new photo is chosen — take `mediaId` from the response
+    /// 2) `PATCH /users/me` with `name` and that `avatarMediaId`
+    /// See http://18.194.78.138:5000/docs#/Mobile%20Upload/post_api_mobile_v1_upload
+    func saveEditedProfile(
+        firstName: String,
+        lastName: String,
+        avatarImage: UIImage?,
+        showLoader: Bool = true,
+        completion: @escaping (Result<ProfileResponse, APIError>) -> Void
+    ) {
+        let fullName = [firstName, lastName]
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+
+        guard let avatarImage else {
+            patchCurrentUser(name: fullName, avatarMediaId: nil, completion: completion)
+            return
+        }
+
+        isLoading = true
+        errorMessage = ""
+
+        NetworkManager.shared.uploadImage(
+            endpoint: .upload(kind: "profile"),
+            image: avatarImage,
+            imageKey: "file",
+            method: .POST,
+            showLoader: showLoader,
+            showErrorAlert: false
+        )
+        .sink { [weak self] completionResult in
+            if case .failure(let error) = completionResult {
+                self?.isLoading = false
+                self?.errorMessage = error.localizedDescription
+                completion(.failure(error))
+            }
+        } receiveValue: { [weak self] (response: MediaUploadResponse) in
+            guard let self else { return }
+            let mediaId = response.data?.resolvedMediaId?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            guard let mediaId, !mediaId.isEmpty else {
+                self.isLoading = false
+                let error = APIError.serverError(response.message ?? "Upload did not return a media id.")
+                self.errorMessage = error.localizedDescription
+                completion(.failure(error))
+                return
+            }
+
+            self.persistAvatarUploadIds(
+                mediaId: mediaId,
+                uploadUuid: response.data?.resolvedUploadUuid
+            )
+            self.patchCurrentUser(
+                name: fullName,
+                avatarMediaId: mediaId,
+                completion: completion
+            )
+        }
+        .store(in: &cancellables)
+    }
+
     /// 1) `POST /upload?kind=profile` (multipart `file`)
     /// 2) `PATCH /users/me` with `avatarMediaId` / `avatarUploadUuid`
     func uploadAndUpdateAvatar(
@@ -195,6 +258,30 @@ final class ProfileViewModel {
             case .failure(let error):
                 // Upload already deleted — still clear local so the UI recovers.
                 self.clearLocalAvatarState()
+                self.errorMessage = error.localizedDescription
+                completion(.failure(error))
+            }
+        }
+    }
+
+    private func patchCurrentUser(
+        name: String,
+        avatarMediaId: String?,
+        completion: @escaping (Result<ProfileResponse, APIError>) -> Void
+    ) {
+        isLoading = true
+        errorMessage = ""
+        auth.updateProfile(
+            name: name.isEmpty ? nil : name,
+            avatarMediaId: avatarMediaId
+        ) { [weak self] result in
+            guard let self else { return }
+            self.isLoading = false
+            switch result {
+            case .success(let profile):
+                self.loadUser(showLoader: false)
+                completion(.success(profile))
+            case .failure(let error):
                 self.errorMessage = error.localizedDescription
                 completion(.failure(error))
             }

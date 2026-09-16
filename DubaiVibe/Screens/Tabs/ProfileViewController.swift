@@ -208,34 +208,7 @@ extension ProfileViewController {
     }
 
     @IBAction private func editProfileTapped() {
-        let defaults = UserDefaults.standard
-        let alert = UIAlertController(
-            title: L10n.profileEditTitle,
-            message: L10n.profileEditSubtitle,
-            preferredStyle: .alert
-        )
-        alert.addTextField {
-            $0.placeholder = L10n.firstName
-            $0.text = defaults.string(forKey: Storage.firstNameKey)
-                ?? self.viewModel.user?.resolvedFirstName
-            $0.autocapitalizationType = .words
-            $0.clearButtonMode = .whileEditing
-        }
-        alert.addTextField {
-            $0.placeholder = L10n.lastName
-            $0.text = defaults.string(forKey: Storage.lastNameKey)
-                ?? self.viewModel.user?.resolvedLastName
-            $0.autocapitalizationType = .words
-            $0.clearButtonMode = .whileEditing
-        }
-        alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: L10n.save, style: .default) { [weak self] _ in
-            self?.saveEditedName(
-                first: alert.textFields?[0].text ?? "",
-                last: alert.textFields?[1].text ?? ""
-            )
-        })
-        presentStyledAlert(alert)
+        EditProfileViewController.open(from: self)
     }
 
     @IBAction private func languageTapped() {
@@ -299,20 +272,6 @@ extension ProfileViewController {
         presentStyledAlert(alert)
     }
 
-    private func saveEditedName(first: String, last: String) {
-        let firstName = first.trimmingCharacters(in: .whitespacesAndNewlines)
-        let lastName = last.trimmingCharacters(in: .whitespacesAndNewlines)
-        if let error = validationMessage(forFirstName: firstName, lastName: lastName) {
-            showAnimatedAlert(title: L10n.error, message: error, style: .warning)
-            return
-        }
-        UserDefaults.standard.set(firstName, forKey: Storage.firstNameKey)
-        UserDefaults.standard.set(lastName, forKey: Storage.lastNameKey)
-        TokenManager.shared.saveSocialFullName("\(firstName) \(lastName)")
-        applyUser(viewModel.user)
-        showAnimatedAlert(title: L10n.saved, message: L10n.profileUpdated, style: .success)
-    }
-
     private func changeLanguage(to language: AppLanguage) {
         guard LocalizationManager.shared.setLanguage(language) else { return }
         AppRouter.reloadInterface(selectingProfile: true)
@@ -346,23 +305,6 @@ extension ProfileViewController {
     /// Root → Authentication storyboard → `SignupOptionsVC`.
     private func navigateToSignupOptions() {
         AppRouter.setRootAuth(animated: true)
-    }
-
-    private func validationMessage(forFirstName first: String, lastName last: String) -> String? {
-        if first.isEmpty { return L10n.enterFirstName }
-        if first.count < 2 { return L10n.firstNameTooShort }
-        if !isValidPersonName(first) { return L10n.invalidFirstName }
-        if last.isEmpty { return L10n.enterLastName }
-        if last.count < 2 { return L10n.lastNameTooShort }
-        if !isValidPersonName(last) { return L10n.invalidLastName }
-        return nil
-    }
-
-    private func isValidPersonName(_ name: String) -> Bool {
-        let allowed = CharacterSet.letters
-            .union(.whitespaces)
-            .union(CharacterSet(charactersIn: "'-"))
-        return !name.isEmpty && name.unicodeScalars.allSatisfy { allowed.contains($0) }
     }
 }
 
