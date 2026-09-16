@@ -45,6 +45,7 @@
 		800801BA304FE3DE005FC893 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80080174304FE3DE005FC893 /* SceneDelegate.swift */; };
 		800801BB304FE3DE005FC893 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80080175304FE3DE005FC893 /* ViewController.swift */; };
 		802C39C5305954F30071277C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 802C39C4305954F30071277C /* GoogleService-Info.plist */; };
+		802C39C7305AA3CC0071277C /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C39C6305AA3CC0071277C /* EditProfileViewController.swift */; };
 		A1B2C3D43060100100000001 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000011 /* AppRouter.swift */; };
 		A1B2C3D43060100100000002 /* SignupOptionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000012 /* SignupOptionsVC.swift */; };
 		A1B2C3D43060100100000003 /* SignupWithPhoneNumberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D43060100100000013 /* SignupWithPhoneNumberVC.swift */; };
@@ -83,7 +84,6 @@
 		F01A2B3C3060110100000013 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */; };
 		F01A2B3C3060110100000014 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000004 /* Inter-Bold.ttf */; };
 		F01A2B3C3060110100000031 /* UIFont+Inter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01A2B3C3060110100000030 /* UIFont+Inter.swift */; };
-		F09BTN1A3060800100000002 /* UIButton+PressAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09BTN1A3060800100000001 /* UIButton+PressAnimation.swift */; };
 		F02A11FC3060110200000002 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02A11FC3060110200000001 /* ProfileViewController.swift */; };
 		F02A11FC3060110200000012 /* ProfileViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02A11FC3060110200000011 /* ProfileViews.swift */; };
 		F02A11FC3060110200000022 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02A11FC3060110200000021 /* ProfileViewModel.swift */; };
@@ -108,6 +108,7 @@
 		F08N0T1F3060700100000014 /* NotificationsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08N0T1F3060700100000004 /* NotificationsAPI.swift */; };
 		F08N0T1F3060700100000015 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08N0T1F3060700100000005 /* NotificationsViewModel.swift */; };
 		F08N0T1F3060700100000016 /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08N0T1F3060700100000006 /* NotificationCell.swift */; };
+		F09BTN1A3060800100000002 /* UIButton+PressAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F09BTN1A3060800100000001 /* UIButton+PressAnimation.swift */; };
 		F10L10N13060110600000004 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10L10N13060110600000001 /* LocalizationManager.swift */; };
 		F10L10N13060110600000005 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10L10N13060110600000002 /* L10n.swift */; };
 		F10L10N13060110600000006 /* LanguageSettingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10L10N13060110600000003 /* LanguageSettingRow.swift */; };
@@ -158,6 +159,7 @@
 		80080174304FE3DE005FC893 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		80080175304FE3DE005FC893 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		802C39C4305954F30071277C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		802C39C6305AA3CC0071277C /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000011 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000012 /* SignupOptionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupOptionsVC.swift; sourceTree = "<group>"; };
 		A1B2C3D43060100100000013 /* SignupWithPhoneNumberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupWithPhoneNumberVC.swift; sourceTree = "<group>"; };
@@ -196,7 +198,6 @@
 		F01A2B3C3060110100000003 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		F01A2B3C3060110100000004 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
 		F01A2B3C3060110100000030 /* UIFont+Inter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Inter.swift"; sourceTree = "<group>"; };
-		F09BTN1A3060800100000001 /* UIButton+PressAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+PressAnimation.swift"; sourceTree = "<group>"; };
 		F02A11FC3060110200000001 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		F02A11FC3060110200000011 /* ProfileViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViews.swift; sourceTree = "<group>"; };
 		F02A11FC3060110200000021 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -222,6 +223,7 @@
 		F08N0T1F3060700100000004 /* NotificationsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsAPI.swift; sourceTree = "<group>"; };
 		F08N0T1F3060700100000005 /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
 		F08N0T1F3060700100000006 /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
+		F09BTN1A3060800100000001 /* UIButton+PressAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+PressAnimation.swift"; sourceTree = "<group>"; };
 		F10L10N13060110600000001 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		F10L10N13060110600000002 /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		F10L10N13060110600000003 /* LanguageSettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSettingRow.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 			isa = PBXGroup;
 			children = (
 				DF7DD7B5305028EE002BFA4F /* MainTabBarController.swift */,
+				802C39C6305AA3CC0071277C /* EditProfileViewController.swift */,
 				DF7DD7B6305028EE002BFA4F /* PlaceholderViewController.swift */,
 				F02A11FC3060110200000001 /* ProfileViewController.swift */,
 				F02A11FC3060110200000021 /* ProfileViewModel.swift */,
@@ -517,16 +520,6 @@
 			path = Screens;
 			sourceTree = "<group>";
 		};
-		F08N0T1F3060700100000010 /* Notifications */ = {
-			isa = PBXGroup;
-			children = (
-				F08N0T1F3060700100000001 /* NotificationsViewController.swift */,
-				F08N0T1F3060700100000005 /* NotificationsViewModel.swift */,
-				F08N0T1F3060700100000006 /* NotificationCell.swift */,
-			);
-			path = Notifications;
-			sourceTree = "<group>";
-		};
 		DF7DD7BE305028EE002BFA4F /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -562,6 +555,16 @@
 				F01A2B3C3060110100000020 /* Fonts */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		F08N0T1F3060700100000010 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				F08N0T1F3060700100000001 /* NotificationsViewController.swift */,
+				F08N0T1F3060700100000005 /* NotificationsViewModel.swift */,
+				F08N0T1F3060700100000006 /* NotificationCell.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		F10L10N13060110600000030 /* Localization */ = {
@@ -736,6 +739,7 @@
 				DF7DD7C2305028EE002BFA4F /* VenueDetailViews.swift in Sources */,
 				DF7DD7C3305028EE002BFA4F /* MainTabBarController.swift in Sources */,
 				DF7DD7C4305028EE002BFA4F /* PlaceholderViewController.swift in Sources */,
+				802C39C7305AA3CC0071277C /* EditProfileViewController.swift in Sources */,
 				F02A11FC3060110200000002 /* ProfileViewController.swift in Sources */,
 				F02A11FC3060110200000022 /* ProfileViewModel.swift in Sources */,
 				F02A11FC3060110200000012 /* ProfileViews.swift in Sources */,

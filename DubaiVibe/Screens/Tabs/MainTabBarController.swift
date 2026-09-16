@@ -36,6 +36,7 @@ private extension MainTabBarController {
     func installTabs() {
         // Keep ProfileViewController / ProfileViews linked so storyboard can resolve custom classes.
         _ = ProfileViewController.self
+        _ = EditProfileViewController.self
         _ = ProfileSettingRow.self
         _ = ProfileCardView.self
 
