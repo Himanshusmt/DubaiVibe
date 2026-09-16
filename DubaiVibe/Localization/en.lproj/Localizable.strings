@@ -36,7 +36,7 @@
 "profile.lastNameTooShort" = "Last name must be at least 2 characters.";
 "profile.invalidLastName" = "Please enter a valid last name.";
 "profile.accountTitle" = "Account Profile";
-"profile.vipMember" = "ONEVIBE VIP MEMBER";
+"profile.vipMember" = "DUBAI VIBE VIP MEMBER";
 "profile.accountSection" = "ACCOUNT & PREFERENCES";
 "profile.supportSection" = "SUPPORT & LEGAL";
 "profile.editTitle" = "Edit Profile";
@@ -74,7 +74,7 @@
 /* Deals */
 "deal.view" = "View Deal";
 "deal.unlock" = "Unlock Deal";
-"deal.exclusiveBadge" = "ONEVIBE EXCLUSIVE";
+"deal.exclusiveBadge" = "DUBAIVIBE EXCLUSIVE";
 "deal.exclusivePerk" = "DUBAI VIBE EXCLUSIVE PERK";
 "deal.enterCodeTitle" = "Enter Code";
 "deal.enterCodeSubtitle" = "Ask restaurant member to enter the code";

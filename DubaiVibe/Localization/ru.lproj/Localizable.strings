@@ -36,7 +36,7 @@
 "profile.lastNameTooShort" = "Фамилия должна содержать не менее 2 символов.";
 "profile.invalidLastName" = "Пожалуйста, введите корректную фамилию.";
 "profile.accountTitle" = "Профиль аккаунта";
-"profile.vipMember" = "ONEVIBE VIP УЧАСТНИК";
+"profile.vipMember" = "DUBAI VIBE VIP УЧАСТНИК";
 "profile.accountSection" = "АККАУНТ И НАСТРОЙКИ";
 "profile.supportSection" = "ПОДДЕРЖКА И ПРАВОВАЯ ИНФОРМАЦИЯ";
 "profile.editTitle" = "Редактировать профиль";

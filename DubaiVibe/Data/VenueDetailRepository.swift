@@ -44,7 +44,7 @@ struct VenueDetailRepository: VenueDetailRepositorying {
                 detail: "Your total bill",
                 terms: [
                     DealTerm(symbolName: "calendar", text: "Valid Sunday – Thursday"),
-                    DealTerm(symbolName: "person", text: "OneVibe members only."),
+                    DealTerm(symbolName: "person", text: "DubaiVibe members only."),
                     DealTerm(symbolName: "fork.knife", text: "Dine-in only"),
                     DealTerm(symbolName: "nosign", text: "Cannot be combined with other offers")
                 ],

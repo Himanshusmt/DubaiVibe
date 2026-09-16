@@ -1345,7 +1345,7 @@ struct BusinessItem: Decodable {
                     : "Valid \(validity)"
                 built.append(DealTerm(symbolName: "calendar", text: calendarText))
             }
-            built.append(DealTerm(symbolName: "person", text: "OneVibe members only."))
+            built.append(DealTerm(symbolName: "person", text: "DubaiVibe members only."))
             built.append(DealTerm(symbolName: "fork.knife", text: "Dine-in only"))
             built.append(DealTerm(symbolName: "nosign", text: "Cannot be combined with other offers"))
             terms = built
