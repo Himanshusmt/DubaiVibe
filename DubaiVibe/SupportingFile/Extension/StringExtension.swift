@@ -86,7 +86,8 @@ extension String {
 
     var isValidUAEMobileNumber: Bool {
         let digits = uaeLocalMobileDigits
-        return digits.count == 9 && digits.hasPrefix("5")
+        // Length + digits only — no prefix restriction (e.g. 50/52/…)
+        return digits.count == 9
     }
 
     func localPhoneDigits(strippingDialCode dialCode: String) -> String {

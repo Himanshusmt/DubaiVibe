@@ -23,6 +23,11 @@ final class LanguageSettingRow: UIControl {
             backgroundColor = isHighlighted
                 ? AppPalette.surfaceRaised
                 : AppPalette.surface
+            if isHighlighted {
+                animatePressZoomIn()
+            } else {
+                animatePressZoomOut()
+            }
         }
     }
 

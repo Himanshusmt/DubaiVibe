@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nt-root">
+    <device id="retina6_12" orientation="portrait" appearance="dark"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Notifications View Controller-->
+        <scene sceneID="nt-scene">
+            <objects>
+                <viewController storyboardIdentifier="NotificationsViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nt-root" customClass="NotificationsViewController" customModule="DubaiVibe" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nt-view">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nt-nav">
+                                <rect key="frame" x="0.0" y="59" width="393" height="56"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nt-back">
+                                        <rect key="frame" x="16" y="10" width="36" height="36"/>
+                                        <color key="backgroundColor" red="0.10588235294117647" green="0.10588235294117647" blue="0.12156862745098039" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="36" id="nt-back-h"/>
+                                            <constraint firstAttribute="width" constant="36" id="nt-back-w"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="chevron.left" catalog="system"/>
+                                        <connections>
+                                            <action selector="handleBack" destination="nt-root" eventType="touchUpInside" id="nt-a-back"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Notifications" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="nt-title">
+                                        <rect key="frame" x="140" y="16" width="113" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ExploreBrandLogo" translatesAutoresizingMaskIntoConstraints="NO" id="nt-brand">
+                                        <rect key="frame" x="337" y="8" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="nt-brand-h"/>
+                                            <constraint firstAttribute="width" constant="40" id="nt-brand-w"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="nt-nav-h"/>
+                                    <constraint firstItem="nt-back" firstAttribute="leading" secondItem="nt-nav" secondAttribute="leading" constant="16" id="nt-back-l"/>
+                                    <constraint firstItem="nt-back" firstAttribute="centerY" secondItem="nt-nav" secondAttribute="centerY" id="nt-back-y"/>
+                                    <constraint firstItem="nt-title" firstAttribute="centerX" secondItem="nt-nav" secondAttribute="centerX" id="nt-title-x"/>
+                                    <constraint firstItem="nt-title" firstAttribute="centerY" secondItem="nt-nav" secondAttribute="centerY" id="nt-title-y"/>
+                                    <constraint firstAttribute="trailing" secondItem="nt-brand" secondAttribute="trailing" constant="16" id="nt-brand-r"/>
+                                    <constraint firstItem="nt-brand" firstAttribute="centerY" secondItem="nt-nav" secondAttribute="centerY" id="nt-brand-y"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="140" sectionHeaderHeight="34" estimatedSectionHeaderHeight="34" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nt-table">
+                                <rect key="frame" x="0.0" y="115" width="393" height="703"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="nt-safe"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="nt-nav" firstAttribute="top" secondItem="nt-safe" secondAttribute="top" id="nt-nav-t"/>
+                            <constraint firstItem="nt-nav" firstAttribute="leading" secondItem="nt-view" secondAttribute="leading" id="nt-nav-l"/>
+                            <constraint firstAttribute="trailing" secondItem="nt-nav" secondAttribute="trailing" id="nt-nav-r"/>
+                            <constraint firstItem="nt-table" firstAttribute="top" secondItem="nt-nav" secondAttribute="bottom" id="nt-table-t"/>
+                            <constraint firstItem="nt-table" firstAttribute="leading" secondItem="nt-view" secondAttribute="leading" id="nt-table-l"/>
+                            <constraint firstAttribute="trailing" secondItem="nt-table" secondAttribute="trailing" id="nt-table-r"/>
+                            <constraint firstItem="nt-safe" firstAttribute="bottom" secondItem="nt-table" secondAttribute="bottom" id="nt-table-b"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backButton" destination="nt-back" id="nt-o-back"/>
+                        <outlet property="brandImageView" destination="nt-brand" id="nt-o-brand"/>
+                        <outlet property="tableView" destination="nt-table" id="nt-o-table"/>
+                        <outlet property="titleLabel" destination="nt-title" id="nt-o-title"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nt-fr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="20" y="20"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ExploreBrandLogo" width="70" height="66"/>
+        <image name="chevron.left" catalog="system" width="10" height="17"/>
+    </resources>
+</document>

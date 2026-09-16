@@ -156,7 +156,11 @@ final class EnterOTPVC: UIViewController {
             case .success(let response):
                 self.showSuccessToast(response.message, fallback: "OTP verified")
                 self.didAdvance = true
-                AppRouter.continueAfterLogin(from: self, user: response.resolvedUser)
+                AppRouter.continueAfterLogin(
+                    from: self,
+                    user: response.resolvedUser,
+                    isOnboardingComplete: response.resolvedOnboardingFlag
+                )
             case .failure(let error):
                 self.showErrorPopup(error)
                 self.otpView?.clear()

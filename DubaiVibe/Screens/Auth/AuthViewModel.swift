@@ -135,12 +135,39 @@ final class AuthViewModel {
         )
     }
 
+    /// `GET /users/me` — source of truth for `isOnboardingComplete` after launch.
+    func fetchCurrentUser(
+        showLoader: Bool = false,
+        completion: @escaping (Result<CurrentUserResponse, APIError>) -> Void
+    ) {
+        perform(
+            endpoint: .currentUser,
+            method: .GET,
+            showLoader: showLoader
+        ) { (result: Result<CurrentUserResponse, APIError>) in
+            if case .success(let response) = result {
+                TokenManager.shared.persistAuthSession(
+                    token: nil,
+                    user: response.resolvedUser,
+                    isOnboardingComplete: response.resolvedOnboardingComplete
+                )
+            }
+            completion(result)
+        }
+    }
+
     func logout( //new
         completion: @escaping (Result<AuthLogoutResponse, APIError>) -> Void
     ) {
+        var headers: [String: String] = [:]
+        if let bearer = TokenManager.shared.bearerAuthorizationHeader {
+            headers["Authorization"] = bearer
+        }
         perform(
             endpoint: .logout,
-            method: .POST
+            method: .POST,
+            parameters: [:],
+            headers: headers
         ) { (result: Result<AuthLogoutResponse, APIError>) in
             TokenManager.shared.clearUnauthorizedSession()
             UserDefaults.standard.setLoggedIn(value: false)
@@ -151,12 +178,34 @@ final class AuthViewModel {
     func logoutAll( //new
         completion: @escaping (Result<AuthLogoutResponse, APIError>) -> Void
     ) {
+        var headers: [String: String] = [:]
+        if let bearer = TokenManager.shared.bearerAuthorizationHeader {
+            headers["Authorization"] = bearer
+        }
         perform(
             endpoint: .logoutAll,
-            method: .POST
+            method: .POST,
+            parameters: [:],
+            headers: headers
         ) { (result: Result<AuthLogoutResponse, APIError>) in
             TokenManager.shared.clearUnauthorizedSession()
             UserDefaults.standard.setLoggedIn(value: false)
+            completion(result)
+        }
+    }
+
+    /// `DELETE /api/mobile/v1/users/me` — deactivate account and revoke sessions.
+    func deleteAccount(
+        completion: @escaping (Result<DeleteAccountResponse, APIError>) -> Void
+    ) {
+        perform(
+            endpoint: .deleteAccount,
+            method: .DELETE
+        ) { (result: Result<DeleteAccountResponse, APIError>) in
+            if case .success = result {
+                TokenManager.shared.clearUnauthorizedSession()
+                UserDefaults.standard.setLoggedIn(value: false)
+            }
             completion(result)
         }
     }
@@ -189,6 +238,9 @@ final class AuthViewModel {
     func updateProfile( //new
         notificationsEnabled: Bool? = nil,
         name: String? = nil,
+        avatarMediaId: String? = nil,
+        avatarUploadUuid: String? = nil,
+        clearAvatar: Bool = false,
         includeNullFields: Bool = false,
         completion: @escaping (Result<ProfileResponse, APIError>) -> Void
     ) {
@@ -202,21 +254,46 @@ final class AuthViewModel {
                 parameters["name"] = trimmed
             }
         }
+        if clearAvatar {
+            parameters["avatarMediaId"] = ""
+            parameters["avatarUploadUuid"] = ""
+        } else {
+            if let avatarMediaId {
+                let trimmed = avatarMediaId.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !trimmed.isEmpty {
+                    parameters["avatarMediaId"] = trimmed
+                }
+            }
+            if let avatarUploadUuid {
+                let trimmed = avatarUploadUuid.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !trimmed.isEmpty {
+                    parameters["avatarUploadUuid"] = trimmed
+                }
+            }
+        }
         if includeNullFields {
             parameters["gender"] = "male"
             parameters["state"] = "Madhya pradesh"
             parameters["city"] = "Indore"
             parameters["latitude"] = 0.00
             parameters["longitude"] = 0.00
-            parameters["avatarMediaId"] = ""
-            parameters["avatarUploadUuid"] = ""
+            if parameters["avatarMediaId"] == nil {
+                parameters["avatarMediaId"] = ""
+            }
+            if parameters["avatarUploadUuid"] == nil {
+                parameters["avatarUploadUuid"] = ""
+            }
         }
         perform(
             endpoint: .updateProfile,
             method: .PATCH,
-            parameters: parameters,
-            completion: completion
-        )
+            parameters: parameters
+        ) { (result: Result<ProfileResponse, APIError>) in
+            if case .success(let response) = result, let flag = response.resolvedOnboardingFlag {
+                TokenManager.shared.isOnboardingCompleted = flag
+            }
+            completion(result)
+        }
     }
 
     func updateProfileName( //new
@@ -234,6 +311,8 @@ final class AuthViewModel {
         endpoint: APIEndpoint,
         method: HTTPMethod,
         parameters: [String: Any]? = nil,
+        headers: [String: String] = [:],
+        showLoader: Bool = true,
         completion: @escaping (Result<T, APIError>) -> Void
     ) {
         isLoading = true
@@ -243,7 +322,8 @@ final class AuthViewModel {
             endpoint: endpoint,
             method: method,
             parameters: parameters,
-            showLoader: true,
+            headers: headers,
+            showLoader: showLoader,
             showErrorAlert: false
         )
         .sink { [weak self] completionResult in

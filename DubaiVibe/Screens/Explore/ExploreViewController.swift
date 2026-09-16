@@ -410,7 +410,7 @@ private extension ExploreViewController {
 
     @objc func handleNotifications() {
         bellDotView.isHidden = true
-        presentSoon(title: L10n.notifications)
+        NotificationsViewController.open(from: self)
     }
 
     func presentSoon(title: String) {

@@ -147,6 +147,7 @@ final class SignupOptionsVC: UIViewController {
                 AppRouter.continueAfterLogin(
                     from: self,
                     user: response.resolvedUser,
+                    isOnboardingComplete: response.resolvedOnboardingFlag,
                     firstName: first,
                     lastName: last
                 )
@@ -173,6 +174,7 @@ final class SignupOptionsVC: UIViewController {
                 AppRouter.continueAfterLogin(
                     from: self,
                     user: response.resolvedUser,
+                    isOnboardingComplete: response.resolvedOnboardingFlag,
                     firstName: first,
                     lastName: last
                 )

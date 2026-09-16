@@ -60,158 +60,780 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="prf-bg">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-brandbar">
-                                <rect key="frame" x="0.0" y="96" width="414" height="68"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-header">
+                                <rect key="frame" x="0.0" y="96" width="414" height="52"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="prf-brand">
-                                        <rect key="frame" x="16" y="1" width="70" height="66"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="prf-brand">
+                                        <rect key="frame" x="16" y="6" width="40" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="66" id="prf-brd-h"/>
-                                            <constraint firstAttribute="width" constant="70" id="prf-brd-w"/>
+                                            <constraint firstAttribute="height" constant="40" id="prf-brd-h"/>
+                                            <constraint firstAttribute="width" constant="40" id="prf-brd-w"/>
                                         </constraints>
-                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="DUBAI • EAT • DRINK • EXPLORE" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-tagline">
-                                        <rect key="frame" x="100" y="28.5" width="148" height="11"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="9"/>
-                                        <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Account Profile" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-title">
+                                        <rect key="frame" x="146" y="16" width="122" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-bell">
-                                        <rect key="frame" x="366" y="18" width="32" height="32"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="32" id="prf-bel-h"/>
-                                            <constraint firstAttribute="width" constant="32" id="prf-bel-w"/>
-                                        </constraints>
-                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" image="bell.fill" catalog="system"/>
-                                    </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-belldot">
-                                        <rect key="frame" x="389.5" y="17.5" width="9" height="9"/>
-                                        <color key="backgroundColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="9" id="prf-dot-h"/>
-                                            <constraint firstAttribute="width" constant="9" id="prf-dot-w"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="prf-bell" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="prf-tagline" secondAttribute="trailing" constant="8" id="prf-bel-l"/>
-                                    <constraint firstItem="prf-bell" firstAttribute="trailing" secondItem="prf-brandbar" secondAttribute="trailing" constant="-16" id="prf-bel-t"/>
-                                    <constraint firstItem="prf-bell" firstAttribute="centerY" secondItem="prf-brandbar" secondAttribute="centerY" id="prf-bel-y"/>
-                                    <constraint firstAttribute="height" constant="68" id="prf-brb-h"/>
-                                    <constraint firstItem="prf-brand" firstAttribute="leading" secondItem="prf-brandbar" secondAttribute="leading" constant="16" id="prf-brd-l"/>
-                                    <constraint firstItem="prf-brand" firstAttribute="centerY" secondItem="prf-brandbar" secondAttribute="centerY" id="prf-brd-y"/>
-                                    <constraint firstItem="prf-belldot" firstAttribute="centerX" secondItem="prf-bell" secondAttribute="trailing" constant="-4" id="prf-dot-x"/>
-                                    <constraint firstItem="prf-belldot" firstAttribute="centerY" secondItem="prf-bell" secondAttribute="top" constant="4" id="prf-dot-y"/>
-                                    <constraint firstItem="prf-tagline" firstAttribute="leading" secondItem="prf-brand" secondAttribute="trailing" constant="14" id="prf-tag-l"/>
-                                    <constraint firstItem="prf-tagline" firstAttribute="centerY" secondItem="prf-brandbar" secondAttribute="centerY" id="prf-tag-y"/>
+                                    <constraint firstItem="prf-brand" firstAttribute="leading" secondItem="prf-header" secondAttribute="leading" constant="16" id="prf-brd-l"/>
+                                    <constraint firstItem="prf-brand" firstAttribute="centerY" secondItem="prf-header" secondAttribute="centerY" id="prf-brd-y"/>
+                                    <constraint firstAttribute="height" constant="52" id="prf-hdr-h"/>
+                                    <constraint firstItem="prf-title" firstAttribute="centerX" secondItem="prf-header" secondAttribute="centerX" id="prf-ttl-x"/>
+                                    <constraint firstItem="prf-title" firstAttribute="centerY" secondItem="prf-header" secondAttribute="centerY" id="prf-ttl-y"/>
                                 </constraints>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="prf-scroll">
-                                <rect key="frame" x="0.0" y="164" width="414" height="615"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="prf-scroll">
+                                <rect key="frame" x="0.0" y="148" width="414" height="748"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-content">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="422"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="951"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-av-box">
-                                                <rect key="frame" x="157" y="40" width="100" height="100"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="prf-root-stack">
+                                                <rect key="frame" x="16" y="12" width="382" height="915"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" translatesAutoresizingMaskIntoConstraints="NO" id="prf-avatar">
-                                                        <rect key="frame" x="0.0" y="0.5" width="100" height="99"/>
-                                                        <color key="backgroundColor" red="0.85098039219999999" green="0.64313725489999995" blue="0.25490196079999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <imageReference key="image" image="person.circle.fill" catalog="system" symbolScale="default"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                <real key="value" value="50"/>
-                                                            </userDefinedRuntimeAttribute>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </imageView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-cam">
-                                                        <rect key="frame" x="68" y="68" width="32" height="32"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-av-box">
+                                                        <rect key="frame" x="0.0" y="0.0" width="382" height="120"/>
                                                         <subviews>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-cam-icon">
-                                                                <rect key="frame" x="7" y="7" width="18" height="18"/>
-                                                                <color key="tintColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="18" id="prf-cam-ih"/>
-                                                                    <constraint firstAttribute="width" constant="18" id="prf-cam-iw"/>
-                                                                </constraints>
+                                                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" image="avatarIcon" translatesAutoresizingMaskIntoConstraints="NO" id="prf-avatar">
+                                                                <rect key="frame" x="131" y="0.0" width="120" height="120"/>
+                                                                <color key="backgroundColor" red="0.094117647058823528" green="0.090196078431372548" blue="0.090196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="60"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                        <real key="value" value="3"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                        <color key="value" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
                                                             </imageView>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-cam">
+                                                                <rect key="frame" x="219" y="90" width="32" height="32"/>
+                                                                <subviews>
+                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-cam-icon">
+                                                                        <rect key="frame" x="9" y="11" width="14" height="9"/>
+                                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="14" id="prf-cam-ih"/>
+                                                                            <constraint firstAttribute="width" constant="14" id="prf-cam-iw"/>
+                                                                        </constraints>
+                                                                        <imageReference key="image" image="camera.fill" catalog="system" symbolScale="small"/>
+                                                                    </imageView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="32" id="prf-cam-h"/>
+                                                                    <constraint firstItem="prf-cam-icon" firstAttribute="centerX" secondItem="prf-cam" secondAttribute="centerX" id="prf-cam-ix"/>
+                                                                    <constraint firstItem="prf-cam-icon" firstAttribute="centerY" secondItem="prf-cam" secondAttribute="centerY" id="prf-cam-iy"/>
+                                                                    <constraint firstAttribute="width" constant="32" id="prf-cam-w"/>
+                                                                </constraints>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="16"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </view>
                                                         </subviews>
-                                                        <color key="backgroundColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="32" id="prf-cam-h"/>
-                                                            <constraint firstItem="prf-cam-icon" firstAttribute="centerX" secondItem="prf-cam" secondAttribute="centerX" id="prf-cam-ix"/>
-                                                            <constraint firstItem="prf-cam-icon" firstAttribute="centerY" secondItem="prf-cam" secondAttribute="centerY" id="prf-cam-iy"/>
-                                                            <constraint firstAttribute="width" constant="32" id="prf-cam-w"/>
+                                                            <constraint firstItem="prf-avatar" firstAttribute="centerX" secondItem="prf-av-box" secondAttribute="centerX" id="prf-av-cx"/>
+                                                            <constraint firstItem="prf-avatar" firstAttribute="centerY" secondItem="prf-av-box" secondAttribute="centerY" id="prf-av-cy"/>
+                                                            <constraint firstItem="prf-avatar" firstAttribute="height" constant="120" id="prf-av-h"/>
+                                                            <constraint firstItem="prf-avatar" firstAttribute="width" constant="120" id="prf-av-w"/>
+                                                            <constraint firstAttribute="height" constant="120" id="prf-avbox-h"/>
+                                                            <constraint firstItem="prf-cam" firstAttribute="bottom" secondItem="prf-avatar" secondAttribute="bottom" constant="2" id="prf-cam-b"/>
+                                                            <constraint firstItem="prf-cam" firstAttribute="trailing" secondItem="prf-avatar" secondAttribute="trailing" id="prf-cam-r"/>
                                                         </constraints>
                                                     </view>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="prf-identity">
+                                                        <rect key="frame" x="0.0" y="142" width="382" height="95.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Dani" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-name">
+                                                                <rect key="frame" x="163.5" y="0.0" width="55" height="31.5"/>
+                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="+971 50 123 4567  •  Dani.10@dubai.ae" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-contact">
+                                                                <rect key="frame" x="72" y="39.5" width="238.5" height="16"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-vip" customClass="ProfileVIPBadgeView" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="63.5" width="382" height="32"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="prf-vip-stack">
+                                                                        <rect key="frame" x="14" y="9" width="354" height="14"/>
+                                                                        <subviews>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-vip-icon">
+                                                                                <rect key="frame" x="0.0" y="1.5" width="14" height="9.5"/>
+                                                                                <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="14" id="prf-vip-ih"/>
+                                                                                    <constraint firstAttribute="width" constant="14" id="prf-vip-iw"/>
+                                                                                </constraints>
+                                                                                <imageReference key="image" image="crown.fill" catalog="system" symbolScale="small"/>
+                                                                            </imageView>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="ONEVIBE VIP MEMBER" textAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-vip-label">
+                                                                                <rect key="frame" x="20" y="0.5" width="334" height="13.5"/>
+                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
+                                                                                <color key="textColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="32" id="prf-vip-h"/>
+                                                                    <constraint firstAttribute="width" secondItem="prf-vip-stack" secondAttribute="width" constant="28" id="prf-vip-w"/>
+                                                                    <constraint firstItem="prf-vip-stack" firstAttribute="centerX" secondItem="prf-vip" secondAttribute="centerX" id="prf-vip-x"/>
+                                                                    <constraint firstItem="prf-vip-stack" firstAttribute="centerY" secondItem="prf-vip" secondAttribute="centerY" id="prf-vip-y"/>
+                                                                </constraints>
+                                                            </view>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="prf-sec1">
+                                                        <rect key="frame" x="0.0" y="259.5" width="382" height="213.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="ACCOUNT &amp; PREFERENCES" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-sec1-h">
+                                                                <rect key="frame" x="0.0" y="0.0" width="382" height="13.5"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
+                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-card1" customClass="ProfileCardView" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="21.5" width="382" height="192"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="prf-card1-stack">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="382" height="192"/>
+                                                                        <subviews>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-edit" customClass="ProfileSettingRow" customModule="DubaiVibe" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="382" height="64"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ic_edit_profile" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-edit-icon">
+                                                                                        <rect key="frame" x="16" y="14" width="36" height="36"/>
+                                                                                        <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="36" id="prf-row-edit-icon-h"/>
+                                                                                            <constraint firstAttribute="width" constant="36" id="prf-row-edit-icon-w"/>
+                                                                                        </constraints>
+                                                                                    </imageView>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-edit-text">
+                                                                                        <rect key="frame" x="66" y="15" width="165.5" height="34.5"/>
+                                                                                        <subviews>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Edit Profile" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-edit-title">
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="165.5" height="18"/>
+                                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Update name, email &amp; details" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-edit-sub">
+                                                                                                <rect key="frame" x="0.0" y="20" width="165.5" height="14.5"/>
+                                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                        </subviews>
+                                                                                    </stackView>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-edit-chev">
+                                                                                        <rect key="frame" x="356" y="28" width="10" height="8"/>
+                                                                                        <color key="tintColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="14" id="prf-row-edit-chev-h"/>
+                                                                                            <constraint firstAttribute="width" constant="10" id="prf-row-edit-chev-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                                                                    </imageView>
+                                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-edit-sep">
+                                                                                        <rect key="frame" x="66" y="63.5" width="300" height="0.5"/>
+                                                                                        <color key="backgroundColor" red="0.16470588235294117" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="0.5" id="prf-row-edit-sep-h"/>
+                                                                                        </constraints>
+                                                                                    </view>
+                                                                                </subviews>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-edit-chev" secondAttribute="trailing" constant="16" id="prf-row-edit-chev-r"/>
+                                                                                    <constraint firstItem="prf-row-edit-chev" firstAttribute="centerY" secondItem="prf-row-edit" secondAttribute="centerY" id="prf-row-edit-chev-y"/>
+                                                                                    <constraint firstAttribute="height" constant="64" id="prf-row-edit-h"/>
+                                                                                    <constraint firstItem="prf-row-edit-icon" firstAttribute="leading" secondItem="prf-row-edit" secondAttribute="leading" constant="16" id="prf-row-edit-icon-l"/>
+                                                                                    <constraint firstItem="prf-row-edit-icon" firstAttribute="centerY" secondItem="prf-row-edit" secondAttribute="centerY" id="prf-row-edit-icon-y"/>
+                                                                                    <constraint firstAttribute="bottom" secondItem="prf-row-edit-sep" secondAttribute="bottom" id="prf-row-edit-sep-b"/>
+                                                                                    <constraint firstItem="prf-row-edit-sep" firstAttribute="leading" secondItem="prf-row-edit-text" secondAttribute="leading" id="prf-row-edit-sep-l"/>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-edit-sep" secondAttribute="trailing" constant="16" id="prf-row-edit-sep-r"/>
+                                                                                    <constraint firstItem="prf-row-edit-text" firstAttribute="leading" secondItem="prf-row-edit-icon" secondAttribute="trailing" constant="14" id="prf-row-edit-text-l"/>
+                                                                                    <constraint firstItem="prf-row-edit-text" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="prf-row-edit-chev" secondAttribute="leading" constant="-12" id="prf-row-edit-text-r"/>
+                                                                                    <constraint firstItem="prf-row-edit-text" firstAttribute="centerY" secondItem="prf-row-edit" secondAttribute="centerY" id="prf-row-edit-text-y"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <action selector="editProfileTapped" destination="prf-vc" eventType="touchUpInside" id="prf-row-edit-act"/>
+                                                                                    <outlet property="chevronImageView" destination="prf-row-edit-chev" id="prf-row-edit-o-chev"/>
+                                                                                    <outlet property="iconImageView" destination="prf-row-edit-icon" id="prf-row-edit-o-icon"/>
+                                                                                    <outlet property="separatorView" destination="prf-row-edit-sep" id="prf-row-edit-o-sep"/>
+                                                                                    <outlet property="subtitleLabel" destination="prf-row-edit-sub" id="prf-row-edit-o-sub"/>
+                                                                                    <outlet property="titleLabel" destination="prf-row-edit-title" id="prf-row-edit-o-title"/>
+                                                                                </connections>
+                                                                            </view>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-lang" customClass="ProfileSettingRow" customModule="DubaiVibe" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="64" width="382" height="64"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ic_language" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-lang-icon">
+                                                                                        <rect key="frame" x="16" y="14" width="36" height="36"/>
+                                                                                        <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="36" id="prf-row-lang-icon-h"/>
+                                                                                            <constraint firstAttribute="width" constant="36" id="prf-row-lang-icon-w"/>
+                                                                                        </constraints>
+                                                                                    </imageView>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-lang-text">
+                                                                                        <rect key="frame" x="66" y="15" width="132" height="34.5"/>
+                                                                                        <subviews>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Language" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-lang-title">
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="132" height="18"/>
+                                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="App interface language" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-lang-sub">
+                                                                                                <rect key="frame" x="0.0" y="20" width="132" height="14.5"/>
+                                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                        </subviews>
+                                                                                    </stackView>
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" text="English (EN)" textAlignment="right" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-lang-value">
+                                                                                        <rect key="frame" x="271.5" y="24" width="76.5" height="16"/>
+                                                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                                                                                        <color key="textColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <nil key="highlightedColor"/>
+                                                                                    </label>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-lang-chev">
+                                                                                        <rect key="frame" x="356" y="28" width="10" height="8"/>
+                                                                                        <color key="tintColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="14" id="prf-row-lang-chev-h"/>
+                                                                                            <constraint firstAttribute="width" constant="10" id="prf-row-lang-chev-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                                                                    </imageView>
+                                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-lang-sep">
+                                                                                        <rect key="frame" x="66" y="63.5" width="300" height="0.5"/>
+                                                                                        <color key="backgroundColor" red="0.16470588235294117" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="0.5" id="prf-row-lang-sep-h"/>
+                                                                                        </constraints>
+                                                                                    </view>
+                                                                                </subviews>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-lang-chev" secondAttribute="trailing" constant="16" id="prf-row-lang-chev-r"/>
+                                                                                    <constraint firstItem="prf-row-lang-chev" firstAttribute="centerY" secondItem="prf-row-lang" secondAttribute="centerY" id="prf-row-lang-chev-y"/>
+                                                                                    <constraint firstAttribute="height" constant="64" id="prf-row-lang-h"/>
+                                                                                    <constraint firstItem="prf-row-lang-icon" firstAttribute="leading" secondItem="prf-row-lang" secondAttribute="leading" constant="16" id="prf-row-lang-icon-l"/>
+                                                                                    <constraint firstItem="prf-row-lang-icon" firstAttribute="centerY" secondItem="prf-row-lang" secondAttribute="centerY" id="prf-row-lang-icon-y"/>
+                                                                                    <constraint firstAttribute="bottom" secondItem="prf-row-lang-sep" secondAttribute="bottom" id="prf-row-lang-sep-b"/>
+                                                                                    <constraint firstItem="prf-row-lang-sep" firstAttribute="leading" secondItem="prf-row-lang-text" secondAttribute="leading" id="prf-row-lang-sep-l"/>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-lang-sep" secondAttribute="trailing" constant="16" id="prf-row-lang-sep-r"/>
+                                                                                    <constraint firstItem="prf-row-lang-text" firstAttribute="leading" secondItem="prf-row-lang-icon" secondAttribute="trailing" constant="14" id="prf-row-lang-text-l"/>
+                                                                                    <constraint firstItem="prf-row-lang-text" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="prf-row-lang-value" secondAttribute="leading" constant="-8" id="prf-row-lang-text-r"/>
+                                                                                    <constraint firstItem="prf-row-lang-text" firstAttribute="centerY" secondItem="prf-row-lang" secondAttribute="centerY" id="prf-row-lang-text-y"/>
+                                                                                    <constraint firstItem="prf-row-lang-value" firstAttribute="trailing" secondItem="prf-row-lang-chev" secondAttribute="leading" constant="-8" id="prf-row-lang-val-r"/>
+                                                                                    <constraint firstItem="prf-row-lang-value" firstAttribute="centerY" secondItem="prf-row-lang" secondAttribute="centerY" id="prf-row-lang-val-y"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <action selector="languageTapped" destination="prf-vc" eventType="touchUpInside" id="prf-row-lang-act"/>
+                                                                                    <outlet property="chevronImageView" destination="prf-row-lang-chev" id="prf-row-lang-o-chev"/>
+                                                                                    <outlet property="iconImageView" destination="prf-row-lang-icon" id="prf-row-lang-o-icon"/>
+                                                                                    <outlet property="separatorView" destination="prf-row-lang-sep" id="prf-row-lang-o-sep"/>
+                                                                                    <outlet property="subtitleLabel" destination="prf-row-lang-sub" id="prf-row-lang-o-sub"/>
+                                                                                    <outlet property="titleLabel" destination="prf-row-lang-title" id="prf-row-lang-o-title"/>
+                                                                                    <outlet property="valueLabel" destination="prf-row-lang-value" id="prf-row-lang-o-val"/>
+                                                                                </connections>
+                                                                            </view>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-push" customClass="ProfileSettingRow" customModule="DubaiVibe" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="128" width="382" height="64"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-push-icon">
+                                                                                        <rect key="frame" x="16" y="14" width="36" height="36"/>
+                                                                                        <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="36" id="prf-row-push-icon-h"/>
+                                                                                            <constraint firstAttribute="width" constant="36" id="prf-row-push-icon-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="ic_notificationToggel" symbolScale="medium"/>
+                                                                                    </imageView>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-push-text">
+                                                                                        <rect key="frame" x="66" y="15" width="173.5" height="34.5"/>
+                                                                                        <subviews>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Push Notifications" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-push-title">
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="173.5" height="18"/>
+                                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Exclusive venue offers &amp; alerts" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-push-sub">
+                                                                                                <rect key="frame" x="0.0" y="20" width="173.5" height="14.5"/>
+                                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                        </subviews>
+                                                                                    </stackView>
+                                                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-push-switch">
+                                                                                        <rect key="frame" x="307" y="18" width="63" height="28"/>
+                                                                                        <color key="onTintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <connections>
+                                                                                            <action selector="pushSwitchChanged:" destination="prf-vc" eventType="valueChanged" id="prf-row-push-sw-act"/>
+                                                                                        </connections>
+                                                                                    </switch>
+                                                                                </subviews>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="64" id="prf-row-push-h"/>
+                                                                                    <constraint firstItem="prf-row-push-icon" firstAttribute="leading" secondItem="prf-row-push" secondAttribute="leading" constant="16" id="prf-row-push-icon-l"/>
+                                                                                    <constraint firstItem="prf-row-push-icon" firstAttribute="centerY" secondItem="prf-row-push" secondAttribute="centerY" id="prf-row-push-icon-y"/>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-push-switch" secondAttribute="trailing" constant="14" id="prf-row-push-sw-r"/>
+                                                                                    <constraint firstItem="prf-row-push-switch" firstAttribute="centerY" secondItem="prf-row-push" secondAttribute="centerY" id="prf-row-push-sw-y"/>
+                                                                                    <constraint firstItem="prf-row-push-text" firstAttribute="leading" secondItem="prf-row-push-icon" secondAttribute="trailing" constant="14" id="prf-row-push-text-l"/>
+                                                                                    <constraint firstItem="prf-row-push-text" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="prf-row-push-switch" secondAttribute="leading" constant="-12" id="prf-row-push-text-r"/>
+                                                                                    <constraint firstItem="prf-row-push-text" firstAttribute="centerY" secondItem="prf-row-push" secondAttribute="centerY" id="prf-row-push-text-y"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <outlet property="iconImageView" destination="prf-row-push-icon" id="prf-row-push-o-icon"/>
+                                                                                    <outlet property="subtitleLabel" destination="prf-row-push-sub" id="prf-row-push-o-sub"/>
+                                                                                    <outlet property="titleLabel" destination="prf-row-push-title" id="prf-row-push-o-title"/>
+                                                                                    <outlet property="toggleSwitch" destination="prf-row-push-switch" id="prf-row-push-o-sw"/>
+                                                                                </connections>
+                                                                            </view>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.094117647058823528" green="0.090196078431372548" blue="0.090196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="bottom" secondItem="prf-card1-stack" secondAttribute="bottom" id="prf-card1-sb"/>
+                                                                    <constraint firstItem="prf-card1-stack" firstAttribute="leading" secondItem="prf-card1" secondAttribute="leading" id="prf-card1-sl"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="prf-card1-stack" secondAttribute="trailing" id="prf-card1-sr"/>
+                                                                    <constraint firstItem="prf-card1-stack" firstAttribute="top" secondItem="prf-card1" secondAttribute="top" id="prf-card1-st"/>
+                                                                </constraints>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="18"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </view>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="prf-sec2">
+                                                        <rect key="frame" x="0.0" y="495" width="382" height="213.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="SUPPORT &amp; LEGAL" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-sec2-h">
+                                                                <rect key="frame" x="0.0" y="0.0" width="382" height="13.5"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
+                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-card2" customClass="ProfileCardView" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="21.5" width="382" height="192"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="prf-card2-stack">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="382" height="192"/>
+                                                                        <subviews>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-faq" customClass="ProfileSettingRow" customModule="DubaiVibe" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="382" height="64"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ic_FQA" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-faq-icon">
+                                                                                        <rect key="frame" x="16" y="14" width="36" height="36"/>
+                                                                                        <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="36" id="prf-row-faq-icon-h"/>
+                                                                                            <constraint firstAttribute="width" constant="36" id="prf-row-faq-icon-w"/>
+                                                                                        </constraints>
+                                                                                    </imageView>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-faq-text">
+                                                                                        <rect key="frame" x="66" y="15" width="183" height="34.5"/>
+                                                                                        <subviews>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="FAQ &amp; Concierge Support" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-faq-title">
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="183" height="18"/>
+                                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Get assistance 24/7 in Dubai" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-faq-sub">
+                                                                                                <rect key="frame" x="0.0" y="20" width="183" height="14.5"/>
+                                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                        </subviews>
+                                                                                    </stackView>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-faq-chev">
+                                                                                        <rect key="frame" x="356" y="28" width="10" height="8"/>
+                                                                                        <color key="tintColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="14" id="prf-row-faq-chev-h"/>
+                                                                                            <constraint firstAttribute="width" constant="10" id="prf-row-faq-chev-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                                                                    </imageView>
+                                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-faq-sep">
+                                                                                        <rect key="frame" x="66" y="63.5" width="300" height="0.5"/>
+                                                                                        <color key="backgroundColor" red="0.16470588235294117" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="0.5" id="prf-row-faq-sep-h"/>
+                                                                                        </constraints>
+                                                                                    </view>
+                                                                                </subviews>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-faq-chev" secondAttribute="trailing" constant="16" id="prf-row-faq-chev-r"/>
+                                                                                    <constraint firstItem="prf-row-faq-chev" firstAttribute="centerY" secondItem="prf-row-faq" secondAttribute="centerY" id="prf-row-faq-chev-y"/>
+                                                                                    <constraint firstAttribute="height" constant="64" id="prf-row-faq-h"/>
+                                                                                    <constraint firstItem="prf-row-faq-icon" firstAttribute="leading" secondItem="prf-row-faq" secondAttribute="leading" constant="16" id="prf-row-faq-icon-l"/>
+                                                                                    <constraint firstItem="prf-row-faq-icon" firstAttribute="centerY" secondItem="prf-row-faq" secondAttribute="centerY" id="prf-row-faq-icon-y"/>
+                                                                                    <constraint firstAttribute="bottom" secondItem="prf-row-faq-sep" secondAttribute="bottom" id="prf-row-faq-sep-b"/>
+                                                                                    <constraint firstItem="prf-row-faq-sep" firstAttribute="leading" secondItem="prf-row-faq-text" secondAttribute="leading" id="prf-row-faq-sep-l"/>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-faq-sep" secondAttribute="trailing" constant="16" id="prf-row-faq-sep-r"/>
+                                                                                    <constraint firstItem="prf-row-faq-text" firstAttribute="leading" secondItem="prf-row-faq-icon" secondAttribute="trailing" constant="14" id="prf-row-faq-text-l"/>
+                                                                                    <constraint firstItem="prf-row-faq-text" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="prf-row-faq-chev" secondAttribute="leading" constant="-12" id="prf-row-faq-text-r"/>
+                                                                                    <constraint firstItem="prf-row-faq-text" firstAttribute="centerY" secondItem="prf-row-faq" secondAttribute="centerY" id="prf-row-faq-text-y"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <action selector="faqTapped" destination="prf-vc" eventType="touchUpInside" id="prf-row-faq-act"/>
+                                                                                    <outlet property="chevronImageView" destination="prf-row-faq-chev" id="prf-row-faq-o-chev"/>
+                                                                                    <outlet property="iconImageView" destination="prf-row-faq-icon" id="prf-row-faq-o-icon"/>
+                                                                                    <outlet property="separatorView" destination="prf-row-faq-sep" id="prf-row-faq-o-sep"/>
+                                                                                    <outlet property="subtitleLabel" destination="prf-row-faq-sub" id="prf-row-faq-o-sub"/>
+                                                                                    <outlet property="titleLabel" destination="prf-row-faq-title" id="prf-row-faq-o-title"/>
+                                                                                </connections>
+                                                                            </view>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-terms" customClass="ProfileSettingRow" customModule="DubaiVibe" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="64" width="382" height="64"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ic_termsAndConditions" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-terms-icon">
+                                                                                        <rect key="frame" x="16" y="14" width="36" height="36"/>
+                                                                                        <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="36" id="prf-row-terms-icon-h"/>
+                                                                                            <constraint firstAttribute="width" constant="36" id="prf-row-terms-icon-w"/>
+                                                                                        </constraints>
+                                                                                    </imageView>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-terms-text">
+                                                                                        <rect key="frame" x="66" y="15" width="156" height="34.5"/>
+                                                                                        <subviews>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Terms and Conditions" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-terms-title">
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="156" height="18"/>
+                                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Membership agreement" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-terms-sub">
+                                                                                                <rect key="frame" x="0.0" y="20" width="156" height="14.5"/>
+                                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                        </subviews>
+                                                                                    </stackView>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-terms-chev">
+                                                                                        <rect key="frame" x="356" y="28" width="10" height="8"/>
+                                                                                        <color key="tintColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="14" id="prf-row-terms-chev-h"/>
+                                                                                            <constraint firstAttribute="width" constant="10" id="prf-row-terms-chev-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                                                                    </imageView>
+                                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-terms-sep">
+                                                                                        <rect key="frame" x="66" y="63.5" width="300" height="0.5"/>
+                                                                                        <color key="backgroundColor" red="0.16470588235294117" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="0.5" id="prf-row-terms-sep-h"/>
+                                                                                        </constraints>
+                                                                                    </view>
+                                                                                </subviews>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-terms-chev" secondAttribute="trailing" constant="16" id="prf-row-terms-chev-r"/>
+                                                                                    <constraint firstItem="prf-row-terms-chev" firstAttribute="centerY" secondItem="prf-row-terms" secondAttribute="centerY" id="prf-row-terms-chev-y"/>
+                                                                                    <constraint firstAttribute="height" constant="64" id="prf-row-terms-h"/>
+                                                                                    <constraint firstItem="prf-row-terms-icon" firstAttribute="leading" secondItem="prf-row-terms" secondAttribute="leading" constant="16" id="prf-row-terms-icon-l"/>
+                                                                                    <constraint firstItem="prf-row-terms-icon" firstAttribute="centerY" secondItem="prf-row-terms" secondAttribute="centerY" id="prf-row-terms-icon-y"/>
+                                                                                    <constraint firstAttribute="bottom" secondItem="prf-row-terms-sep" secondAttribute="bottom" id="prf-row-terms-sep-b"/>
+                                                                                    <constraint firstItem="prf-row-terms-sep" firstAttribute="leading" secondItem="prf-row-terms-text" secondAttribute="leading" id="prf-row-terms-sep-l"/>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-terms-sep" secondAttribute="trailing" constant="16" id="prf-row-terms-sep-r"/>
+                                                                                    <constraint firstItem="prf-row-terms-text" firstAttribute="leading" secondItem="prf-row-terms-icon" secondAttribute="trailing" constant="14" id="prf-row-terms-text-l"/>
+                                                                                    <constraint firstItem="prf-row-terms-text" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="prf-row-terms-chev" secondAttribute="leading" constant="-12" id="prf-row-terms-text-r"/>
+                                                                                    <constraint firstItem="prf-row-terms-text" firstAttribute="centerY" secondItem="prf-row-terms" secondAttribute="centerY" id="prf-row-terms-text-y"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <action selector="termsTapped" destination="prf-vc" eventType="touchUpInside" id="prf-row-terms-act"/>
+                                                                                    <outlet property="chevronImageView" destination="prf-row-terms-chev" id="prf-row-terms-o-chev"/>
+                                                                                    <outlet property="iconImageView" destination="prf-row-terms-icon" id="prf-row-terms-o-icon"/>
+                                                                                    <outlet property="separatorView" destination="prf-row-terms-sep" id="prf-row-terms-o-sep"/>
+                                                                                    <outlet property="subtitleLabel" destination="prf-row-terms-sub" id="prf-row-terms-o-sub"/>
+                                                                                    <outlet property="titleLabel" destination="prf-row-terms-title" id="prf-row-terms-o-title"/>
+                                                                                </connections>
+                                                                            </view>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-privacy" customClass="ProfileSettingRow" customModule="DubaiVibe" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="128" width="382" height="64"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-privacy-icon">
+                                                                                        <rect key="frame" x="16" y="14" width="36" height="36"/>
+                                                                                        <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="36" id="prf-row-privacy-icon-h"/>
+                                                                                            <constraint firstAttribute="width" constant="36" id="prf-row-privacy-icon-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="ic_privacyPolicy" symbolScale="medium"/>
+                                                                                    </imageView>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-privacy-text">
+                                                                                        <rect key="frame" x="66" y="15" width="156.5" height="34.5"/>
+                                                                                        <subviews>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Privacy Policy" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-privacy-title">
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="156.5" height="18"/>
+                                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Security &amp; data governance" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-privacy-sub">
+                                                                                                <rect key="frame" x="0.0" y="20" width="156.5" height="14.5"/>
+                                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                                <color key="textColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                        </subviews>
+                                                                                    </stackView>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-privacy-chev">
+                                                                                        <rect key="frame" x="356" y="28" width="10" height="8"/>
+                                                                                        <color key="tintColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="14" id="prf-row-privacy-chev-h"/>
+                                                                                            <constraint firstAttribute="width" constant="10" id="prf-row-privacy-chev-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                                                                    </imageView>
+                                                                                </subviews>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-privacy-chev" secondAttribute="trailing" constant="16" id="prf-row-privacy-chev-r"/>
+                                                                                    <constraint firstItem="prf-row-privacy-chev" firstAttribute="centerY" secondItem="prf-row-privacy" secondAttribute="centerY" id="prf-row-privacy-chev-y"/>
+                                                                                    <constraint firstAttribute="height" constant="64" id="prf-row-privacy-h"/>
+                                                                                    <constraint firstItem="prf-row-privacy-icon" firstAttribute="leading" secondItem="prf-row-privacy" secondAttribute="leading" constant="16" id="prf-row-privacy-icon-l"/>
+                                                                                    <constraint firstItem="prf-row-privacy-icon" firstAttribute="centerY" secondItem="prf-row-privacy" secondAttribute="centerY" id="prf-row-privacy-icon-y"/>
+                                                                                    <constraint firstItem="prf-row-privacy-text" firstAttribute="leading" secondItem="prf-row-privacy-icon" secondAttribute="trailing" constant="14" id="prf-row-privacy-text-l"/>
+                                                                                    <constraint firstItem="prf-row-privacy-text" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="prf-row-privacy-chev" secondAttribute="leading" constant="-12" id="prf-row-privacy-text-r"/>
+                                                                                    <constraint firstItem="prf-row-privacy-text" firstAttribute="centerY" secondItem="prf-row-privacy" secondAttribute="centerY" id="prf-row-privacy-text-y"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <action selector="privacyTapped" destination="prf-vc" eventType="touchUpInside" id="prf-row-privacy-act"/>
+                                                                                    <outlet property="chevronImageView" destination="prf-row-privacy-chev" id="prf-row-privacy-o-chev"/>
+                                                                                    <outlet property="iconImageView" destination="prf-row-privacy-icon" id="prf-row-privacy-o-icon"/>
+                                                                                    <outlet property="subtitleLabel" destination="prf-row-privacy-sub" id="prf-row-privacy-o-sub"/>
+                                                                                    <outlet property="titleLabel" destination="prf-row-privacy-title" id="prf-row-privacy-o-title"/>
+                                                                                </connections>
+                                                                            </view>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.094117647058823528" green="0.090196078431372548" blue="0.090196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="bottom" secondItem="prf-card2-stack" secondAttribute="bottom" id="prf-card2-sb"/>
+                                                                    <constraint firstItem="prf-card2-stack" firstAttribute="leading" secondItem="prf-card2" secondAttribute="leading" id="prf-card2-sl"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="prf-card2-stack" secondAttribute="trailing" id="prf-card2-sr"/>
+                                                                    <constraint firstItem="prf-card2-stack" firstAttribute="top" secondItem="prf-card2" secondAttribute="top" id="prf-card2-st"/>
+                                                                </constraints>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="18"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </view>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="prf-sec3">
+                                                        <rect key="frame" x="0.0" y="730.5" width="382" height="136"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-card3" customClass="ProfileCardView" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="382" height="56"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="prf-card3-stack">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="382" height="56"/>
+                                                                        <subviews>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-logout" customClass="ProfileSettingRow" customModule="DubaiVibe" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="382" height="56"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ic_logout" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-logout-icon">
+                                                                                        <rect key="frame" x="16" y="10" width="36" height="36"/>
+                                                                                        <color key="tintColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="36" id="prf-row-logout-icon-h"/>
+                                                                                            <constraint firstAttribute="width" constant="36" id="prf-row-logout-icon-w"/>
+                                                                                        </constraints>
+                                                                                    </imageView>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-logout-text">
+                                                                                        <rect key="frame" x="66" y="19" width="56.5" height="18"/>
+                                                                                        <subviews>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Log Out" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-logout-title">
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="56.5" height="18"/>
+                                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                                                <color key="textColor" red="0.8901960784313725" green="0.70196078431372544" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                        </subviews>
+                                                                                    </stackView>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-logout-chev">
+                                                                                        <rect key="frame" x="356" y="24" width="10" height="8"/>
+                                                                                        <color key="tintColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="14" id="prf-row-logout-chev-h"/>
+                                                                                            <constraint firstAttribute="width" constant="10" id="prf-row-logout-chev-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                                                                    </imageView>
+                                                                                </subviews>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-logout-chev" secondAttribute="trailing" constant="16" id="prf-row-logout-chev-r"/>
+                                                                                    <constraint firstItem="prf-row-logout-chev" firstAttribute="centerY" secondItem="prf-row-logout" secondAttribute="centerY" id="prf-row-logout-chev-y"/>
+                                                                                    <constraint firstAttribute="height" constant="56" id="prf-row-logout-h"/>
+                                                                                    <constraint firstItem="prf-row-logout-icon" firstAttribute="leading" secondItem="prf-row-logout" secondAttribute="leading" constant="16" id="prf-row-logout-icon-l"/>
+                                                                                    <constraint firstItem="prf-row-logout-icon" firstAttribute="centerY" secondItem="prf-row-logout" secondAttribute="centerY" id="prf-row-logout-icon-y"/>
+                                                                                    <constraint firstItem="prf-row-logout-text" firstAttribute="leading" secondItem="prf-row-logout-icon" secondAttribute="trailing" constant="14" id="prf-row-logout-text-l"/>
+                                                                                    <constraint firstItem="prf-row-logout-text" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="prf-row-logout-chev" secondAttribute="leading" constant="-12" id="prf-row-logout-text-r"/>
+                                                                                    <constraint firstItem="prf-row-logout-text" firstAttribute="centerY" secondItem="prf-row-logout" secondAttribute="centerY" id="prf-row-logout-text-y"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <action selector="logOutTapped" destination="prf-vc" eventType="touchUpInside" id="prf-row-logout-act"/>
+                                                                                    <outlet property="chevronImageView" destination="prf-row-logout-chev" id="prf-row-logout-o-chev"/>
+                                                                                    <outlet property="iconImageView" destination="prf-row-logout-icon" id="prf-row-logout-o-icon"/>
+                                                                                    <outlet property="titleLabel" destination="prf-row-logout-title" id="prf-row-logout-o-title"/>
+                                                                                </connections>
+                                                                            </view>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.094117647058823528" green="0.090196078431372548" blue="0.090196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="bottom" secondItem="prf-card3-stack" secondAttribute="bottom" id="prf-card3-sb"/>
+                                                                    <constraint firstItem="prf-card3-stack" firstAttribute="leading" secondItem="prf-card3" secondAttribute="leading" id="prf-card3-sl"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="prf-card3-stack" secondAttribute="trailing" id="prf-card3-sr"/>
+                                                                    <constraint firstItem="prf-card3-stack" firstAttribute="top" secondItem="prf-card3" secondAttribute="top" id="prf-card3-st"/>
+                                                                </constraints>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="18"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </view>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-card4" customClass="ProfileCardView" customModule="DubaiVibe" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="68" width="382" height="68"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="prf-card4-stack">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="382" height="68"/>
+                                                                        <subviews>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-delete" customClass="ProfileSettingRow" customModule="DubaiVibe" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="382" height="68"/>
+                                                                                <subviews>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-delete-icon">
+                                                                                        <rect key="frame" x="16" y="16" width="36" height="36"/>
+                                                                                        <color key="tintColor" red="1" green="0.27058823529411763" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="36" id="prf-row-delete-icon-h"/>
+                                                                                            <constraint firstAttribute="width" constant="36" id="prf-row-delete-icon-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="ic_deleteAcc" symbolScale="medium"/>
+                                                                                    </imageView>
+                                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-delete-text">
+                                                                                        <rect key="frame" x="66" y="17" width="224.5" height="34.5"/>
+                                                                                        <subviews>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Delete Account" textAlignment="natural" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-delete-title">
+                                                                                                <rect key="frame" x="0.0" y="0.0" width="224.5" height="18"/>
+                                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                                                                <color key="textColor" red="1" green="0.27058823529411763" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Permanently erase your OneVibe profile" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-delete-sub">
+                                                                                                <rect key="frame" x="0.0" y="20" width="224.5" height="14.5"/>
+                                                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                                                <color key="textColor" red="1" green="0.27058823529411763" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                                <nil key="highlightedColor"/>
+                                                                                            </label>
+                                                                                        </subviews>
+                                                                                    </stackView>
+                                                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="prf-row-delete-chev">
+                                                                                        <rect key="frame" x="356" y="30" width="10" height="8"/>
+                                                                                        <color key="tintColor" red="0.63921568627450975" green="0.63921568627450975" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                        <constraints>
+                                                                                            <constraint firstAttribute="height" constant="14" id="prf-row-delete-chev-h"/>
+                                                                                            <constraint firstAttribute="width" constant="10" id="prf-row-delete-chev-w"/>
+                                                                                        </constraints>
+                                                                                        <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                                                                    </imageView>
+                                                                                </subviews>
+                                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="trailing" secondItem="prf-row-delete-chev" secondAttribute="trailing" constant="16" id="prf-row-delete-chev-r"/>
+                                                                                    <constraint firstItem="prf-row-delete-chev" firstAttribute="centerY" secondItem="prf-row-delete" secondAttribute="centerY" id="prf-row-delete-chev-y"/>
+                                                                                    <constraint firstAttribute="height" constant="68" id="prf-row-delete-h"/>
+                                                                                    <constraint firstItem="prf-row-delete-icon" firstAttribute="leading" secondItem="prf-row-delete" secondAttribute="leading" constant="16" id="prf-row-delete-icon-l"/>
+                                                                                    <constraint firstItem="prf-row-delete-icon" firstAttribute="centerY" secondItem="prf-row-delete" secondAttribute="centerY" id="prf-row-delete-icon-y"/>
+                                                                                    <constraint firstItem="prf-row-delete-text" firstAttribute="leading" secondItem="prf-row-delete-icon" secondAttribute="trailing" constant="14" id="prf-row-delete-text-l"/>
+                                                                                    <constraint firstItem="prf-row-delete-text" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="prf-row-delete-chev" secondAttribute="leading" constant="-12" id="prf-row-delete-text-r"/>
+                                                                                    <constraint firstItem="prf-row-delete-text" firstAttribute="centerY" secondItem="prf-row-delete" secondAttribute="centerY" id="prf-row-delete-text-y"/>
+                                                                                </constraints>
+                                                                                <connections>
+                                                                                    <action selector="deleteAccountTapped" destination="prf-vc" eventType="touchUpInside" id="prf-row-delete-act"/>
+                                                                                    <outlet property="chevronImageView" destination="prf-row-delete-chev" id="prf-row-delete-o-chev"/>
+                                                                                    <outlet property="iconImageView" destination="prf-row-delete-icon" id="prf-row-delete-o-icon"/>
+                                                                                    <outlet property="subtitleLabel" destination="prf-row-delete-sub" id="prf-row-delete-o-sub"/>
+                                                                                    <outlet property="titleLabel" destination="prf-row-delete-title" id="prf-row-delete-o-title"/>
+                                                                                </connections>
+                                                                            </view>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" red="0.094117647058823528" green="0.090196078431372548" blue="0.090196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="bottom" secondItem="prf-card4-stack" secondAttribute="bottom" id="prf-card4-sb"/>
+                                                                    <constraint firstItem="prf-card4-stack" firstAttribute="leading" secondItem="prf-card4" secondAttribute="leading" id="prf-card4-sl"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="prf-card4-stack" secondAttribute="trailing" id="prf-card4-sr"/>
+                                                                    <constraint firstItem="prf-card4-stack" firstAttribute="top" secondItem="prf-card4" secondAttribute="top" id="prf-card4-st"/>
+                                                                </constraints>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="18"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </view>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" translatesAutoresizingMaskIntoConstraints="NO" id="prf-version">
+                                                        <rect key="frame" x="0.0" y="888.5" width="382" height="26.5"/>
+                                                        <string key="text">Dubai Vibe iOS v2.4.1
+10k downloaders</string>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                        <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
                                                 </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="prf-avatar" secondAttribute="bottom" id="prf-av-bt"/>
-                                                    <constraint firstItem="prf-avatar" firstAttribute="leading" secondItem="prf-av-box" secondAttribute="leading" id="prf-av-l"/>
-                                                    <constraint firstAttribute="trailing" secondItem="prf-avatar" secondAttribute="trailing" id="prf-av-r"/>
-                                                    <constraint firstItem="prf-avatar" firstAttribute="top" secondItem="prf-av-box" secondAttribute="top" id="prf-av-tp"/>
-                                                    <constraint firstAttribute="height" constant="100" id="prf-avbox-h"/>
-                                                    <constraint firstAttribute="width" constant="100" id="prf-avbox-w"/>
-                                                    <constraint firstAttribute="bottom" secondItem="prf-cam" secondAttribute="bottom" id="prf-cam-b"/>
-                                                    <constraint firstAttribute="trailing" secondItem="prf-cam" secondAttribute="trailing" id="prf-cam-r"/>
-                                                </constraints>
-                                            </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-first" customClass="AuthDarkField" customModule="DubaiVibe" customModuleProvider="target">
-                                                <rect key="frame" x="24" y="172" width="366" height="56"/>
-                                                <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="56" id="prf-f-h"/>
-                                                </constraints>
-                                            </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="prf-last" customClass="AuthDarkField" customModule="DubaiVibe" customModuleProvider="target">
-                                                <rect key="frame" x="24" y="242" width="366" height="56"/>
-                                                <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="56" id="prf-l-h"/>
-                                                </constraints>
-                                            </view>
-                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prf-save" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
-                                                <rect key="frame" x="24" y="328" width="366" height="54"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="54" id="prf-save-h"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                <state key="normal" title="Save">
-                                                    <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                        <real key="value" value="14"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="saveTapped:" destination="prf-vc" eventType="touchUpInside" id="prf-save-act"/>
-                                                </connections>
-                                            </button>
+                                            </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="prf-av-box" firstAttribute="top" secondItem="prf-content" secondAttribute="top" constant="40" id="prf-avbox-t"/>
-                                            <constraint firstItem="prf-av-box" firstAttribute="centerX" secondItem="prf-content" secondAttribute="centerX" id="prf-avbox-x"/>
-                                            <constraint firstItem="prf-first" firstAttribute="leading" secondItem="prf-content" secondAttribute="leading" constant="24" id="prf-f-l"/>
-                                            <constraint firstAttribute="trailing" secondItem="prf-first" secondAttribute="trailing" constant="24" id="prf-f-r"/>
-                                            <constraint firstItem="prf-first" firstAttribute="top" secondItem="prf-av-box" secondAttribute="bottom" constant="32" id="prf-f-t"/>
-                                            <constraint firstItem="prf-last" firstAttribute="leading" secondItem="prf-first" secondAttribute="leading" id="prf-l-l"/>
-                                            <constraint firstItem="prf-last" firstAttribute="trailing" secondItem="prf-first" secondAttribute="trailing" id="prf-l-r"/>
-                                            <constraint firstItem="prf-last" firstAttribute="top" secondItem="prf-first" secondAttribute="bottom" constant="14" id="prf-l-t"/>
-                                            <constraint firstAttribute="bottom" secondItem="prf-save" secondAttribute="bottom" constant="40" id="prf-s-b"/>
-                                            <constraint firstItem="prf-save" firstAttribute="leading" secondItem="prf-first" secondAttribute="leading" id="prf-s-l"/>
-                                            <constraint firstItem="prf-save" firstAttribute="trailing" secondItem="prf-first" secondAttribute="trailing" id="prf-s-r"/>
-                                            <constraint firstItem="prf-save" firstAttribute="top" secondItem="prf-last" secondAttribute="bottom" constant="30" id="prf-s-t"/>
+                                            <constraint firstAttribute="bottom" secondItem="prf-root-stack" secondAttribute="bottom" constant="24" id="prf-rs-b"/>
+                                            <constraint firstItem="prf-root-stack" firstAttribute="leading" secondItem="prf-content" secondAttribute="leading" constant="16" id="prf-rs-l"/>
+                                            <constraint firstAttribute="trailing" secondItem="prf-root-stack" secondAttribute="trailing" constant="16" id="prf-rs-r"/>
+                                            <constraint firstItem="prf-root-stack" firstAttribute="top" secondItem="prf-content" secondAttribute="top" constant="12" id="prf-rs-t"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -227,30 +849,29 @@
                         <viewLayoutGuide key="safeArea" id="prf-safe"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="prf-bg" secondAttribute="bottom" id="prf-bg-b"/>
-                            <constraint firstItem="prf-bg" firstAttribute="leading" secondItem="prf-view" secondAttribute="leading" id="prf-bg-l"/>
-                            <constraint firstAttribute="trailing" secondItem="prf-bg" secondAttribute="trailing" id="prf-bg-r"/>
-                            <constraint firstItem="prf-bg" firstAttribute="top" secondItem="prf-view" secondAttribute="top" id="prf-bg-t"/>
-                            <constraint firstItem="prf-brandbar" firstAttribute="leading" secondItem="prf-view" secondAttribute="leading" id="prf-brb-l"/>
-                            <constraint firstItem="prf-brandbar" firstAttribute="trailing" secondItem="prf-view" secondAttribute="trailing" id="prf-brb-r"/>
-                            <constraint firstItem="prf-brandbar" firstAttribute="top" secondItem="prf-safe" secondAttribute="top" id="prf-brb-t"/>
-                            <constraint firstItem="prf-safe" firstAttribute="bottom" secondItem="prf-scroll" secondAttribute="bottom" id="prf-sc-b"/>
-                            <constraint firstItem="prf-scroll" firstAttribute="leading" secondItem="prf-safe" secondAttribute="leading" id="prf-sc-l"/>
-                            <constraint firstItem="prf-safe" firstAttribute="trailing" secondItem="prf-scroll" secondAttribute="trailing" id="prf-sc-r"/>
-                            <constraint firstItem="prf-scroll" firstAttribute="top" secondItem="prf-brandbar" secondAttribute="bottom" id="prf-sc-t"/>
+                            <constraint firstItem="prf-header" firstAttribute="leading" secondItem="prf-view" secondAttribute="leading" id="prf-hdr-l"/>
+                            <constraint firstAttribute="trailing" secondItem="prf-header" secondAttribute="trailing" id="prf-hdr-r"/>
+                            <constraint firstItem="prf-header" firstAttribute="top" secondItem="prf-safe" secondAttribute="top" id="prf-hdr-t"/>
+                            <constraint firstAttribute="bottom" secondItem="prf-scroll" secondAttribute="bottom" id="prf-sc-b"/>
+                            <constraint firstItem="prf-scroll" firstAttribute="leading" secondItem="prf-view" secondAttribute="leading" id="prf-sc-l"/>
+                            <constraint firstAttribute="trailing" secondItem="prf-scroll" secondAttribute="trailing" id="prf-sc-r"/>
+                            <constraint firstItem="prf-scroll" firstAttribute="top" secondItem="prf-header" secondAttribute="bottom" id="prf-sc-t"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="ic_profile_unsele" selectedImage="ic_profile_selected" id="prf-tab"/>
                     <connections>
                         <outlet property="avatarImageView" destination="prf-avatar" id="prf-o-av"/>
-                        <outlet property="bellDotView" destination="prf-belldot" id="prf-o-dot"/>
                         <outlet property="brandImageView" destination="prf-brand" id="prf-o-brand"/>
                         <outlet property="cameraBadge" destination="prf-cam" id="prf-o-cam"/>
-                        <outlet property="firstNameField" destination="prf-first" id="prf-o-first"/>
-                        <outlet property="lastNameField" destination="prf-last" id="prf-o-last"/>
-                        <outlet property="notificationButton" destination="prf-bell" id="prf-o-bell"/>
-                        <outlet property="saveButton" destination="prf-save" id="prf-o-save"/>
-                        <outlet property="taglineLabel" destination="prf-tagline" id="prf-o-tag"/>
+                        <outlet property="contactLabel" destination="prf-contact" id="prf-o-contact"/>
+                        <outlet property="languageRow" destination="prf-row-lang" id="prf-o-lang"/>
+                        <outlet property="languageValueLabel" destination="prf-row-lang-value" id="prf-o-langval"/>
+                        <outlet property="nameLabel" destination="prf-name" id="prf-o-name"/>
+                        <outlet property="pushSwitch" destination="prf-row-push-switch" id="prf-o-push"/>
+                        <outlet property="scrollView" destination="prf-scroll" id="prf-o-scroll"/>
+                        <outlet property="titleLabel" destination="prf-title" id="prf-o-title"/>
+                        <outlet property="versionLabel" destination="prf-version" id="prf-o-ver"/>
+                        <outlet property="vipBadgeView" destination="prf-vip" id="prf-o-vip"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="prf-fr" sceneMemberID="firstResponder"/>
@@ -516,10 +1137,10 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ven-deal">
-                                                            <rect key="frame" x="14" y="304" width="354" height="78"/>
+                                                            <rect key="frame" x="14" y="288" width="354" height="94"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ven-crown-bg">
-                                                                    <rect key="frame" x="12" y="17" width="44" height="44"/>
+                                                                    <rect key="frame" x="12" y="25" width="44" height="44"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="crown.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ven-crown">
                                                                             <rect key="frame" x="10" y="10" width="24" height="22.5"/>
@@ -563,7 +1184,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ven-dealbtn" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
-                                                                    <rect key="frame" x="257" y="23" width="87" height="32"/>
+                                                                    <rect key="frame" x="257" y="31" width="87" height="32"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="32" id="dlb-h"/>
@@ -708,18 +1329,27 @@
     </scenes>
     <resources>
         <image name="LaunchLogo" width="1746" height="1704"/>
-        <image name="backgroundImage" width="851" height="1848"/>
+        <image name="avatarIcon" width="84" height="84"/>
         <image name="bell.fill" catalog="system" width="123" height="128"/>
         <image name="bookmark" catalog="system" width="110" height="128"/>
+        <image name="camera.fill" catalog="system" width="128" height="93"/>
         <image name="checkmark.seal.fill" catalog="system" width="128" height="124"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="crown.fill" catalog="system" width="128" height="92"/>
         <image name="heart" catalog="system" width="128" height="107"/>
+        <image name="ic_FQA" width="36" height="36"/>
+        <image name="ic_deleteAcc" width="36" height="36"/>
+        <image name="ic_edit_profile" width="36" height="36"/>
         <image name="ic_home_selected" width="24" height="24"/>
         <image name="ic_home_unsel" width="96" height="96"/>
+        <image name="ic_language" width="36" height="36"/>
+        <image name="ic_logout" width="36" height="36"/>
+        <image name="ic_notificationToggel" width="36" height="36"/>
+        <image name="ic_privacyPolicy" width="36" height="36"/>
         <image name="ic_profile_selected" width="96" height="96"/>
         <image name="ic_profile_unsele" width="24" height="24"/>
+        <image name="ic_termsAndConditions" width="36" height="36"/>
         <image name="mappin.circle.fill" catalog="system" width="128" height="123"/>
-        <image name="person.circle.fill" catalog="system" width="128" height="123"/>
     </resources>
 </document>

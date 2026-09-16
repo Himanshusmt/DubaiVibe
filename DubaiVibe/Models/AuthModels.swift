@@ -10,10 +10,27 @@ struct AuthUser: Codable {
     let role: String?
     let email: String?
     let phone: String?
+    let phoneCode: String?
+    let notificationsEnabled: Bool?
+    let avatarURL: String?
+    let avatarMediaId: String?
+    let avatarUploadUuid: String?
     let isOnboardingComplete: Bool?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, firstName, lastName, role, email, phone
+        case id, name, role, email, phone
+        case firstName, lastName
+        case first_name, last_name
+        case phoneCode
+        case phone_code
+        case notificationsEnabled
+        case notifications_enabled
+        case avatar
+        case avatarURL
+        case avatarUrl
+        case avatar_url
+        case avatarMediaId, avatar_media_id
+        case avatarUploadUuid, avatar_upload_uuid
         case isOnboardingComplete = "is_onboarding_complete"
         case isOnboardingCompleteCamel = "isOnboardingComplete"
     }
@@ -23,10 +40,24 @@ struct AuthUser: Codable {
         id = values.decodeFlexibleIfPresent(forKey: .id)
         name = values.decodeFlexibleIfPresent(forKey: .name)
         firstName = values.decodeFlexibleIfPresent(forKey: .firstName)
+            ?? values.decodeFlexibleIfPresent(forKey: .first_name)
         lastName = values.decodeFlexibleIfPresent(forKey: .lastName)
+            ?? values.decodeFlexibleIfPresent(forKey: .last_name)
         role = values.decodeFlexibleIfPresent(forKey: .role)
         email = values.decodeFlexibleIfPresent(forKey: .email)
         phone = values.decodeFlexibleIfPresent(forKey: .phone)
+        phoneCode = values.decodeFlexibleIfPresent(forKey: .phoneCode)
+            ?? values.decodeFlexibleIfPresent(forKey: .phone_code)
+        notificationsEnabled = values.decodeFlexibleIfPresent(forKey: .notificationsEnabled)
+            ?? values.decodeFlexibleIfPresent(forKey: .notifications_enabled)
+        avatarURL = values.decodeFlexibleIfPresent(forKey: .avatarURL)
+            ?? values.decodeFlexibleIfPresent(forKey: .avatarUrl)
+            ?? values.decodeFlexibleIfPresent(forKey: .avatar_url)
+            ?? values.decodeFlexibleIfPresent(forKey: .avatar)
+        avatarMediaId = values.decodeFlexibleIfPresent(forKey: .avatarMediaId)
+            ?? values.decodeFlexibleIfPresent(forKey: .avatar_media_id)
+        avatarUploadUuid = values.decodeFlexibleIfPresent(forKey: .avatarUploadUuid)
+            ?? values.decodeFlexibleIfPresent(forKey: .avatar_upload_uuid)
         isOnboardingComplete = values.decodeFlexibleIfPresent(forKey: .isOnboardingComplete)
             ?? values.decodeFlexibleIfPresent(forKey: .isOnboardingCompleteCamel)
     }
@@ -40,7 +71,23 @@ struct AuthUser: Codable {
         try container.encodeIfPresent(role, forKey: .role)
         try container.encodeIfPresent(email, forKey: .email)
         try container.encodeIfPresent(phone, forKey: .phone)
+        try container.encodeIfPresent(phoneCode, forKey: .phoneCode)
+        try container.encodeIfPresent(notificationsEnabled, forKey: .notificationsEnabled)
+        try container.encodeIfPresent(avatarURL, forKey: .avatarURL)
+        try container.encodeIfPresent(avatarMediaId, forKey: .avatarMediaId)
+        try container.encodeIfPresent(avatarUploadUuid, forKey: .avatarUploadUuid)
         try container.encodeIfPresent(isOnboardingComplete, forKey: .isOnboardingComplete)
+    }
+
+    var resolvedAvatarUploadUuid: String? {
+        [avatarUploadUuid, avatarMediaId]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+
+    var hasUploadedAvatar: Bool {
+        let remote = avatarURL?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return !remote.isEmpty || resolvedAvatarUploadUuid != nil
     }
 
     var resolvedFullName: String? {
@@ -63,6 +110,18 @@ struct AuthUser: Codable {
         let direct = lastName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if !direct.isEmpty { return direct }
         return splitName().last
+    }
+
+    /// Prefer `phone_code` + national number when both are present.
+    var resolvedPhoneDisplay: String? {
+        let national = phone?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let code = phoneCode?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if !code.isEmpty, !national.isEmpty {
+            let normalizedCode = code.hasPrefix("+") ? code : "+\(code)"
+            return "\(normalizedCode) \(national)"
+        }
+        if !national.isEmpty { return national }
+        return nil
     }
 
     private func splitName() -> (first: String?, last: String?) {
@@ -111,10 +170,13 @@ struct AuthLoginResponse: Decodable {
     let data: AuthLoginData?
     let token: String?
     let user: AuthUser?
+    let isOnboardingComplete: Bool?
 
     enum CodingKeys: String, CodingKey {
         case success, message, data, token, user
         case accessToken
+        case isOnboardingComplete = "is_onboarding_complete"
+        case isOnboardingCompleteCamel = "isOnboardingComplete"
     }
 
     init(from decoder: Decoder) throws {
@@ -128,6 +190,8 @@ struct AuthLoginResponse: Decodable {
             .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
             .first { !$0.isEmpty }
         user = try? values.decode(AuthUser.self, forKey: .user)
+        isOnboardingComplete = values.decodeFlexibleIfPresent(forKey: .isOnboardingComplete)
+            ?? values.decodeFlexibleIfPresent(forKey: .isOnboardingCompleteCamel)
     }
 
     var resolvedToken: String? {
@@ -141,11 +205,16 @@ struct AuthLoginResponse: Decodable {
         data?.user ?? user
     }
 
+    /// Raw flag from verify-OTP / social login. `nil` and `false` both mean onboarding is incomplete.
+    var resolvedOnboardingFlag: Bool? {
+        isOnboardingComplete
+            ?? data?.isOnboardingComplete
+            ?? resolvedUser?.isOnboardingComplete
+    }
+
     /// Defaults to `false` until the API (or local onboarding) sets it true.
     var resolvedOnboardingComplete: Bool {
-        data?.isOnboardingComplete
-            ?? resolvedUser?.isOnboardingComplete
-            ?? false
+        resolvedOnboardingFlag == true
     }
 }
 
@@ -276,10 +345,13 @@ struct ProfileData: Decodable {
     let id: String?
     let name: String?
     let notificationsEnabled: Bool?
+    let avatarURL: String?
     let isOnboardingComplete: Bool?
 
     enum CodingKeys: String, CodingKey {
         case id, name, notificationsEnabled
+        case avatar
+        case avatarURL, avatarUrl, avatar_url
         case isOnboardingComplete = "is_onboarding_complete"
         case isOnboardingCompleteCamel = "isOnboardingComplete"
     }
@@ -289,6 +361,10 @@ struct ProfileData: Decodable {
         id = values.decodeFlexibleIfPresent(forKey: .id)
         name = values.decodeFlexibleIfPresent(forKey: .name)
         notificationsEnabled = values.decodeFlexibleIfPresent(forKey: .notificationsEnabled)
+        avatarURL = values.decodeFlexibleIfPresent(forKey: .avatarURL)
+            ?? values.decodeFlexibleIfPresent(forKey: .avatarUrl)
+            ?? values.decodeFlexibleIfPresent(forKey: .avatar_url)
+            ?? values.decodeFlexibleIfPresent(forKey: .avatar)
         isOnboardingComplete = values.decodeFlexibleIfPresent(forKey: .isOnboardingComplete)
             ?? values.decodeFlexibleIfPresent(forKey: .isOnboardingCompleteCamel)
     }
@@ -298,6 +374,135 @@ struct ProfileResponse: Decodable {
     let success: Bool?
     let message: String?
     let data: ProfileData?
+    let isOnboardingComplete: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case success, message, data
+        case isOnboardingComplete = "is_onboarding_complete"
+        case isOnboardingCompleteCamel = "isOnboardingComplete"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = values.decodeFlexibleIfPresent(forKey: .success)
+        message = values.decodeFlexibleIfPresent(forKey: .message)
+        data = try? values.decode(ProfileData.self, forKey: .data)
+        isOnboardingComplete = values.decodeFlexibleIfPresent(forKey: .isOnboardingComplete)
+            ?? values.decodeFlexibleIfPresent(forKey: .isOnboardingCompleteCamel)
+    }
+
+    var resolvedOnboardingFlag: Bool? {
+        isOnboardingComplete ?? data?.isOnboardingComplete
+    }
+}
+
+// MARK: - Current user (`GET /users/me`)
+
+struct CurrentUserResponse: Decodable {
+    let success: Bool?
+    let message: String?
+    let data: AuthUser?
+    let user: AuthUser?
+    let isOnboardingComplete: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case success, message, data, user
+        case isOnboardingComplete = "is_onboarding_complete"
+        case isOnboardingCompleteCamel = "isOnboardingComplete"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = values.decodeFlexibleIfPresent(forKey: .success)
+        message = values.decodeFlexibleIfPresent(forKey: .message)
+        let nestedUser: AuthUser?
+        let nestedFlag: Bool?
+        if let nested = try? values.nestedContainer(keyedBy: CodingKeys.self, forKey: .data) {
+            nestedUser = try? nested.decode(AuthUser.self, forKey: .user)
+            nestedFlag = nested.decodeFlexibleIfPresent(forKey: .isOnboardingComplete)
+                ?? nested.decodeFlexibleIfPresent(forKey: .isOnboardingCompleteCamel)
+        } else {
+            nestedUser = nil
+            nestedFlag = nil
+        }
+        let dataUser = try? values.decode(AuthUser.self, forKey: .data)
+        user = nestedUser ?? (try? values.decode(AuthUser.self, forKey: .user))
+        data = dataUser
+        isOnboardingComplete = values.decodeFlexibleIfPresent(forKey: .isOnboardingComplete)
+            ?? values.decodeFlexibleIfPresent(forKey: .isOnboardingCompleteCamel)
+            ?? nestedFlag
+    }
+
+    var resolvedUser: AuthUser? { user ?? data }
+
+    var resolvedOnboardingFlag: Bool? {
+        isOnboardingComplete
+            ?? resolvedUser?.isOnboardingComplete
+    }
+
+    var resolvedOnboardingComplete: Bool {
+        resolvedOnboardingFlag == true
+    }
+}
+
+// MARK: - Upload (`POST /upload?kind=profile`)
+
+struct MediaUploadData: Decodable {
+    let id: String?
+    let uuid: String?
+    let mediaId: String?
+    let uploadUuid: String?
+    let sourceURL: String?
+    let url: String?
+    let src: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, uuid, url, src
+        case mediaId, media_id
+        case uploadUuid, upload_uuid
+        case sourceURL, sourceUrl, source_url
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = values.decodeFlexibleIfPresent(forKey: .id)
+        uuid = values.decodeFlexibleIfPresent(forKey: .uuid)
+        mediaId = values.decodeFlexibleIfPresent(forKey: .mediaId)
+            ?? values.decodeFlexibleIfPresent(forKey: .media_id)
+        uploadUuid = values.decodeFlexibleIfPresent(forKey: .uploadUuid)
+            ?? values.decodeFlexibleIfPresent(forKey: .upload_uuid)
+        sourceURL = values.decodeFlexibleIfPresent(forKey: .sourceURL)
+            ?? values.decodeFlexibleIfPresent(forKey: .sourceUrl)
+            ?? values.decodeFlexibleIfPresent(forKey: .source_url)
+        url = values.decodeFlexibleIfPresent(forKey: .url)
+        src = values.decodeFlexibleIfPresent(forKey: .src)
+    }
+
+    /// Prefer explicit media id, then public id/uuid.
+    var resolvedMediaId: String? {
+        [mediaId, id, uuid]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+
+    /// Prefer upload uuid fields, then public uuid/id.
+    var resolvedUploadUuid: String? {
+        [uploadUuid, uuid, id]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+
+    var resolvedSourceURL: String? {
+        [sourceURL, url, src]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+}
+
+struct MediaUploadResponse: Decodable {
+    let success: Bool?
+    let message: String?
+    let data: MediaUploadData?
 
     enum CodingKeys: String, CodingKey {
         case success, message, data
@@ -307,6 +512,64 @@ struct ProfileResponse: Decodable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         success = values.decodeFlexibleIfPresent(forKey: .success)
         message = values.decodeFlexibleIfPresent(forKey: .message)
-        data = try? values.decode(ProfileData.self, forKey: .data)
+        data = try? values.decode(MediaUploadData.self, forKey: .data)
+    }
+}
+
+// MARK: - Delete upload (`DELETE /upload/{uuid}`)
+
+struct MediaDeleteResponse: Decodable {
+    let success: Bool?
+    let message: String?
+
+    enum CodingKeys: String, CodingKey {
+        case success, message
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = values.decodeFlexibleIfPresent(forKey: .success)
+        message = values.decodeFlexibleIfPresent(forKey: .message)
+    }
+
+    var isDeleted: Bool {
+        success != false
+    }
+}
+
+// MARK: - Delete account (`DELETE /users/me`)
+
+struct DeleteAccountResponse: Decodable {
+    let success: Bool?
+    let message: String?
+    let data: DeleteAccountData?
+
+    enum CodingKeys: String, CodingKey {
+        case success, message, data
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = values.decodeFlexibleIfPresent(forKey: .success)
+        message = values.decodeFlexibleIfPresent(forKey: .message)
+        data = try? values.decode(DeleteAccountData.self, forKey: .data)
+    }
+
+    var isDeleted: Bool {
+        if let deleted = data?.deleted { return deleted }
+        return success == true
+    }
+}
+
+struct DeleteAccountData: Decodable {
+    let deleted: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case deleted
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        deleted = values.decodeFlexibleIfPresent(forKey: .deleted)
     }
 }

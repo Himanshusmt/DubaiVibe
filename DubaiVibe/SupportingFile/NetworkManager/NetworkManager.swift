@@ -392,6 +392,7 @@ final class NetworkLogger {
         
         HEADERS:
         \(request.allHTTPHeaderFields ?? [:])
+        Authorization set: \((request.value(forHTTPHeaderField: "Authorization")?.isEmpty == false) ? "yes" : "no")
         
         """)
         
@@ -653,7 +654,8 @@ final class NetworkManager {
                 default:
                     throw Self.mapHTTPError(
                         statusCode: response.statusCode,
-                        data: output.data
+                        data: output.data,
+                        expireSession: endpoint.triggersSessionExpiryOnUnauthorized
                     )
                 }
             }
@@ -835,7 +837,8 @@ final class NetworkManager {
                 default:
                     let apiError = NetworkManager.mapHTTPError(
                         statusCode: response.statusCode,
-                        data: data ?? Data()
+                        data: data ?? Data(),
+                        expireSession: endpoint.triggersSessionExpiryOnUnauthorized
                     )
                     if showErrorAlert {
                         APIErrorAlertPresenter.present(apiError)
@@ -906,6 +909,8 @@ final class NetworkManager {
         request.httpMethod =
         method.rawValue
         
+        applyDefaultHeaders(to: &request, extra: [:])
+        
         if let body = body {
             
             request.httpBody =
@@ -940,7 +945,8 @@ final class NetworkManager {
         default:
             let apiError = NetworkManager.mapHTTPError(
                 statusCode: response.statusCode,
-                data: data
+                data: data,
+                expireSession: endpoint.triggersSessionExpiryOnUnauthorized
             )
             if showErrorAlert {
                 APIErrorAlertPresenter.present(apiError)
@@ -1037,7 +1043,8 @@ final class NetworkManager {
                 default:
                     throw Self.mapHTTPError(
                         statusCode: response.statusCode,
-                        data: output.data
+                        data: output.data,
+                        expireSession: endpoint.triggersSessionExpiryOnUnauthorized
                     )
                 }
 
@@ -1081,67 +1088,81 @@ final class NetworkManager {
             request.setValue(value, forHTTPHeaderField: key)
         }
 
-        if let token = TokenManager.shared.accessToken, !token.isEmpty {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-
         extra.forEach { key, value in
             request.setValue(value, forHTTPHeaderField: key)
         }
+
+        // Apply bearer last so auth is never dropped by earlier header merges.
+        let hasExplicitAuth = extra.keys.contains {
+            $0.caseInsensitiveCompare("Authorization") == .orderedSame
+        }
+        if !hasExplicitAuth, let bearer = TokenManager.shared.bearerAuthorizationHeader {
+            request.setValue(bearer, forHTTPHeaderField: "Authorization")
+        }
     }
 
-    // MARK: - 401 Unauthorized
+    // MARK: - 401 Unauthorized / Session Expired
 
+    /// Clears cached auth and returns the user to `SignupOptionsVC`.
+    /// Called automatically when any authenticated API returns 401 / Unauthorized.
     func handleUnauthorizedSession() {
         guard !isHandlingUnauthorizedSession else { return }
+
+        let token = TokenManager.shared.accessToken?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        // No active session (e.g. invalid OTP / social credential) — skip redirect.
+        guard !token.isEmpty else { return }
+
         isHandlingUnauthorizedSession = true
 
         LoaderManager.shared.reset()
         TokenManager.shared.clearUnauthorizedSession()
 
-        guard let presenter = Self.topViewControllerForSessionAlert(),
-              !(presenter is UIAlertController) else {
-            navigateToSignUpAfterUnauthorized()
-            isHandlingUnauthorizedSession = false
+        DispatchQueue.main.async { [weak self] in
+            self?.presentSessionExpiredAndNavigate()
+        }
+    }
+
+    private func presentSessionExpiredAndNavigate() {
+        guard let host = Self.keyWindowForSessionAlert() else {
+            finishUnauthorizedNavigation()
             return
         }
 
-        presenter.showAnimatedAlert(
+        // Remove any existing session alert, then show on the key window so it survives VC teardown.
+        host.viewWithTag(Self.sessionAlertOverlayTag)?.removeFromSuperview()
+
+        AuthAnimatedAlertView.show(
+            on: host,
             title: L10n.sessionExpired,
             message: L10n.sessionExpiredMessage,
-            style: .warning
+            style: .warning,
+            actionTitle: "OK"
         ) { [weak self] in
-            self?.navigateToSignUpAfterUnauthorized()
-            self?.isHandlingUnauthorizedSession = false
+            self?.finishUnauthorizedNavigation()
         }
+    }
+
+    private func finishUnauthorizedNavigation() {
+        navigateToSignUpAfterUnauthorized()
+        isHandlingUnauthorizedSession = false
     }
 
     private func navigateToSignUpAfterUnauthorized() {
         AppRouter.setRootAuth(animated: true)
     }
 
-    private static func topViewControllerForSessionAlert(
-        from root: UIViewController? = UIApplication.shared.connectedScenes
+    private static let sessionAlertOverlayTag = 8_818_182
+
+    private static func keyWindowForSessionAlert() -> UIWindow? {
+        UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .flatMap(\.windows)
-            .first(where: \.isKeyWindow)?
-            .rootViewController
-    ) -> UIViewController? {
-        guard let root else { return nil }
-
-        if let presented = root.presentedViewController {
-            return topViewControllerForSessionAlert(from: presented)
-        }
-
-        if let navigation = root as? UINavigationController {
-            return topViewControllerForSessionAlert(from: navigation.visibleViewController)
-        }
-
-        if let tab = root as? UITabBarController {
-            return topViewControllerForSessionAlert(from: tab.selectedViewController)
-        }
-
-        return root
+            .first(where: \.isKeyWindow)
+            ?? UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap(\.windows)
+                .first
     }
 }
 
@@ -1149,10 +1170,16 @@ final class NetworkManager {
 
 private extension NetworkManager {
 
-    static func mapHTTPError(statusCode: Int, data: Data) -> APIError {
-        if statusCode == 401 {
-            DispatchQueue.main.async {
-                NetworkManager.shared.handleUnauthorizedSession()
+    static func mapHTTPError(
+        statusCode: Int,
+        data: Data,
+        expireSession: Bool = true
+    ) -> APIError {
+        if isUnauthorized(statusCode: statusCode, data: data) {
+            if expireSession {
+                DispatchQueue.main.async {
+                    NetworkManager.shared.handleUnauthorizedSession()
+                }
             }
             return .unauthorized
         }
@@ -1169,6 +1196,33 @@ private extension NetworkManager {
         }
 
         return .serverError(message)
+    }
+
+    /// HTTP 401, or an explicit Unauthorized / session-token expiry body message.
+    static func isUnauthorized(statusCode: Int, data: Data) -> Bool {
+        if statusCode == 401 {
+            return true
+        }
+
+        let message = (APIErrorMessageParser.message(from: data) ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+
+        guard !message.isEmpty else { return false }
+
+        // Exact auth failures (avoid matching permission copy like "not authorized to…").
+        if message == "unauthorized"
+            || message == "unauthenticated"
+            || message == "unauthorized."
+            || message == "unauthenticated." {
+            return true
+        }
+
+        return message.contains("session expired")
+            || message.contains("token expired")
+            || message.contains("invalid token")
+            || message.contains("jwt expired")
+            || message.contains("authentication required")
     }
 }
 
@@ -1485,6 +1539,17 @@ final class TokenManager {
         )
     }
 
+    /// `Authorization: Bearer <token>` value, or `nil` when logged out.
+    var bearerAuthorizationHeader: String? {
+        let raw = accessToken?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !raw.isEmpty else { return nil }
+        if raw.lowercased().hasPrefix("bearer ") {
+            return raw
+        }
+        return "Bearer \(raw)"
+    }
+
     /// Name from Google / Apple login — used to prefill Complete Profile.
     var socialFullName: String? {
         let name = UserDefaults.standard.string(forKey: socialFullNameKey)?
@@ -1580,9 +1645,9 @@ final class TokenManager {
             }
         }
 
-        isOnboardingCompleted = isOnboardingComplete
-            ?? user?.isOnboardingComplete
-            ?? false
+        if let isOnboardingComplete {
+            isOnboardingCompleted = isOnboardingComplete
+        }
 
         if markLoggedIn || isOnboardingCompleted {
             UserDefaults.standard.setLoggedIn(value: true)
@@ -1659,6 +1724,14 @@ final class TokenManager {
         defaults.removeObject(forKey: "GoogleSignInGivenName")
         defaults.removeObject(forKey: "GoogleSignInFamilyName")
 
+        // Local profile cache
+        defaults.removeObject(forKey: "profile.firstName")
+        defaults.removeObject(forKey: "profile.lastName")
+        defaults.removeObject(forKey: "profile.pushNotificationsEnabled")
+        defaults.removeObject(forKey: "profile.avatarUploadUuid")
+        defaults.removeObject(forKey: "profile.avatarMediaId")
+        clearLocalAvatarFile()
+
         GoogleSignInService.signOut()
 
         defaults.setLoggedIn(value: false)
@@ -1667,6 +1740,12 @@ final class TokenManager {
         FCMNotificationManager.clearDeviceId()
 
         defaults.synchronize()
+    }
+
+    private func clearLocalAvatarFile() {
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("profile_avatar.jpg")
+        try? FileManager.default.removeItem(at: url)
     }
 
     func clearSteps() {

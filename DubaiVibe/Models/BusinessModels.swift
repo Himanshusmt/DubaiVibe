@@ -1179,18 +1179,29 @@ struct BusinessItem: Decodable {
         return "on total bill"
     }
 
-    /// Formats API `days` into compact ranges: "Monday – Saturday", "Sunday – Monday".
+    /// Formats API `days` into compact ranges: "Monday – Saturday", "Monday – Wednesday".
+    /// Consecutive weekdays collapse to a start–end range; gaps stay comma-separated.
     private static func formattedValidityDays(_ days: [String]?) -> String? {
         guard let days, !days.isEmpty else { return nil }
 
         let order = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
         let nameByIndex = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        let aliases: [String: Int] = [
+            "sun": 0, "sunday": 0,
+            "mon": 1, "monday": 1,
+            "tue": 2, "tues": 2, "tuesday": 2,
+            "wed": 3, "wednesday": 3,
+            "thu": 4, "thur": 4, "thurs": 4, "thursday": 4,
+            "fri": 5, "friday": 5,
+            "sat": 6, "saturday": 6
+        ]
 
         var indices = Set<Int>()
         for raw in days {
             let key = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-            guard let index = order.firstIndex(of: key) else { continue }
-            indices.insert(index)
+            if let index = aliases[key] ?? order.firstIndex(of: key) {
+                indices.insert(index)
+            }
         }
         guard !indices.isEmpty else { return nil }
 

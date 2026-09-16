@@ -24,6 +24,10 @@ enum APIEndpoint {
     case logout
     case logoutAll
     case updateProfile
+    case currentUser
+    case deleteAccount
+    case upload(kind: String = "profile")
+    case deleteUpload(uuid: String)
     case listCategories
     case listBusinesses(
         cursor: String? = nil,
@@ -35,6 +39,8 @@ enum APIEndpoint {
         radiusMeters: Double? = nil
     )
     case businessDetail(uuid: String, lat: Double? = nil, lng: Double? = nil)
+    case listNotifications(cursor: String? = nil, limit: Int? = nil)
+    case markNotificationRead(uuid: String)
     
     var path: String {
         
@@ -62,7 +68,17 @@ enum APIEndpoint {
             return "auth/logout-all"
 
         case .updateProfile:
-            return "profile"
+            return "users/me"
+        case .currentUser:
+            return "users/me"
+        case .deleteAccount:
+            return "users/me"
+        case .upload(let kind):
+            let encoded = kind.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? kind
+            return "upload?kind=\(encoded)"
+        case .deleteUpload(let uuid):
+            let encoded = uuid.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? uuid
+            return "upload/\(encoded)"
 
         case .listCategories:
             return "categories"
@@ -83,11 +99,34 @@ enum APIEndpoint {
                 ("lat", lat.map { String(format: "%.6f", $0) }),
                 ("lng", lng.map { String(format: "%.6f", $0) })
             ])
+
+        case .listNotifications(let cursor, let limit):
+            return "notifications" + Self.query([
+                ("cursor", cursor),
+                ("limit", limit.map(String.init))
+            ])
+        case .markNotificationRead(let uuid):
+            let encoded = uuid.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? uuid
+            return "notifications/\(encoded)/read"
         }
     }
     
     var url: String {
         return APIEndpoint.baseURL + path
+    }
+
+    /// Login / OTP / social auth can return 401 for invalid credentials — do not treat as session expiry.
+    /// Logout clears the session itself, so a 401 there should not show the session-expired flow.
+    var triggersSessionExpiryOnUnauthorized: Bool {
+        switch self {
+        case .sendOTP, .verifyOTP, .resendOTP,
+             .googleLogin, .googleAuthURL,
+             .appleLogin, .appleAuthURL,
+             .logout, .logoutAll:
+            return false
+        default:
+            return true
+        }
     }
 
     private static func oauthURLPath(_ path: String, callbackURL: String?) -> String {

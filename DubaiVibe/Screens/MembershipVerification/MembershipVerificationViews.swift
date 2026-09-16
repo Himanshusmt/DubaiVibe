@@ -94,13 +94,15 @@ final class GoldHaloView: UIView {
     private func setup() {
         isUserInteractionEnabled = false
         backgroundColor = .clear
+        clipsToBounds = false
         glow.type = .radial
         glow.colors = [
-            AppPalette.gold.withAlphaComponent(0.34).cgColor,
-            AppPalette.gold.withAlphaComponent(0.26).cgColor,
+            AppPalette.gold.withAlphaComponent(0.42).cgColor,
+            AppPalette.gold.withAlphaComponent(0.22).cgColor,
+            AppPalette.gold.withAlphaComponent(0.06).cgColor,
             UIColor.clear.cgColor
         ]
-        glow.locations = [0, 0.55, 1]
+        glow.locations = [0, 0.35, 0.65, 1]
         glow.startPoint = CGPoint(x: 0.5, y: 0.5)
         glow.endPoint = CGPoint(x: 1, y: 1)
         layer.addSublayer(glow)

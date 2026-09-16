@@ -34,8 +34,7 @@ final class NotificationsPermissionVC: UIViewController {
             self.enableButton?.isEnabled = true
             switch result {
             case .success(let response):
-                TokenManager.shared.isOnboardingCompleted = response.data?.isOnboardingComplete ?? true
-                UserDefaults.standard.setLoggedIn(value: true)
+                AppRouter.completeOnboarding()
                 self.showSuccessToast(response.message, fallback: "Profile updated")
                 AppRouter.setRootMain(animated: true)
             case .failure(let error):

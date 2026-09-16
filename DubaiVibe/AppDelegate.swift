@@ -11,6 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         GoogleServiceConfig.configureGIDSignInIfPossible()
         UIFont.installInterAsSystemFont()
+        UIButton.enableGlobalPressAnimation()
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = AppPalette.gold
         configureKeyboardManager()
         LaunchOverlay.begin()
@@ -25,7 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         keyboard.disabledDistanceHandlingClasses.append(contentsOf: [
             SignupWithPhoneNumberVC.self,
             EnterOTPVC.self,
-            OnboardingNameVC.self
+            OnboardingNameVC.self,
+            EnterVenueCodeViewController.self
         ])
         // Auth fields wrap UITextField in UIView chrome; treat the chrome as a control
         // so tapping another field focuses it instead of resigning the keyboard.

@@ -773,6 +773,21 @@ private extension VenueDetailViewController {
     }
 
     @IBAction func handleUnlockDeal() {
+        let storyboard = UIStoryboard(name: "VenueDetail", bundle: nil)
+        guard let popup = storyboard.instantiateViewController(
+            withIdentifier: "EnterVenueCodeViewController"
+        ) as? EnterVenueCodeViewController else {
+            return
+        }
+        popup.modalPresentationStyle = .overFullScreen
+        popup.modalTransitionStyle = .crossDissolve
+        popup.onDone = { [weak self] _ in
+            self?.pushMembershipVerification()
+        }
+        present(popup, animated: true)
+    }
+
+    func pushMembershipVerification() {
         let storyboard = UIStoryboard(name: "MembershipVerification", bundle: nil)
         guard let controller = storyboard.instantiateInitialViewController() as? MembershipVerificationViewController else {
             return

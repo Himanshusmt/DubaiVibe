@@ -35,6 +35,28 @@
 "profile.enterLastName" = "Please enter your last name.";
 "profile.lastNameTooShort" = "Last name must be at least 2 characters.";
 "profile.invalidLastName" = "Please enter a valid last name.";
+"profile.accountTitle" = "Account Profile";
+"profile.vipMember" = "ONEVIBE VIP MEMBER";
+"profile.accountSection" = "ACCOUNT & PREFERENCES";
+"profile.supportSection" = "SUPPORT & LEGAL";
+"profile.editTitle" = "Edit Profile";
+"profile.editSubtitle" = "Update name, email & details";
+"profile.languageSubtitle" = "App interface language";
+"profile.pushTitle" = "Push Notifications";
+"profile.pushSubtitle" = "Exclusive venue offers & alerts";
+"profile.faqTitle" = "FAQ & Concierge Support";
+"profile.faqSubtitle" = "Get assistance 24/7 in Dubai";
+"profile.termsTitle" = "Terms and Conditions";
+"profile.termsSubtitle" = "Membership agreement";
+"profile.privacySubtitle" = "Security & data governance";
+"profile.logOut" = "Log Out";
+"profile.logOutConfirm" = "Are you sure you want to log out?";
+"profile.deleteTitle" = "Delete Account";
+"profile.deleteSubtitle" = "Permanently erase your OneVibe profile";
+"profile.deleteConfirm" = "This permanently erases your OneVibe profile. This cannot be undone.";
+"profile.contactPlaceholder" = "Add phone or email in Edit Profile";
+"profile.versionPrefix" = "Dubai Vibe iOS";
+"profile.downloaders" = "10k downloaders";
 
 /* Categories */
 "category.all" = "All";
@@ -53,6 +75,13 @@
 "deal.view" = "View Deal";
 "deal.unlock" = "Unlock Deal";
 "deal.exclusiveBadge" = "ONEVIBE EXCLUSIVE";
+"deal.exclusivePerk" = "DUBAI VIBE EXCLUSIVE PERK";
+"deal.enterCodeTitle" = "Enter Code";
+"deal.enterCodeSubtitle" = "Ask restaurant member to enter the code";
+"deal.venuePasscode" = "VENUE PASSCODE";
+"deal.enterVenueCodePlaceholder" = "enter venue code";
+"deal.enterVenueCodeHint" = "Enter the alphanumeric code provided by your server";
+"deal.done" = "Done ✓";
 "deal.favorite" = "Favorite";
 "deal.bookmark" = "Bookmark";
 
@@ -146,6 +175,35 @@
 /* Image picker */
 "picker.takePhoto" = "Take photo";
 "picker.photoLibrary" = "Photo library";
+"picker.deletePhoto" = "Delete photo";
+"picker.photoDeleted" = "Profile photo deleted";
+
+/* Notifications */
+"notifications.today" = "TODAY";
+"notifications.yesterday" = "YESTERDAY";
+"notifications.newCount" = "2 new";
+"notifications.offerBadge" = "  30% OFF  ";
+"notifications.zumaTitle" = "Zuma Dubai";
+"notifications.zumaBody" = "Your exclusive OneVibe discount voucher is ready for dinner reservations tonight at DIFC.";
+"notifications.zumaMeta" = "12m ago • Dining Exclusive";
+"notifications.viewVoucher" = "View Voucher";
+"notifications.celaViTitle" = "Trending at CÉ LA VI";
+"notifications.celaViBody" = "Sunset rooftop lounge tables are booking fast for tonight with panoramic Burj Khalifa views.";
+"notifications.celaViMeta" = "1h ago • Downtown Dubai";
+"notifications.reserveTable" = "Reserve Table →";
+"notifications.vipTitle" = "VIP Tier Verified";
+"notifications.vipBody" = "Your membership status is active. Enjoy priority reservations and exclusive member rates.";
+"notifications.vipMeta" = "3h ago • Membership";
+"notifications.statusActive" = "Status: Active";
+"notifications.nobuTitle" = "New Partner: Nobu Dubai";
+"notifications.nobuBody" = "Discover Japanese-Peruvian cuisine and exclusive OneVibe offerings at our newest partner venue.";
+"notifications.nobuMeta" = "5h ago • Partners";
+"notifications.loginTitle" = "New Login Detected";
+"notifications.loginBody" = "A new device signed in to your Dubai Vibe account. If this wasn’t you, review your security settings.";
+"notifications.loginMeta" = "Yesterday • Security";
+"notifications.review" = "Review";
+"notifications.empty" = "No notifications yet.";
+"notifications.newCountFormat" = "%d new";
 
 /* Session */
 "session.expiredTitle" = "Session Expired";

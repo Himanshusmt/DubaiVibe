@@ -35,6 +35,28 @@
 "profile.enterLastName" = "Пожалуйста, введите фамилию.";
 "profile.lastNameTooShort" = "Фамилия должна содержать не менее 2 символов.";
 "profile.invalidLastName" = "Пожалуйста, введите корректную фамилию.";
+"profile.accountTitle" = "Профиль аккаунта";
+"profile.vipMember" = "ONEVIBE VIP УЧАСТНИК";
+"profile.accountSection" = "АККАУНТ И НАСТРОЙКИ";
+"profile.supportSection" = "ПОДДЕРЖКА И ПРАВОВАЯ ИНФОРМАЦИЯ";
+"profile.editTitle" = "Редактировать профиль";
+"profile.editSubtitle" = "Имя, email и данные";
+"profile.languageSubtitle" = "Язык интерфейса приложения";
+"profile.pushTitle" = "Push-уведомления";
+"profile.pushSubtitle" = "Эксклюзивные предложения и оповещения";
+"profile.faqTitle" = "FAQ и Concierge-поддержка";
+"profile.faqSubtitle" = "Помощь 24/7 в Дубае";
+"profile.termsTitle" = "Условия использования";
+"profile.termsSubtitle" = "Соглашение о членстве";
+"profile.privacySubtitle" = "Безопасность и данные";
+"profile.logOut" = "Выйти";
+"profile.logOutConfirm" = "Вы уверены, что хотите выйти?";
+"profile.deleteTitle" = "Удалить аккаунт";
+"profile.deleteSubtitle" = "Безвозвратно удалить профиль OneVibe";
+"profile.deleteConfirm" = "Это навсегда удалит ваш профиль OneVibe. Действие нельзя отменить.";
+"profile.contactPlaceholder" = "Добавьте телефон или email в профиле";
+"profile.versionPrefix" = "Dubai Vibe iOS";
+"profile.downloaders" = "10 тыс. загрузок";
 
 /* Categories */
 "category.all" = "Все";
@@ -53,6 +75,13 @@
 "deal.view" = "Смотреть";
 "deal.unlock" = "Открыть предложение";
 "deal.exclusiveBadge" = "ЭКСКЛЮЗИВ DUBAI VIBE";
+"deal.exclusivePerk" = "ЭКСКЛЮЗИВ DUBAI VIBE";
+"deal.enterCodeTitle" = "Введите код";
+"deal.enterCodeSubtitle" = "Попросите сотрудника ресторана ввести код";
+"deal.venuePasscode" = "КОД ЗАВЕДЕНИЯ";
+"deal.enterVenueCodePlaceholder" = "введите код заведения";
+"deal.enterVenueCodeHint" = "Введите буквенно-цифровой код от вашего официанта";
+"deal.done" = "Готово ✓";
 "deal.favorite" = "Избранное";
 "deal.bookmark" = "Закладка";
 
@@ -147,6 +176,35 @@
 /* Image picker */
 "picker.takePhoto" = "Сделать фото";
 "picker.photoLibrary" = "Галерея";
+"picker.deletePhoto" = "Удалить фото";
+"picker.photoDeleted" = "Фото профиля удалено";
+
+/* Notifications */
+"notifications.today" = "СЕГОДНЯ";
+"notifications.yesterday" = "ВЧЕРА";
+"notifications.newCount" = "2 новых";
+"notifications.offerBadge" = "  30% OFF  ";
+"notifications.zumaTitle" = "Zuma Dubai";
+"notifications.zumaBody" = "Ваш эксклюзивный ваучер OneVibe готов для ужина сегодня вечером в DIFC.";
+"notifications.zumaMeta" = "12 мин назад • Dining Exclusive";
+"notifications.viewVoucher" = "Смотреть ваучер";
+"notifications.celaViTitle" = "В тренде: CÉ LA VI";
+"notifications.celaViBody" = "Столики на закате бронируются быстро — панорамный вид на Burj Khalifa.";
+"notifications.celaViMeta" = "1 ч назад • Downtown Dubai";
+"notifications.reserveTable" = "Забронировать →";
+"notifications.vipTitle" = "VIP-статус подтверждён";
+"notifications.vipBody" = "Ваше членство активно. Пользуйтесь приоритетным бронированием и особыми тарифами.";
+"notifications.vipMeta" = "3 ч назад • Membership";
+"notifications.statusActive" = "Статус: Активен";
+"notifications.nobuTitle" = "Новый партнёр: Nobu Dubai";
+"notifications.nobuBody" = "Откройте японско-перуанскую кухню и эксклюзивные предложения OneVibe у нового партнёра.";
+"notifications.nobuMeta" = "5 ч назад • Partners";
+"notifications.loginTitle" = "Обнаружен новый вход";
+"notifications.loginBody" = "С вашего аккаунта Dubai Vibe выполнен вход с нового устройства. Если это не вы — проверьте безопасность.";
+"notifications.loginMeta" = "Вчера • Security";
+"notifications.review" = "Проверить";
+"notifications.empty" = "Пока нет уведомлений.";
+"notifications.newCountFormat" = "%d новых";
 
 /* Session */
 "session.expiredTitle" = "Сессия истекла";

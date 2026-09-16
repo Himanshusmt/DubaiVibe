@@ -9,8 +9,13 @@
 import Foundation
 import UIKit
 
-public protocol TDImagePickerDelegate: class {
+public protocol TDImagePickerDelegate: AnyObject {
     func didSelect(image: UIImage?)
+    func didTapDeletePhoto()
+}
+
+public extension TDImagePickerDelegate {
+    func didTapDeletePhoto() {}
 }
 
 open class TDImagePicker: NSObject {
@@ -47,7 +52,7 @@ open class TDImagePicker: NSObject {
         }
     }
 
-    public func present(from sourceView: UIView) {
+    public func present(from sourceView: UIView, showsDeleteOption: Bool = false) {
         let alertController = UndimmedActionSheetController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.overrideUserInterfaceStyle = .dark
 
@@ -56,6 +61,13 @@ open class TDImagePicker: NSObject {
         }
         if let action = self.action(for: .photoLibrary, title: L10n.photoLibrary) {
             alertController.addAction(action)
+        }
+        if showsDeleteOption {
+            alertController.addAction(
+                UIAlertAction(title: L10n.deletePhoto, style: .destructive) { [weak self] _ in
+                    self?.delegate?.didTapDeletePhoto()
+                }
+            )
         }
 
         alertController.addAction(UIAlertAction(title: L10n.cancel, style: .cancel, handler: nil))

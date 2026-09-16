@@ -27,6 +27,8 @@ final class VenueCardCell: UITableViewCell {
     private let dealFill = GoldGradientView()
     private let dealBorder = GradientBorderView()
     private let heroFade = GoldGradientView()
+    /// Matches exclusive label top inset (`ex-t` = 12) on the opposite edge.
+    private var dealValidityBottomConstraint: NSLayoutConstraint!
 
     var onFavorite: (() -> Void)?
     var onBookmark: (() -> Void)?
@@ -130,17 +132,25 @@ final class VenueCardCell: UITableViewCell {
         dealTitleLabel.lineBreakMode = .byWordWrapping
         dealDiscountLabel.font = AppTypography.font(.bold, size: 17)
         dealDiscountLabel.textColor = AppPalette.primaryText
-        dealDiscountLabel.numberOfLines = 2
-        dealDiscountLabel.lineBreakMode = .byWordWrapping
+        dealDiscountLabel.numberOfLines = 1
+        dealDiscountLabel.lineBreakMode = .byTruncatingTail
         dealDetailLabel.font = AppTypography.font(.regular, size: 10)
         dealDetailLabel.textColor = AppPalette.dealDetailText
-        dealDetailLabel.numberOfLines = 2
-        dealDetailLabel.lineBreakMode = .byWordWrapping
+        dealDetailLabel.numberOfLines = 1
+        dealDetailLabel.lineBreakMode = .byTruncatingTail
         dealValidityLabel.font = AppTypography.font(.regular, size: 9.5)
         dealValidityLabel.textColor = AppPalette.secondaryText
-        dealValidityLabel.numberOfLines = 2
-        dealValidityLabel.lineBreakMode = .byWordWrapping
+        dealValidityLabel.numberOfLines = 1
+        dealValidityLabel.lineBreakMode = .byTruncatingTail
+        dealValidityLabel.adjustsFontSizeToFitWidth = true
+        dealValidityLabel.minimumScaleFactor = 0.85
         dealValidityLabel.isHidden = true
+        // Same inset as exclusive label top (12) — pin days to banner bottom.
+        dealValidityBottomConstraint = dealValidityLabel.bottomAnchor.constraint(
+            equalTo: dealBannerView.bottomAnchor,
+            constant: -12
+        )
+        dealValidityBottomConstraint.isActive = false
 
         // Figma View Deal button: #F3CE85 → #D8A04D (diagonal)
         viewDealButton.backgroundColor = .clear
@@ -178,6 +188,10 @@ final class VenueCardCell: UITableViewCell {
         onViewDeal = nil
         heroImageView.setBusinessImage(urlString: nil)
         wordmarkLabel.text = nil
+        dealValidityLabel.text = nil
+        dealValidityLabel.isHidden = true
+        dealValidityBottomConstraint.isActive = false
+        dealHeightConstraint.isActive = true
     }
 
     func configure(with venue: Venue) {
@@ -201,7 +215,6 @@ final class VenueCardCell: UITableViewCell {
 
         if let deal = venue.deal {
             dealBannerView.isHidden = false
-            dealHeightConstraint.constant = AppMetrics.dealHeight
             dealTopConstraint.constant = 12
 
             dealTitleLabel.attributedText = NSAttributedString(string: deal.badge, attributes: [
@@ -211,12 +224,29 @@ final class VenueCardCell: UITableViewCell {
             ])
             dealDiscountLabel.text = deal.discount
             dealDetailLabel.text = deal.detail
-            dealValidityLabel.text = nil
-            dealValidityLabel.isHidden = true
+
+            let validity = deal.validity.trimmingCharacters(in: .whitespacesAndNewlines)
+            if validity.isEmpty {
+                dealValidityLabel.text = nil
+                dealValidityLabel.isHidden = true
+                dealValidityBottomConstraint.isActive = false
+                dealHeightConstraint.isActive = true
+                dealHeightConstraint.constant = AppMetrics.dealHeight
+            } else {
+                dealValidityLabel.text = validity
+                dealValidityLabel.isHidden = false
+                // Content + matching 12pt top/bottom insets define banner height.
+                dealHeightConstraint.isActive = false
+                dealValidityBottomConstraint.isActive = true
+            }
         } else {
             dealBannerView.isHidden = true
+            dealValidityBottomConstraint.isActive = false
+            dealHeightConstraint.isActive = true
             dealHeightConstraint.constant = 0
             dealTopConstraint.constant = 0
+            dealValidityLabel.text = nil
+            dealValidityLabel.isHidden = true
         }
     }
 

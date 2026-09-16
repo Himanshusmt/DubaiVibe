@@ -182,6 +182,7 @@ final class GoldGradientButton: UIButton {
         }
         gradientLayer.frame = bounds
         gradientLayer.cornerRadius = layer.cornerRadius
+        gradientLayer.cornerCurve = layer.cornerCurve
         layer.insertSublayer(gradientLayer, at: 0)
         if let titleLabel { bringSubviewToFront(titleLabel) }
         if let imageView { bringSubviewToFront(imageView) }

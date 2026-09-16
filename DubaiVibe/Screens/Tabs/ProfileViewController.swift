@@ -1,130 +1,244 @@
 import UIKit
+import SDWebImage
 
 @objc(ProfileViewController)
 final class ProfileViewController: UIViewController {
-    @IBOutlet weak var brandImageView: UIImageView!
-    @IBOutlet weak var taglineLabel: UILabel!
-    @IBOutlet weak var notificationButton: UIButton!
-    @IBOutlet weak var bellDotView: UIView!
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var cameraBadge: UIView!
-    @IBOutlet weak var firstNameField: AuthDarkField!
-    @IBOutlet weak var lastNameField: AuthDarkField!
-    @IBOutlet weak var saveButton: GoldGradientButton!
+    @IBOutlet private weak var brandImageView: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var avatarImageView: UIImageView!
+    @IBOutlet private weak var cameraBadge: UIView!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var contactLabel: UILabel!
+    @IBOutlet private weak var vipBadgeView: ProfileVIPBadgeView!
+    @IBOutlet private weak var languageRow: ProfileSettingRow!
+    @IBOutlet private weak var languageValueLabel: UILabel!
+    @IBOutlet private weak var pushSwitch: UISwitch!
+    @IBOutlet private weak var versionLabel: UILabel!
 
-    private let languageRow = LanguageSettingRow()
     private var imagePicker: TDImagePicker?
-    private var pendingAvatarImage: UIImage?
-    private var baselineFirstName = ""
-    private var baselineLastName = ""
-    private var avatarChanged = false
+    private let viewModel = ProfileViewModel()
 
     private enum Storage {
         static let firstNameKey = "profile.firstName"
         static let lastNameKey = "profile.lastName"
         static let avatarFileName = "profile_avatar.jpg"
-    }
-
-    private enum SaveStyle {
-        static let enabledAlpha: CGFloat = 1
-        static let disabledAlpha: CGFloat = 0.4
+        static let pushEnabledKey = "profile.pushNotificationsEnabled"
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = AppPalette.background
-        authDismissKeyboardOnTap()
-        configureHeader()
-        configureFields()
-        configureLanguageRow()
-        configureAvatar()
-        configureSaveButton()
-        loadSavedProfile()
-        updateSaveButtonState()
+        configureChrome()
+        configureActions()
         applyLocalizedStoryboardCopy()
+        applyUser(viewModel.cachedUser)
+        fetchCurrentUser()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        applyCircularAvatar()
-        if let cameraBadge {
-            cameraBadge.layer.cornerRadius = min(cameraBadge.bounds.width, cameraBadge.bounds.height) / 2
+        avatarImageView?.makeCircular()
+        cameraBadge?.applyCircularBadge()
+        applyFloatingTabInset()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        languageValueLabel?.text = Self.languageValueText
+        if viewModel.user == nil {
+            applyUser(viewModel.cachedUser)
+        }
+        fetchCurrentUser(showLoader: false)
+    }
+}
+
+// MARK: - Chrome
+
+private extension ProfileViewController {
+    func configureChrome() {
+        view.backgroundColor = AppPalette.background
+        scrollView?.contentInsetAdjustmentBehavior = .never
+        scrollView?.showsVerticalScrollIndicator = false
+
+        brandImageView?.applyBrandTileChrome()
+        brandImageView?.accessibilityLabel = L10n.brandName
+
+        pushSwitch?.onTintColor = AppPalette.gold
+        pushSwitch?.isOn = UserDefaults.standard.object(forKey: Storage.pushEnabledKey) as? Bool ?? true
+        languageValueLabel?.text = Self.languageValueText
+
+        imagePicker = TDImagePicker(presentationController: self, delegate: self)
+    }
+
+    func configureActions() {
+        let avatarTap = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
+        avatarImageView?.isUserInteractionEnabled = true
+        avatarImageView?.addGestureRecognizer(avatarTap)
+
+        let badgeTap = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
+        cameraBadge?.isUserInteractionEnabled = true
+        cameraBadge?.addGestureRecognizer(badgeTap)
+    }
+
+    func applyFloatingTabInset() {
+        guard let scrollView else { return }
+        let bottom = AppMetrics.floatingTabPillSize.height
+            + AppMetrics.floatingTabBottomInset(for: view)
+            + 12
+        if scrollView.contentInset.bottom != bottom {
+            scrollView.contentInset.bottom = bottom
+            scrollView.verticalScrollIndicatorInsets.bottom = bottom
         }
     }
 
-    /// Mirrors the brand bar on Explore so both tabs share one header treatment.
-    private func configureHeader() {
-        brandImageView?.image = UIImage(named: "ExploreBrandLogo") ?? UIImage(named: "dubai vibe logo") ?? UIImage(named: "LaunchLogo")
-        brandImageView?.contentMode = .scaleAspectFit
-        brandImageView?.layer.cornerRadius = 14
-        brandImageView?.layer.cornerCurve = .continuous
-        brandImageView?.clipsToBounds = true
-        brandImageView?.accessibilityLabel = L10n.brandName
-
-        taglineLabel?.attributedText = NSAttributedString(
-            string: L10n.tagline,
-            attributes: [
-                .font: AppTypography.font(.medium, size: 9.5),
-                .foregroundColor: AppPalette.tagline,
-                .kern: 1.9
-            ]
-        )
-
-        notificationButton?.setImage(UIImage(named: "ExploreBell"), for: .normal)
-        notificationButton?.tintColor = nil
-        notificationButton?.accessibilityLabel = L10n.notifications
-        notificationButton?.addTarget(self, action: #selector(handleNotifications), for: .touchUpInside)
-
-        bellDotView?.backgroundColor = AppPalette.badgeRed
-        bellDotView?.layer.cornerRadius = 4.5
-        bellDotView?.layer.borderWidth = 1.5
-        bellDotView?.layer.borderColor = AppPalette.background.cgColor
-        bellDotView?.isUserInteractionEnabled = false
+    static var languageValueText: String {
+        let language = LocalizationManager.shared.language
+        return "\(language.nativeName) (\(language.code.uppercased()))"
     }
+}
 
-    @objc private func handleNotifications() {
-        bellDotView?.isHidden = true
-        showAnimatedAlert(title: L10n.notifications, message: L10n.comingSoon, style: .info)
-    }
+// MARK: - User binding
 
-    private func configureFields() {
-        firstNameField?.placeholder = L10n.firstName
-        firstNameField?.textField.autocapitalizationType = .words
-        firstNameField?.textField.returnKeyType = .next
-        firstNameField?.textField.addTarget(self, action: #selector(firstReturn), for: .editingDidEndOnExit)
-        firstNameField?.textField.addTarget(self, action: #selector(fieldsChanged), for: .editingChanged)
-
-        lastNameField?.placeholder = L10n.lastName
-        lastNameField?.textField.autocapitalizationType = .words
-        lastNameField?.textField.returnKeyType = .done
-        lastNameField?.textField.addTarget(self, action: #selector(lastReturn), for: .editingDidEndOnExit)
-        lastNameField?.textField.addTarget(self, action: #selector(fieldsChanged), for: .editingChanged)
-    }
-
-    private func configureLanguageRow() {
-        guard let lastNameField, let saveButton, let content = lastNameField.superview else { return }
-
-        languageRow.refresh()
-        languageRow.addTarget(self, action: #selector(languageRowTapped), for: .touchUpInside)
-        content.addSubview(languageRow)
-
-        content.constraints
-            .filter { constraint in
-                constraint.firstItem === saveButton
-                    && constraint.firstAttribute == .top
-                    && constraint.secondItem === lastNameField
+private extension ProfileViewController {
+    func fetchCurrentUser(showLoader: Bool = false) {
+        viewModel.loadUser(showLoader: showLoader) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let user):
+                    self?.applyUser(user)
+                case .failure:
+                    if self?.viewModel.user == nil {
+                        self?.applyUser(self?.viewModel.cachedUser)
+                    }
+                }
             }
-            .forEach { $0.isActive = false }
-
-        NSLayoutConstraint.activate([
-            languageRow.leadingAnchor.constraint(equalTo: lastNameField.leadingAnchor),
-            languageRow.trailingAnchor.constraint(equalTo: lastNameField.trailingAnchor),
-            languageRow.topAnchor.constraint(equalTo: lastNameField.bottomAnchor, constant: 14),
-            saveButton.topAnchor.constraint(equalTo: languageRow.bottomAnchor, constant: 30)
-        ])
+        }
     }
 
-    @objc private func languageRowTapped() {
+    func applyUser(_ user: AuthUser?) {
+        let defaults = UserDefaults.standard
+        let localFirst = (defaults.string(forKey: Storage.firstNameKey) ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        let localLast = (defaults.string(forKey: Storage.lastNameKey) ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        let apiName = user?.resolvedFullName
+        let localName = [localFirst, localLast].filter { !$0.isEmpty }.joined(separator: " ")
+        let fullName = !(apiName ?? "").isEmpty ? (apiName ?? "") : (localName.isEmpty ? "Guest" : localName)
+        nameLabel?.text = fullName.split(separator: " ").first.map(String.init) ?? fullName
+
+        let phone = user?.resolvedPhoneDisplay
+        let email = user?.email
+            ?? defaults.string(forKey: "AppleSignInEmail")
+            ?? defaults.string(forKey: "GoogleSignInEmail")
+        contactLabel?.text = Self.contactLine(phone: phone, email: email)
+
+        if let notifications = user?.notificationsEnabled {
+            pushSwitch?.isOn = notifications
+            defaults.set(notifications, forKey: Storage.pushEnabledKey)
+        }
+
+        if let remote = user?.avatarURL, !remote.isEmpty {
+            avatarImageView?.setBusinessImage(urlString: remote)
+            avatarImageView?.contentMode = .scaleAspectFill
+            avatarImageView?.tintColor = nil
+        } else if let localAvatar = Self.loadAvatarFromDisk() {
+            applyPhotoAvatar(localAvatar)
+        } else {
+            applyPlaceholderAvatar()
+        }
+    }
+
+    static func contactLine(phone: String?, email: String?) -> String {
+        let parts = [phone, email]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+        return parts.isEmpty ? L10n.profileContactPlaceholder : parts.joined(separator: "  •  ")
+    }
+
+    func applyPhotoAvatar(_ image: UIImage) {
+        avatarImageView?.image = image
+        avatarImageView?.tintColor = nil
+        avatarImageView?.contentMode = .scaleAspectFill
+    }
+
+    func applyPlaceholderAvatar() {
+        avatarImageView?.sd_cancelCurrentImageLoad()
+        avatarImageView?.image = UIImage(named: "avatarIcon")
+        avatarImageView?.contentMode = .scaleAspectFill
+        avatarImageView?.tintColor = nil
+    }
+
+    static func loadAvatarFromDisk() -> UIImage? {
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(Storage.avatarFileName)
+        guard FileManager.default.fileExists(atPath: url.path),
+              let data = try? Data(contentsOf: url)
+        else { return nil }
+        return UIImage(data: data)
+    }
+
+    func saveAvatarToDisk(_ image: UIImage) {
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(Storage.avatarFileName)
+        guard let data = image.jpegData(compressionQuality: 0.85) else { return }
+        try? data.write(to: url, options: .atomic)
+    }
+
+    func removeAvatarFromDisk() {
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(Storage.avatarFileName)
+        try? FileManager.default.removeItem(at: url)
+    }
+}
+
+// MARK: - Actions
+
+extension ProfileViewController {
+    @objc private func avatarTapped() {
+        guard let avatarImageView else { return }
+        imagePicker?.present(
+            from: avatarImageView,
+            showsDeleteOption: viewModel.canDeleteAvatar
+        )
+    }
+
+    @IBAction private func pushSwitchChanged(_ sender: UISwitch) {
+        UserDefaults.standard.set(sender.isOn, forKey: Storage.pushEnabledKey)
+    }
+
+    @IBAction private func editProfileTapped() {
+        let defaults = UserDefaults.standard
+        let alert = UIAlertController(
+            title: L10n.profileEditTitle,
+            message: L10n.profileEditSubtitle,
+            preferredStyle: .alert
+        )
+        alert.addTextField {
+            $0.placeholder = L10n.firstName
+            $0.text = defaults.string(forKey: Storage.firstNameKey)
+                ?? self.viewModel.user?.resolvedFirstName
+            $0.autocapitalizationType = .words
+            $0.clearButtonMode = .whileEditing
+        }
+        alert.addTextField {
+            $0.placeholder = L10n.lastName
+            $0.text = defaults.string(forKey: Storage.lastNameKey)
+                ?? self.viewModel.user?.resolvedLastName
+            $0.autocapitalizationType = .words
+            $0.clearButtonMode = .whileEditing
+        }
+        alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.save, style: .default) { [weak self] _ in
+            self?.saveEditedName(
+                first: alert.textFields?[0].text ?? "",
+                last: alert.textFields?[1].text ?? ""
+            )
+        })
+        presentStyledAlert(alert)
+    }
+
+    @IBAction private func languageTapped() {
         let sheet = UIAlertController(title: L10n.language, message: nil, preferredStyle: .actionSheet)
         let current = LocalizationManager.shared.language
         for language in AppLanguage.allCases {
@@ -138,9 +252,65 @@ final class ProfileViewController: UIViewController {
         sheet.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
         if let popover = sheet.popoverPresentationController {
             popover.sourceView = languageRow
-            popover.sourceRect = languageRow.bounds
+            popover.sourceRect = languageRow?.bounds ?? .zero
         }
         presentStyledAlert(sheet)
+    }
+
+    @IBAction private func faqTapped() {
+        showAnimatedAlert(title: L10n.profileFAQTitle, message: L10n.comingSoon, style: .info)
+    }
+
+    @IBAction private func termsTapped() {
+        showAnimatedAlert(title: L10n.profileTermsTitle, message: L10n.termsSoon, style: .info)
+    }
+
+    @IBAction private func privacyTapped() {
+        showAnimatedAlert(title: L10n.privacyPolicy, message: L10n.privacySoon, style: .info)
+    }
+
+    @IBAction private func logOutTapped() {
+        let sheet = UIAlertController(
+            title: L10n.profileLogOut,
+            message: L10n.profileLogOutConfirm,
+            preferredStyle: .actionSheet
+        )
+        sheet.addAction(UIAlertAction(title: L10n.profileLogOut, style: .destructive) { [weak self] _ in
+            self?.performLogout()
+        })
+        sheet.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
+        if let popover = sheet.popoverPresentationController {
+            popover.sourceView = view
+            popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.maxY - 120, width: 1, height: 1)
+        }
+        presentStyledAlert(sheet)
+    }
+
+    @IBAction private func deleteAccountTapped() {
+        let alert = UIAlertController(
+            title: L10n.profileDeleteTitle,
+            message: L10n.profileDeleteConfirm,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: L10n.profileDeleteTitle, style: .destructive) { [weak self] _ in
+            self?.performDeleteAccount()
+        })
+        presentStyledAlert(alert)
+    }
+
+    private func saveEditedName(first: String, last: String) {
+        let firstName = first.trimmingCharacters(in: .whitespacesAndNewlines)
+        let lastName = last.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let error = validationMessage(forFirstName: firstName, lastName: lastName) {
+            showAnimatedAlert(title: L10n.error, message: error, style: .warning)
+            return
+        }
+        UserDefaults.standard.set(firstName, forKey: Storage.firstNameKey)
+        UserDefaults.standard.set(lastName, forKey: Storage.lastNameKey)
+        TokenManager.shared.saveSocialFullName("\(firstName) \(lastName)")
+        applyUser(viewModel.user)
+        showAnimatedAlert(title: L10n.saved, message: L10n.profileUpdated, style: .success)
     }
 
     private func changeLanguage(to language: AppLanguage) {
@@ -148,155 +318,43 @@ final class ProfileViewController: UIViewController {
         AppRouter.reloadInterface(selectingProfile: true)
     }
 
-    private func configureAvatar() {
-        avatarImageView?.backgroundColor = AppPalette.surface
-        avatarImageView?.tintColor = AppPalette.gold
-        // Keep gold tint while action sheet is presented (UIKit otherwise dims it).
-        avatarImageView?.tintAdjustmentMode = .normal
-        avatarImageView?.layer.borderWidth = 3
-        avatarImageView?.layer.borderColor = AppPalette.gold.cgColor
-
-        cameraBadge?.backgroundColor = AppPalette.gold
-        cameraBadge?.layer.cornerRadius = 16
-        cameraBadge?.clipsToBounds = true
-        cameraBadge?.tintAdjustmentMode = .normal
-
-        if let iconView = cameraBadge?.subviews.first as? UIImageView {
-            let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold)
-            iconView.image = UIImage(systemName: "camera.fill", withConfiguration: config)?
-                .withRenderingMode(.alwaysTemplate)
-            iconView.tintColor = AppPalette.onGold
-            iconView.tintAdjustmentMode = .normal
-        }
-
-        let tap = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
-        avatarImageView?.isUserInteractionEnabled = true
-        avatarImageView?.addGestureRecognizer(tap)
-
-        let badgeTap = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
-        cameraBadge?.isUserInteractionEnabled = true
-        cameraBadge?.addGestureRecognizer(badgeTap)
-
-        imagePicker = TDImagePicker(presentationController: self, delegate: self)
-    }
-
-    private func configureSaveButton() {
-        saveButton?.setTitle(L10n.save, for: .normal)
-        saveButton?.setTitleColor(AppPalette.onGold, for: .normal)
-        saveButton?.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        saveButton?.clipsToBounds = true
-        saveButton?.layer.cornerRadius = 14
-    }
-
-    private func loadSavedProfile() {
-        let defaults = UserDefaults.standard
-        let first = (defaults.string(forKey: Storage.firstNameKey) ?? "")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        let last = (defaults.string(forKey: Storage.lastNameKey) ?? "")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        firstNameField?.text = first
-        lastNameField?.text = last
-        baselineFirstName = first
-        baselineLastName = last
-        avatarChanged = false
-
-        if let image = loadAvatarFromDisk() {
-            pendingAvatarImage = image
-            applyPhotoAvatar(image)
-        } else {
-           //
+    private func performLogout() {
+        viewModel.logout { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.navigateToSignupOptions()
+            }
         }
     }
 
-    private func applyPhotoAvatar(_ image: UIImage) {
-        avatarImageView?.image = image
-        avatarImageView?.tintColor = nil
-        avatarImageView?.contentMode = .scaleAspectFill
-    }
-
-    @objc private func fieldsChanged() {
-        updateSaveButtonState()
-    }
-
-    private var hasUnsavedChanges: Bool {
-        let first = (firstNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let last = (lastNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        return first != baselineFirstName
-            || last != baselineLastName
-            || avatarChanged
-    }
-
-    private func updateSaveButtonState() {
-        let enabled = hasUnsavedChanges
-        saveButton?.isEnabled = enabled
-        saveButton?.alpha = enabled ? SaveStyle.enabledAlpha : SaveStyle.disabledAlpha
-    }
-
-    @objc private func firstReturn() {
-        lastNameField?.textField.becomeFirstResponder()
-    }
-
-    @objc private func lastReturn() {
-        lastNameField?.textField.resignFirstResponder()
-        guard hasUnsavedChanges else { return }
-        saveTapped(nil)
-    }
-
-    @objc private func avatarTapped() {
-        guard let avatarImageView else { return }
-        imagePicker?.present(from: avatarImageView)
-    }
-
-    @IBAction private func saveTapped(_ sender: Any?) {
-        guard hasUnsavedChanges else { return }
-        view.endEditing(true)
-
-        let first = (firstNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let last = (lastNameField?.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-
-        if let error = validationMessage(forFirstName: first, lastName: last) {
-            showNameValidationAlert(error, firstNameField: firstNameField, lastNameField: lastNameField)
-            return
+    private func performDeleteAccount() {
+        viewModel.deleteAccount { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.navigateToSignupOptions()
+                case .failure(let error):
+                    self?.showAnimatedAlert(
+                        title: L10n.error,
+                        message: error.localizedDescription,
+                        style: .warning
+                    )
+                }
+            }
         }
+    }
 
-        UserDefaults.standard.set(first, forKey: Storage.firstNameKey)
-        UserDefaults.standard.set(last, forKey: Storage.lastNameKey)
-
-        if let image = pendingAvatarImage, avatarChanged {
-            saveAvatarToDisk(image)
-        }
-
-        baselineFirstName = first
-        baselineLastName = last
-        avatarChanged = false
-        updateSaveButtonState()
-
-        showAnimatedAlert(
-            title: L10n.saved,
-            message: L10n.profileUpdated,
-            style: .success
-        )
+    /// Root → Authentication storyboard → `SignupOptionsVC`.
+    private func navigateToSignupOptions() {
+        AppRouter.setRootAuth(animated: true)
     }
 
     private func validationMessage(forFirstName first: String, lastName last: String) -> String? {
-        if first.isEmpty {
-            return L10n.enterFirstName
-        }
-        if first.count < 2 {
-            return L10n.firstNameTooShort
-        }
-        if !isValidPersonName(first) {
-            return L10n.invalidFirstName
-        }
-        if last.isEmpty {
-            return L10n.enterLastName
-        }
-        if last.count < 2 {
-            return L10n.lastNameTooShort
-        }
-        if !isValidPersonName(last) {
-            return L10n.invalidLastName
-        }
+        if first.isEmpty { return L10n.enterFirstName }
+        if first.count < 2 { return L10n.firstNameTooShort }
+        if !isValidPersonName(first) { return L10n.invalidFirstName }
+        if last.isEmpty { return L10n.enterLastName }
+        if last.count < 2 { return L10n.lastNameTooShort }
+        if !isValidPersonName(last) { return L10n.invalidLastName }
         return nil
     }
 
@@ -306,32 +364,61 @@ final class ProfileViewController: UIViewController {
             .union(CharacterSet(charactersIn: "'-"))
         return !name.isEmpty && name.unicodeScalars.allSatisfy { allowed.contains($0) }
     }
-
-    private var avatarFileURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent(Storage.avatarFileName)
-    }
-
-    private func saveAvatarToDisk(_ image: UIImage) {
-        guard let data = image.jpegData(compressionQuality: 0.85) else { return }
-        try? data.write(to: avatarFileURL, options: .atomic)
-    }
-
-    private func loadAvatarFromDisk() -> UIImage? {
-        let url = avatarFileURL
-        guard FileManager.default.fileExists(atPath: url.path),
-              let data = try? Data(contentsOf: url)
-        else { return nil }
-        return UIImage(data: data)
-    }
 }
 
 extension ProfileViewController: TDImagePickerDelegate {
     func didSelect(image: UIImage?) {
         guard let image else { return }
-        pendingAvatarImage = image
-        avatarChanged = true
         applyPhotoAvatar(image)
-        updateSaveButtonState()
+        saveAvatarToDisk(image)
+
+        viewModel.uploadAndUpdateAvatar(image) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let payload):
+                    if let remote = payload.upload.resolvedSourceURL {
+                        self?.avatarImageView?.setBusinessImage(urlString: remote)
+                        self?.avatarImageView?.contentMode = .scaleAspectFill
+                        self?.avatarImageView?.tintColor = nil
+                    }
+                    self?.applyUser(self?.viewModel.user)
+                    self?.showAnimatedAlert(
+                        title: L10n.saved,
+                        message: L10n.profileUpdated,
+                        style: .success
+                    )
+                case .failure(let error):
+                    self?.showAnimatedAlert(
+                        title: L10n.error,
+                        message: error.localizedDescription,
+                        style: .warning
+                    )
+                }
+            }
+        }
+    }
+
+    func didTapDeletePhoto() {
+        viewModel.deleteAvatar { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.removeAvatarFromDisk()
+                    self?.applyPlaceholderAvatar()
+                    self?.applyUser(self?.viewModel.user)
+                    self?.showAnimatedAlert(
+                        title: L10n.saved,
+                        message: L10n.photoDeleted,
+                        style: .success
+                    )
+                case .failure(let error):
+                    self?.showAnimatedAlert(
+                        title: L10n.error,
+                        message: error.localizedDescription,
+                        style: .warning
+                    )
+                }
+            }
+        }
     }
 }

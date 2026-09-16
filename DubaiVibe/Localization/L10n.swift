@@ -34,6 +34,28 @@ enum L10n {
     static var enterLastName: String { "profile.enterLastName".localized }
     static var lastNameTooShort: String { "profile.lastNameTooShort".localized }
     static var invalidLastName: String { "profile.invalidLastName".localized }
+    static var accountProfile: String { "profile.accountTitle".localized }
+    static var profileVIPMember: String { "profile.vipMember".localized }
+    static var profileAccountSection: String { "profile.accountSection".localized }
+    static var profileSupportSection: String { "profile.supportSection".localized }
+    static var profileEditTitle: String { "profile.editTitle".localized }
+    static var profileEditSubtitle: String { "profile.editSubtitle".localized }
+    static var profileLanguageSubtitle: String { "profile.languageSubtitle".localized }
+    static var profilePushTitle: String { "profile.pushTitle".localized }
+    static var profilePushSubtitle: String { "profile.pushSubtitle".localized }
+    static var profileFAQTitle: String { "profile.faqTitle".localized }
+    static var profileFAQSubtitle: String { "profile.faqSubtitle".localized }
+    static var profileTermsTitle: String { "profile.termsTitle".localized }
+    static var profileTermsSubtitle: String { "profile.termsSubtitle".localized }
+    static var profilePrivacySubtitle: String { "profile.privacySubtitle".localized }
+    static var profileLogOut: String { "profile.logOut".localized }
+    static var profileLogOutConfirm: String { "profile.logOutConfirm".localized }
+    static var profileDeleteTitle: String { "profile.deleteTitle".localized }
+    static var profileDeleteSubtitle: String { "profile.deleteSubtitle".localized }
+    static var profileDeleteConfirm: String { "profile.deleteConfirm".localized }
+    static var profileContactPlaceholder: String { "profile.contactPlaceholder".localized }
+    static var profileVersionPrefix: String { "profile.versionPrefix".localized }
+    static var profileDownloaders: String { "profile.downloaders".localized }
 
     static var categoryAll: String { "category.all".localized }
     static var categoryRestaurants: String { "category.restaurants".localized }
@@ -50,6 +72,13 @@ enum L10n {
     static var viewDeal: String { "deal.view".localized }
     static var unlockDeal: String { "deal.unlock".localized }
     static var exclusiveBadge: String { "deal.exclusiveBadge".localized }
+    static var exclusivePerk: String { "deal.exclusivePerk".localized }
+    static var enterCodeTitle: String { "deal.enterCodeTitle".localized }
+    static var enterCodeSubtitle: String { "deal.enterCodeSubtitle".localized }
+    static var venuePasscode: String { "deal.venuePasscode".localized }
+    static var enterVenueCodePlaceholder: String { "deal.enterVenueCodePlaceholder".localized }
+    static var enterVenueCodeHint: String { "deal.enterVenueCodeHint".localized }
+    static var enterCodeDone: String { "deal.done".localized }
     static var favorite: String { "deal.favorite".localized }
     static var bookmark: String { "deal.bookmark".localized }
 
@@ -145,6 +174,36 @@ enum L10n {
 
     static var takePhoto: String { "picker.takePhoto".localized }
     static var photoLibrary: String { "picker.photoLibrary".localized }
+    static var deletePhoto: String { "picker.deletePhoto".localized }
+    static var photoDeleted: String { "picker.photoDeleted".localized }
+
+    static var notificationsToday: String { "notifications.today".localized }
+    static var notificationsYesterday: String { "notifications.yesterday".localized }
+    static var notificationsNewCount: String { "notifications.newCount".localized }
+    static var notificationsOfferBadge: String { "notifications.offerBadge".localized }
+    static var notificationsZumaTitle: String { "notifications.zumaTitle".localized }
+    static var notificationsZumaBody: String { "notifications.zumaBody".localized }
+    static var notificationsZumaMeta: String { "notifications.zumaMeta".localized }
+    static var notificationsViewVoucher: String { "notifications.viewVoucher".localized }
+    static var notificationsCelaViTitle: String { "notifications.celaViTitle".localized }
+    static var notificationsCelaViBody: String { "notifications.celaViBody".localized }
+    static var notificationsCelaViMeta: String { "notifications.celaViMeta".localized }
+    static var notificationsReserveTable: String { "notifications.reserveTable".localized }
+    static var notificationsVipTitle: String { "notifications.vipTitle".localized }
+    static var notificationsVipBody: String { "notifications.vipBody".localized }
+    static var notificationsVipMeta: String { "notifications.vipMeta".localized }
+    static var notificationsStatusActive: String { "notifications.statusActive".localized }
+    static var notificationsNobuTitle: String { "notifications.nobuTitle".localized }
+    static var notificationsNobuBody: String { "notifications.nobuBody".localized }
+    static var notificationsNobuMeta: String { "notifications.nobuMeta".localized }
+    static var notificationsLoginTitle: String { "notifications.loginTitle".localized }
+    static var notificationsLoginBody: String { "notifications.loginBody".localized }
+    static var notificationsLoginMeta: String { "notifications.loginMeta".localized }
+    static var notificationsReview: String { "notifications.review".localized }
+    static var notificationsEmpty: String { "notifications.empty".localized }
+    static func notificationsNewCountFormat(_ count: Int) -> String {
+        LocalizationManager.shared.format("notifications.newCountFormat", count)
+    }
 
     static var sessionExpired: String { "session.expiredTitle".localized }
     static var sessionExpiredMessage: String { "session.expiredMessage".localized }
@@ -193,6 +252,25 @@ extension UIView {
             "Save": L10n.save,
             "Home": L10n.home,
             "Profile": L10n.profile,
+            "Account Profile": L10n.accountProfile,
+            "ONEVIBE VIP MEMBER": L10n.profileVIPMember,
+            "ACCOUNT & PREFERENCES": L10n.profileAccountSection,
+            "SUPPORT & LEGAL": L10n.profileSupportSection,
+            "Edit Profile": L10n.profileEditTitle,
+            "Update name, email & details": L10n.profileEditSubtitle,
+            "Language": L10n.language,
+            "App interface language": L10n.profileLanguageSubtitle,
+            "Push Notifications": L10n.profilePushTitle,
+            "Exclusive venue offers & alerts": L10n.profilePushSubtitle,
+            "FAQ & Concierge Support": L10n.profileFAQTitle,
+            "Get assistance 24/7 in Dubai": L10n.profileFAQSubtitle,
+            "Terms and Conditions": L10n.profileTermsTitle,
+            "Membership agreement": L10n.profileTermsSubtitle,
+            "Privacy Policy": L10n.privacyPolicy,
+            "Security & data governance": L10n.profilePrivacySubtitle,
+            "Log Out": L10n.profileLogOut,
+            "Delete Account": L10n.profileDeleteTitle,
+            "Permanently erase your OneVibe profile": L10n.profileDeleteSubtitle,
             "REAL PEOPLE": L10n.realPeople,
             "REAL EXPERIENCES": L10n.realExperiences,
             "Continue with Phone Number": L10n.continueWithPhone,
@@ -235,6 +313,14 @@ extension UIView {
             "Reviews": L10n.reviews,
             "Unlock Deal": L10n.unlockDeal,
             "View Deal": L10n.viewDeal,
+            "DUBAI VIBE EXCLUSIVE PERK": L10n.exclusivePerk,
+            "Enter Code": L10n.enterCodeTitle,
+            "Ask restaurant member to enter the code": L10n.enterCodeSubtitle,
+            "VENUE PASSCODE": L10n.venuePasscode,
+            "enter venue code": L10n.enterVenueCodePlaceholder,
+            "Enter the alphanumeric code provided by your server": L10n.enterVenueCodeHint,
+            "Done": L10n.done,
+            "Done ✓": L10n.enterCodeDone,
             "Almost there!": L10n.almostThere,
             "Verify your membership\nto unlock this exclusive offer.": L10n.membershipSubtitle,
             "Verified Member": L10n.verifiedMember,
@@ -249,7 +335,31 @@ extension UIView {
             "Valid For": L10n.validFor,
             "Usage": "membership.usage".localized,
             "One-time use only": L10n.oneTimeUse,
-            "This code can only be used once.": L10n.codeOnce
+            "This code can only be used once.": L10n.codeOnce,
+            "Notifications": L10n.notifications,
+            "TODAY": L10n.notificationsToday,
+            "YESTERDAY": L10n.notificationsYesterday,
+            "2 new": L10n.notificationsNewCount,
+            "  30% OFF  ": L10n.notificationsOfferBadge,
+            "Zuma Dubai": L10n.notificationsZumaTitle,
+            "Your exclusive OneVibe discount voucher is ready for dinner reservations tonight at DIFC.": L10n.notificationsZumaBody,
+            "12m ago • Dining Exclusive": L10n.notificationsZumaMeta,
+            "View Voucher": L10n.notificationsViewVoucher,
+            "Trending at CÉ LA VI": L10n.notificationsCelaViTitle,
+            "Sunset rooftop lounge tables are booking fast for tonight with panoramic Burj Khalifa views.": L10n.notificationsCelaViBody,
+            "1h ago • Downtown Dubai": L10n.notificationsCelaViMeta,
+            "Reserve Table →": L10n.notificationsReserveTable,
+            "VIP Tier Verified": L10n.notificationsVipTitle,
+            "Your membership status is active. Enjoy priority reservations and exclusive member rates.": L10n.notificationsVipBody,
+            "3h ago • Membership": L10n.notificationsVipMeta,
+            "Status: Active": L10n.notificationsStatusActive,
+            "New Partner: Nobu Dubai": L10n.notificationsNobuTitle,
+            "Discover Japanese-Peruvian cuisine and exclusive OneVibe offerings at our newest partner venue.": L10n.notificationsNobuBody,
+            "5h ago • Partners": L10n.notificationsNobuMeta,
+            "New Login Detected": L10n.notificationsLoginTitle,
+            "A new device signed in to your Dubai Vibe account. If this wasn’t you, review your security settings.": L10n.notificationsLoginBody,
+            "Yesterday • Security": L10n.notificationsLoginMeta,
+            "Review": L10n.notificationsReview
         ]
     }
 }
