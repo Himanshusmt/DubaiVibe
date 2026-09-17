@@ -39,6 +39,8 @@ enum APIEndpoint {
         radiusMeters: Double? = nil
     )
     case businessDetail(uuid: String, lat: Double? = nil, lng: Double? = nil)
+    case businessFavorite(uuid: String)
+    case businessSave(uuid: String)
     case unlockOffer(offerId: String)
     case listNotifications(cursor: String? = nil, limit: Int? = nil)
     case markNotificationRead(uuid: String)
@@ -100,6 +102,12 @@ enum APIEndpoint {
                 ("lat", lat.map { String(format: "%.6f", $0) }),
                 ("lng", lng.map { String(format: "%.6f", $0) })
             ])
+        case .businessFavorite(let uuid):
+            let encoded = uuid.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? uuid
+            return "businesses/\(encoded)/favorite"
+        case .businessSave(let uuid):
+            let encoded = uuid.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? uuid
+            return "businesses/\(encoded)/save"
         case .unlockOffer(let offerId):
             let encoded = offerId.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? offerId
             return "businesses/offers/\(encoded)/unlock"

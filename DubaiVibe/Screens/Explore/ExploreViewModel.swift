@@ -11,6 +11,10 @@ final class ExploreViewModel {
 
     private var feedCancellables = Set<AnyCancellable>()
     private var categoryCancellables = Set<AnyCancellable>()
+    private var favoriteCancellables = Set<AnyCancellable>()
+    private var saveCancellables = Set<AnyCancellable>()
+    private var favoriteInFlight = Set<String>()
+    private var saveInFlight = Set<String>()
     private var nextCursor: String?
     private var isPaging = false
     private var pagingFailed = false
@@ -23,14 +27,94 @@ final class ExploreViewModel {
         venues.first { $0.id == id }
     }
 
-    func toggleFavorite(id: UUID) {
+    /// Optimistic toggle: POST when favoriting, DELETE when unfavoriting. Rolls back on failure.
+    func toggleFavorite(
+        id: UUID,
+        completion: @escaping (Result<Void, APIError>) -> Void
+    ) {
         guard let index = venues.firstIndex(where: { $0.id == id }) else { return }
-        venues[index].isFavorite.toggle()
+        let businessID = venues[index].resolvedBusinessID
+        guard !businessID.isEmpty else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        guard !favoriteInFlight.contains(businessID) else { return }
+
+        let previous = venues[index].isFavorite
+        let next = !previous
+        venues[index].isFavorite = next
+        favoriteInFlight.insert(businessID)
+
+        BusinessAPI.setFavorite(uuid: businessID, isFavorite: next, showLoader: false)
+            .sink { [weak self] completionResult in
+                guard let self else { return }
+                self.favoriteInFlight.remove(businessID)
+                if case .failure(let error) = completionResult {
+                    if let idx = self.venues.firstIndex(where: { $0.id == id }) {
+                        self.venues[idx].isFavorite = previous
+                    }
+                    self.errorMessage = error.localizedDescription
+                    completion(.failure(error))
+                }
+            } receiveValue: { [weak self] (response: FavoriteToggleResponse) in
+                guard let self else { return }
+                guard response.isSuccessful else {
+                    if let idx = self.venues.firstIndex(where: { $0.id == id }) {
+                        self.venues[idx].isFavorite = previous
+                    }
+                    let error = APIError.serverError(response.message ?? "Unable to update favorite.")
+                    self.errorMessage = error.localizedDescription
+                    completion(.failure(error))
+                    return
+                }
+                completion(.success(()))
+            }
+            .store(in: &favoriteCancellables)
     }
 
-    func toggleBookmark(id: UUID) {
+    /// Optimistic toggle: POST when saving, DELETE when unsaving. Rolls back on failure.
+    func toggleBookmark(
+        id: UUID,
+        completion: @escaping (Result<Void, APIError>) -> Void
+    ) {
         guard let index = venues.firstIndex(where: { $0.id == id }) else { return }
-        venues[index].isBookmarked.toggle()
+        let businessID = venues[index].resolvedBusinessID
+        guard !businessID.isEmpty else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        guard !saveInFlight.contains(businessID) else { return }
+
+        let previous = venues[index].isBookmarked
+        let next = !previous
+        venues[index].isBookmarked = next
+        saveInFlight.insert(businessID)
+
+        BusinessAPI.setSaved(uuid: businessID, isSaved: next, showLoader: false)
+            .sink { [weak self] completionResult in
+                guard let self else { return }
+                self.saveInFlight.remove(businessID)
+                if case .failure(let error) = completionResult {
+                    if let idx = self.venues.firstIndex(where: { $0.id == id }) {
+                        self.venues[idx].isBookmarked = previous
+                    }
+                    self.errorMessage = error.localizedDescription
+                    completion(.failure(error))
+                }
+            } receiveValue: { [weak self] (response: FavoriteToggleResponse) in
+                guard let self else { return }
+                guard response.isSuccessful else {
+                    if let idx = self.venues.firstIndex(where: { $0.id == id }) {
+                        self.venues[idx].isBookmarked = previous
+                    }
+                    let error = APIError.serverError(response.message ?? "Unable to update saved place.")
+                    self.errorMessage = error.localizedDescription
+                    completion(.failure(error))
+                    return
+                }
+                completion(.success(()))
+            }
+            .store(in: &saveCancellables)
     }
 
     func loadCategories(
@@ -103,39 +187,42 @@ final class ExploreViewModel {
         isLoading = reset
         errorMessage = ""
 
-        let location = LocationManager.shared.lastKnownLocation?.coordinate
-        let hasLocation = location != nil
         let categoryId = selectedCategory.isAll ? nil : selectedCategory.id
+        let cursor = reset ? nil : nextCursor
+        let query = activeQuery.isEmpty ? nil : activeQuery
 
-        BusinessAPI.listBusinesses(
-            cursor: reset ? nil : nextCursor,
-            limit: pageSize,
-            query: activeQuery.isEmpty ? nil : activeQuery,
-            categoryId: categoryId,
-            latitude: hasLocation ? location?.latitude : nil,
-            longitude: hasLocation ? location?.longitude : nil,
-            showLoader: showLoader
-        )
-        .sink { [weak self] completionResult in
-            self?.isLoading = false
-            self?.isPaging = false
-            if case .failure(let error) = completionResult {
-                if !reset { self?.pagingFailed = true }
-                self?.errorMessage = error.localizedDescription
-                completion(.failure(error))
-            }
-        } receiveValue: { [weak self] (response: BusinessListResponse) in
+        LocationManager.shared.resolveCurrentCoordinate { [weak self] coordinate in
             guard let self else { return }
-            self.isLoading = false
-            self.isPaging = false
-            let incoming = response.items.compactMap { $0.asVenue() }
-            self.merge(incoming, reset: reset)
-            let cursor = response.nextCursor?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            self.nextCursor = cursor.isEmpty ? nil : cursor
-            self.pagingFailed = false
-            completion(.success(response))
+            BusinessAPI.listBusinesses(
+                cursor: cursor,
+                limit: self.pageSize,
+                query: query,
+                categoryId: categoryId,
+                latitude: coordinate?.latitude,
+                longitude: coordinate?.longitude,
+                showLoader: showLoader
+            )
+            .sink { [weak self] completionResult in
+                self?.isLoading = false
+                self?.isPaging = false
+                if case .failure(let error) = completionResult {
+                    if !reset { self?.pagingFailed = true }
+                    self?.errorMessage = error.localizedDescription
+                    completion(.failure(error))
+                }
+            } receiveValue: { [weak self] (response: BusinessListResponse) in
+                guard let self else { return }
+                self.isLoading = false
+                self.isPaging = false
+                let incoming = response.items.compactMap { $0.asVenue() }
+                self.merge(incoming, reset: reset)
+                let next = response.nextCursor?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                self.nextCursor = next.isEmpty ? nil : next
+                self.pagingFailed = false
+                completion(.success(response))
+            }
+            .store(in: &self.feedCancellables)
         }
-        .store(in: &feedCancellables)
     }
 
     private func applyCategories(_ items: [CategoryItem]) {

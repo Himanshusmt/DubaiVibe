@@ -29,7 +29,12 @@ final class NotificationsPermissionVC: UIViewController {
     }
 
     private func updateProfileAndFinishOnboarding() {
-        viewModel.updateProfile(notificationsEnabled: true) { [weak self] result in
+        let coordinate = LocationManager.shared.lastKnownLatLng
+        viewModel.updateProfile(
+            notificationsEnabled: true,
+            latitude: coordinate?.latitude,
+            longitude: coordinate?.longitude
+        ) { [weak self] result in
             guard let self else { return }
             self.enableButton?.isEnabled = true
             switch result {

@@ -20,9 +20,12 @@ final class WelcomeSuccessVC: UIViewController {
     }
 
     @IBAction private func startExploring(_ sender: Any) {
-        navigationController?.pushViewController(
-            UIStoryboard.authentication.instantiateViewController(withIdentifier: "NotificationsPermissionVC"),
-            animated: true
-        )
+        // Refresh GPS if permission was granted on Create Account; otherwise continue.
+        LocationManager.shared.resolveCurrentCoordinate(timeout: 3) { [weak self] _ in
+            self?.navigationController?.pushViewController(
+                UIStoryboard.authentication.instantiateViewController(withIdentifier: "NotificationsPermissionVC"),
+                animated: true
+            )
+        }
     }
 }

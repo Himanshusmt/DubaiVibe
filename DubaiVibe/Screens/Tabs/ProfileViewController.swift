@@ -5,7 +5,7 @@ import SDWebImage
 final class ProfileViewController: UIViewController {
     @IBOutlet private weak var brandImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var scrollView: ProfileScrollView!
     @IBOutlet private weak var avatarImageView: UIImageView!
     @IBOutlet private weak var cameraBadge: UIView!
     @IBOutlet private weak var nameLabel: UILabel!
@@ -65,9 +65,14 @@ private extension ProfileViewController {
         view.backgroundColor = AppPalette.background
         scrollView?.contentInsetAdjustmentBehavior = .never
         scrollView?.showsVerticalScrollIndicator = false
+        // Faster taps on controls; keep cancel enabled so dragging still scrolls.
+        scrollView?.delaysContentTouches = false
+        scrollView?.canCancelContentTouches = true
 
-        brandImageView?.applyBrandTileChrome()
-        brandImageView?.accessibilityLabel = L10n.brandName
+        brandImageView.layer.cornerRadius = 14
+        brandImageView.layer.cornerCurve = .continuous
+        brandImageView.clipsToBounds = true
+        brandImageView.accessibilityLabel = L10n.brandName
 
         nameLabel?.numberOfLines = 2
         nameLabel?.lineBreakMode = .byWordWrapping
@@ -76,8 +81,10 @@ private extension ProfileViewController {
 
         pushSwitch?.onTintColor = AppPalette.gold
         pushSwitch?.isOn = UserDefaults.standard.object(forKey: Storage.pushEnabledKey) as? Bool ?? true
+        pushSwitch?.isEnabled = true
         languageValueLabel?.text = Self.languageValueText
 
+        applyPlaceholderAvatar()
         imagePicker = TDImagePicker(presentationController: self, delegate: self)
     }
 
@@ -89,6 +96,26 @@ private extension ProfileViewController {
         let badgeTap = UITapGestureRecognizer(target: self, action: #selector(avatarTapped))
         cameraBadge?.isUserInteractionEnabled = true
         cameraBadge?.addGestureRecognizer(badgeTap)
+
+        configurePushNotificationToggle()
+    }
+
+    /// Drive the notifications switch from a full-row overlay button so taps always register
+    /// (avoids UISwitch + UIScrollView + UIControl hit-testing conflicts).
+    func configurePushNotificationToggle() {
+        guard let pushSwitch else { return }
+        let row = (pushSwitch.superview as? ProfileSettingRow)
+            ?? pushSwitch.superview?.superview as? ProfileSettingRow
+        row?.installFullRowTapTarget(
+            target: self,
+            action: #selector(pushNotificationRowTapped)
+        )
+    }
+
+    @objc func pushNotificationRowTapped() {
+        guard let pushSwitch else { return }
+        pushSwitch.setOn(!pushSwitch.isOn, animated: true)
+        pushSwitchChanged(pushSwitch)
     }
 
     func applyFloatingTabInset() {
@@ -153,13 +180,13 @@ private extension ProfileViewController {
         contactLabel?.text = phone
         contactLabel?.isHidden = (phone ?? "").isEmpty
 
-        if let notifications = user?.notificationsEnabled {
+        if let notifications = user?.notificationsEnabled, !viewModel.isUpdatingNotifications {
             pushSwitch?.isOn = notifications
             defaults.set(notifications, forKey: Storage.pushEnabledKey)
         }
 
         if let remote = user?.resolvedAvatarURL, !remote.isEmpty {
-            avatarImageView?.setBusinessImage(urlString: remote)
+            avatarImageView?.setBusinessImage(urlString: remote, placeholder: Self.avatarPlaceholder)
             avatarImageView?.contentMode = .scaleAspectFill
             avatarImageView?.tintColor = nil
         } else if let localAvatar = Self.loadAvatarFromDisk() {
@@ -170,16 +197,24 @@ private extension ProfileViewController {
     }
 
     func applyPhotoAvatar(_ image: UIImage) {
+        avatarImageView?.sd_cancelCurrentImageLoad()
         avatarImageView?.image = image
         avatarImageView?.tintColor = nil
         avatarImageView?.contentMode = .scaleAspectFill
     }
 
-    func applyPlaceholderAvatar() {
+    private func applyPlaceholderAvatar() {
         avatarImageView?.sd_cancelCurrentImageLoad()
-        avatarImageView?.image = UIImage(named: "avatarIcon")
+        if let remote = viewModel.user?.resolvedAvatarURL ?? viewModel.cachedUser?.resolvedAvatarURL {
+            SDImageCache.shared.removeImage(forKey: remote, fromDisk: true, withCompletion: nil)
+        }
+        avatarImageView?.image = Self.avatarPlaceholder
         avatarImageView?.contentMode = .scaleAspectFill
         avatarImageView?.tintColor = nil
+    }
+
+    static var avatarPlaceholder: UIImage? {
+        UIImage(named: "avatarIcon")
     }
 
     static func loadAvatarFromDisk() -> UIImage? {
@@ -217,7 +252,22 @@ extension ProfileViewController {
     }
 
     @IBAction private func pushSwitchChanged(_ sender: UISwitch) {
-        UserDefaults.standard.set(sender.isOn, forKey: Storage.pushEnabledKey)
+        let enabled = sender.isOn
+        guard !viewModel.isUpdatingNotifications else {
+            sender.setOn(!enabled, animated: false)
+            return
+        }
+        UserDefaults.standard.set(enabled, forKey: Storage.pushEnabledKey)
+
+        viewModel.updateNotificationsEnabled(enabled) { [weak self] result in
+            DispatchQueue.main.async {
+                if case .failure(let error) = result {
+                    sender.setOn(!enabled, animated: true)
+                    UserDefaults.standard.set(!enabled, forKey: Storage.pushEnabledKey)
+                    self?.showErrorPopup(error)
+                }
+            }
+        }
     }
 
     @IBAction private func editProfileTapped() {
@@ -332,7 +382,10 @@ extension ProfileViewController: TDImagePickerDelegate {
                 switch result {
                 case .success(let payload):
                     if let remote = payload.upload.resolvedSourceURL {
-                        self?.avatarImageView?.setBusinessImage(urlString: remote)
+                        self?.avatarImageView?.setBusinessImage(
+                            urlString: remote,
+                            placeholder: Self.avatarPlaceholder
+                        )
                         self?.avatarImageView?.contentMode = .scaleAspectFill
                         self?.avatarImageView?.tintColor = nil
                     }
@@ -360,7 +413,6 @@ extension ProfileViewController: TDImagePickerDelegate {
                 case .success:
                     self?.removeAvatarFromDisk()
                     self?.applyPlaceholderAvatar()
-                    self?.applyUser(self?.viewModel.user)
                     self?.showAnimatedAlert(
                         title: L10n.saved,
                         message: L10n.photoDeleted,

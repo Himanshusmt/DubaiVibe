@@ -85,8 +85,8 @@ final class ExploreViewController: UIViewController {
 
 private extension ExploreViewController {
     func configureHeader() {
-        brandImageView.image = UIImage(named: "ExploreBrandLogo") ?? UIImage(named: "dubai vibe logo") ?? UIImage(named: "LaunchLogo")
-        brandImageView.contentMode = .scaleAspectFit
+        brandImageView.image = UIImage(named: "LaunchLogo") ?? UIImage(named: "LaunchLogo")
+       // brandImageView.contentMode = .scaleAspectFit
         brandImageView.layer.cornerRadius = 14
         brandImageView.layer.cornerCurve = .continuous
         brandImageView.clipsToBounds = true
@@ -350,13 +350,25 @@ private extension ExploreViewController {
     }
 
     func toggleFavorite(id: UUID) {
-        viewModel.toggleFavorite(id: id)
+        viewModel.toggleFavorite(id: id) { [weak self] result in
+            guard let self else { return }
+            self.reloadVenue(id)
+            if case .failure(let error) = result {
+                self.showErrorPopup(error)
+            }
+        }
         reloadVenue(id)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 
     func toggleBookmark(id: UUID) {
-        viewModel.toggleBookmark(id: id)
+        viewModel.toggleBookmark(id: id) { [weak self] result in
+            guard let self else { return }
+            self.reloadVenue(id)
+            if case .failure(let error) = result {
+                self.showErrorPopup(error)
+            }
+        }
         reloadVenue(id)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }

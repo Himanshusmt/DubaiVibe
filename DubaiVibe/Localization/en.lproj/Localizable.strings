@@ -181,7 +181,7 @@
 /* Image picker */
 "picker.takePhoto" = "Take photo";
 "picker.photoLibrary" = "Photo library";
-"picker.deletePhoto" = "Delete photo";
+"picker.deletePhoto" = "Remove photo";
 "picker.photoDeleted" = "Profile photo deleted";
 
 /* Notifications */

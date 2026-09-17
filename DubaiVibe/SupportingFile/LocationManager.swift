@@ -8,6 +8,8 @@
 
 import UIKit
 import MapKit
+import CoreLocation
+import _LocationEssentials
 
 final class LocationManager: NSObject {
     
@@ -65,8 +67,22 @@ final class LocationManager: NSObject {
 
     private func requestAlwaysAuthorizationIfNeeded() {
         switch currentAuthorizationStatus() {
-        case .notDetermined, .authorizedWhenInUse:
+        case .notDetermined:
+            // Prefer When In Use for normal app flows (explore / profile).
+            locationManager?.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse:
             locationManager?.requestAlwaysAuthorization()
+        default:
+            break
+        }
+    }
+
+    private func requestWhenInUseAuthorizationIfNeeded() {
+        switch currentAuthorizationStatus() {
+        case .notDetermined:
+            locationManager?.requestWhenInUseAuthorization()
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationManager?.startUpdatingLocation()
         default:
             break
         }
@@ -225,7 +241,80 @@ final class LocationManager: NSObject {
         if locationManager == nil {
             setupLocationManager()
         }
-        requestAlwaysAuthorizationIfNeeded()
+
+        switch currentAuthorizationStatus() {
+        case .denied:
+            didComplete(location: nil, error: NSError(
+                domain: classForCoder.description(),
+                code: Int(CLAuthorizationStatus.denied.rawValue),
+                userInfo: [NSLocalizedDescriptionKey: LocationErrors.denied.rawValue]
+            ))
+            return
+        case .restricted:
+            didComplete(location: nil, error: NSError(
+                domain: classForCoder.description(),
+                code: Int(CLAuthorizationStatus.restricted.rawValue),
+                userInfo: [NSLocalizedDescriptionKey: LocationErrors.restricted.rawValue]
+            ))
+            return
+        default:
+            break
+        }
+
+        requestWhenInUseAuthorizationIfNeeded()
+        if hasLocationAccess() {
+            locationManager?.startUpdatingLocation()
+        }
+    }
+
+    /// Shows the system location permission prompt when needed, then returns the best known coordinate.
+    /// Used by signup / profile / explore so lat/lng can be sent to the API.
+    func resolveCurrentCoordinate(
+        maxCacheAge: TimeInterval = 120,
+        timeout: TimeInterval = 8,
+        completion: @escaping (CLLocationCoordinate2D?) -> Void
+    ) {
+        if let cached = lastKnownLocation,
+           cached.horizontalAccuracy >= 0,
+           -cached.timestamp.timeIntervalSinceNow <= maxCacheAge {
+            DispatchQueue.main.async { completion(cached.coordinate) }
+            return
+        }
+
+        var didFinish = false
+        let finish: (CLLocationCoordinate2D?) -> Void = { coordinate in
+            guard !didFinish else { return }
+            didFinish = true
+            DispatchQueue.main.async { completion(coordinate) }
+        }
+
+        getLocation { location, _ in
+            finish(location?.coordinate)
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + timeout) { [weak self] in
+            finish(self?.lastKnownLocation?.coordinate)
+        }
+    }
+
+    var lastKnownLatLng: (latitude: Double, longitude: Double)? {
+        guard let coordinate = lastKnownLocation?.coordinate else { return nil }
+        return (coordinate.latitude, coordinate.longitude)
+    }
+
+    /// Same as `resolveCurrentCoordinate`, but returns Doubles so callers don't need CoreLocation.
+    func resolveCurrentLatLng(
+        maxCacheAge: TimeInterval = 120,
+        timeout: TimeInterval = 8,
+        completion: @escaping (_ latitude: Double?, _ longitude: Double?) -> Void
+    ) {
+        resolveCurrentCoordinate(maxCacheAge: maxCacheAge, timeout: timeout) { coordinate in
+            guard let coordinate else {
+                completion(nil, nil)
+                return
+            }
+            completion(coordinate.latitude, coordinate.longitude)
+        }
     }
     
     
@@ -571,7 +660,7 @@ extension LocationManager: CLLocationManagerDelegate {
                }
                
            case .notDetermined:
-               self.locationManager?.requestAlwaysAuthorization()
+               self.locationManager?.requestWhenInUseAuthorization()
                
            @unknown default:
                    didComplete(location: nil,error: NSError(

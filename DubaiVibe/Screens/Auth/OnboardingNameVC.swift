@@ -77,18 +77,26 @@ final class OnboardingNameVC: UIViewController {
         TokenManager.shared.saveSocialFullName(fullName)
 
         isSubmitting = true
-        viewModel.updateProfileName(fullName) { [weak self] result in
+        // Request location at signup so the system permission prompt appears,
+        // then send lat/lng with the complete-profile PATCH.
+        LocationManager.shared.resolveCurrentLatLng { [weak self] latitude, longitude in
             guard let self else { return }
-            self.isSubmitting = false
-            switch result {
-            case .success(let response):
-//                self.showSuccessToast(response.message, fallback: "Profile updated")
-                self.navigationController?.pushViewController(
-                    UIStoryboard.authentication.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
-                    animated: true
-                )
-            case .failure(let error):
-                self.showErrorPopup(error)
+            self.viewModel.updateProfileName(
+                fullName,
+                latitude: latitude,
+                longitude: longitude
+            ) { [weak self] result in
+                guard let self else { return }
+                self.isSubmitting = false
+                switch result {
+                case .success:
+                    self.navigationController?.pushViewController(
+                        UIStoryboard.authentication.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
+                        animated: true
+                    )
+                case .failure(let error):
+                    self.showErrorPopup(error)
+                }
             }
         }
     }

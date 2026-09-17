@@ -1,11 +1,11 @@
+import SDWebImage
 import UIKit
 
 @objc(EditProfileViewController)
 final class EditProfileViewController: UIViewController {
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var brandImageView: UIImageView!
-    @IBOutlet weak var taglineLabel: UILabel!
-    @IBOutlet weak var notificationButton: UIButton!
-    @IBOutlet weak var bellDotView: UIView!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var cameraBadge: UIView!
     @IBOutlet weak var firstNameField: AuthDarkField!
@@ -18,6 +18,7 @@ final class EditProfileViewController: UIViewController {
     private var baselineFirstName = ""
     private var baselineLastName = ""
     private var avatarChanged = false
+    private var isShowingPlaceholder = true
     private var isSaving = false
 
     private enum Storage {
@@ -36,7 +37,6 @@ final class EditProfileViewController: UIViewController {
         view.backgroundColor = AppPalette.background
         authDismissKeyboardOnTap()
         configureHeader()
-        configureBackButton()
         configureFields()
         configureAvatar()
         configureSaveButton()
@@ -58,70 +58,31 @@ final class EditProfileViewController: UIViewController {
         }
     }
 
-    /// Mirrors the brand bar on Explore so both tabs share one header treatment.
+    /// Matches the Notifications inner-screen header: back, centered title, brand mark.
     private func configureHeader() {
-        brandImageView?.image = UIImage(named: "ExploreBrandLogo") ?? UIImage(named: "dubai vibe logo") ?? UIImage(named: "LaunchLogo")
+        backButton?.backgroundColor = AppPalette.surfaceRaised
+        backButton?.tintColor = .white
+        backButton?.layer.cornerRadius = 18
+        backButton?.clipsToBounds = true
+        backButton?.accessibilityLabel = L10n.back
+
+        brandImageView?.image = UIImage(named: "ExploreBrandLogo")
+            ?? UIImage(named: "dubai vibe logo")
+            ?? UIImage(named: "LaunchLogo")
         brandImageView?.contentMode = .scaleAspectFit
-        brandImageView?.layer.cornerRadius = 14
+        brandImageView?.layer.cornerRadius = 10
         brandImageView?.layer.cornerCurve = .continuous
         brandImageView?.clipsToBounds = true
+        brandImageView?.layer.borderWidth = 1
+        brandImageView?.layer.borderColor = AppPalette.gold.withAlphaComponent(0.7).cgColor
         brandImageView?.accessibilityLabel = L10n.brandName
 
-        taglineLabel?.attributedText = NSAttributedString(
-            string: L10n.tagline,
-            attributes: [
-                .font: AppTypography.font(.medium, size: 9.5),
-                .foregroundColor: AppPalette.tagline,
-                .kern: 1.9
-            ]
-        )
-
-        notificationButton?.setImage(UIImage(named: "ExploreBell"), for: .normal)
-        notificationButton?.tintColor = nil
-        notificationButton?.accessibilityLabel = L10n.notifications
-        notificationButton?.addTarget(self, action: #selector(handleNotifications), for: .touchUpInside)
-
-        bellDotView?.backgroundColor = AppPalette.badgeRed
-        bellDotView?.layer.cornerRadius = 4.5
-        bellDotView?.layer.borderWidth = 1.5
-        bellDotView?.layer.borderColor = AppPalette.background.cgColor
-        bellDotView?.isUserInteractionEnabled = false
+        titleLabel?.text = L10n.profileEditTitle
+        titleLabel?.textColor = AppPalette.primaryText
+        titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
     }
 
-    @objc private func handleNotifications() {
-        bellDotView?.isHidden = true
-        NotificationsViewController.open(from: self)
-    }
-    
-
-    private func configureBackButton() {
-        guard let brandImageView, let header = brandImageView.superview else { return }
-
-        let backButton = UIButton(type: .system)
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        backButton.tintColor = .white
-        backButton.backgroundColor = AppPalette.surfaceRaised
-        backButton.layer.cornerRadius = 18
-        backButton.clipsToBounds = true
-        backButton.accessibilityLabel = L10n.back
-        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
-        header.addSubview(backButton)
-
-        header.constraints
-            .filter { $0.firstItem === brandImageView && $0.firstAttribute == .leading }
-            .forEach { $0.isActive = false }
-
-        NSLayoutConstraint.activate([
-            backButton.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
-            backButton.centerYAnchor.constraint(equalTo: header.centerYAnchor),
-            backButton.widthAnchor.constraint(equalToConstant: 36),
-            backButton.heightAnchor.constraint(equalToConstant: 36),
-            brandImageView.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 10)
-        ])
-    }
-
-    @objc private func handleBack() {
+    @IBAction private func handleBack() {
         if let nav = navigationController, nav.viewControllers.first !== self {
             nav.popViewController(animated: true)
         } else {
@@ -188,6 +149,7 @@ final class EditProfileViewController: UIViewController {
         cameraBadge?.addGestureRecognizer(badgeTap)
 
         imagePicker = TDImagePicker(presentationController: self, delegate: self)
+        applyPlaceholderAvatar()
     }
 
     private func configureSaveButton() {
@@ -214,19 +176,40 @@ final class EditProfileViewController: UIViewController {
         avatarChanged = false
 
         if let remote = user?.resolvedAvatarURL, !remote.isEmpty {
-            avatarImageView?.setBusinessImage(urlString: remote)
+            isShowingPlaceholder = false
+            avatarImageView?.setBusinessImage(urlString: remote, placeholder: Self.avatarPlaceholder)
             avatarImageView?.contentMode = .scaleAspectFill
             avatarImageView?.tintColor = nil
-        } else if let image = loadAvatarFromDisk() {
-            pendingAvatarImage = image
-            applyPhotoAvatar(image)
+        } else {
+            applyPlaceholderAvatar()
         }
     }
 
     private func applyPhotoAvatar(_ image: UIImage) {
+        avatarImageView?.sd_cancelCurrentImageLoad()
         avatarImageView?.image = image
         avatarImageView?.tintColor = nil
         avatarImageView?.contentMode = .scaleAspectFill
+        isShowingPlaceholder = false
+    }
+
+    private func applyPlaceholderAvatar() {
+        avatarImageView?.sd_cancelCurrentImageLoad()
+        if let remote = viewModel.user?.resolvedAvatarURL ?? viewModel.cachedUser?.resolvedAvatarURL {
+            SDImageCache.shared.removeImage(forKey: remote, fromDisk: true, withCompletion: nil)
+        }
+        avatarImageView?.image = Self.avatarPlaceholder
+        avatarImageView?.contentMode = .scaleAspectFill
+        avatarImageView?.tintColor = nil
+        isShowingPlaceholder = true
+    }
+
+    private static var avatarPlaceholder: UIImage? {
+        UIImage(named: "avatarIcon")
+    }
+
+    private var showsRemovePhotoOption: Bool {
+        viewModel.canDeleteAvatar || !isShowingPlaceholder
     }
 
     @objc private func fieldsChanged() {
@@ -259,7 +242,10 @@ final class EditProfileViewController: UIViewController {
 
     @objc private func avatarTapped() {
         guard let avatarImageView else { return }
-        imagePicker?.present(from: avatarImageView)
+        imagePicker?.present(
+            from: avatarImageView,
+            showsDeleteOption: showsRemovePhotoOption
+        )
     }
 
     @IBAction private func saveTapped(_ sender: Any?) {
@@ -297,10 +283,14 @@ final class EditProfileViewController: UIViewController {
                 self.avatarChanged = false
                 self.updateSaveButtonState()
                 let apiMessage = (response.message ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+                let shouldReturnToProfile = imageToUpload != nil
                 self.showAnimatedAlert(
                     title: L10n.saved,
                     message: apiMessage.isEmpty ? L10n.profileUpdated : apiMessage,
-                    style: .success
+                    style: .success,
+                    onAction: shouldReturnToProfile ? { [weak self] in
+                        self?.navigateBackToProfile()
+                    } : nil
                 )
             case .failure(let error):
                 self.updateSaveButtonState()
@@ -311,6 +301,25 @@ final class EditProfileViewController: UIViewController {
                 )
             }
         }
+    }
+
+    private func navigateBackToProfile() {
+        if let nav = navigationController, nav.viewControllers.first !== self {
+            nav.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
+    }
+
+    private func showPhotoSuccessAndReturn(message: String) {
+        showAnimatedAlert(
+            title: L10n.saved,
+            message: message,
+            style: .success,
+            onAction: { [weak self] in
+                self?.navigateBackToProfile()
+            }
+        )
     }
 
     private func validationMessage(forFirstName first: String, lastName last: String) -> String? {
@@ -347,17 +356,8 @@ final class EditProfileViewController: UIViewController {
             .appendingPathComponent(Storage.avatarFileName)
     }
 
-    private func saveAvatarToDisk(_ image: UIImage) {
-        guard let data = image.jpegData(compressionQuality: 0.85) else { return }
-        try? data.write(to: avatarFileURL, options: .atomic)
-    }
-
-    private func loadAvatarFromDisk() -> UIImage? {
-        let url = avatarFileURL
-        guard FileManager.default.fileExists(atPath: url.path),
-              let data = try? Data(contentsOf: url)
-        else { return nil }
-        return UIImage(data: data)
+    private func removeAvatarFromDisk() {
+        try? FileManager.default.removeItem(at: avatarFileURL)
     }
 }
 
@@ -368,5 +368,59 @@ extension EditProfileViewController: TDImagePickerDelegate {
         avatarChanged = true
         applyPhotoAvatar(image)
         updateSaveButtonState()
+
+        // Same upload flow as Profile: POST /upload then PATCH /users/me.
+        viewModel.uploadAndUpdateAvatar(image) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success(let payload):
+                    LocalUserStore.persistAvatar(image)
+                    if let remote = payload.upload.resolvedSourceURL {
+                        self.avatarImageView?.setBusinessImage(
+                            urlString: remote,
+                            placeholder: Self.avatarPlaceholder
+                        )
+                        self.avatarImageView?.contentMode = .scaleAspectFill
+                        self.avatarImageView?.tintColor = nil
+                        self.isShowingPlaceholder = false
+                    }
+                    self.pendingAvatarImage = nil
+                    self.avatarChanged = false
+                    self.updateSaveButtonState()
+                    self.showPhotoSuccessAndReturn(message: L10n.profileUpdated)
+                case .failure(let error):
+                    self.showAnimatedAlert(
+                        title: L10n.error,
+                        message: error.localizedDescription,
+                        style: .warning
+                    )
+                }
+            }
+        }
+    }
+
+    func didTapDeletePhoto() {
+        // Same delete flow as Profile: DELETE /upload/{uuid} then clear avatar on /users/me.
+        viewModel.deleteAvatar { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success:
+                    self.pendingAvatarImage = nil
+                    self.avatarChanged = false
+                    self.removeAvatarFromDisk()
+                    self.applyPlaceholderAvatar()
+                    self.updateSaveButtonState()
+                    self.showPhotoSuccessAndReturn(message: L10n.photoDeleted)
+                case .failure(let error):
+                    self.showAnimatedAlert(
+                        title: L10n.error,
+                        message: error.localizedDescription,
+                        style: .warning
+                    )
+                }
+            }
+        }
     }
 }

@@ -127,7 +127,7 @@ final class VenueCardCell: UITableViewCell {
         crownBackgroundView?.layer.cornerCurve = .continuous
         crownBackgroundView?.layer.borderWidth = 1
         crownBackgroundView?.layer.borderColor = AppPalette.gold.withAlphaComponent(0.6).cgColor
-        crownImageView?.image = UIImage(named: "crown.fill")
+        crownImageView?.image = UIImage(systemName: "crown.fill")
         crownImageView?.tintColor = nil
         crownImageView?.contentMode = .scaleAspectFit
 
@@ -294,10 +294,10 @@ final class VenueCardCell: UITableViewCell {
 
     private func updateBookmark(_ isBookmarked: Bool) {
         if isBookmarked {
-            bookmarkButton?.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+            bookmarkButton?.setImage(UIImage(named: "ic_save.filled"), for: .normal)
             bookmarkButton?.tintColor = AppPalette.gold
         } else {
-            bookmarkButton?.setImage(UIImage(named: "ExploreBookmark"), for: .normal)
+            bookmarkButton?.setImage(UIImage(named: "ic_save.unfilled"), for: .normal)
             bookmarkButton?.tintColor = nil
         }
     }

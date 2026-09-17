@@ -58,6 +58,34 @@ enum BusinessAPI {
         )
     }
 
+    /// Toggle favorite: `POST` to favorite, `DELETE` to unfavorite.
+    static func setFavorite(
+        uuid: String,
+        isFavorite: Bool,
+        showLoader: Bool = false
+    ) -> AnyPublisher<FavoriteToggleResponse, APIError> {
+        NetworkManager.shared.request(
+            endpoint: .businessFavorite(uuid: uuid),
+            method: isFavorite ? .POST : .DELETE,
+            showLoader: showLoader,
+            showErrorAlert: false
+        )
+    }
+
+    /// Toggle save/bookmark: `POST` to save, `DELETE` to unsave.
+    static func setSaved(
+        uuid: String,
+        isSaved: Bool,
+        showLoader: Bool = false
+    ) -> AnyPublisher<FavoriteToggleResponse, APIError> {
+        NetworkManager.shared.request(
+            endpoint: .businessSave(uuid: uuid),
+            method: isSaved ? .POST : .DELETE,
+            showLoader: showLoader,
+            showErrorAlert: false
+        )
+    }
+
     private static func get<T: Decodable>(
         _ endpoint: APIEndpoint,
         showLoader: Bool

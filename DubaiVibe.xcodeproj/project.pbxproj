@@ -847,6 +847,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DubaiVibe/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Dubai Vibe needs camera access so you can take a profile photo.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Dubai Vibe uses your location to show nearby venues and personalize your experience.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Dubai Vibe needs photo library access so you can choose a profile photo.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -887,6 +888,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DubaiVibe/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Dubai Vibe needs camera access so you can take a profile photo.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Dubai Vibe uses your location to show nearby venues and personalize your experience.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Dubai Vibe needs photo library access so you can choose a profile photo.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

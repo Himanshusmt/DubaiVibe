@@ -787,6 +787,7 @@ struct BusinessItem: Decodable {
     let reviewCount: Int?
     let isVerified: Bool?
     let isFavorite: Bool?
+    let isSaved: Bool?
     let imageURL: String?
     let coverImage: String?
     let banner: String?
@@ -817,6 +818,7 @@ struct BusinessItem: Decodable {
         case reviewCount, reviewsCount, reviews_count, review_count, reviews
         case isVerified, is_verified, verified
         case isFavorite, is_favorite, favorite
+        case isSaved, is_saved, saved, isBookmarked, is_bookmarked, bookmarked
         case coverImage, cover_image, coverImageUrl, cover_image_url, cover, coverUrl, cover_url
         case image, imageUrl, image_url, thumbnail, photo, photoUrl, photo_url
         case banner, logo
@@ -899,6 +901,10 @@ struct BusinessItem: Decodable {
 
         isVerified = Self.firstFlexible(from: values, keys: [.isVerified, .is_verified, .verified])
         isFavorite = Self.firstFlexible(from: values, keys: [.isFavorite, .is_favorite, .favorite])
+        isSaved = Self.firstFlexible(
+            from: values,
+            keys: [.isSaved, .is_saved, .saved, .isBookmarked, .is_bookmarked, .bookmarked]
+        )
 
         let mediaFromMedia = (try? values.decode([BusinessMedia].self, forKey: .media)) ?? []
         let mediaFromImages = (try? values.decode([BusinessMedia].self, forKey: .images)) ?? []
@@ -1031,7 +1037,7 @@ struct BusinessItem: Decodable {
             reviewCount: reviewCount ?? 0,
             deal: Self.deal(from: coupons.first),
             isFavorite: isFavorite ?? false,
-            isBookmarked: false,
+            isBookmarked: isSaved ?? false,
             isVerified: isVerified ?? false,
             artworkStyle: mappedCategory.artworkStyle,
             imageURL: imageURL,
@@ -1365,6 +1371,25 @@ struct BusinessItem: Decodable {
             offerId: coupon.id?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         )
     }
+}
+
+// MARK: - Favorite Toggle (`POST|DELETE /businesses/{uuid}/favorite`)
+
+struct FavoriteToggleResponse: Decodable {
+    let success: Bool?
+    let message: String?
+
+    enum CodingKeys: String, CodingKey {
+        case success, message
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = values.decodeFlexibleIfPresent(forKey: .success)
+        message = values.decodeFlexibleIfPresent(forKey: .message)
+    }
+
+    var isSuccessful: Bool { success != false }
 }
 
 // MARK: - Unlock Offer (`POST /businesses/offers/{offerId}/unlock`)

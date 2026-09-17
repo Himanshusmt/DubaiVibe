@@ -241,7 +241,9 @@ final class AuthViewModel {
         avatarMediaId: String? = nil,
         avatarUploadUuid: String? = nil,
         clearAvatar: Bool = false,
-        includeNullFields: Bool = false,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        showLoader: Bool = true,
         completion: @escaping (Result<ProfileResponse, APIError>) -> Void
     ) {
         var parameters: [String: Any] = [:]
@@ -255,8 +257,11 @@ final class AuthViewModel {
             }
         }
         if clearAvatar {
-            parameters["avatarMediaId"] = ""
-            parameters["avatarUploadUuid"] = ""
+            // Explicit nulls so `/users/me` drops the avatar reference after DELETE /upload/{uuid}.
+            parameters["avatarMediaId"] = NSNull()
+            parameters["avatarUploadUuid"] = NSNull()
+            parameters["avatarURL"] = NSNull()
+            parameters["avatar"] = NSNull()
         } else {
             if let avatarMediaId {
                 let trimmed = avatarMediaId.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -271,23 +276,17 @@ final class AuthViewModel {
                 }
             }
         }
-        if includeNullFields {
-            parameters["gender"] = "male"
-            parameters["state"] = "Madhya pradesh"
-            parameters["city"] = "Indore"
-            parameters["latitude"] = 0.00
-            parameters["longitude"] = 0.00
-            if parameters["avatarMediaId"] == nil {
-                parameters["avatarMediaId"] = ""
-            }
-            if parameters["avatarUploadUuid"] == nil {
-                parameters["avatarUploadUuid"] = ""
-            }
+
+        if let resolvedCoordinate = Self.resolvedCoordinate(latitude: latitude, longitude: longitude) {
+            parameters["latitude"] = resolvedCoordinate.latitude
+            parameters["longitude"] = resolvedCoordinate.longitude
         }
+
         perform(
             endpoint: .updateProfile,
             method: .PATCH,
-            parameters: parameters
+            parameters: parameters,
+            showLoader: showLoader
         ) { (result: Result<ProfileResponse, APIError>) in
             if case .success(let response) = result, let flag = response.resolvedOnboardingFlag {
                 TokenManager.shared.isOnboardingCompleted = flag
@@ -296,15 +295,41 @@ final class AuthViewModel {
         }
     }
 
+    /// Onboarding name screen — `PATCH /users/me` with only `name`, `latitude`, and `longitude`.
     func updateProfileName( //new
         _ name: String,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
         completion: @escaping (Result<ProfileResponse, APIError>) -> Void
     ) {
-        updateProfile(
-            name: name,
-            includeNullFields: true,
-            completion: completion
-        )
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        var parameters: [String: Any] = ["name": trimmed]
+        if let coordinate = Self.resolvedCoordinate(latitude: latitude, longitude: longitude) {
+            parameters["latitude"] = coordinate.latitude
+            parameters["longitude"] = coordinate.longitude
+        }
+        perform(
+            endpoint: .updateProfile,
+            method: .PATCH,
+            parameters: parameters,
+            showLoader: true
+        ) { (result: Result<ProfileResponse, APIError>) in
+            if case .success(let response) = result, let flag = response.resolvedOnboardingFlag {
+                TokenManager.shared.isOnboardingCompleted = flag
+            }
+            completion(result)
+        }
+    }
+
+    /// Prefer explicit coords; otherwise use the last known GPS fix from LocationManager.
+    private static func resolvedCoordinate(
+        latitude: Double?,
+        longitude: Double?
+    ) -> (latitude: Double, longitude: Double)? {
+        if let latitude, let longitude {
+            return (latitude, longitude)
+        }
+        return LocationManager.shared.lastKnownLatLng
     }
 
     private func perform<T: Decodable>(

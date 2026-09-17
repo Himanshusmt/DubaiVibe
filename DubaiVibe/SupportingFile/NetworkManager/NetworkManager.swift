@@ -1278,7 +1278,16 @@ private extension NetworkManager {
         _ type: T.Type,
         from data: Data
     ) throws -> T {
-        
+        // DELETE /upload/{uuid} (and similar) may return 204 / empty body.
+        let trimmed = String(data: data, encoding: .utf8)?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if data.isEmpty || trimmed.isEmpty || trimmed == "{}" || trimmed == "null" {
+            if type == MediaDeleteResponse.self,
+               let empty = MediaDeleteResponse.emptySuccess as? T {
+                return empty
+            }
+        }
+
         do {
             
             return try JSONDecoder()

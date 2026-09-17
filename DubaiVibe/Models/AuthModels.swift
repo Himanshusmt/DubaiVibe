@@ -624,14 +624,24 @@ struct MediaDeleteResponse: Decodable {
         case success, message
     }
 
+    init(success: Bool?, message: String?) {
+        self.success = success
+        self.message = message
+    }
+
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         success = values.decodeFlexibleIfPresent(forKey: .success)
         message = values.decodeFlexibleIfPresent(forKey: .message)
     }
 
+    /// Treat missing/empty DELETE bodies and `success: true` as deleted.
     var isDeleted: Bool {
         success != false
+    }
+
+    static var emptySuccess: MediaDeleteResponse {
+        MediaDeleteResponse(success: true, message: nil)
     }
 }
 

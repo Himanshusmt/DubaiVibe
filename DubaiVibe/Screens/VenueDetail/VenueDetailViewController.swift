@@ -754,9 +754,22 @@ private extension VenueDetailViewController {
     }
 
     @IBAction func handleFavorite() {
-        isFavorite.toggle()
+        guard !viewModel.isFavoriteRequestInFlight else { return }
+
+        let previous = isFavorite
+        let next = !previous
+        isFavorite = next
         updateFavoriteIcon()
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
+
+        viewModel.setFavorite(businessID: businessID, isFavorite: next) { [weak self] result in
+            guard let self else { return }
+            if case .failure(let error) = result {
+                self.isFavorite = previous
+                self.updateFavoriteIcon()
+                self.showErrorPopup(error)
+            }
+        }
     }
 
     func updateFavoriteIcon() {

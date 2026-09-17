@@ -8,6 +8,7 @@ final class ProfileViewModel {
     @Published private(set) var user: AuthUser?
     @Published private(set) var isLoading = false
     @Published var errorMessage = ""
+    private(set) var isUpdatingNotifications = false
 
     private var cancellables = Set<AnyCancellable>()
     private let auth = AuthViewModel()
@@ -58,6 +59,33 @@ final class ProfileViewModel {
             completion?(.success(resolved))
         }
         .store(in: &cancellables)
+    }
+
+    /// `PATCH /users/me` with `{ "notificationsEnabled": true|false }`.
+    func updateNotificationsEnabled(
+        _ enabled: Bool,
+        completion: @escaping (Result<Void, APIError>) -> Void
+    ) {
+        guard !isUpdatingNotifications else { return }
+        isUpdatingNotifications = true
+
+        auth.updateProfile(
+            notificationsEnabled: enabled,
+            showLoader: false
+        ) { [weak self] result in
+            switch result {
+            case .success:
+                // Keep local flag until profile refresh finishes so UI isn't reset mid-toggle.
+                self?.loadUser(showLoader: false) { _ in
+                    self?.isUpdatingNotifications = false
+                    completion(.success(()))
+                }
+            case .failure(let error):
+                self?.isUpdatingNotifications = false
+                self?.errorMessage = error.localizedDescription
+                completion(.failure(error))
+            }
+        }
     }
 
     /// Edit Profile save:
@@ -183,7 +211,7 @@ final class ProfileViewModel {
         .store(in: &cancellables)
     }
 
-    /// `DELETE /upload/{uuid}` then clears avatar on `PATCH /users/me`.
+    /// `DELETE /api/mobile/v1/upload/{uuid}` then clears avatar on `PATCH /users/me`.
     func deleteAvatar(
         showLoader: Bool = true,
         completion: @escaping (Result<Void, APIError>) -> Void
@@ -191,12 +219,15 @@ final class ProfileViewModel {
         isLoading = true
         errorMessage = ""
 
-        let uuid = resolvedAvatarUploadUuid
-        guard let uuid, !uuid.isEmpty else {
-            clearAvatarOnProfile(showLoader: showLoader, completion: completion)
+        guard let uuid = resolvedAvatarUploadUuid, !uuid.isEmpty else {
+            let error = APIError.serverError("Missing upload uuid for delete.")
+            isLoading = false
+            errorMessage = error.localizedDescription
+            completion(.failure(error))
             return
         }
 
+        // Always call DELETE /upload/{uuid} first.
         NetworkManager.shared.request(
             endpoint: .deleteUpload(uuid: uuid),
             method: .DELETE,
@@ -218,6 +249,8 @@ final class ProfileViewModel {
                 completion(.failure(error))
                 return
             }
+            // Drop local image immediately so UI cannot reload the old file/URL.
+            self.clearLocalAvatarState()
             self.clearAvatarOnProfile(showLoader: false, completion: completion)
         }
         .store(in: &cancellables)
@@ -225,10 +258,9 @@ final class ProfileViewModel {
 
     /// Whether the profile currently has an uploaded avatar (remote or locally tracked).
     var canDeleteAvatar: Bool {
-        if let stored = storedAvatarUploadUuid, !stored.isEmpty { return true }
-        if user?.hasUploadedAvatar == true { return true }
-        if cachedUser?.hasUploadedAvatar == true { return true }
-        return false
+        resolvedAvatarUploadUuid != nil
+            || user?.hasUploadedAvatar == true
+            || cachedUser?.hasUploadedAvatar == true
     }
 
     private var storedAvatarUploadUuid: String? {
@@ -237,27 +269,69 @@ final class ProfileViewModel {
         return (value?.isEmpty == false) ? value : nil
     }
 
+    private var storedAvatarMediaId: String? {
+        let value = UserDefaults.standard.string(forKey: Self.avatarMediaIdKey)?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return (value?.isEmpty == false) ? value : nil
+    }
+
+    /// UUID used by `DELETE /upload/{uuid}` — stored ids, user payload, or extracted from avatar URL.
     private var resolvedAvatarUploadUuid: String? {
-        if let stored = storedAvatarUploadUuid { return stored }
-        if let fromUser = user?.resolvedAvatarUploadUuid { return fromUser }
-        return cachedUser?.resolvedAvatarUploadUuid
+        let candidates: [String?] = [
+            storedAvatarUploadUuid,
+            storedAvatarMediaId,
+            user?.avatarUploadUuid,
+            user?.avatarMediaId,
+            cachedUser?.avatarUploadUuid,
+            cachedUser?.avatarMediaId,
+            user?.resolvedAvatarUploadUuid,
+            cachedUser?.resolvedAvatarUploadUuid,
+            Self.mediaUUID(from: user?.avatarURL),
+            Self.mediaUUID(from: cachedUser?.avatarURL),
+            Self.mediaUUID(from: user?.resolvedAvatarURL),
+            Self.mediaUUID(from: cachedUser?.resolvedAvatarURL)
+        ]
+        return candidates
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty }
+    }
+
+    /// Pulls a media/upload UUID out of absolute or relative avatar URLs.
+    private static func mediaUUID(from rawURL: String?) -> String? {
+        let raw = rawURL?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !raw.isEmpty else { return nil }
+        if UUID(uuidString: raw) != nil { return raw }
+
+        let parts = raw
+            .split(separator: "/")
+            .map { $0.split(separator: "?").first.map(String.init) ?? String($0) }
+
+        for (index, part) in parts.enumerated() where part == "media" || part == "upload" {
+            guard index + 1 < parts.count else { continue }
+            let candidate = parts[index + 1]
+            if UUID(uuidString: candidate) != nil { return candidate }
+        }
+
+        return parts.reversed().first { UUID(uuidString: $0) != nil }
     }
 
     private func clearAvatarOnProfile(
         showLoader: Bool,
         completion: @escaping (Result<Void, APIError>) -> Void
     ) {
-        auth.updateProfile(clearAvatar: true) { [weak self] result in
+        auth.updateProfile(clearAvatar: true, showLoader: showLoader) { [weak self] result in
             guard let self else { return }
-            self.isLoading = false
             switch result {
             case .success:
                 self.clearLocalAvatarState()
-                self.loadUser(showLoader: showLoader)
-                completion(.success(()))
+                self.loadUser(showLoader: false) { _ in
+                    self.isLoading = false
+                    completion(.success(()))
+                }
             case .failure(let error):
                 // Upload already deleted — still clear local so the UI recovers.
                 self.clearLocalAvatarState()
+                self.isLoading = false
                 self.errorMessage = error.localizedDescription
                 completion(.failure(error))
             }
@@ -392,11 +466,26 @@ final class ProfileViewModel {
             user: resolved
         )
         syncLocalNameCache(from: resolved)
-        if let uploadUuid = resolved.avatarUploadUuid, !uploadUuid.isEmpty {
-            UserDefaults.standard.set(uploadUuid, forKey: Self.avatarUploadUuidKey)
-        }
-        if let mediaId = resolved.avatarMediaId, !mediaId.isEmpty {
-            UserDefaults.standard.set(mediaId, forKey: Self.avatarMediaIdKey)
+
+        let uploadUuid = resolved.avatarUploadUuid?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let mediaId = resolved.avatarMediaId?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let defaults = UserDefaults.standard
+
+        if resolved.hasUploadedAvatar {
+            if !uploadUuid.isEmpty {
+                defaults.set(uploadUuid, forKey: Self.avatarUploadUuidKey)
+            } else if let extracted = Self.mediaUUID(from: resolved.resolvedAvatarURL) {
+                defaults.set(extracted, forKey: Self.avatarUploadUuidKey)
+            }
+            if !mediaId.isEmpty {
+                defaults.set(mediaId, forKey: Self.avatarMediaIdKey)
+            }
+        } else {
+            defaults.removeObject(forKey: Self.avatarUploadUuidKey)
+            defaults.removeObject(forKey: Self.avatarMediaIdKey)
+            Self.removeLocalAvatarFile()
         }
     }
 
