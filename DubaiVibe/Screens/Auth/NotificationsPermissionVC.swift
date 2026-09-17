@@ -15,8 +15,8 @@ final class NotificationsPermissionVC: UIViewController {
         enableButton?.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         enableButton?.clipsToBounds = true
         enableButton?.layer.cornerRadius = 14
-        titleLabel?.text = L10n.welcomeTitle
-        subtitleLabel?.text = L10n.welcomeSubtitle
+        titleLabel?.text = L10n.notificationsTitle
+        subtitleLabel?.text = L10n.notificationSubtitle
         enableButton?.setTitle(L10n.enableNotifications, for: .normal)
         applyLocalizedStoryboardCopy()
     }

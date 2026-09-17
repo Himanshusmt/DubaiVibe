@@ -127,7 +127,7 @@ final class VenueCardCell: UITableViewCell {
         crownBackgroundView?.layer.cornerCurve = .continuous
         crownBackgroundView?.layer.borderWidth = 1
         crownBackgroundView?.layer.borderColor = AppPalette.gold.withAlphaComponent(0.6).cgColor
-        crownImageView?.image = UIImage(named: "ExploreCrown")
+        crownImageView?.image = UIImage(named: "crown.fill")
         crownImageView?.tintColor = nil
         crownImageView?.contentMode = .scaleAspectFit
 

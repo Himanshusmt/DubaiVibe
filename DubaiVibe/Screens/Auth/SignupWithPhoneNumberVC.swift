@@ -48,7 +48,7 @@ final class SignupWithPhoneNumberVC: UIViewController {
         applyLocalizedStoryboardCopy()
         phoneTextField?.attributedPlaceholder = NSAttributedString(
             string: "50 123 4567",
-            attributes: [.foregroundColor: AppPalette.secondaryText]
+            attributes: [.foregroundColor: AppPalette.placeHolderText]
         )
     }
 

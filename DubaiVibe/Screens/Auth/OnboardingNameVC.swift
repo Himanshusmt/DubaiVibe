@@ -82,7 +82,7 @@ final class OnboardingNameVC: UIViewController {
             self.isSubmitting = false
             switch result {
             case .success(let response):
-                self.showSuccessToast(response.message, fallback: "Profile updated")
+//                self.showSuccessToast(response.message, fallback: "Profile updated")
                 self.navigationController?.pushViewController(
                     UIStoryboard.authentication.instantiateViewController(withIdentifier: "WelcomeSuccessVC"),
                     animated: true

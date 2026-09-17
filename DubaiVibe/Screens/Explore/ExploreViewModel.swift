@@ -139,14 +139,21 @@ final class ExploreViewModel {
     }
 
     private func applyCategories(_ items: [CategoryItem]) {
+        // Preserve API array order when sortOrder ties (backend currently sends the same
+        // sortOrder for every category). Do not alphabetize — that mismatches icon/name order.
         let mapped = items
-            .compactMap { $0.asExploreCategory() }
-            .sorted { lhs, rhs in
-                if lhs.sortOrder == rhs.sortOrder {
-                    return lhs.title.localizedCaseInsensitiveCompare(rhs.title) == .orderedAscending
-                }
-                return lhs.sortOrder < rhs.sortOrder
+            .enumerated()
+            .compactMap { index, item -> (index: Int, category: ExploreCategory)? in
+                guard let category = item.asExploreCategory() else { return nil }
+                return (index, category)
             }
+            .sorted { lhs, rhs in
+                if lhs.category.sortOrder == rhs.category.sortOrder {
+                    return lhs.index < rhs.index
+                }
+                return lhs.category.sortOrder < rhs.category.sortOrder
+            }
+            .map(\.category)
 
         let hasAll = mapped.contains(where: \.isAll)
         categories = hasAll ? mapped : [.all] + mapped

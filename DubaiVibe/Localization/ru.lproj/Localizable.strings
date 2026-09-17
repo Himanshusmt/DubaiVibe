@@ -119,7 +119,8 @@
 "auth.nameTitle" = "Как вас зовут?";
 "auth.nameSubtitle" = "Это будет отображаться в вашем профиле.";
 "auth.createAccount" = "Создать аккаунт";
-"auth.welcomeTitle" = "Добро пожаловать в DubaiVibe!";
+"auth.welcomeTitle" = "Добро пожаловать в Dubai Vibe!";
+"auth.notifications" = "Turn on Notifications?";
 "auth.welcomeSubtitle" = "Ваш аккаунт готов.";
 "auth.connectPeople" = "Знакомьтесь с людьми";
 "auth.discoverPlaces" = "Открывайте места";

@@ -19,7 +19,7 @@ final class SignupOptionsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)
-        phoneButton?.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        phoneButton?.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         phoneButton?.setTitle(L10n.continueWithPhone, for: .normal)
         applyLocalizedStoryboardCopy()
         configureTermsLinks()

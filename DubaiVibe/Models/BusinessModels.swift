@@ -143,8 +143,9 @@ struct ExploreCategory: Hashable {
 
     var localIcon: UIImage? {
         guard !isAll else { return nil }
-        return VenueCategory.matching(apiName: name)?.icon
-            ?? VenueCategory.matching(apiName: slug)?.icon
+        // Prefer slug — API names like "Ladies Nights" can fuzzy-match the wrong category.
+        return VenueCategory.matching(apiName: slug)?.icon
+            ?? VenueCategory.matching(apiName: name)?.icon
     }
 
     static var all: ExploreCategory {
@@ -1526,37 +1527,50 @@ extension VenueCategory {
     static func matching(apiName: String?) -> VenueCategory? {
         let value = (apiName ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !value.isEmpty else { return nil }
-        if value == "all" { return .all }
+
+        // Exact slug / title matches first (matches GET /categories order & icons).
+        switch value {
+        case "all":
+            return .all
+        case "restaurants", "restaurant":
+            return .restaurants
+        case "bars-lounges", "bars", "bars & lounges", "bar", "lounges":
+            return .bars
+        case "nightlife", "night life", "nightclub", "night club":
+            return .nightlife
+        case "cafes", "cafés", "cafe", "café":
+            return .cafes
+        case "brunches", "brunch":
+            return .brunches
+        case "beach-clubs", "beach clubs", "beachclub", "beach club":
+            return .beachClubs
+        case "ladies-nights", "ladies nights", "ladies-night", "ladies night":
+            return .ladiesNights
+        case "gyms-fitness", "gyms & fitness", "gyms", "fitness", "gym":
+            return .gymsFitness
+        case "padel-tennis", "padel & tennis", "padel", "tennis":
+            return .padelTennis
+        case "beauty-salons", "beauty & salons", "beauty", "salons", "salon":
+            return .beautySalons
+        default:
+            break
+        }
+
+        // Fuzzy fallback — order matters (ladies before night, beach before club).
+        if value.contains("ladies") { return .ladiesNights }
+        if value.contains("beach") { return .beachClubs }
         if value.contains("restaurant") || value.contains("food") || value.contains("dining") {
             return .restaurants
         }
-        if value.contains("bar") || value.contains("lounge") {
-            return .bars
-        }
+        if value.contains("bar") || value.contains("lounge") { return .bars }
         if value.contains("cafe") || value.contains("café") || value.contains("coffee") {
             return .cafes
         }
-        if value.contains("brunch") {
-            return .brunches
-        }
-        if value.contains("beach") {
-            return .beachClubs
-        }
-        if value.contains("night") || value.contains("club") {
-            return .nightlife
-        }
-        if value.contains("ladies") {
-            return .ladiesNights
-        }
-        if value.contains("gym") || value.contains("fitness") {
-            return .gymsFitness
-        }
-        if value.contains("padel") || value.contains("tennis") {
-            return .padelTennis
-        }
-        if value.contains("beauty") || value.contains("salon") {
-            return .beautySalons
-        }
+        if value.contains("brunch") { return .brunches }
+        if value.contains("night") || value.contains("club") { return .nightlife }
+        if value.contains("gym") || value.contains("fitness") { return .gymsFitness }
+        if value.contains("padel") || value.contains("tennis") { return .padelTennis }
+        if value.contains("beauty") || value.contains("salon") { return .beautySalons }
         return nil
     }
 

@@ -117,7 +117,9 @@ enum L10n {
     static var nameSubtitle: String { "auth.nameSubtitle".localized }
     static var createAccount: String { "auth.createAccount".localized }
     static var welcomeTitle: String { "auth.welcomeTitle".localized }
+    static var notificationsTitle: String {"auth.notifications".localized }
     static var welcomeSubtitle: String { "auth.welcomeSubtitle".localized }
+    static var notificationSubtitle: String { "auth.notificationSubtitle".localized }
     static var connectWithPeople: String { "auth.connectPeople".localized }
     static var discoverPlaces: String { "auth.discoverPlaces".localized }
     static var getExclusiveDeal: String { "auth.getExclusiveDeal".localized }

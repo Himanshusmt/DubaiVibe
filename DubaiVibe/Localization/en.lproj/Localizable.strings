@@ -118,8 +118,10 @@
 "auth.nameTitle" = "What's your full name?";
 "auth.nameSubtitle" = "This will be shown on your profile.";
 "auth.createAccount" = "Create Account";
-"auth.welcomeTitle" = "Welcome to DubaiVibe!";
+"auth.welcomeTitle" = "Welcome to Dubai Vibe!";
+"auth.notifications" = "Turn on Notifications?";
 "auth.welcomeSubtitle" = "Your account is ready.";
+"auth.notificationSubtitle" = "Get updates, messages and exclusive deals from Dubai Vibe.";
 "auth.connectPeople" = "Connect with people";
 "auth.discoverPlaces" = "Discover amazing places";
 "auth.getExclusiveDeal" = "Get exclusive deal";

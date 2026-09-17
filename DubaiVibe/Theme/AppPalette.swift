@@ -13,6 +13,7 @@ enum AppPalette {
     static let surfaceRaised = UIColor(hex: 0x1B1B1F)
     static let primaryText = UIColor(hex: 0xFFFFFF)
     static let secondaryText = UIColor(hex: 0xA3A3A3)
+    static let placeHolderText = UIColor(hex: 0x52525B)
     static let separator = UIColor(hex: 0x2A2A2E)
 
     static let tagline = UIColor(hex: 0xA3A3A3)

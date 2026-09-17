@@ -7,6 +7,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Inter-Bold.ttf">
+            <string>Inter-Bold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="UMJ-7u-bZa">
@@ -34,7 +39,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AuthSkyline" translatesAutoresizingMaskIntoConstraints="NO" id="wel-hero" customClass="HeroImageView" customModule="DubaiVibe" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="602"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="577"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wel-scroll">
                                 <rect key="frame" x="0.0" y="118" width="393" height="666"/>
@@ -42,15 +47,15 @@
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wel-content">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="666"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="wel-logo">
-                                                <rect key="frame" x="121.66666666666669" y="28" width="150" height="150"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="wel-logo">
+                                                <rect key="frame" x="116.66666666666669" y="25" width="160" height="140"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="150" id="wel-logo-h"/>
-                                                    <constraint firstAttribute="width" constant="150" id="wel-logo-w"/>
+                                                    <constraint firstAttribute="height" constant="140" id="wel-logo-h"/>
+                                                    <constraint firstAttribute="width" constant="160" id="wel-logo-w"/>
                                                 </constraints>
                                             </imageView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="wel-tag-stack">
-                                                <rect key="frame" x="24" y="192" width="345" height="35.333333333333343"/>
+                                                <rect key="frame" x="24" y="179" width="345" height="35.333333333333343"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REAL PEOPLE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wel-tag-people">
                                                         <rect key="frame" x="130.33333333333334" y="0.0" width="84.666666666666657" height="15.666666666666666"/>
@@ -61,7 +66,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REAL EXPERIENCES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wel-tag-exp">
                                                         <rect key="frame" x="111.33333333333334" y="19.666666666666686" width="122.33333333333334" height="15.666666666666664"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -74,7 +79,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="54" id="wel-phone-h"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                         <color key="tintColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <inset key="imageEdgeInsets" minX="40" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <state key="normal" title="Continue with Phone Number" image="chevron.right" catalog="system">
@@ -90,7 +95,7 @@
                                                         </connections>
                                                     </button>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c8G-EW-ag3">
-                                                        <rect key="frame" x="0.0" y="68.000000000000057" width="345" height="16"/>
+                                                        <rect key="frame" x="0.0" y="68" width="345" height="16"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wel-or-left">
                                                                 <rect key="frame" x="35" y="7.6666666666666288" width="114" height="1"/>
@@ -100,7 +105,7 @@
                                                                 </constraints>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="or" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wel-or-lbl">
-                                                                <rect key="frame" x="166" y="0.33333333333325665" width="13" height="15.666666666666664"/>
+                                                                <rect key="frame" x="166" y="0.33333333333337034" width="13" height="15.666666666666664"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
                                                                 <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -127,11 +132,11 @@
                                                         </constraints>
                                                     </view>
                                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wel-apple">
-                                                        <rect key="frame" x="0.0" y="98.000000000000057" width="345" height="54"/>
+                                                        <rect key="frame" x="0.0" y="98" width="345" height="54"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="54" id="wel-apple-h"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <inset key="titleEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
@@ -154,11 +159,11 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wel-google">
-                                                        <rect key="frame" x="0.0" y="166.00000000000006" width="345" height="54"/>
+                                                        <rect key="frame" x="0.0" y="166" width="345" height="54"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="54" id="wel-google-h"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                         <inset key="titleEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
                                                         <state key="normal" title="Continue with Google" image="GoogleG">
@@ -204,7 +209,7 @@ Terms of Service and Privacy Policy.</string>
                                             <constraint firstItem="wel-cta-stack" firstAttribute="leading" secondItem="wel-content" secondAttribute="leading" constant="24" id="wel-cta-l"/>
                                             <constraint firstAttribute="trailing" secondItem="wel-cta-stack" secondAttribute="trailing" constant="24" id="wel-cta-r"/>
                                             <constraint firstItem="wel-logo" firstAttribute="centerX" secondItem="wel-content" secondAttribute="centerX" id="wel-logo-cx"/>
-                                            <constraint firstItem="wel-logo" firstAttribute="top" secondItem="wel-content" secondAttribute="top" constant="28" id="wel-logo-t"/>
+                                            <constraint firstItem="wel-logo" firstAttribute="top" secondItem="wel-content" secondAttribute="top" constant="25" id="wel-logo-t"/>
                                             <constraint firstItem="wel-tag-stack" firstAttribute="leading" secondItem="wel-content" secondAttribute="leading" constant="24" id="wel-tag-l"/>
                                             <constraint firstAttribute="trailing" secondItem="wel-tag-stack" secondAttribute="trailing" constant="24" id="wel-tag-r"/>
                                             <constraint firstItem="wel-tag-stack" firstAttribute="top" secondItem="wel-logo" secondAttribute="bottom" constant="14" id="wel-tag-t"/>
@@ -224,7 +229,7 @@ Terms of Service and Privacy Policy.</string>
                         <viewLayoutGuide key="safeArea" id="Sdy-Dc-bIq"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="wel-hero" secondAttribute="bottom" constant="250" id="wel-hero-b"/>
+                            <constraint firstAttribute="bottom" secondItem="wel-hero" secondAttribute="bottom" constant="275" id="wel-hero-b"/>
                             <constraint firstItem="wel-hero" firstAttribute="leading" secondItem="4ff-3B-S0d" secondAttribute="leading" id="wel-hero-l"/>
                             <constraint firstAttribute="trailing" secondItem="wel-hero" secondAttribute="trailing" id="wel-hero-r"/>
                             <constraint firstItem="wel-hero" firstAttribute="top" secondItem="4ff-3B-S0d" secondAttribute="top" id="wel-hero-t"/>
@@ -255,146 +260,148 @@ Terms of Service and Privacy Policy.</string>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="bg-img">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" bounces="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="phone-scroll">
-                                <rect key="frame" x="0.0" y="118" width="393" height="700"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="phone-scroll">
+                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="phone-content">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="700"/>
                                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="logo-box">
-                                <rect key="frame" x="121.66666666666669" y="146" width="150" height="150"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="logo-img">
-                                        <rect key="frame" x="7.9999999999999858" y="8" width="134" height="134"/>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.039215686274509803" green="0.039215686274509803" blue="0.039215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="logo-img" secondAttribute="bottom" constant="8" id="logo-b"/>
-                                    <constraint firstAttribute="height" constant="150" id="logo-h"/>
-                                    <constraint firstItem="logo-img" firstAttribute="leading" secondItem="logo-box" secondAttribute="leading" constant="8" id="logo-l"/>
-                                    <constraint firstAttribute="trailing" secondItem="logo-img" secondAttribute="trailing" constant="8" id="logo-r"/>
-                                    <constraint firstItem="logo-img" firstAttribute="top" secondItem="logo-box" secondAttribute="top" constant="8" id="logo-t"/>
-                                    <constraint firstAttribute="width" constant="150" id="logo-w"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <real key="value" value="12"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                        <real key="value" value="1.5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's your phone number?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="title-lbl">
-                                <rect key="frame" x="20" y="316" width="353" height="28.666666666666686"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We'll send you a verification code to get you started." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sub-lbl">
-                                <rect key="frame" x="32" y="356.66666666666669" width="329" height="38.333333333333314"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="phone-box">
-                                <rect key="frame" x="24" y="427" width="345" height="56"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flag" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="flag-img">
-                                        <rect key="frame" x="14" y="21" width="22" height="14"/>
-                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="16" id="flag-h"/>
-                                            <constraint firstAttribute="width" constant="22" id="flag-w"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+971" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="code-lbl">
-                                        <rect key="frame" x="44" y="18.333333333333314" width="36.333333333333343" height="19.333333333333329"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="divider">
-                                        <rect key="frame" x="92.333333333333329" y="14" width="1" height="28"/>
-                                        <color key="backgroundColor" red="0.16470588235294117" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="28" id="div-h"/>
-                                            <constraint firstAttribute="width" constant="1" id="div-w"/>
-                                        </constraints>
-                                    </view>
-                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="50 123 4567" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="phone-tf">
-                                        <rect key="frame" x="105.33333333333336" y="0.0" width="223.66666666666663" height="56"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
-                                    </textField>
-                                </subviews>
-                                <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="code-lbl" firstAttribute="centerY" secondItem="phone-box" secondAttribute="centerY" id="code-cy"/>
-                                    <constraint firstItem="code-lbl" firstAttribute="leading" secondItem="flag-img" secondAttribute="trailing" constant="8" id="code-l"/>
-                                    <constraint firstItem="divider" firstAttribute="centerY" secondItem="phone-box" secondAttribute="centerY" id="div-cy"/>
-                                    <constraint firstItem="divider" firstAttribute="leading" secondItem="code-lbl" secondAttribute="trailing" constant="12" id="div-l"/>
-                                    <constraint firstItem="flag-img" firstAttribute="centerY" secondItem="phone-box" secondAttribute="centerY" id="flag-cy"/>
-                                    <constraint firstItem="flag-img" firstAttribute="leading" secondItem="phone-box" secondAttribute="leading" constant="14" id="flag-l"/>
-                                    <constraint firstAttribute="height" constant="56" id="phone-h"/>
-                                    <constraint firstItem="phone-tf" firstAttribute="bottom" secondItem="phone-box" secondAttribute="bottom" id="tf-b"/>
-                                    <constraint firstItem="phone-tf" firstAttribute="leading" secondItem="divider" secondAttribute="trailing" constant="12" id="tf-l"/>
-                                    <constraint firstAttribute="trailing" secondItem="phone-tf" secondAttribute="trailing" constant="16" id="tf-r"/>
-                                    <constraint firstItem="phone-tf" firstAttribute="top" secondItem="phone-box" secondAttribute="top" id="tf-t"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <real key="value" value="14"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                        <real key="value" value="1"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="send-btn" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
-                                <rect key="frame" x="24" y="507" width="345" height="54"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="54" id="send-h"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Send OTP">
-                                    <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="sendOTPTapped:" destination="phone-otp-vc" eventType="touchUpInside" id="send-act"/>
-                                </connections>
-                            </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="secure-stack">
-                                <rect key="frame" x="40" y="734.33333333333337" width="313" height="33.666666666666629"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="lock-img">
-                                        <rect key="frame" x="0.0" y="8" width="20" height="18"/>
-                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="lock-h"/>
-                                            <constraint firstAttribute="width" constant="20" id="lock-w"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your number is secure and will never be shared with anyone." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="secure-lbl">
-                                        <rect key="frame" x="28" y="0.0" width="285" height="33.666666666666664"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="logo-box">
+                                                <rect key="frame" x="116.66666666666669" y="28" width="160" height="140"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="logo-img">
+                                                        <rect key="frame" x="0.0" y="0.0" width="160" height="140"/>
+                                                    </imageView>
+                                                </subviews>
+                                                <color key="backgroundColor" red="0.039215686274509803" green="0.039215686274509803" blue="0.039215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="logo-img" secondAttribute="bottom" id="Jpa-yE-VYp"/>
+                                                    <constraint firstItem="logo-img" firstAttribute="leading" secondItem="logo-box" secondAttribute="leading" id="Xxl-8k-d4v"/>
+                                                    <constraint firstItem="logo-img" firstAttribute="top" secondItem="logo-box" secondAttribute="top" id="YTQ-EX-MrS"/>
+                                                    <constraint firstAttribute="trailing" secondItem="logo-img" secondAttribute="trailing" id="g88-ph-juo"/>
+                                                    <constraint firstAttribute="height" constant="140" id="logo-h"/>
+                                                    <constraint firstAttribute="width" constant="160" id="logo-w"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <real key="value" value="12"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <real key="value" value="1.5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's your phone number?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="title-lbl">
+                                                <rect key="frame" x="20" y="190" width="353" height="26.666666666666657"/>
+                                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="22"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sub-lbl">
+                                                <rect key="frame" x="32" y="226.66666666666669" width="329" height="38.333333333333314"/>
+                                                <string key="text">We'll send you a verification code 
+to get you started.</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="phone-box">
+                                                <rect key="frame" x="24" y="297" width="345" height="56"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flag" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="flag-img">
+                                                        <rect key="frame" x="14" y="21" width="22" height="14"/>
+                                                        <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="16" id="flag-h"/>
+                                                            <constraint firstAttribute="width" constant="22" id="flag-w"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+971" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="code-lbl">
+                                                        <rect key="frame" x="44" y="18.333333333333314" width="36.333333333333343" height="19.333333333333329"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="divider">
+                                                        <rect key="frame" x="92.333333333333329" y="14" width="1" height="28"/>
+                                                        <color key="backgroundColor" red="0.16470588235294117" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="28" id="div-h"/>
+                                                            <constraint firstAttribute="width" constant="1" id="div-w"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="50 123 4567" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="phone-tf">
+                                                        <rect key="frame" x="105.33333333333336" y="0.0" width="223.66666666666663" height="56"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                        <textInputTraits key="textInputTraits" keyboardType="phonePad"/>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstItem="code-lbl" firstAttribute="centerY" secondItem="phone-box" secondAttribute="centerY" id="code-cy"/>
+                                                    <constraint firstItem="code-lbl" firstAttribute="leading" secondItem="flag-img" secondAttribute="trailing" constant="8" id="code-l"/>
+                                                    <constraint firstItem="divider" firstAttribute="centerY" secondItem="phone-box" secondAttribute="centerY" id="div-cy"/>
+                                                    <constraint firstItem="divider" firstAttribute="leading" secondItem="code-lbl" secondAttribute="trailing" constant="12" id="div-l"/>
+                                                    <constraint firstItem="flag-img" firstAttribute="centerY" secondItem="phone-box" secondAttribute="centerY" id="flag-cy"/>
+                                                    <constraint firstItem="flag-img" firstAttribute="leading" secondItem="phone-box" secondAttribute="leading" constant="14" id="flag-l"/>
+                                                    <constraint firstAttribute="height" constant="56" id="phone-h"/>
+                                                    <constraint firstItem="phone-tf" firstAttribute="bottom" secondItem="phone-box" secondAttribute="bottom" id="tf-b"/>
+                                                    <constraint firstItem="phone-tf" firstAttribute="leading" secondItem="divider" secondAttribute="trailing" constant="12" id="tf-l"/>
+                                                    <constraint firstAttribute="trailing" secondItem="phone-tf" secondAttribute="trailing" constant="16" id="tf-r"/>
+                                                    <constraint firstItem="phone-tf" firstAttribute="top" secondItem="phone-box" secondAttribute="top" id="tf-t"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <real key="value" value="14"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="send-btn" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
+                                                <rect key="frame" x="24" y="377" width="345" height="54"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="54" id="send-h"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="16"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Send OTP">
+                                                    <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="sendOTPTapped:" destination="phone-otp-vc" eventType="touchUpInside" id="send-act"/>
+                                                </connections>
+                                            </button>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_lock" translatesAutoresizingMaskIntoConstraints="NO" id="lock-img">
+                                                <rect key="frame" x="60.333333333333343" y="471" width="22" height="22"/>
+                                                <color key="tintColor" red="0.90980392156862744" green="0.72549019607843135" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="22" id="lock-h"/>
+                                                    <constraint firstAttribute="width" constant="22" id="lock-w"/>
+                                                </constraints>
+                                            </imageView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="secure-stack">
+                                                <rect key="frame" x="86.333333333333329" y="471" width="240.33333333333337" height="33.666666666666686"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="secure-lbl">
+                                                        <rect key="frame" x="0.0" y="0.0" width="240.33333333333334" height="33.666666666666664"/>
+                                                        <string key="text">Your number is secure and will never 
+be shared with anyone.</string>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="logo-box" firstAttribute="top" secondItem="phone-content" secondAttribute="top" constant="28" id="hoF-Df-yrv"/>
-                                            <constraint firstItem="logo-box" firstAttribute="centerX" secondItem="phone-content" secondAttribute="centerX" id="c5"/>
-                                            <constraint firstItem="title-lbl" firstAttribute="top" secondItem="logo-box" secondAttribute="bottom" constant="20" id="c7"/>
-                                            <constraint firstItem="title-lbl" firstAttribute="leading" secondItem="phone-content" secondAttribute="leading" constant="20" id="c8"/>
-                                            <constraint firstAttribute="trailing" secondItem="title-lbl" secondAttribute="trailing" constant="20" id="c9"/>
-                                            <constraint firstItem="sub-lbl" firstAttribute="top" secondItem="title-lbl" secondAttribute="bottom" constant="12" id="c10"/>
+                                            <constraint firstAttribute="height" constant="700" id="K1L-L0-r1y"/>
+                                            <constraint firstItem="secure-stack" firstAttribute="centerX" secondItem="send-btn" secondAttribute="centerX" constant="10" id="Vz5-0H-iGE"/>
+                                            <constraint firstItem="secure-stack" firstAttribute="top" secondItem="send-btn" secondAttribute="bottom" constant="40" id="ZWh-af-iLy"/>
+                                            <constraint firstItem="sub-lbl" firstAttribute="top" secondItem="title-lbl" secondAttribute="bottom" constant="10" id="c10"/>
                                             <constraint firstItem="sub-lbl" firstAttribute="leading" secondItem="phone-content" secondAttribute="leading" constant="32" id="c11"/>
                                             <constraint firstAttribute="trailing" secondItem="sub-lbl" secondAttribute="trailing" constant="32" id="c12"/>
                                             <constraint firstItem="phone-box" firstAttribute="top" secondItem="sub-lbl" secondAttribute="bottom" constant="32" id="c13"/>
@@ -403,20 +410,22 @@ Terms of Service and Privacy Policy.</string>
                                             <constraint firstItem="send-btn" firstAttribute="top" secondItem="phone-box" secondAttribute="bottom" constant="24" id="c16"/>
                                             <constraint firstItem="send-btn" firstAttribute="leading" secondItem="phone-box" secondAttribute="leading" id="c17"/>
                                             <constraint firstItem="send-btn" firstAttribute="trailing" secondItem="phone-box" secondAttribute="trailing" id="c18"/>
-                                            <constraint firstItem="secure-stack" firstAttribute="leading" secondItem="phone-content" secondAttribute="leading" constant="40" id="c19"/>
-                                            <constraint firstAttribute="trailing" secondItem="secure-stack" secondAttribute="trailing" constant="40" id="c20"/>
-                                            <constraint firstItem="secure-stack" firstAttribute="top" relation="greaterThanOrEqual" secondItem="send-btn" secondAttribute="bottom" constant="24" id="c21-top"/>
-                                            <constraint firstAttribute="bottom" secondItem="secure-stack" secondAttribute="bottom" constant="16" id="c21"/>
+                                            <constraint firstItem="logo-box" firstAttribute="centerX" secondItem="phone-content" secondAttribute="centerX" id="c5"/>
+                                            <constraint firstItem="title-lbl" firstAttribute="top" secondItem="logo-box" secondAttribute="bottom" constant="22" id="c7"/>
+                                            <constraint firstItem="title-lbl" firstAttribute="leading" secondItem="phone-content" secondAttribute="leading" constant="20" id="c8"/>
+                                            <constraint firstAttribute="trailing" secondItem="title-lbl" secondAttribute="trailing" constant="20" id="c9"/>
+                                            <constraint firstItem="secure-stack" firstAttribute="leading" secondItem="lock-img" secondAttribute="trailing" constant="4" id="gdB-Kt-zKr"/>
+                                            <constraint firstItem="logo-box" firstAttribute="top" secondItem="phone-content" secondAttribute="top" constant="28" id="hoF-Df-yrv"/>
+                                            <constraint firstItem="lock-img" firstAttribute="top" secondItem="secure-stack" secondAttribute="top" id="xI1-aT-01x"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="phone-content" firstAttribute="top" secondItem="phone-scroll" secondAttribute="top" id="phone-ct-t"/>
+                                    <constraint firstAttribute="bottom" secondItem="phone-content" secondAttribute="bottom" id="phone-ct-b"/>
                                     <constraint firstItem="phone-content" firstAttribute="leading" secondItem="phone-scroll" secondAttribute="leading" id="phone-ct-l"/>
                                     <constraint firstAttribute="trailing" secondItem="phone-content" secondAttribute="trailing" id="phone-ct-r"/>
-                                    <constraint firstAttribute="bottom" secondItem="phone-content" secondAttribute="bottom" id="phone-ct-b"/>
+                                    <constraint firstItem="phone-content" firstAttribute="top" secondItem="phone-scroll" secondAttribute="top" id="phone-ct-t"/>
                                     <constraint firstItem="phone-content" firstAttribute="width" secondItem="phone-scroll" secondAttribute="width" id="phone-ct-w"/>
-                                    <constraint firstItem="phone-content" firstAttribute="height" relation="greaterThanOrEqual" secondItem="phone-scroll" secondAttribute="height" id="phone-ct-minh"/>
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="back-btn">
@@ -456,20 +465,20 @@ Terms of Service and Privacy Policy.</string>
                             <constraint firstItem="back-btn" firstAttribute="top" secondItem="phone-safe" secondAttribute="top" constant="4" id="c2"/>
                             <constraint firstItem="phone-safe" firstAttribute="trailing" secondItem="help-btn" secondAttribute="trailing" constant="16" id="c3"/>
                             <constraint firstItem="help-btn" firstAttribute="centerY" secondItem="back-btn" secondAttribute="centerY" id="c4"/>
-                            <constraint firstItem="phone-scroll" firstAttribute="top" secondItem="phone-safe" secondAttribute="top" id="phone-sc-t"/>
+                            <constraint firstItem="phone-safe" firstAttribute="bottom" secondItem="phone-scroll" secondAttribute="bottom" id="phone-sc-b"/>
                             <constraint firstItem="phone-scroll" firstAttribute="leading" secondItem="phone-root" secondAttribute="leading" id="phone-sc-l"/>
                             <constraint firstAttribute="trailing" secondItem="phone-scroll" secondAttribute="trailing" id="phone-sc-r"/>
-                            <constraint firstItem="phone-safe" firstAttribute="bottom" secondItem="phone-scroll" secondAttribute="bottom" id="phone-sc-b"/>
+                            <constraint firstItem="phone-scroll" firstAttribute="top" secondItem="phone-safe" secondAttribute="top" id="phone-sc-t"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="contentScrollView" destination="phone-scroll" id="out-phone-scroll"/>
                         <outlet property="countryCodeLabel" destination="code-lbl" id="out-code"/>
                         <outlet property="flagImageView" destination="flag-img" id="out-flag"/>
                         <outlet property="logoContainer" destination="logo-box" id="out-logo"/>
                         <outlet property="phoneContainer" destination="phone-box" id="out-box"/>
                         <outlet property="phoneTextField" destination="phone-tf" id="out-phone"/>
                         <outlet property="sendButton" destination="send-btn" id="out-send"/>
-                        <outlet property="contentScrollView" destination="phone-scroll" id="out-phone-scroll"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="phone-fr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -487,17 +496,17 @@ Terms of Service and Privacy Policy.</string>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="otp-bg">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="otp-scroll">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="otp-scroll">
                                 <rect key="frame" x="0.0" y="118" width="393" height="666"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="otp-content">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="410.66666666666669"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="471.66666666666669"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="otp-logo">
-                                                <rect key="frame" x="121.66666666666669" y="28" width="150" height="150"/>
+                                            <imageView clipsSubviews="YES" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="otp-logo">
+                                                <rect key="frame" x="116.66666666666669" y="28" width="160" height="140"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="150" id="otp-logo-h"/>
-                                                    <constraint firstAttribute="width" constant="150" id="otp-logo-w"/>
+                                                    <constraint firstAttribute="height" constant="140" id="otp-logo-h"/>
+                                                    <constraint firstAttribute="width" constant="160" id="otp-logo-w"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -506,30 +515,30 @@ Terms of Service and Privacy Policy.</string>
                                                 </userDefinedRuntimeAttributes>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter the 6-digit code" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="otp-title">
-                                                <rect key="frame" x="24" y="200" width="345" height="33.666666666666657"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                                <rect key="frame" x="24" y="190" width="345" height="26.666666666666657"/>
+                                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="22"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We sent a verification code to" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="otp-subtitle">
-                                                <rect key="frame" x="24" y="241.66666666666669" width="345" height="18"/>
+                                                <rect key="frame" x="24" y="224.66666666666669" width="345" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="otp-boxes" customClass="AuthOTPView" customModule="DubaiVibe" customModuleProvider="target">
-                                                <rect key="frame" x="24" y="289.66666666666669" width="345" height="56"/>
+                                                <rect key="frame" x="24" y="272.66666666666669" width="345" height="56"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="56" id="jUA-ll-93a"/>
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="otp-verify" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
-                                                <rect key="frame" x="24" y="369.66666666666669" width="345" height="54"/>
+                                                <rect key="frame" x="24" y="352.66666666666669" width="345" height="54"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="54" id="otp-verify-h"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="16"/>
                                                 <state key="normal" title="Verify OTP">
                                                     <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
@@ -538,7 +547,7 @@ Terms of Service and Privacy Policy.</string>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Didn't receive the code? Resend in 01:00" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="otp-resend">
-                                                <rect key="frame" x="24" y="447.66666666666669" width="345" height="17"/>
+                                                <rect key="frame" x="24" y="430.66666666666663" width="345" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -552,10 +561,10 @@ Terms of Service and Privacy Policy.</string>
                                             <constraint firstItem="otp-subtitle" firstAttribute="trailing" secondItem="otp-title" secondAttribute="trailing" id="otp-c10"/>
                                             <constraint firstItem="otp-boxes" firstAttribute="leading" secondItem="otp-title" secondAttribute="leading" id="otp-c12"/>
                                             <constraint firstItem="otp-boxes" firstAttribute="trailing" secondItem="otp-title" secondAttribute="trailing" id="otp-c13"/>
+                                            <constraint firstItem="otp-resend" firstAttribute="top" secondItem="otp-verify" secondAttribute="bottom" constant="24" id="otp-c14"/>
                                             <constraint firstItem="otp-verify" firstAttribute="top" secondItem="otp-boxes" secondAttribute="bottom" constant="24" id="otp-c14a"/>
                                             <constraint firstItem="otp-verify" firstAttribute="leading" secondItem="otp-title" secondAttribute="leading" id="otp-c14b"/>
                                             <constraint firstItem="otp-verify" firstAttribute="trailing" secondItem="otp-title" secondAttribute="trailing" id="otp-c14c"/>
-                                            <constraint firstItem="otp-resend" firstAttribute="top" secondItem="otp-verify" secondAttribute="bottom" constant="24" id="otp-c14"/>
                                             <constraint firstItem="otp-resend" firstAttribute="leading" secondItem="otp-title" secondAttribute="leading" id="otp-c15"/>
                                             <constraint firstItem="otp-resend" firstAttribute="trailing" secondItem="otp-title" secondAttribute="trailing" id="otp-c16"/>
                                             <constraint firstAttribute="bottom" secondItem="otp-resend" secondAttribute="bottom" constant="24" id="otp-c17"/>
@@ -606,12 +615,12 @@ Terms of Service and Privacy Policy.</string>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="contentScrollView" destination="otp-scroll" id="otp-out-scroll"/>
                         <outlet property="otpView" destination="otp-boxes" id="otp-out-boxes"/>
-                        <outlet property="verifyButton" destination="otp-verify" id="otp-out-verify"/>
                         <outlet property="resendLabel" destination="otp-resend" id="otp-out-resend"/>
                         <outlet property="subtitleLabel" destination="otp-subtitle" id="otp-out-sub"/>
                         <outlet property="titleLabel" destination="otp-title" id="otp-out-title"/>
-                        <outlet property="contentScrollView" destination="otp-scroll" id="otp-out-scroll"/>
+                        <outlet property="verifyButton" destination="otp-verify" id="otp-out-verify"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="otp-fr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -629,78 +638,71 @@ Terms of Service and Privacy Policy.</string>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="name-bg">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" bounces="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="name-scroll">
-                                <rect key="frame" x="0.0" y="118" width="393" height="700"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="name-scroll">
+                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="name-content">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="700"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="496.66666666666669"/>
                                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="name-logo">
-                                <rect key="frame" x="121.66666666666669" y="146" width="150" height="150"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="name-logo-h"/>
-                                    <constraint firstAttribute="width" constant="150" id="name-logo-w"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's your full name?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="name-title">
-                                <rect key="frame" x="24" y="318" width="345" height="33.666666666666686"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This will be shown on your profile." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="name-subtitle">
-                                <rect key="frame" x="24" y="359.66666666666669" width="345" height="18"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="name-first" customClass="AuthDarkField" customModule="DubaiVibe" customModuleProvider="target">
-                                <rect key="frame" x="24" y="406" width="345" height="56"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="name-first-h"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="name-last" customClass="AuthDarkField" customModule="DubaiVibe" customModuleProvider="target">
-                                <rect key="frame" x="24" y="474" width="345" height="56"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="name-last-h"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="name-create" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
-                                <rect key="frame" x="24" y="554" width="345" height="54"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="54" id="name-create-h"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                <state key="normal" title="Create Account">
-                                    <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="14"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="createAccount:" destination="name-vc" eventType="touchUpInside" id="name-create-act"/>
-                                </connections>
-                            </button>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="name-logo">
+                                                <rect key="frame" x="116.66666666666669" y="28" width="160" height="140"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="140" id="name-logo-h"/>
+                                                    <constraint firstAttribute="width" constant="160" id="name-logo-w"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="10"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's your full name?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="name-title">
+                                                <rect key="frame" x="24" y="190" width="345" height="26.666666666666657"/>
+                                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="22"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This will be shown on your profile." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="name-subtitle">
+                                                <rect key="frame" x="24" y="224.66666666666669" width="345" height="18"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="name-first" customClass="AuthDarkField" customModule="DubaiVibe" customModuleProvider="target">
+                                                <rect key="frame" x="24" y="270.66666666666669" width="345" height="56"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="56" id="name-first-h"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="name-last" customClass="AuthDarkField" customModule="DubaiVibe" customModuleProvider="target">
+                                                <rect key="frame" x="24" y="338.66666666666669" width="345" height="56"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="56" id="name-last-h"/>
+                                                </constraints>
+                                            </view>
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="name-create" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
+                                                <rect key="frame" x="24" y="418.66666666666663" width="345" height="54"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="54" id="name-create-h"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="16"/>
+                                                <state key="normal" title="Create Account">
+                                                    <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="14"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="createAccount:" destination="name-vc" eventType="touchUpInside" id="name-create-act"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="name-logo" firstAttribute="centerX" secondItem="name-content" secondAttribute="centerX" id="name-c3"/>
-                                            <constraint firstItem="name-logo" firstAttribute="top" secondItem="name-content" secondAttribute="top" constant="28" id="name-c4"/>
-                                            <constraint firstItem="name-title" firstAttribute="top" secondItem="name-logo" secondAttribute="bottom" constant="22" id="name-c5"/>
-                                            <constraint firstItem="name-title" firstAttribute="leading" secondItem="name-content" secondAttribute="leading" constant="24" id="name-c6"/>
-                                            <constraint firstAttribute="trailing" secondItem="name-title" secondAttribute="trailing" constant="24" id="name-c7"/>
-                                            <constraint firstItem="name-subtitle" firstAttribute="top" secondItem="name-title" secondAttribute="bottom" constant="8" id="name-c8"/>
-                                            <constraint firstItem="name-subtitle" firstAttribute="leading" secondItem="name-title" secondAttribute="leading" id="name-c9"/>
                                             <constraint firstItem="name-subtitle" firstAttribute="trailing" secondItem="name-title" secondAttribute="trailing" id="name-c10"/>
                                             <constraint firstItem="name-first" firstAttribute="top" secondItem="name-subtitle" secondAttribute="bottom" constant="28" id="name-c11"/>
                                             <constraint firstItem="name-first" firstAttribute="leading" secondItem="name-title" secondAttribute="leading" id="name-c12"/>
@@ -712,14 +714,21 @@ Terms of Service and Privacy Policy.</string>
                                             <constraint firstItem="name-create" firstAttribute="leading" secondItem="name-title" secondAttribute="leading" id="name-c18"/>
                                             <constraint firstItem="name-create" firstAttribute="trailing" secondItem="name-title" secondAttribute="trailing" id="name-c19"/>
                                             <constraint firstAttribute="bottom" secondItem="name-create" secondAttribute="bottom" constant="24" id="name-c20"/>
+                                            <constraint firstItem="name-logo" firstAttribute="centerX" secondItem="name-content" secondAttribute="centerX" id="name-c3"/>
+                                            <constraint firstItem="name-logo" firstAttribute="top" secondItem="name-content" secondAttribute="top" constant="28" id="name-c4"/>
+                                            <constraint firstItem="name-title" firstAttribute="top" secondItem="name-logo" secondAttribute="bottom" constant="22" id="name-c5"/>
+                                            <constraint firstItem="name-title" firstAttribute="leading" secondItem="name-content" secondAttribute="leading" constant="24" id="name-c6"/>
+                                            <constraint firstAttribute="trailing" secondItem="name-title" secondAttribute="trailing" constant="24" id="name-c7"/>
+                                            <constraint firstItem="name-subtitle" firstAttribute="top" secondItem="name-title" secondAttribute="bottom" constant="8" id="name-c8"/>
+                                            <constraint firstItem="name-subtitle" firstAttribute="leading" secondItem="name-title" secondAttribute="leading" id="name-c9"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="name-content" firstAttribute="top" secondItem="name-scroll" secondAttribute="top" id="name-ct-t"/>
+                                    <constraint firstAttribute="bottom" secondItem="name-content" secondAttribute="bottom" id="name-ct-b"/>
                                     <constraint firstItem="name-content" firstAttribute="leading" secondItem="name-scroll" secondAttribute="leading" id="name-ct-l"/>
                                     <constraint firstAttribute="trailing" secondItem="name-content" secondAttribute="trailing" id="name-ct-r"/>
-                                    <constraint firstAttribute="bottom" secondItem="name-content" secondAttribute="bottom" id="name-ct-b"/>
+                                    <constraint firstItem="name-content" firstAttribute="top" secondItem="name-scroll" secondAttribute="top" id="name-ct-t"/>
                                     <constraint firstItem="name-content" firstAttribute="width" secondItem="name-scroll" secondAttribute="width" id="name-ct-w"/>
                                 </constraints>
                             </scrollView>
@@ -747,19 +756,19 @@ Terms of Service and Privacy Policy.</string>
                             <constraint firstItem="name-bg" firstAttribute="top" secondItem="name-root" secondAttribute="top" id="name-bg-t"/>
                             <constraint firstItem="name-back" firstAttribute="leading" secondItem="name-safe" secondAttribute="leading" constant="16" id="name-c1"/>
                             <constraint firstItem="name-back" firstAttribute="top" secondItem="name-safe" secondAttribute="top" constant="4" id="name-c2"/>
-                            <constraint firstItem="name-scroll" firstAttribute="top" secondItem="name-safe" secondAttribute="top" id="name-sc-t"/>
+                            <constraint firstItem="name-safe" firstAttribute="bottom" secondItem="name-scroll" secondAttribute="bottom" id="name-sc-b"/>
                             <constraint firstItem="name-scroll" firstAttribute="leading" secondItem="name-root" secondAttribute="leading" id="name-sc-l"/>
                             <constraint firstAttribute="trailing" secondItem="name-scroll" secondAttribute="trailing" id="name-sc-r"/>
-                            <constraint firstItem="name-safe" firstAttribute="bottom" secondItem="name-scroll" secondAttribute="bottom" id="name-sc-b"/>
+                            <constraint firstItem="name-scroll" firstAttribute="top" secondItem="name-safe" secondAttribute="top" id="name-sc-t"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="contentScrollView" destination="name-scroll" id="name-out-scroll"/>
                         <outlet property="createButton" destination="name-create" id="name-out-create"/>
                         <outlet property="firstNameField" destination="name-first" id="name-out-first"/>
                         <outlet property="lastNameField" destination="name-last" id="name-out-last"/>
                         <outlet property="subtitleLabel" destination="name-subtitle" id="name-out-sub"/>
                         <outlet property="titleLabel" destination="name-title" id="name-out-title"/>
-                        <outlet property="contentScrollView" destination="name-scroll" id="name-out-scroll"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="name-fr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -777,11 +786,11 @@ Terms of Service and Privacy Policy.</string>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="success-bg">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="success-logo">
-                                <rect key="frame" x="121.66666666666669" y="146" width="150" height="150"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="success-logo">
+                                <rect key="frame" x="116.66666666666669" y="146" width="160" height="140"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="success-logo-h"/>
-                                    <constraint firstAttribute="width" constant="150" id="success-logo-w"/>
+                                    <constraint firstAttribute="height" constant="140" id="success-logo-h"/>
+                                    <constraint firstAttribute="width" constant="160" id="success-logo-w"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -790,26 +799,26 @@ Terms of Service and Privacy Policy.</string>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Group 1" translatesAutoresizingMaskIntoConstraints="NO" id="success-check">
-                                <rect key="frame" x="116.66666666666669" y="332" width="160" height="160"/>
+                                <rect key="frame" x="116.66666666666669" y="306" width="160" height="160"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="160" id="success-check-h"/>
                                     <constraint firstAttribute="width" constant="160" id="success-check-w"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to DubaiVibe!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-title">
-                                <rect key="frame" x="24" y="528" width="345" height="33.666666666666629"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Dubai Vibe!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-title">
+                                <rect key="frame" x="24" y="486" width="345" height="33.666666666666629"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your account is ready." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-subtitle">
-                                <rect key="frame" x="24" y="569.66666666666663" width="345" height="19.333333333333371"/>
+                                <rect key="frame" x="24" y="527.66666666666663" width="345" height="19.333333333333371"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="success-features">
-                                <rect key="frame" x="24" y="617" width="345" height="64.666666666666629"/>
+                                <rect key="frame" x="24" y="575" width="345" height="64.666666666666629"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-1">
                                         <rect key="frame" x="0.0" y="0.0" width="109.66666666666667" height="64.666666666666671"/>
@@ -822,8 +831,10 @@ Terms of Service and Privacy Policy.</string>
                                                     <constraint firstAttribute="width" constant="28" id="success-feat-1-icon-w"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect with people" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-1-label">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-1-label">
                                                 <rect key="frame" x="22" y="36" width="65.666666666666671" height="28.666666666666671"/>
+                                                <string key="text">Connect 
+with people</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -860,8 +871,10 @@ Terms of Service and Privacy Policy.</string>
                                                     <constraint firstAttribute="width" constant="28" id="success-feat-3-icon-w"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Get exclusive                                deal" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-3-label">
-                                                <rect key="frame" x="0.0" y="36" width="109.66666666666667" height="28.666666666666671"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="success-feat-3-label">
+                                                <rect key="frame" x="13.666666666666686" y="36" width="82.333333333333329" height="28.666666666666671"/>
+                                                <string key="text"> Get exclusive 
+deal</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -871,11 +884,11 @@ Terms of Service and Privacy Policy.</string>
                                 </subviews>
                             </stackView>
                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="success-cta" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
-                                <rect key="frame" x="24" y="706" width="345" height="54"/>
+                                <rect key="frame" x="24" y="667.66666666666663" width="345" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="success-cta-h"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="16"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Start Exploring">
                                     <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -893,6 +906,7 @@ Terms of Service and Privacy Policy.</string>
                         <viewLayoutGuide key="safeArea" id="success-safe"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="success-cta" firstAttribute="top" secondItem="success-features" secondAttribute="bottom" constant="28" id="0Dl-Sc-e6w"/>
                             <constraint firstAttribute="bottom" secondItem="success-bg" secondAttribute="bottom" id="success-bg-b"/>
                             <constraint firstItem="success-bg" firstAttribute="leading" secondItem="success-root" secondAttribute="leading" id="success-bg-l"/>
                             <constraint firstAttribute="trailing" secondItem="success-bg" secondAttribute="trailing" id="success-bg-r"/>
@@ -907,12 +921,11 @@ Terms of Service and Privacy Policy.</string>
                             <constraint firstItem="success-features" firstAttribute="trailing" secondItem="success-title" secondAttribute="trailing" id="success-c17"/>
                             <constraint firstItem="success-cta" firstAttribute="leading" secondItem="success-safe" secondAttribute="leading" constant="24" id="success-c18"/>
                             <constraint firstItem="success-safe" firstAttribute="trailing" secondItem="success-cta" secondAttribute="trailing" constant="24" id="success-c19"/>
-                            <constraint firstItem="success-safe" firstAttribute="bottom" secondItem="success-cta" secondAttribute="bottom" constant="24" id="success-c20"/>
                             <constraint firstItem="success-logo" firstAttribute="centerX" secondItem="success-root" secondAttribute="centerX" id="success-c3"/>
                             <constraint firstItem="success-logo" firstAttribute="top" secondItem="success-safe" secondAttribute="top" constant="28" id="success-c4"/>
-                            <constraint firstItem="success-check" firstAttribute="top" secondItem="success-logo" secondAttribute="bottom" constant="36" id="success-c5"/>
+                            <constraint firstItem="success-check" firstAttribute="top" secondItem="success-logo" secondAttribute="bottom" constant="20" id="success-c5"/>
                             <constraint firstItem="success-check" firstAttribute="centerX" secondItem="success-root" secondAttribute="centerX" id="success-c6"/>
-                            <constraint firstItem="success-title" firstAttribute="top" secondItem="success-check" secondAttribute="bottom" constant="36" id="success-c9"/>
+                            <constraint firstItem="success-title" firstAttribute="top" secondItem="success-check" secondAttribute="bottom" constant="20" id="success-c9"/>
                         </constraints>
                     </view>
                     <connections>
@@ -936,11 +949,11 @@ Terms of Service and Privacy Policy.</string>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="notif-bg">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="notif-logo">
-                                <rect key="frame" x="121.66666666666669" y="146" width="150" height="150"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="notif-logo">
+                                <rect key="frame" x="116.66666666666669" y="146" width="160" height="140"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="notif-logo-h"/>
-                                    <constraint firstAttribute="width" constant="150" id="notif-logo-w"/>
+                                    <constraint firstAttribute="height" constant="140" id="notif-logo-h"/>
+                                    <constraint firstAttribute="width" constant="160" id="notif-logo-w"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -948,14 +961,16 @@ Terms of Service and Privacy Policy.</string>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to DubaiVibe!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="notif-title">
-                                <rect key="frame" x="24" y="312" width="345" height="33.666666666666686"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turn on Notifications?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="notif-title">
+                                <rect key="frame" x="24" y="308" width="345" height="26.666666666666686"/>
+                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your account is ready." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="notif-subtitle">
-                                <rect key="frame" x="24" y="353.66666666666669" width="345" height="19.333333333333314"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="notif-subtitle">
+                                <rect key="frame" x="24" y="342.66666666666669" width="345" height="38.333333333333314"/>
+                                <string key="text">Get updates, messages and exclusive 
+deals from Dubai Vibe.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -968,7 +983,7 @@ Terms of Service and Privacy Policy.</string>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="notif-features">
-                                <rect key="frame" x="24" y="605" width="345" height="68.666666666666629"/>
+                                <rect key="frame" x="24" y="605" width="345" height="75"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="notif-feat-1">
                                         <rect key="frame" x="0.0" y="0.0" width="109.66666666666667" height="68.666666666666671"/>
@@ -980,8 +995,10 @@ Terms of Service and Privacy Policy.</string>
                                                     <constraint firstAttribute="width" constant="32" id="notif-feat-1-icon-w"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New                               Messages" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="notif-feat-1-label">
-                                                <rect key="frame" x="0.0" y="40" width="109.66666666666667" height="28.666666666666671"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="notif-feat-1-label">
+                                                <rect key="frame" x="26.333333333333336" y="40" width="57.000000000000007" height="28.666666666666671"/>
+                                                <string key="text">New
+Messages</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -1018,8 +1035,10 @@ Deals</string>
                                                     <constraint firstAttribute="width" constant="32" id="notif-feat-3-icon-w"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="People                               Near You" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="notif-feat-3-label">
-                                                <rect key="frame" x="0.0" y="40" width="109.66666666666667" height="28.666666666666671"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="notif-feat-3-label">
+                                                <rect key="frame" x="29.333333333333375" y="40" width="51.333333333333343" height="28.666666666666671"/>
+                                                <string key="text">People
+Near You</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -1027,13 +1046,16 @@ Deals</string>
                                         </subviews>
                                     </stackView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="djf-sw-dCL"/>
+                                </constraints>
                             </stackView>
                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="notif-enable" customClass="GoldGradientButton" customModule="DubaiVibe" customModuleProvider="target">
-                                <rect key="frame" x="24" y="714" width="345" height="54"/>
+                                <rect key="frame" x="24" y="700" width="345" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="notif-enable-h"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="Inter-Bold" family="Inter" pointSize="16"/>
                                 <state key="normal" title="Enable Notifications">
                                     <color key="titleColor" red="0.070588235294117646" green="0.070588235294117646" blue="0.070588235294117646" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -1046,27 +1068,36 @@ Deals</string>
                                     <action selector="enableTapped:" destination="notif-vc" eventType="touchUpInside" id="notif-enable-act"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t81-4G-NTB">
+                                <rect key="frame" x="88.000000000000014" y="774" width="217.33333333333337" height="20.333333333333371"/>
+                                <string key="text">You can change this anytime
+in Settings.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="notif-safe"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="t81-4G-NTB" firstAttribute="top" secondItem="notif-enable" secondAttribute="bottom" constant="20" id="Dfb-xv-H5U"/>
+                            <constraint firstItem="t81-4G-NTB" firstAttribute="centerX" secondItem="notif-enable" secondAttribute="centerX" id="OGE-SV-8uc"/>
                             <constraint firstAttribute="bottom" secondItem="notif-bg" secondAttribute="bottom" id="notif-bg-b"/>
                             <constraint firstItem="notif-bg" firstAttribute="leading" secondItem="notif-root" secondAttribute="leading" id="notif-bg-l"/>
                             <constraint firstAttribute="trailing" secondItem="notif-bg" secondAttribute="trailing" id="notif-bg-r"/>
                             <constraint firstItem="notif-bg" firstAttribute="top" secondItem="notif-root" secondAttribute="top" id="notif-bg-t"/>
                             <constraint firstItem="notif-subtitle" firstAttribute="trailing" secondItem="notif-title" secondAttribute="trailing" id="notif-c10"/>
-                            <constraint firstItem="notif-bell" firstAttribute="top" secondItem="notif-subtitle" secondAttribute="bottom" constant="28" id="notif-c11"/>
+                            <constraint firstItem="notif-bell" firstAttribute="top" secondItem="notif-subtitle" secondAttribute="bottom" constant="20" id="notif-c11"/>
                             <constraint firstItem="notif-bell" firstAttribute="centerX" secondItem="notif-root" secondAttribute="centerX" id="notif-c12"/>
                             <constraint firstItem="notif-features" firstAttribute="top" secondItem="notif-bell" secondAttribute="bottom" constant="20" id="notif-c15"/>
                             <constraint firstItem="notif-features" firstAttribute="leading" secondItem="notif-title" secondAttribute="leading" id="notif-c16"/>
                             <constraint firstItem="notif-features" firstAttribute="trailing" secondItem="notif-title" secondAttribute="trailing" id="notif-c17"/>
                             <constraint firstItem="notif-enable" firstAttribute="leading" secondItem="notif-safe" secondAttribute="leading" constant="24" id="notif-c18"/>
                             <constraint firstItem="notif-safe" firstAttribute="trailing" secondItem="notif-enable" secondAttribute="trailing" constant="24" id="notif-c19"/>
-                            <constraint firstItem="notif-safe" firstAttribute="bottom" secondItem="notif-enable" secondAttribute="bottom" constant="16" id="notif-c20"/>
-                            <constraint firstItem="notif-enable" firstAttribute="top" relation="greaterThanOrEqual" secondItem="notif-features" secondAttribute="bottom" constant="24" id="notif-c24"/>
+                            <constraint firstItem="notif-enable" firstAttribute="top" secondItem="notif-features" secondAttribute="bottom" constant="20" id="notif-c24"/>
                             <constraint firstItem="notif-logo" firstAttribute="centerX" secondItem="notif-root" secondAttribute="centerX" id="notif-c3"/>
                             <constraint firstItem="notif-logo" firstAttribute="top" secondItem="notif-safe" secondAttribute="top" constant="28" id="notif-c4"/>
-                            <constraint firstItem="notif-title" firstAttribute="top" secondItem="notif-logo" secondAttribute="bottom" constant="16" id="notif-c5"/>
+                            <constraint firstItem="notif-title" firstAttribute="top" secondItem="notif-logo" secondAttribute="bottom" constant="22" id="notif-c5"/>
                             <constraint firstItem="notif-title" firstAttribute="leading" secondItem="notif-safe" secondAttribute="leading" constant="24" id="notif-c6"/>
                             <constraint firstItem="notif-safe" firstAttribute="trailing" secondItem="notif-title" secondAttribute="trailing" constant="24" id="notif-c7"/>
                             <constraint firstItem="notif-subtitle" firstAttribute="top" secondItem="notif-title" secondAttribute="bottom" constant="8" id="notif-c8"/>
@@ -1081,7 +1112,7 @@ Deals</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="notif-fr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3600" y="20"/>
+            <point key="canvasLocation" x="3599.2366412213737" y="19.718309859154932"/>
         </scene>
     </scenes>
     <resources>
@@ -1100,6 +1131,6 @@ Deals</string>
         <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="flag" catalog="system" width="128" height="121"/>
-        <image name="lock.fill" catalog="system" width="111" height="128"/>
+        <image name="ic_lock" width="22" height="22"/>
     </resources>
 </document>

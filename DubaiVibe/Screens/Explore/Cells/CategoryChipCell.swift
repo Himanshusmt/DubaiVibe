@@ -105,18 +105,23 @@ final class CategoryChipCell: UICollectionViewCell {
     }
 
     private func applyIcon(category: ExploreCategory, selected: Bool) {
-        let placeholder = category.localIcon
+        // Prefer local assets matched by slug/name. API category icons are SVGs and
+        // are not decoded by SDWebImage without an SVG coder.
+        if let local = category.localIcon {
+            styleIcon(local, selected: selected)
+            return
+        }
         if category.iconURL != nil {
             BusinessImageLoader.setImage(
                 on: iconImageView,
                 urlString: category.iconURL,
-                placeholder: placeholder
+                placeholder: nil
             ) { [weak self] image in
                 guard let self, self.isChipSelected == selected else { return }
-                self.styleIcon(image ?? placeholder, selected: selected)
+                self.styleIcon(image, selected: selected)
             }
         } else {
-            styleIcon(placeholder, selected: selected)
+            styleIcon(nil, selected: selected)
         }
     }
 
