@@ -191,38 +191,34 @@ final class ExploreViewModel {
         let cursor = reset ? nil : nextCursor
         let query = activeQuery.isEmpty ? nil : activeQuery
 
-        LocationManager.shared.resolveCurrentCoordinate { [weak self] coordinate in
-            guard let self else { return }
-            BusinessAPI.listBusinesses(
-                cursor: cursor,
-                limit: self.pageSize,
-                query: query,
-                categoryId: categoryId,
-                latitude: coordinate?.latitude,
-                longitude: coordinate?.longitude,
-                showLoader: showLoader
-            )
-            .sink { [weak self] completionResult in
-                self?.isLoading = false
-                self?.isPaging = false
-                if case .failure(let error) = completionResult {
-                    if !reset { self?.pagingFailed = true }
-                    self?.errorMessage = error.localizedDescription
-                    completion(.failure(error))
-                }
-            } receiveValue: { [weak self] (response: BusinessListResponse) in
-                guard let self else { return }
-                self.isLoading = false
-                self.isPaging = false
-                let incoming = response.items.compactMap { $0.asVenue() }
-                self.merge(incoming, reset: reset)
-                let next = response.nextCursor?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                self.nextCursor = next.isEmpty ? nil : next
-                self.pagingFailed = false
-                completion(.success(response))
+        // Lat/lng omitted for now — re-enable when location-based filtering is ready.
+        BusinessAPI.listBusinesses(
+            cursor: cursor,
+            limit: pageSize,
+            query: query,
+            categoryId: categoryId,
+            showLoader: showLoader
+        )
+        .sink { [weak self] completionResult in
+            self?.isLoading = false
+            self?.isPaging = false
+            if case .failure(let error) = completionResult {
+                if !reset { self?.pagingFailed = true }
+                self?.errorMessage = error.localizedDescription
+                completion(.failure(error))
             }
-            .store(in: &self.feedCancellables)
+        } receiveValue: { [weak self] (response: BusinessListResponse) in
+            guard let self else { return }
+            self.isLoading = false
+            self.isPaging = false
+            let incoming = response.items.compactMap { $0.asVenue() }
+            self.merge(incoming, reset: reset)
+            let next = response.nextCursor?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            self.nextCursor = next.isEmpty ? nil : next
+            self.pagingFailed = false
+            completion(.success(response))
         }
+        .store(in: &feedCancellables)
     }
 
     private func applyCategories(_ items: [CategoryItem]) {

@@ -3,6 +3,7 @@
 "common.cancel" = "Отмена";
 "common.error" = "Ошибка";
 "common.help" = "Помощь";
+"common.skip" = "Пропустить";
 "common.comingSoon" = "Скоро";
 "common.save" = "Сохранить";
 "common.notifications" = "Уведомления";
@@ -22,6 +23,8 @@
 "explore.cityDubai" = "Дубай";
 "explore.cityAbuDhabi" = "Абу-Даби";
 "explore.cityDubaiAccessibility" = "Город: Дубай";
+"explore.noBusinesses" = "Пока нет заведений";
+"explore.noMatchingBusinesses" = "Нет подходящих заведений";
 
 /* Profile */
 "profile.firstName" = "Имя";
@@ -102,10 +105,10 @@
 "auth.termsSoon" = "Условия использования скоро появятся.";
 "auth.privacySoon" = "Политика конфиденциальности скоро появится.";
 "auth.phoneTitle" = "Какой у вас номер телефона?";
-"auth.phoneSubtitle" = "Мы отправим код подтверждения, чтобы начать.";
+"auth.phoneSubtitle" = "Мы отправим код подтверждения,\nчтобы начать.";
 "auth.enterMobile" = "Введите номер телефона";
 "auth.sendOTP" = "Отправить код";
-"auth.phoneSecure" = "Ваш номер в безопасности и не будет передан третьим лицам.";
+"auth.phoneSecure" = "Ваш номер в безопасности и не будет\nпередан третьим лицам.";
 "auth.phoneHelp" = "Введите номер телефона, чтобы получить одноразовый код подтверждения.";
 "auth.enterPhone" = "Пожалуйста, введите номер телефона.";
 "auth.invalidUAEPhone" = "Пожалуйста, введите действующий номер телефона ОАЭ.";
@@ -120,16 +123,18 @@
 "auth.nameSubtitle" = "Это будет отображаться в вашем профиле.";
 "auth.createAccount" = "Создать аккаунт";
 "auth.welcomeTitle" = "Добро пожаловать в Dubai Vibe!";
-"auth.notifications" = "Turn on Notifications?";
+"auth.notifications" = "Включить уведомления?";
 "auth.welcomeSubtitle" = "Ваш аккаунт готов.";
-"auth.connectPeople" = "Знакомьтесь с людьми";
+"auth.notificationSubtitle" = "Получайте обновления, сообщения и эксклюзивные\nпредложения от Dubai Vibe.";
+"auth.connectPeople" = "Знакомьтесь\nс людьми";
 "auth.discoverPlaces" = "Открывайте места";
-"auth.getExclusiveDeal" = "Эксклюзивные предложения";
+"auth.getExclusiveDeal" = "Эксклюзивные\nпредложения";
 "auth.startExploring" = "Начать";
 "auth.enableNotifications" = "Включить уведомления";
-"auth.newMessages" = "Новые сообщения";
-"auth.exclusiveDeals" = "Эксклюзивные предложения";
-"auth.peopleNearYou" = "Люди рядом";
+"auth.newMessages" = "Новые\nсообщения";
+"auth.exclusiveDeals" = "Эксклюзивные\nпредложения";
+"auth.peopleNearYou" = "Люди\nрядом";
+"auth.notificationsSettingsHint" = "Вы можете изменить это в любое время\nв Настройках.";
 "auth.appleMissingToken" = "Вход через Apple не вернул токен. Попробуйте ещё раз.";
 "auth.googleNotConfigured" = "Вход через Google ещё не настроен. Добавьте CLIENT_ID (и REVERSED_CLIENT_ID) в GoogleService-Info.plist, затем укажите тот же REVERSED_CLIENT_ID как URL-схему в Info.plist.";
 "auth.googleMissingScheme" = "Добавьте URL-схему «%@» в Info.plist (CFBundleURLTypes). Она должна совпадать с REVERSED_CLIENT_ID из GoogleService-Info.plist.";

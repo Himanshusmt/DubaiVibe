@@ -3,6 +3,7 @@
 "common.cancel" = "Cancel";
 "common.error" = "Error";
 "common.help" = "Help";
+"common.skip" = "Skip";
 "common.comingSoon" = "Coming soon";
 "common.save" = "Save";
 "common.notifications" = "Notifications";
@@ -22,6 +23,8 @@
 "explore.cityDubai" = "Dubai";
 "explore.cityAbuDhabi" = "Abu Dhabi";
 "explore.cityDubaiAccessibility" = "City: Dubai";
+"explore.noBusinesses" = "No businesses yet";
+"explore.noMatchingBusinesses" = "No matching businesses";
 
 /* Profile */
 "profile.firstName" = "First Name";
@@ -101,10 +104,10 @@
 "auth.termsSoon" = "Terms of Service will be available soon.";
 "auth.privacySoon" = "Privacy Policy will be available soon.";
 "auth.phoneTitle" = "What's your phone number?";
-"auth.phoneSubtitle" = "We'll send you a verification code to get you started.";
+"auth.phoneSubtitle" = "We'll send you a verification code\nto get you started.";
 "auth.enterMobile" = "Enter mobile number";
 "auth.sendOTP" = "Send OTP";
-"auth.phoneSecure" = "Your number is secure and will never be shared with anyone.";
+"auth.phoneSecure" = "Your number is secure and will never\nbe shared with anyone.";
 "auth.phoneHelp" = "Enter your mobile number to receive a one-time verification code.";
 "auth.enterPhone" = "Please enter your phone number.";
 "auth.invalidUAEPhone" = "Please enter a valid UAE mobile number.";
@@ -121,15 +124,16 @@
 "auth.welcomeTitle" = "Welcome to Dubai Vibe!";
 "auth.notifications" = "Turn on Notifications?";
 "auth.welcomeSubtitle" = "Your account is ready.";
-"auth.notificationSubtitle" = "Get updates, messages and exclusive deals from Dubai Vibe.";
-"auth.connectPeople" = "Connect with people";
+"auth.notificationSubtitle" = "Get updates, messages and exclusive\ndeals from Dubai Vibe.";
+"auth.connectPeople" = "Connect\nwith people";
 "auth.discoverPlaces" = "Discover amazing places";
-"auth.getExclusiveDeal" = "Get exclusive deal";
+"auth.getExclusiveDeal" = "Get exclusive\ndeal";
 "auth.startExploring" = "Start Exploring";
 "auth.enableNotifications" = "Enable Notifications";
-"auth.newMessages" = "New Messages";
-"auth.exclusiveDeals" = "Exclusive Deals";
-"auth.peopleNearYou" = "People Near You";
+"auth.newMessages" = "New\nMessages";
+"auth.exclusiveDeals" = "Exclusive\nDeals";
+"auth.peopleNearYou" = "People\nNear You";
+"auth.notificationsSettingsHint" = "You can change this anytime\nin Settings.";
 "auth.appleMissingToken" = "Apple Sign-In did not return an identity token. Please try again.";
 "auth.googleNotConfigured" = "Google Sign-In is not configured yet. Add CLIENT_ID (and REVERSED_CLIENT_ID) to GoogleService-Info.plist, then set the same REVERSED_CLIENT_ID as a URL scheme in Info.plist.";
 "auth.googleMissingScheme" = "Add URL scheme \"%@\" to Info.plist (CFBundleURLTypes). It must match REVERSED_CLIENT_ID from GoogleService-Info.plist.";

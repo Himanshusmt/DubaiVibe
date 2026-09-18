@@ -321,8 +321,8 @@ private extension ExploreViewController {
         if filteredIDs.isEmpty {
             let label = UILabel()
             label.text = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                ? "No businesses yet"
-                : "No matching businesses"
+                ? L10n.noBusinessesYet
+                : L10n.noMatchingBusinesses
             label.font = AppTypography.font(.medium, size: 14)
             label.textColor = AppPalette.secondaryText
             label.textAlignment = .center

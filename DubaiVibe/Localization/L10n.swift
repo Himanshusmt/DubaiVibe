@@ -5,6 +5,7 @@ enum L10n {
     static var cancel: String { "common.cancel".localized }
     static var error: String { "common.error".localized }
     static var help: String { "common.help".localized }
+    static var skip: String { "common.skip".localized }
     static var comingSoon: String { "common.comingSoon".localized }
     static var save: String { "common.save".localized }
     static var notifications: String { "common.notifications".localized }
@@ -22,6 +23,8 @@ enum L10n {
     static var cityDubai: String { "explore.cityDubai".localized }
     static var cityAbuDhabi: String { "explore.cityAbuDhabi".localized }
     static var cityDubaiAccessibility: String { "explore.cityDubaiAccessibility".localized }
+    static var noBusinessesYet: String { "explore.noBusinesses".localized }
+    static var noMatchingBusinesses: String { "explore.noMatchingBusinesses".localized }
 
     static var firstName: String { "profile.firstName".localized }
     static var lastName: String { "profile.lastName".localized }
@@ -128,6 +131,7 @@ enum L10n {
     static var newMessages: String { "auth.newMessages".localized }
     static var exclusiveDeals: String { "auth.exclusiveDeals".localized }
     static var peopleNearYou: String { "auth.peopleNearYou".localized }
+    static var notificationsSettingsHint: String { "auth.notificationsSettingsHint".localized }
     static var appleMissingToken: String { "auth.appleMissingToken".localized }
     static var googleNotConfigured: String { "auth.googleNotConfigured".localized }
     static func googleMissingScheme(_ scheme: String) -> String {
@@ -284,12 +288,13 @@ extension UIView {
             "Continue with Google": L10n.continueWithGoogle,
             "or": L10n.or,
             "Help": L10n.help,
+            "Skip": L10n.skip,
             "What's your phone number?": L10n.phoneTitle,
-            "We'll send you a verification code to get you started.": L10n.phoneSubtitle,
+            "We'll send you a verification code \nto get you started.": L10n.phoneSubtitle,
             "Enter mobile number": L10n.enterMobileNumber,
             "Send OTP": L10n.sendOTP,
             "Verify OTP": L10n.verifyOTP,
-            "Your number is secure and will never be shared with anyone.": L10n.phoneSecure,
+            "Your number is secure and will never \nbe shared with anyone.": L10n.phoneSecure,
             "Enter the 6-digit code": L10n.otpTitle,
             "We sent a verification code to": L10n.otpSentPrefix.trimmingCharacters(in: .newlines),
             "What's your full name?": L10n.nameTitle,
@@ -297,14 +302,17 @@ extension UIView {
             "Create Account": L10n.createAccount,
             "Welcome to DubaiVibe!": L10n.welcomeTitle,
             "Your account is ready.": L10n.welcomeSubtitle,
-            "Connect with people": L10n.connectWithPeople,
+            "Turn on Notifications?": L10n.notificationsTitle,
+            "Get updates, messages and exclusive\ndeals from Dubai Vibe.": L10n.notificationSubtitle,
+            "Connect \nwith people": L10n.connectWithPeople,
             "Discover amazing places": L10n.discoverPlaces,
-            " Get exclusive                                deal": L10n.getExclusiveDeal,
+            " Get exclusive \ndeal": L10n.getExclusiveDeal,
             "Start Exploring": L10n.startExploring,
             "Enable Notifications": L10n.enableNotifications,
-            "New                               Messages": L10n.newMessages,
+            "New\nMessages": L10n.newMessages,
             "Exclusive\nDeals": L10n.exclusiveDeals,
-            "People                               Near You": L10n.peopleNearYou,
+            "People\nNear You": L10n.peopleNearYou,
+            "You can change this anytime\nin Settings.": L10n.notificationsSettingsHint,
             "Photos": L10n.photos,
             "Watch Vibe": L10n.watchVibe,
             "Directions": L10n.directions,
@@ -334,7 +342,7 @@ extension UIView {
             "OneVibe Member since 2024": L10n.memberSince(2024),
             "DubaiVibe Member since 2024": L10n.memberSince(2024),
             "Real People": "membership.realPeople".localized,
-            "Exclusive Deals": L10n.exclusiveDeals,
+            "Exclusive Deals": L10n.exclusiveDeals.replacingOccurrences(of: "\n", with: " "),
             "Better Experiences": L10n.betterExperiences,
             "YOUR VERIFIED CODE": L10n.yourVerifiedCode,
             "Show this code to the staff\nto get your exclusive discount.": L10n.showCodeToStaff,

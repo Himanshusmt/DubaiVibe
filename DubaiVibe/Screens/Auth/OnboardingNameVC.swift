@@ -7,11 +7,17 @@ final class OnboardingNameVC: UIViewController {
     @IBOutlet private weak var lastNameField: AuthDarkField!
     @IBOutlet private weak var createButton: GoldGradientButton!
     @IBOutlet private weak var contentScrollView: UIScrollView?
+    @IBOutlet private weak var termsTextView: UITextView!
 
     private let viewModel = AuthViewModel()
     private var isSubmitting = false
     var prefillFirstName: String?
     var prefillLastName: String?
+
+    private enum Link {
+        static let terms = URL(string: "dubaivibe://terms")!
+        static let privacy = URL(string: "dubaivibe://privacy")!
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +51,68 @@ final class OnboardingNameVC: UIViewController {
         titleLabel?.text = L10n.nameTitle
         subtitleLabel?.text = L10n.nameSubtitle
         applyLocalizedStoryboardCopy()
+        configureTermsLinks()
+    }
+
+    /// Attributed links can't be authored fully in IB — only this bit stays in code.
+    private func configureTermsLinks() {
+        guard let termsTextView else { return }
+
+        let font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+
+        let text = NSMutableAttributedString(
+            string: L10n.termsPrefix,
+            attributes: [
+                .foregroundColor: AppPalette.secondaryText,
+                .font: font,
+                .paragraphStyle: paragraph
+            ]
+        )
+        text.append(NSAttributedString(
+            string: L10n.termsOfService,
+            attributes: [
+                .link: Link.terms,
+                .font: UIFont.systemFont(ofSize: 14, weight: .medium),
+                .underlineStyle: NSUnderlineStyle.single.rawValue,
+                .paragraphStyle: paragraph
+            ]
+        ))
+        text.append(NSAttributedString(
+            string: L10n.termsAnd,
+            attributes: [
+                .foregroundColor: AppPalette.secondaryText,
+                .font: font,
+                .paragraphStyle: paragraph
+            ]
+        ))
+        text.append(NSAttributedString(
+            string: L10n.privacyPolicy,
+            attributes: [
+                .link: Link.privacy,
+                .font: UIFont.systemFont(ofSize: 14, weight: .medium),
+                .underlineStyle: NSUnderlineStyle.single.rawValue,
+                .paragraphStyle: paragraph
+            ]
+        ))
+        text.append(NSAttributedString(
+            string: ".",
+            attributes: [
+                .foregroundColor: AppPalette.secondaryText,
+                .font: font,
+                .paragraphStyle: paragraph
+            ]
+        ))
+
+        termsTextView.attributedText = text
+        termsTextView.linkTextAttributes = [
+            .foregroundColor: AppPalette.gold,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        termsTextView.delegate = self
+        termsTextView.textContainerInset = .zero
+        termsTextView.textContainer.lineFragmentPadding = 0
     }
 
     @IBAction private func backTapped(_ sender: Any) {
@@ -130,5 +198,32 @@ final class OnboardingNameVC: UIViewController {
             .union(.whitespaces)
             .union(CharacterSet(charactersIn: "'-"))
         return trimmed.unicodeScalars.allSatisfy { allowed.contains($0) }
+    }
+}
+
+extension OnboardingNameVC: UITextViewDelegate {
+    func textView(
+        _ textView: UITextView,
+        shouldInteractWith URL: URL,
+        in characterRange: NSRange,
+        interaction: UITextItemInteraction
+    ) -> Bool {
+        switch URL {
+        case Link.terms:
+            showAnimatedAlert(
+                title: L10n.termsOfService,
+                message: L10n.termsSoon,
+                style: .info
+            )
+        case Link.privacy:
+            showAnimatedAlert(
+                title: L10n.privacyPolicy,
+                message: L10n.privacySoon,
+                style: .info
+            )
+        default:
+            break
+        }
+        return false
     }
 }

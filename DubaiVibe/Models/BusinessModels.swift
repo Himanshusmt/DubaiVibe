@@ -1453,8 +1453,6 @@ struct UnlockOfferData: Decodable {
             ?? values.decodeFlexibleIfPresent(forKey: .redeemed_at)
         expiresAt = values.decodeFlexibleIfPresent(forKey: .expiresAt)
             ?? values.decodeFlexibleIfPresent(forKey: .expires_at)
-        validUntil = values.decodeFlexibleIfPresent(forKey: .validUntil)
-            ?? values.decodeFlexibleIfPresent(forKey: .valid_until)
         if let minutes: Int = values.decodeFlexibleIfPresent(forKey: .validityMinutes)
             ?? values.decodeFlexibleIfPresent(forKey: .validity_minutes) {
             validityMinutes = minutes
@@ -1463,18 +1461,22 @@ struct UnlockOfferData: Decodable {
         }
         offer = try? values.decode(UnlockOfferRef.self, forKey: .offer)
         business = try? values.decode(UnlockOfferBusinessRef.self, forKey: .business)
+        // API nests deal end under `offer.validUntil`; also accept top-level if present.
+        validUntil = values.decodeFlexibleIfPresent(forKey: .validUntil)
+            ?? values.decodeFlexibleIfPresent(forKey: .valid_until)
+            ?? offer?.validUntil
     }
 
     var redeemedDate: Date {
         Self.parseISO8601(redeemedAt) ?? Date()
     }
 
-    /// Prefer API `validUntil` for the membership "Valid Until" row.
+    /// Membership "Valid Until" = deal end (`offer.validUntil`), not short-lived `expiresAt`.
     var validUntilDate: Date {
         if let parsed = Self.parseISO8601(validUntil) {
             return parsed
         }
-        if let parsed = Self.parseISO8601(expiresAt) {
+        if let parsed = Self.parseISO8601(offer?.validUntil) {
             return parsed
         }
         let minutes = max(validityMinutes ?? 15, 1)
@@ -1517,9 +1519,11 @@ struct UnlockOfferData: Decodable {
 struct UnlockOfferRef: Decodable {
     let id: String?
     let title: String?
+    let validUntil: String?
 
     enum CodingKeys: String, CodingKey {
         case id, uuid, title, name
+        case validUntil, valid_until
     }
 
     init(from decoder: Decoder) throws {
@@ -1528,6 +1532,8 @@ struct UnlockOfferRef: Decodable {
             ?? values.decodeFlexibleIfPresent(forKey: .uuid)
         title = values.decodeFlexibleIfPresent(forKey: .title)
             ?? values.decodeFlexibleIfPresent(forKey: .name)
+        validUntil = values.decodeFlexibleIfPresent(forKey: .validUntil)
+            ?? values.decodeFlexibleIfPresent(forKey: .valid_until)
     }
 }
 

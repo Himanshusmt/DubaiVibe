@@ -4,6 +4,7 @@ final class NotificationsPermissionVC: UIViewController {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var subtitleLabel: UILabel!
     @IBOutlet private weak var enableButton: GoldGradientButton!
+    @IBOutlet private weak var skipButton: UIButton!
 
     private let viewModel = AuthViewModel()
 
@@ -18,29 +19,42 @@ final class NotificationsPermissionVC: UIViewController {
         titleLabel?.text = L10n.notificationsTitle
         subtitleLabel?.text = L10n.notificationSubtitle
         enableButton?.setTitle(L10n.enableNotifications, for: .normal)
+        skipButton?.setTitle(L10n.skip, for: .normal)
         applyLocalizedStoryboardCopy()
     }
 
     @IBAction private func enableTapped(_ sender: Any) {
-        enableButton?.isEnabled = false
+        setControlsEnabled(false)
         FCMNotificationManager.requestAuthorizationIfNeeded { [weak self] _ in
-            self?.updateProfileAndFinishOnboarding()
+            self?.updateProfileAndFinishOnboarding(notificationsEnabled: true)
         }
     }
 
-    private func updateProfileAndFinishOnboarding() {
+    @IBAction private func skipTapped(_ sender: Any) {
+        setControlsEnabled(false)
+        updateProfileAndFinishOnboarding(notificationsEnabled: false)
+    }
+
+    private func setControlsEnabled(_ enabled: Bool) {
+        enableButton?.isEnabled = enabled
+        skipButton?.isEnabled = enabled
+    }
+
+    private func updateProfileAndFinishOnboarding(notificationsEnabled: Bool) {
         let coordinate = LocationManager.shared.lastKnownLatLng
         viewModel.updateProfile(
-            notificationsEnabled: true,
+            notificationsEnabled: notificationsEnabled,
             latitude: coordinate?.latitude,
             longitude: coordinate?.longitude
         ) { [weak self] result in
             guard let self else { return }
-            self.enableButton?.isEnabled = true
+            self.setControlsEnabled(true)
             switch result {
             case .success(let response):
                 AppRouter.completeOnboarding()
-                self.showSuccessToast(response.message, fallback: "Profile updated")
+                if notificationsEnabled {
+                    self.showSuccessToast(response.message, fallback: "Profile updated")
+                }
                 AppRouter.setRootMain(animated: true)
             case .failure(let error):
                 TokenManager.shared.isOnboardingCompleted = false
