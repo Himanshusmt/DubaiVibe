@@ -401,7 +401,7 @@ extension EditProfileViewController: TDImagePickerDelegate {
     }
 
     func didTapDeletePhoto() {
-        // Same delete flow as Profile: DELETE /upload/{uuid} then clear avatar on /users/me.
+        // Same delete flow as Profile: DELETE /users/profile-picture/{id} then clear avatar on /users/me.
         viewModel.deleteAvatar { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }

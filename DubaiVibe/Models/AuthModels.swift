@@ -614,7 +614,7 @@ struct MediaUploadResponse: Decodable {
     }
 }
 
-// MARK: - Delete upload (`DELETE /upload/{uuid}`)
+// MARK: - Delete profile picture (`DELETE /users/profile-picture/{id}`)
 
 struct MediaDeleteResponse: Decodable {
     let success: Bool?

@@ -1278,7 +1278,7 @@ private extension NetworkManager {
         _ type: T.Type,
         from data: Data
     ) throws -> T {
-        // DELETE /upload/{uuid} (and similar) may return 204 / empty body.
+        // DELETE /users/profile-picture/{id} (and similar) may return 204 / empty body.
         let trimmed = String(data: data, encoding: .utf8)?
             .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if data.isEmpty || trimmed.isEmpty || trimmed == "{}" || trimmed == "null" {

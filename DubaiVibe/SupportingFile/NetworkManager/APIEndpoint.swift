@@ -27,7 +27,7 @@ enum APIEndpoint {
     case currentUser
     case deleteAccount
     case upload(kind: String = "profile")
-    case deleteUpload(uuid: String)
+    case deleteProfilePicture(id: String)
     case listCategories
     case listBusinesses(
         cursor: String? = nil,
@@ -79,9 +79,9 @@ enum APIEndpoint {
         case .upload(let kind):
             let encoded = kind.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? kind
             return "upload?kind=\(encoded)"
-        case .deleteUpload(let uuid):
-            let encoded = uuid.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? uuid
-            return "upload/\(encoded)"
+        case .deleteProfilePicture(let id):
+            let encoded = id.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? id
+            return "users/profile-picture/\(encoded)"
 
         case .listCategories:
             return "categories"

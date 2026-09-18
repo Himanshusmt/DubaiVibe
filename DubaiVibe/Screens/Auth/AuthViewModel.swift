@@ -257,7 +257,7 @@ final class AuthViewModel {
             }
         }
         if clearAvatar {
-            // Explicit nulls so `/users/me` drops the avatar reference after DELETE /upload/{uuid}.
+            // Explicit nulls so `/users/me` drops the avatar reference after DELETE /users/profile-picture/{id}.
             parameters["avatarMediaId"] = NSNull()
             parameters["avatarUploadUuid"] = NSNull()
             parameters["avatarURL"] = NSNull()

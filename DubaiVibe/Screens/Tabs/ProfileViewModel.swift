@@ -3,7 +3,7 @@ import Foundation
 import SDWebImage
 import UIKit
 
-/// Profile tab view model — `/users/me`, `/upload`, `/auth/logout`, and delete account.
+/// Profile tab view model — `/users/me`, `/upload`, `/users/profile-picture`, `/auth/logout`, and delete account.
 final class ProfileViewModel {
     @Published private(set) var user: AuthUser?
     @Published private(set) var isLoading = false
@@ -211,7 +211,7 @@ final class ProfileViewModel {
         .store(in: &cancellables)
     }
 
-    /// `DELETE /api/mobile/v1/upload/{uuid}` then clears avatar on `PATCH /users/me`.
+    /// `DELETE /api/mobile/v1/users/profile-picture/{id}` then clears avatar on `PATCH /users/me`.
     func deleteAvatar(
         showLoader: Bool = true,
         completion: @escaping (Result<Void, APIError>) -> Void
@@ -219,17 +219,17 @@ final class ProfileViewModel {
         isLoading = true
         errorMessage = ""
 
-        guard let uuid = resolvedAvatarUploadUuid, !uuid.isEmpty else {
-            let error = APIError.serverError("Missing upload uuid for delete.")
+        guard let id = resolvedAvatarUploadUuid, !id.isEmpty else {
+            let error = APIError.serverError("Missing profile picture id for delete.")
             isLoading = false
             errorMessage = error.localizedDescription
             completion(.failure(error))
             return
         }
 
-        // Always call DELETE /upload/{uuid} first.
+        // Always call DELETE /users/profile-picture/{id} first.
         NetworkManager.shared.request(
-            endpoint: .deleteUpload(uuid: uuid),
+            endpoint: .deleteProfilePicture(id: id),
             method: .DELETE,
             showLoader: showLoader,
             showErrorAlert: false
@@ -275,7 +275,7 @@ final class ProfileViewModel {
         return (value?.isEmpty == false) ? value : nil
     }
 
-    /// UUID used by `DELETE /upload/{uuid}` — stored ids, user payload, or extracted from avatar URL.
+    /// Id used by `DELETE /users/profile-picture/{id}` — stored ids, user payload, or extracted from avatar URL.
     private var resolvedAvatarUploadUuid: String? {
         let candidates: [String?] = [
             storedAvatarUploadUuid,
